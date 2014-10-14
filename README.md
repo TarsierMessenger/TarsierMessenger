@@ -6,7 +6,7 @@ Tarsier Messenger is a mesh-networked messaging application.
 We use GitHub for bug and progress tracking. Please search the existing issues for your bug and create a new one if the issue is not yet tracked!
 
 ## Building
-Instructions on how to setup your development environment and build TextSecure can be found in BUILDING.md.
+Instructions on how to setup your development environment and build Tarsier can be found in BUILDING.md.
 
 ## Documentation
 Looking for documentation? Check out the wiki!
