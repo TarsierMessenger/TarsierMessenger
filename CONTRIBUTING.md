@@ -12,7 +12,7 @@ This project uses the [JavaDoc](http://www.oracle.com/technetwork/java/javase/te
 
 ### Principles
 
-- Features are developed on `feature/*` branches.
+- Features are developed on `feature/[issue number]-[feature name]` branches. Eg. `feature/23-peer-discovery`.
 - Small changes that can go whenever are pushed to the `develop` branch.
 - When features are finished, a pull request is opened to `develop` for any ad hoc review before merging.
 - A `feature/*` will only be merged if all the tests pass, as reported inline in the pull request by the Jenkins plugin.
@@ -32,7 +32,7 @@ Please take a look at the [Atlassian Git Tutorial](https://www.atlassian.com/git
     
 3. Create and switch to a new branch.
  
-        $ git checkout -b feature/peer-discovery
+        $ git checkout -b feature/23-peer-discovery
 
 4. Implement the feature, and commit it.  
    Look into [`git commit --amend`](https://www.atlassian.com/git/tutorials/rewriting-history/git-commit--amend) and [`git rebase -i'](https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase-i) to clean up your history, if needed.
@@ -44,7 +44,7 @@ Please take a look at the [Atlassian Git Tutorial](https://www.atlassian.com/git
         
 6. Push your branch to GitHub.
 
-        $ git push origin feature/peer-discover
+        $ git push origin feature/23-peer-discover
 
 7. Go to [GitHub](https://github.com/sweng-epfl-2014/sweng-team-meshenger/), select your branch in the dropdown, and create a pull request.
 
