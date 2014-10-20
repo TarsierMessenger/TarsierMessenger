@@ -13,10 +13,9 @@ This project uses the [JavaDoc](http://www.oracle.com/technetwork/java/javase/te
 ### Principles
 
 - Features are developed on `feature/[issue number]-[feature name]` branches. Eg. `feature/23-peer-discovery`.
-- Small changes that can go whenever are pushed to the `develop` branch.
-- When features are finished, a pull request is opened to `develop` for any ad hoc review before merging.
+- Small changes that can go whenever are pushed to the `master` branch.
+- When features are finished, a pull request is opened to `master` for any ad hoc review before merging.
 - A `feature/*` will only be merged if all the tests pass, as reported inline in the pull request by the Jenkins plugin.
-- `develop` branch is merged to `master` via pull request in preparation for release.
 
 Please take a look at the [Atlassian Git Tutorial](https://www.atlassian.com/git/tutorials/) if you are not already comfortable with Git. Especially the first two sections: Getting Started and Collaborating.
 
@@ -26,9 +25,9 @@ Please take a look at the [Atlassian Git Tutorial](https://www.atlassian.com/git
 
         $ git clone https://github.com/sweng-epfl-2014/sweng-team-meshenger.git
     
-2. Checkout the `develop` branch
+2. Checkout the `master` branch
 
-        $ git checkout develop
+        $ git checkout master
     
 3. Create and switch to a new branch.
  
@@ -37,8 +36,8 @@ Please take a look at the [Atlassian Git Tutorial](https://www.atlassian.com/git
 4. Implement the feature, and commit it.  
    Look into [`git commit --amend`](https://www.atlassian.com/git/tutorials/rewriting-history/git-commit--amend) and [`git rebase -i'](https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase-i) to clean up your history, if needed.
 
-5. [Rebase](https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase) your branch on the `develop` branch, and fix the conflicts, if any.  
-    This will ensure that your pull request can be easily merged into `develop`.
+5. [Rebase](https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase) your branch on the `master` branch, and fix the conflicts, if any.  
+    This will ensure that your pull request can be easily merged into `master`.
 
         $ git rebase develop
         
