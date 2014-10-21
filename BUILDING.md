@@ -28,6 +28,27 @@ If you have a device with ADB enabled plugged into your machine or the emulator 
 
 Getting started to work on the project with Android Studio should be really straight forward. Download and install Android studio, make sure that you have the Android SDKs and an emulator set up and then click on `Open Project`, browse to the git repository folder and click on `Open`. You should be ready to go.
 
+# Checkstyle
+
+## Checkstyle from the command line
+
+You can run Checkstyle from the command line by typing:
+
+```bash
+./gradlew check
+```
+
+## Checkstyle with Android Studio
+
+1. Install the Checkstyle-IDEA plugin by going to `Android Studio > Preferences...`, then `Plugins`, and finally `Browse repositories...`. Here search for `Checkstyle-IDEA` and click `Install`.
+2. Restart Android Studio
+3. Re-open the preferences, and select `Checkstyle`.
+4. Check `Scan test classes`.
+5. Add a new configuration file by clicking `+`
+6. Type a name for the configuration. Eg. `SwEng Checkstyle`.
+7. Click `Browse` and select `app/config/checkstyle/checkstyle.xml`, then click `Next`.
+8. Activate the newly created configuration, and click `OK`.
+
 # Testing
 
 ## Testing from the command line
@@ -64,7 +85,7 @@ Before you can build the project with Android Studio, you need to add a testing 
 
 6. Paste the following (or browse for it) in the `Specific instrumentation runner`:
 
-    com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner
+        com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner
 
 
 7. I also like to set the run configuration to `Show Chooser` so I can decide how to run the tests when needed:
