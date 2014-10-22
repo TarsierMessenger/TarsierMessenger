@@ -3,13 +3,13 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 20
     buildToolsVersion "20.0.0"
-
     defaultConfig {
         applicationId "ch.tarsier.tarsier"
-        minSdkVersion 18
+        minSdkVersion 17
         targetSdkVersion 20
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
     }
     buildTypes {
         release {
@@ -17,8 +17,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
+
+    lintOptions {
+        textReport true
+        textOutput 'stdout'
+
+        // Needed because Espresso references APIs that are not supported in Android.
+        ignore 'InvalidPackage'
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile files('libs/espresso-contrib-1.1-bundled.jar')
+    compile files('../libs/espresso-contrib-1.1-bundled.jar')
 }
