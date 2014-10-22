@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 
 public class HomeActivity extends Activity {
+    public boolean testUI = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,4 +36,12 @@ public class HomeActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //dummy UI testing
+    public void dummyMethodTestUI(View view) {
+        //testUI = !testUI;
+        TextView tw = (TextView) findViewById(R.id.helloWorld);
+        tw.setText("Hello World!");
+    }
+
 }
