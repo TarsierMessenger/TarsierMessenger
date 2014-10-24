@@ -14,12 +14,13 @@ import android.widget.Toast;
 
 /**
  * This is the Home screen of Tarsier. It allows to enter a Username
- * and access the view of the list of rooms.
+ * and initiate a session
+ * @author Benjamin Paccaud.
  */
 public class HomeActivity extends Activity {
 
-    private final int MIN_USERNAME_LENGTH = 1;
-    private final int MIN_STATUS_LENGTH = 1;
+    static private final int MIN_USERNAME_LENGTH = 1;
+    static private final int MIN_STATUS_LENGTH = 1;
 
 
 
@@ -31,14 +32,6 @@ public class HomeActivity extends Activity {
         ((EditText) findViewById(R.id.username)).addTextChangedListener(new EditTextWatcher());
         ((EditText) findViewById(R.id.status_message)).addTextChangedListener(new EditTextWatcher());
 
-    }
-
-    private boolean chatButtonCanBeEnabled() {
-        if ((((EditText) findViewById(R.id.status_message)).getText().length() >= MIN_STATUS_LENGTH)
-            && (((EditText) findViewById(R.id.username)).getText().length() >= MIN_USERNAME_LENGTH)) {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -70,7 +63,7 @@ public class HomeActivity extends Activity {
 
     public void onClickAddPicture(View view) {
         //launch Activity to have the user choose the picture
-        Intent picture = new Intent(this,AddProfilePictureActivity.class);
+        Intent picture = new Intent(this, AddProfilePictureActivity.class);
         this.startActivity(picture);
         //debug
         //Toast.makeText(this, "add picture", Toast.LENGTH_SHORT).show();
@@ -96,6 +89,10 @@ public class HomeActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Verify that we can enable the Button that initiate the session.
+     * by checking the EditText s of the Activity
+     */
     private final class EditTextWatcher implements TextWatcher {
 
         @Override
@@ -115,6 +112,14 @@ public class HomeActivity extends Activity {
         @Override
         public void afterTextChanged(Editable editable) {
 
+        }
+
+        private boolean chatButtonCanBeEnabled() {
+            if ((((EditText) findViewById(R.id.status_message)).getText().length() >= MIN_STATUS_LENGTH)
+                    && (((EditText) findViewById(R.id.username)).getText().length() >= MIN_USERNAME_LENGTH)) {
+                return true;
+            }
+            return false;
         }
     }
 

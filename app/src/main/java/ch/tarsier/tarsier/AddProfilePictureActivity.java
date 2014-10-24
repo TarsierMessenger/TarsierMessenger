@@ -7,7 +7,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-
+/**
+ * Activity to upload a profile picture, either from the Gallery or
+ * by taking a new picture.
+ * @author Benjamin Paccaud
+ *
+ */
 public class AddProfilePictureActivity extends Activity {
 
     @Override
