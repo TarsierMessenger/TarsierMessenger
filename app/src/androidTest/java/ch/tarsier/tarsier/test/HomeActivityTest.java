@@ -27,9 +27,4 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
         getActivity();
     }
 
-    public void testTest() {
-        onView(withId(R.id.helloWorld)).check(matches(withText("Hello world!")));
-        onView(withId(R.id.testUIButton)).perform(click());
-        onView(withId(R.id.helloWorld)).check(matches(withText("Hello World!")));
-    }
 }

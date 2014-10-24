@@ -27,6 +27,7 @@
         android:layout_height="@dimen/add_picture"
         android:id="@+id/picture"
         android:src="@drawable/add_picture"
+        android:onClick="onClickAddPicture"
         />
 
     <EditText

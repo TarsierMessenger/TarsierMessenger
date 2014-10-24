@@ -7,5 +7,8 @@
     <string name="lets_chat">Let\'s chat!</string>
     <string name="hint_status_message">Status message</string>
     <string name="hint_username">Username</string>
+    <string name="title_activity_add_profile_picture">Add a profile picture</string>
+    <string name="add_from_existing">Add from your gallery</string>
+    <string name="add_new_picture">Take a new picture</string>
 
 </resources>
