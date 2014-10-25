@@ -2,12 +2,12 @@ apply plugin: "com.android.application"
 apply plugin: "checkstyle"
 
 android {
-    compileSdkVersion 20
-    buildToolsVersion "20.0.0"
+    compileSdkVersion 18
+    buildToolsVersion "19.1.0"
     defaultConfig {
         applicationId "ch.tarsier.tarsier"
         minSdkVersion 17
-        targetSdkVersion 20
+        targetSdkVersion 18
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
