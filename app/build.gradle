@@ -3,7 +3,7 @@ apply plugin: "checkstyle"
 
 android {
     compileSdkVersion 18
-    buildToolsVersion "19.1.0"
+    buildToolsVersion "20.0.0"
     defaultConfig {
         applicationId "ch.tarsier.tarsier"
         minSdkVersion 17
