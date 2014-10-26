@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_name">Tarsier</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="create_group_str">Create a new group</string>
+    <string name="search_group_str">Look for group info</string>
+    <string name="refresh_str">Restart</string>
     <string name="action_settings">Settings</string>
 
 </resources>
