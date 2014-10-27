@@ -2,7 +2,12 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/GreenActionBar</item>
+    </style>
+
+    <style name="GreenActionBar"
+           parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/tarsier_green_base</item>
     </style>
     <style name="boldText">
         <item name="android:textStyle">bold|italic</item>
