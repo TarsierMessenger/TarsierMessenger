@@ -4,11 +4,13 @@
     <item android:id="@+id/action_save_profile"
           android:icon="@drawable/check_profile"
           android:title="@string/save_profile"
-          android:showAsAction="ifRoom" />
+          android:showAsAction="ifRoom"
+          android:onClick="onClickSave" />
     <item android:id="@+id/action_cancel_profile"
           android:icon="@drawable/close_profile"
           android:title="@string/cancel_profile"
-          android:showAsAction="ifRoom" />
+          android:showAsAction="ifRoom"
+          android:onClick="onClickCancel" />
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"

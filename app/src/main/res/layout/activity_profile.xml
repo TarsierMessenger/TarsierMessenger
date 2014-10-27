@@ -16,7 +16,8 @@
             android:src="@drawable/add_picture_profile"
             android:contentDescription="@string/add_profile_picture_accessibility"
             android:layout_toEndOf="@+id/add_picture_button" android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true" android:clickable="true"
+            android:onClick="onClickAddPicture"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
