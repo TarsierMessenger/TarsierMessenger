@@ -32,7 +32,6 @@ public class DiscussionManager {
         if (mInstance == null) {
             mInstance = new DiscussionManager();
         }
-
         return mInstance;
     }
 

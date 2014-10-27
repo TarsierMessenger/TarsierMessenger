@@ -25,6 +25,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
+ * Based on the v7 samples of the Android SDK.
  * Created by gluthier on 23.10.2014.
  */
 public class DiscussionsDecoration extends RecyclerView.ItemDecoration {
