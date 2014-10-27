@@ -5,6 +5,10 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -15,9 +19,13 @@ import java.util.concurrent.TimeUnit;
 public class Server extends Thread {
 
     public static final String TAG = "Server";
-    ServerSocket socket = null;
+    private final HashMap<Integer,MyConnection> connectionsMap = new HashMap<Integer,MyConnection>();
     private final int THREAD_COUNT = 10;
+    private final static Random random = new Random();
+    ServerSocket socket = null;
     private Handler handler;
+
+    private MyConnection conn;
 
     public Server(Handler handler) throws IOException {
         try {
@@ -41,7 +49,9 @@ public class Server extends Thread {
         while (true) {
             try {
                 // A blocking operation.
-                pool.execute(new MyConnection(socket.accept(), handler));
+                conn = new MyConnection(socket.accept(), handler);
+                pool.execute(conn);
+                connectionsMap.put(random.nextInt(1000),conn);
                 Log.d(TAG, "Launching the I/O handler");
             } catch (IOException e) {
                 try {
@@ -59,4 +69,17 @@ public class Server extends Thread {
     public interface MessageTarget {
         public Handler getHandler();
     }
+
+    public void send(Integer id,byte[] message){
+        if (connectionsMap.containsKey(id) ) {
+            MyConnection conn = connectionsMap.get(id);
+            conn.write(message);
+        }
+    }
+
+    public HashMap<Integer,MyConnection> getConnectionMaps(){
+        return connectionsMap;
+    }
+
+
 }

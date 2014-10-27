@@ -36,6 +36,8 @@ public class MyConnection implements Runnable {
             handler.obtainMessage(HomeActivity.MY_HANDLE, this)
                     .sendToTarget();
 
+
+
             while (true) {
                 try {
                     // Read from the InputStream
@@ -62,7 +64,7 @@ public class MyConnection implements Runnable {
             }
         }
     }
-    public void write(byte[] buffer) {
+    public synchronized void write(byte[] buffer) {
         try {
             out.write(buffer);
         } catch (IOException e) {
