@@ -2,78 +2,51 @@ package ch.tarsier.tarsier;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pGroup;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
-import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-/*TODO:
-    -Custumize listView
-    -
-*/
+
 public class HomeActivity extends Activity implements WifiP2pManager.ConnectionInfoListener,
         WiFiDirectGroupList.DeviceClickListener,Server.MessageTarget,Handler.Callback{
-    public boolean testUI = true;
 
     public static final String TAG = "HomeActivity";
-    // TXT RECORD properties
-    public static final String TXTRECORD_PROP_AVAILABLE = "available";
-    public static final String SERVICE_INSTANCE = "_tarsierchat";
-    public static final String SERVICE_REG_TYPE = "_presence._tcp";
-
-    WiFiDirectGroupList groupList;
-
-
-    final static public int SERVER_PORT = 8888;
-    final public String NAME = "Tarsier"; //TODO: To be modified by UI
-
+    public static final int SERVER_PORT = 8888;
     public static final int MESSAGE_READ = 0x400 + 1;
     public static final int MY_HANDLE = 0x400 + 2;
 
+
+    private WifiP2pManager.PeerListListener peerListListener;
     private IntentFilter mIntentFilter;
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private WiFiDirectBroadcastReceiver mReceiver;
-    private WifiP2pDnsSdServiceRequest serviceRequest;
-    final HashMap<String, String> buddies = new HashMap<String, String>();
-    private ArrayAdapter<WifiP2pDevice> adapter;
-    final HashMap<String,WifiP2pDevice> list = new HashMap<String,WifiP2pDevice>();
-    private WifiP2pManager.ActionListener refreshListener;
-    ListView listView;
-    private boolean isP2PEnabled;
+
+
+    private WiFiDirectGroupList groupList;
+    private final ArrayList<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
+    private ChatRoom chatRoom;
     private Handler mHandler = new Handler(this);
+
+
+    public boolean testUI = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-
 
         // Add intents that broadcast receiver checks for
         mIntentFilter = new IntentFilter();
@@ -85,20 +58,51 @@ public class HomeActivity extends Activity implements WifiP2pManager.ConnectionI
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
-        startRegistration();
-        discoverService();
+        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this,peerListListener);//Be careful, using peerList before initializing it
+        createPeerListener();
+        initiatePeerDiscovery();
 
 
+        mManager.requestPeers(mChannel,peerListListener);
         groupList = new WiFiDirectGroupList();
         getFragmentManager().beginTransaction()
                 .add(R.id.container, groupList, "groups").commit();
 
     }
 
+    private void createPeerListener() {
+
+        peerListListener = new WifiP2pManager.PeerListListener() {
+            @Override
+            public void onPeersAvailable(WifiP2pDeviceList peersList) {
+                peers.clear();
+                peers.addAll(peersList.getDeviceList());
+
+                // If an AdapterView is backed by this data, notify it
+                // of the change.  For instance, if you have a ListView of available
+                // peers, trigger an update.
+                WiFiDirectGroupList fragment = (WiFiDirectGroupList) getFragmentManager()
+                        .findFragmentByTag("groups");
+                if (fragment != null) {
+                    WiFiDirectGroupList.WiFiDevicesAdapter adapter = ((WiFiDirectGroupList.WiFiDevicesAdapter) fragment
+                            .getListAdapter());
+                    adapter.clear();
+                    adapter.addAll(peers);
+                    adapter.notifyDataSetChanged();
+                    Log.d(TAG, "Peer list updated: "+ peers.toString());
+                    if (peers.size() == 0) {
+                        Log.d(TAG, "No devices found");
+                        return;
+                    }
+
+                }
+            }
+        };
+    }
+
     @Override
     protected void onRestart() {
-        Fragment frag = getFragmentManager().findFragmentByTag("services");
+        Fragment frag = getFragmentManager().findFragmentByTag("groups");
         if (frag != null) {
             getFragmentManager().beginTransaction().remove(frag).commit();
         }
@@ -106,116 +110,38 @@ public class HomeActivity extends Activity implements WifiP2pManager.ConnectionI
     }
 
 
-
-
-
-    protected void startRegistration() {
-        Map<String, String> record = new HashMap<String, String>();
-        record.put(TXTRECORD_PROP_AVAILABLE, "visible");
-        WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
-                SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
-        mManager.addLocalService(mChannel, service, new WifiP2pManager.ActionListener() {
+    public void initiatePeerDiscovery(){
+        mManager.discoverPeers(mChannel,new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Log.d(TAG,"Added Local Service");
+                Log.d(TAG,"Peer discovery initiation succeeded");
             }
+
             @Override
-            public void onFailure(int error) {
-                Log.d(TAG,"Failed to add a service");
+            public void onFailure(int reasonCode) {
+                if (reasonCode == WifiP2pManager.P2P_UNSUPPORTED) {
+                    Log.d(TAG, "Peer discovery initiation failed. P2P isn't supported on this device.");
+                }else if(reasonCode == WifiP2pManager.BUSY){
+                    Log.d(TAG, "Peer discovery initiation failed. The system is too busy to process the request.");
+                }else if(reasonCode == WifiP2pManager.ERROR){
+                    Log.d(TAG, "Peer discovery initiation failed. The operation failed due to an internal error.");
+                }
             }
         });
+
+
     }
 
-
-
-
-
-    private void discoverService() {
-
-        mManager.setDnsSdResponseListeners(mChannel,
-                new WifiP2pManager.DnsSdServiceResponseListener() {
-                    @Override
-                    public void onDnsSdServiceAvailable(String instanceName,
-                                                        String registrationType, WifiP2pDevice srcDevice) {
-                        // A service has been discovered. Is this our app?
-                        if (instanceName.equalsIgnoreCase(SERVICE_INSTANCE)) {
-                            // update the UI and add the item the discovered
-                            // device.
-                            WiFiDirectGroupList fragment = (WiFiDirectGroupList) getFragmentManager()
-                                    .findFragmentByTag("services");
-                            if (fragment != null) {
-//                                WiFiDevicesAdapter adapter = ((WiFiDevicesAdapter) fragment
-//                                        .getListAdapter());
-                                WiFip2pService service = new WiFip2pService();
-                                service.device = srcDevice;
-                                service.instanceName = instanceName;
-                                service.serviceRegistrationType = registrationType;
-//                                adapter.add(service);
-//                                adapter.notifyDataSetChanged();
-                                Log.d(TAG, "onBonjourServiceAvailable "
-                                        + instanceName);
-                            }
-                        }
-                    }
-                }, new WifiP2pManager.DnsSdTxtRecordListener() {
-                    /**
-                     * A new TXT record is available. Pick up the advertised
-                     * buddy name.
-                     */
-                    @Override
-                    public void onDnsSdTxtRecordAvailable(
-                            String fullDomainName, Map<String, String> record,
-                            WifiP2pDevice device) {
-                        Log.d(TAG,
-                                device.deviceName + " is "
-                                        + record.get(TXTRECORD_PROP_AVAILABLE));
-                    }
-                });
-                // After attaching listeners, create a service request and initiate
-               // discovery.
-                    serviceRequest = WifiP2pDnsSdServiceRequest.newInstance();
-        mManager.addServiceRequest(mChannel, serviceRequest,
-                new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        Log.d(TAG,"Added service discovery request");
-                    }
-                    @Override
-                    public void onFailure(int arg0) {
-                        Log.d(TAG,"Failed adding service discovery request");
-                    }
-                });
-        mManager.discoverServices(mChannel, new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-                Log.d(TAG,"Service discovery initiated");
-            }
-            @Override
-            public void onFailure(int arg0) {
-                Log.d(TAG,"Service discovery failed");
-            }
-        });
-    }
 
     @Override
-    public void connectP2p(WiFip2pService service) {
+    public void connectP2p(WifiP2pDevice device) {
         WifiP2pConfig config = new WifiP2pConfig();
-        config.deviceAddress = service.device.deviceAddress;
+        config.deviceAddress = device.deviceAddress;
         config.wps.setup = WpsInfo.PBC;
-        if (serviceRequest != null)
-            mManager.removeServiceRequest(mChannel, serviceRequest,
-                    new WifiP2pManager.ActionListener() {
-                        @Override
-                        public void onSuccess() {
-                        }
-                        @Override
-                        public void onFailure(int arg0) {
-                        }
-                    });
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Log.d(TAG,"Connecting to service");
+                Log.d(TAG,"Connecting to peer");
             }
             @Override
             public void onFailure(int errorCode) {
@@ -228,19 +154,14 @@ public class HomeActivity extends Activity implements WifiP2pManager.ConnectionI
     @Override
     public void onResume() {
         super.onResume();
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
+        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this,peerListListener);
         registerReceiver(mReceiver, mIntentFilter);
+
+
+
     }
 
-    public void setIsWifiP2pEnabled(boolean bool){
-        isP2PEnabled = bool;
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -255,12 +176,6 @@ public class HomeActivity extends Activity implements WifiP2pManager.ConnectionI
     }
 
 
-    //dummy UI testing
-//    public void dummyMethodTestUI(View view) {
-//        //testUI = !testUI;
-//        TextView tw = (TextView) findViewById(R.id.helloWorld);
-//        tw.setText("Hello World!");
-//    }
 
 
 
@@ -312,6 +227,10 @@ public class HomeActivity extends Activity implements WifiP2pManager.ConnectionI
             handler.start();
         }
 
+        chatRoom = new ChatRoom();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, chatRoom).commit();
+
     }
 
     @Override
@@ -321,7 +240,20 @@ public class HomeActivity extends Activity implements WifiP2pManager.ConnectionI
 
     @Override
     public boolean handleMessage(Message message) {
-        return false;
+
+        switch (message.what) {
+            case MESSAGE_READ:
+                byte[] readBuf = (byte[]) message.obj;
+                // construct a string from the valid bytes in the buffer
+                String readMessage = new String(readBuf, 0, message.arg1);
+                Log.d(TAG, readMessage);
+                (chatRoom).pushMessage("Peer: " + readMessage);
+                break;
+            case MY_HANDLE:
+                Object obj = message.obj;
+                (chatRoom).setMyConnection((MyConnection) obj);
+        }
+        return true;
     }
 
 

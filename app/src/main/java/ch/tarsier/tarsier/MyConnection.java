@@ -3,12 +3,8 @@ package ch.tarsier.tarsier;
 import android.os.Handler;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
@@ -37,6 +33,8 @@ public class MyConnection implements Runnable {
             out= socket.getOutputStream();
             byte[] buffer = new byte[1024];
             int bytes;
+            handler.obtainMessage(HomeActivity.MY_HANDLE, this)
+                    .sendToTarget();
 
             while (true) {
                 try {
@@ -47,6 +45,8 @@ public class MyConnection implements Runnable {
                     }
                     // Send the obtained bytes to the UI Activity
                     Log.d(TAG, "Rec:" + String.valueOf(buffer));
+                    handler.obtainMessage(HomeActivity.MESSAGE_READ,
+                            bytes, -1, buffer).sendToTarget();
 
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);

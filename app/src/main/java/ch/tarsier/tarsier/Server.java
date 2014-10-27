@@ -3,12 +3,8 @@ package ch.tarsier.tarsier;
 import android.os.Handler;
 import android.util.Log;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +21,7 @@ public class Server extends Thread {
 
     public Server(Handler handler) throws IOException {
         try {
-            socket = new ServerSocket(8080);
+            socket = new ServerSocket(HomeActivity.SERVER_PORT);
             this.handler = handler;
             Log.d(TAG, "Socket Started");
         } catch (IOException e) {

@@ -3,9 +3,9 @@
 
     <string name="app_name">Tarsier</string>
     <string name="create_group_str">Create a new group</string>
-    <string name="search_group_str">Look for group info</string>
-    <string name="refresh_str">Restart</string>
-    <string name="finding_service">Finding local services</string>
+    <string name="txt_hint">Type Message</string>
+    <string name="btn_send">Send Message</string>
+    <string name="finding_service">Finding local peers</string>
     <string name="action_settings">Settings</string>
 
 </resources>

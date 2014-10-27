@@ -22,7 +22,7 @@ public class WiFiDirectGroupList extends ListFragment {
     WiFiDevicesAdapter listAdapter = null;
 
     interface DeviceClickListener {
-        public void connectP2p(WiFip2pService wifiP2pService);
+        public void connectP2p(WifiP2pDevice device);
     }
 
     @Override
@@ -30,28 +30,34 @@ public class WiFiDirectGroupList extends ListFragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.devices_list, container, false);
     }
+
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         listAdapter = new WiFiDevicesAdapter(this.getActivity(),
                 android.R.layout.simple_list_item_2, android.R.id.text1,
-                new ArrayList<WiFip2pService>());
+                new ArrayList<WifiP2pDevice>());
         setListAdapter(listAdapter);
     }
+
+
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
 
-        ((DeviceClickListener) getActivity()).connectP2p((WiFip2pService) l
+        ((DeviceClickListener) getActivity()).connectP2p((WifiP2pDevice) l
                 .getItemAtPosition(position));
         ((TextView) v.findViewById(android.R.id.text2)).setText("Connecting");
     }
 
 
-    public class WiFiDevicesAdapter extends ArrayAdapter<WiFip2pService> {
-        private List<WiFip2pService> items;
+    public class WiFiDevicesAdapter extends ArrayAdapter<WifiP2pDevice> {
+        private List<WifiP2pDevice> items;
 
         public WiFiDevicesAdapter(Context context, int resource,
-                                  int textViewResourceId, List<WiFip2pService> items) {
+                                  int textViewResourceId, List<WifiP2pDevice> items) {
             super(context, resource, textViewResourceId, items);
             this.items = items;
         }
@@ -63,16 +69,16 @@ public class WiFiDirectGroupList extends ListFragment {
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 v = vi.inflate(android.R.layout.simple_list_item_2, null);
             }
-            WiFip2pService service = items.get(position);
-            if (service != null) {
+            WifiP2pDevice device = items.get(position);
+            if (device != null) {
                 TextView nameText = (TextView) v
                         .findViewById(android.R.id.text1);
                 if (nameText != null) {
-                    nameText.setText(service.device.deviceName + " - " + service.instanceName);
+                    nameText.setText(device.deviceName);
                 }
                 TextView statusText = (TextView) v
                         .findViewById(android.R.id.text2);
-                statusText.setText(getDeviceStatus(service.device.status));
+                statusText.setText(getDeviceStatus(device.status));
             }
             return v;
         }
