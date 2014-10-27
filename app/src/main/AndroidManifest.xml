@@ -2,6 +2,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ch.tarsier.tarsier" >
 
+    <!-- Min 14 is needed to support Wi-Fi Direct. -->
+    <uses-sdk android:minSdkVersion="14" />
+    <!-- Request permission to use the Wi-Fi hardware . -->
+    <uses-permission
+        android:required="true"
+        android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission
+        android:required="true"
+        android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission
+        android:required="true"
+        android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission
+        android:required="true"
+        android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:required="true"
+        android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"

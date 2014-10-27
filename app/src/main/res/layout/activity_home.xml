@@ -22,22 +22,22 @@
             android:layout_marginBottom="@dimen/view_spacing"
             >
 
-        <ImageView
-            android:layout_width="@dimen/add_picture"
-            android:layout_height="@dimen/add_picture"
-            android:id="@+id/picture"
-            android:src="@drawable/add_picture_home"
-            android:onClick="onClickAddPicture"
-            />
+            <ImageView
+                android:layout_width="@dimen/add_picture"
+                android:layout_height="@dimen/add_picture"
+                android:id="@+id/picture"
+                android:src="@drawable/add_picture_home"
+                android:onClick="onClickAddPicture"
+                />
 
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_username"
-            android:id="@+id/username"
-            android:layout_toEndOf="@id/picture"
-            android:layout_centerInParent="true"
-            />
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_username"
+                android:id="@+id/username"
+                android:layout_toEndOf="@id/picture"
+                android:layout_centerInParent="true"
+                />
 
         </RelativeLayout>
 

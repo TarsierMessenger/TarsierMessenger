@@ -2,7 +2,10 @@
 <resources>
 
     <string name="app_name">Tarsier</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="create_group_str">Create a new group</string>
+    <string name="txt_hint">Type Message</string>
+    <string name="btn_send">Send Message</string>
+    <string name="finding_service">Finding local peers</string>
     <string name="action_settings">Settings</string>
     <string name="lets_chat">Let\'s chat!</string>
     <string name="hint_status_message">Status message</string>
