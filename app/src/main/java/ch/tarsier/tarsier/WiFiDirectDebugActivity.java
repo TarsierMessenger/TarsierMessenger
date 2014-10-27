@@ -18,14 +18,20 @@ import android.view.MenuItem;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
-public class WiFiDirectDebugActivity extends Activity implements WifiP2pManager.ConnectionInfoListener,
-        WiFiDirectGroupList.DeviceClickListener,Server.MessageTarget,Handler.Callback{
+/**
+ * @author amirezza
+ */
+public class WiFiDirectDebugActivity
+    extends Activity
+    implements WifiP2pManager.ConnectionInfoListener,
+               WiFiDirectGroupList.DeviceClickListener,
+               Server.MessageTarget,
+               Handler.Callback {
 
     public static final String TAG = "WiFiDirectDebugActivity";
     public static final int SERVER_PORT = 8888;
-    public static final int MESSAGE_READ = 0x400 + 1;
-    public static final int MY_HANDLE = 0x400 + 2;
+    public static final int MESSAGE_READ = 0x401;
+    public static final int MY_HANDLE = 0x402;
 
 
     private WifiP2pManager.PeerListListener peerListListener;
@@ -55,12 +61,14 @@ public class WiFiDirectDebugActivity extends Activity implements WifiP2pManager.
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this,peerListListener);//Be careful, using peerList before initializing it
+
+        //Be careful, using peerList before initializing it
+        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this, peerListListener);
         createPeerListener();
         initiatePeerDiscovery();
 
 
-        mManager.requestPeers(mChannel,peerListListener);
+        mManager.requestPeers(mChannel, peerListListener);
         groupList = new WiFiDirectGroupList();
         getFragmentManager().beginTransaction()
                 .add(R.id.container, groupList, "groups").commit();
@@ -81,17 +89,16 @@ public class WiFiDirectDebugActivity extends Activity implements WifiP2pManager.
                 WiFiDirectGroupList fragment = (WiFiDirectGroupList) getFragmentManager()
                         .findFragmentByTag("groups");
                 if (fragment != null) {
-                    WiFiDirectGroupList.WiFiDevicesAdapter adapter = ((WiFiDirectGroupList.WiFiDevicesAdapter) fragment
-                            .getListAdapter());
+                    WiFiDirectGroupList.WiFiDevicesAdapter adapter =
+                            (WiFiDirectGroupList.WiFiDevicesAdapter) fragment.getListAdapter();
+
                     adapter.clear();
                     adapter.addAll(peers);
                     adapter.notifyDataSetChanged();
                     Log.d(TAG, "Peer list updated: "+ peers.toString());
                     if (peers.size() == 0) {
                         Log.d(TAG, "No devices found");
-                        return;
                     }
-
                 }
             }
         };
@@ -107,20 +114,20 @@ public class WiFiDirectDebugActivity extends Activity implements WifiP2pManager.
     }
 
 
-    public void initiatePeerDiscovery(){
-        mManager.discoverPeers(mChannel,new WifiP2pManager.ActionListener() {
+    public void initiatePeerDiscovery() {
+        mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Log.d(TAG,"Peer discovery initiation succeeded");
+                Log.d(TAG, "Peer discovery initiation succeeded");
             }
 
             @Override
             public void onFailure(int reasonCode) {
                 if (reasonCode == WifiP2pManager.P2P_UNSUPPORTED) {
                     Log.d(TAG, "Peer discovery initiation failed. P2P isn't supported on this device.");
-                }else if(reasonCode == WifiP2pManager.BUSY){
+                } else if (reasonCode == WifiP2pManager.BUSY) {
                     Log.d(TAG, "Peer discovery initiation failed. The system is too busy to process the request.");
-                }else if(reasonCode == WifiP2pManager.ERROR){
+                } else if (reasonCode == WifiP2pManager.ERROR) {
                     Log.d(TAG, "Peer discovery initiation failed. The operation failed due to an internal error.");
                 }
             }
@@ -137,11 +144,11 @@ public class WiFiDirectDebugActivity extends Activity implements WifiP2pManager.
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Log.d(TAG,"Connecting to peer");
+                Log.d(TAG, "Connecting to peer");
             }
             @Override
             public void onFailure(int errorCode) {
-                Log.d(TAG,"Failed connecting to service");
+                Log.d(TAG, "Failed connecting to service");
             }
         });
     }
@@ -150,7 +157,7 @@ public class WiFiDirectDebugActivity extends Activity implements WifiP2pManager.
     @Override
     public void onResume() {
         super.onResume();
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this,peerListListener);
+        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this, peerListListener);
         registerReceiver(mReceiver, mIntentFilter);
     }
 
