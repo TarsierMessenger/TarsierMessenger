@@ -13,5 +13,15 @@
     <string name="title_activity_add_profile_picture">Add a profile picture</string>
     <string name="add_from_existing">Add from your gallery</string>
     <string name="add_new_picture">Take a new picture</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="save_profile">Save</string>
+    <string name="cancel_profile">Cancel</string>
+    <string name="status_message_placeholder">Enter a status message</string>
+    <string name="add_profile_picture_desc">Add a profile picture</string>
+    <string name="action_profile">Profile</string>
+    <string name="action_wifidirectdebug">Wi-Fi Direct Debug</string>
+    <string name="error_username_length">Username should be between 1 and 36 chars long</string>
+    <string name="error_status_message_length">Status message length should be between 1 and 50 chars long</string>
+    <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
 
 </resources>

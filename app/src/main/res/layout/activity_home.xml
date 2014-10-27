@@ -22,13 +22,13 @@
             android:layout_marginBottom="@dimen/view_spacing"
             >
 
-            <ImageView
-                android:layout_width="@dimen/add_picture"
-                android:layout_height="@dimen/add_picture"
-                android:id="@+id/picture"
-                android:src="@drawable/add_picture_home"
-                android:onClick="onClickAddPicture"
-                />
+        <ImageView
+            android:layout_width="@dimen/add_picture"
+            android:layout_height="@dimen/add_picture"
+            android:id="@+id/picture"
+            android:src="@drawable/add_picture_home"
+            android:onClick="onClickAddPicture"
+            android:contentDescription="@string/add_profile_picture_desc" />
 
             <EditText
                 android:layout_width="fill_parent"

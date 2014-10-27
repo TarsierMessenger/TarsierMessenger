@@ -1,19 +1,31 @@
 package ch.tarsier.tarsier;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Activity to upload a profile picture, either from the Gallery or
  * by taking a new picture.
+ *
  * @author Benjamin Paccaud
+ * @author Romain Ruetschi
  *
  */
 public class AddProfilePictureActivity extends Activity {
+
+    private static final int PICK_IMAGE            = 0x01;
+    private static final int REQUEST_IMAGE_CAPTURE = 0x02;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,13 +34,69 @@ public class AddProfilePictureActivity extends Activity {
     }
 
     public void onClickNewPicture(View view) {
-        Toast.makeText(this, "new pic", Toast.LENGTH_SHORT).show();
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
     public void onClickAddExisting(View view) {
-        Toast.makeText(this, "existing pic", Toast.LENGTH_SHORT).show();
+        Intent pickImageIntent = new Intent(Intent.ACTION_PICK);
+        pickImageIntent.setType("image/*");
+
+        startActivityForResult(pickImageIntent, PICK_IMAGE);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case PICK_IMAGE:
+                onImagePicked(resultCode, data);
+                break;
+
+            case REQUEST_IMAGE_CAPTURE:
+                onImageCaptured(resultCode, data);
+                break;
+
+            default:
+                // TODO: Handle unknown request code.
+        }
+    }
+
+    private void onImageCaptured(int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            // TODO: Handle errors.
+            return;
+        }
+
+        Bundle extras = data.getExtras();
+        Bitmap imageBitmap = (Bitmap) extras.get("data");
+        // mImageView.setImageBitmap(imageBitmap);
+    }
+
+    private void onImagePicked(int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            // TODO: Handle errors.
+            return;
+        }
+
+        InputStream imageStream;
+
+        try {
+            imageStream = getContentResolver().openInputStream(data.getData());
+            Bitmap imageBitmap = BitmapFactory.decodeStream(imageStream);
+            // mImageView.setImageBitmap(imageBitmap);
+
+            imageStream.close();
+        } catch (FileNotFoundException e) {
+            // TODO: Show error message.
+        } catch (IOException e) {
+            // TODO: Show error message.
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

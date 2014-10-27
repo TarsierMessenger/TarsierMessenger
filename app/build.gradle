@@ -29,7 +29,7 @@ android {
         textOutput 'stdout'
 
         // Needed because Espresso references APIs that are not supported in Android.
-        ignore 'InvalidPackage'
+        ignore 'InvalidPackage', 'GradleDependency', 'OldTargetApi', 'LabelFor'
     }
 }
 
@@ -41,12 +41,12 @@ dependencies {
 
 check.dependsOn 'checkstyle'
 
-task checkstyle(type: Checkstyle){
-  ignoreFailures = false
-  configFile file("config/checkstyle/checkstyle.xml")
+task checkstyle(type: Checkstyle) {
+    ignoreFailures = false
+    configFile file("config/checkstyle/checkstyle.xml")
 
-  source 'src'
-  include '**/*.java'
-  // exclude '**/packageName/**', '**/utils/MyFile.java'
-  classpath = files()
+    source 'src'
+    include '**/*.java'
+    // exclude '**/packageName/**', '**/utils/MyFile.java'
+    classpath = files()
 }
