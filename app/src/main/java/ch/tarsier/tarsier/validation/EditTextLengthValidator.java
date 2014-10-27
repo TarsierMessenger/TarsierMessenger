@@ -3,7 +3,7 @@ package ch.tarsier.tarsier.validation;
 import android.widget.EditText;
 
 /**
- * @author romac
+ * @author Romain Ruetschi
  */
 public class EditTextLengthValidator extends EditTextValidator {
 
