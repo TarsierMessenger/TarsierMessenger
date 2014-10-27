@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import ch.tarsier.tarsier.validation.StatusMessageValidator;
+import ch.tarsier.tarsier.validation.UsernameValidator;
+
 /**
  * This is the Home screen of Tarsier. It allows to enter a Username
  * and initiate a session
@@ -19,18 +22,20 @@ import android.widget.Toast;
  */
 public class HomeActivity extends Activity {
 
-    static private final int MIN_USERNAME_LENGTH = 1;
-    static private final int MIN_STATUS_LENGTH = 1;
-
-
+    private EditText username;
+    private EditText statusMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         enableStartButton(false);
-        ((EditText) findViewById(R.id.username)).addTextChangedListener(new EditTextWatcher());
-        ((EditText) findViewById(R.id.status_message)).addTextChangedListener(new EditTextWatcher());
+
+        username = (EditText)findViewById(R.id.username);
+        statusMessage = (EditText)findViewById(R.id.status_message);
+
+        username.addTextChangedListener(new EditTextWatcher());
+        statusMessage.addTextChangedListener(new EditTextWatcher());
 
     }
 
@@ -46,8 +51,7 @@ public class HomeActivity extends Activity {
 
     public void onClickLetsChat(View view) {
         //create intent with username and launch the list of rooms
-        EditText username = (EditText) findViewById(R.id.username);
-        if (isValidUsername(username.getText().toString())) {
+        if (validateUsername()) {
             //continue
         } else {
             //show toast with information on invalidity
@@ -56,17 +60,39 @@ public class HomeActivity extends Activity {
         Toast.makeText(this, "enabled", Toast.LENGTH_SHORT).show();
     }
 
-    private boolean isValidUsername(String username) {
-        //check on the string (length)
-        return true;
+    /**
+     * Check if the username's length is within the bounds, and
+     * set an error message otherwise.
+     *
+     * @return Whether it is valid or not
+     */
+    private boolean validateUsername() {
+        return new UsernameValidator().validate(username);
+    }
+
+    /**
+     * Check if the status message's length is within the bounds, and
+     * set an error message otherwise.
+     *
+     * @return Whether it is valid or not
+     */
+    private boolean validateStatusMessage() {
+        return new StatusMessageValidator().validate(statusMessage);
+    }
+
+    /**
+     * Validate the username and status message.
+     *
+     * @return Whether or not both are valid.
+     */
+    private boolean validateFields() {
+        return validateUsername() && validateStatusMessage();
     }
 
     public void onClickAddPicture(View view) {
         //launch Activity to have the user choose the picture
         Intent picture = new Intent(this, AddProfilePictureActivity.class);
         this.startActivity(picture);
-        //debug
-        //Toast.makeText(this, "add picture", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -85,8 +111,7 @@ public class HomeActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
-        }
-        else if (id == R.id.action_profile) {
+        } else if (id == R.id.action_profile) {
             displayProfileActivty();
         }
 
@@ -106,11 +131,7 @@ public class HomeActivity extends Activity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-            if (chatButtonCanBeEnabled()) {
-                enableStartButton(true);
-            } else {
-                enableStartButton(false);
-            }
+            enableStartButton(chatButtonCanBeEnabled());
         }
 
         @Override
@@ -119,11 +140,7 @@ public class HomeActivity extends Activity {
         }
 
         private boolean chatButtonCanBeEnabled() {
-            if ((((EditText) findViewById(R.id.status_message)).getText().length() >= MIN_STATUS_LENGTH)
-                    && (((EditText) findViewById(R.id.username)).getText().length() >= MIN_USERNAME_LENGTH)) {
-                return true;
-            }
-            return false;
+            return validateFields();
         }
     }
 
