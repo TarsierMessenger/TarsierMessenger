@@ -50,6 +50,12 @@
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile">
         </activity>
+
+        <activity
+                android:name=".WiFiDirectDebugActivity"
+                android:label="@string/title_activity_wifidirectdebug">
+        </activity>
+
     </application>
 
 </manifest>

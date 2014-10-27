@@ -19,7 +19,9 @@
     <string name="status_message_placeholder">Enter a status message</string>
     <string name="add_profile_picture_desc">Add a profile picture</string>
     <string name="action_profile">Profile</string>
+    <string name="action_wifidirectdebug">Wi-Fi Direct Debug</string>
     <string name="error_username_length">Username should be between 1 and 36 chars long</string>
     <string name="error_status_message_length">Status message length should be between 1 and 50 chars long</string>
+    <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
 
 </resources>

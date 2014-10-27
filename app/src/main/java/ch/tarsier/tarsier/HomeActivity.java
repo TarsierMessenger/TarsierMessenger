@@ -112,7 +112,9 @@ public class HomeActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_profile) {
-            displayProfileActivty();
+            displayProfileActivity();
+        } else if (id == R.id.action_wifidirectdebug) {
+            displayWifiDirectDebugActivity();
         }
 
         return super.onOptionsItemSelected(item);
@@ -144,9 +146,14 @@ public class HomeActivity extends Activity {
         }
     }
 
-    public void displayProfileActivty() {
+    public void displayProfileActivity() {
         Intent displayProfileIntent = new Intent(this, ProfileActivity.class);
         startActivity(displayProfileIntent);
+    }
+
+    private void displayWifiDirectDebugActivity() {
+        Intent displayWifiDirectDebugIntent = new Intent(this, WiFiDirectDebugActivity.class);
+        startActivity(displayWifiDirectDebugIntent);
     }
 
 }
