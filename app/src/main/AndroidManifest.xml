@@ -62,6 +62,10 @@
             android:name=".ui.PreferencesActivity"
             android:label="@string/title_activity_preferences" >
         </activity>
+
+        <activity android:name=".DiscussionsActivity"
+            android:label="Discussions"
+            android:theme="@style/CustomActionBarTheme" ></activity>
     </application>
 
 </manifest>
