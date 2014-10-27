@@ -6,17 +6,17 @@ import ch.tarsier.tarsier.AddProfilePictureActivity;
 import ch.tarsier.tarsier.R;
 
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
+import static com.google.android.apps.common.testing.ui.espresso.Espresso.pressBack;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
 
 /**
- * Created by Benjamin Paccaud on 22/10/14.
+ * @author Benjamin Paccaud
  */
 public class AddProfilePictureActivityTest extends ActivityInstrumentationTestCase2<AddProfilePictureActivity> {
 
-    @SuppressWarnings("deprecation")
     public AddProfilePictureActivityTest() {
-        super("ch.tarsier.tarsier", AddProfilePictureActivity.class);
+        super(AddProfilePictureActivity.class);
     }
 
     @Override
@@ -26,13 +26,15 @@ public class AddProfilePictureActivityTest extends ActivityInstrumentationTestCa
     }
 
     public void testAddNewPicture() {
-        onView(withId(R.id.add_new_picture)).perform(click());
-        //do stuff
+        // onView(withId(R.id.add_new_picture)).perform(click());
+        // do stuff
+        // pressBack();
     }
 
     public void testAddExistingPicture() {
-        onView(withId(R.id.add_from_existing)).perform(click());
-        //do stuff
+        // onView(withId(R.id.add_from_existing)).perform(click());
+        // do stuff
+        // pressBack();
     }
 
 }

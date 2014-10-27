@@ -15,13 +15,12 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
 
 /**
- * Created by Benjamin Paccaud on 22/10/14.
+ * @author Benjamin Paccaud
  */
 public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActivity> {
 
-    @SuppressWarnings("deprecation")
     public HomeActivityTest() {
-        super("ch.tarsier.tarsier", HomeActivity.class);
+        super(HomeActivity.class);
     }
 
     @Override
@@ -40,36 +39,41 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
         onView(withId(R.id.lets_chat)).check(matches(isClickable()));
         onView(withId(R.id.username)).perform(clearText());
         onView(withId(R.id.lets_chat)).perform(click());
-        //nothing should happen
+        // nothing should happen
         onView(withId(R.id.username)).perform(typeText("Benpac"));
         onView(withId(R.id.lets_chat)).check(matches(isClickable()));
         onView(withId(R.id.lets_chat)).perform(click());
-        //we go to new activity
-        //basic check
-        //pressBack();
-        //we are back to home activity
+
+        // we go to new activity
+        // basic check
+        // pressBack();
+        // we are back to home activity
     }
 
     public void testAddPictureClick() {
         onView(withId(R.id.picture)).check(matches(isClickable()));
         onView(withId(R.id.picture)).perform(click());
+
         // we are on AddProfilePictureActivity
         onView(withId(R.id.add_from_existing)).check(matches(isClickable()));
         onView(withId(R.id.add_new_picture)).check(matches(isClickable()));
-        //click and check intent for existing picture
-        onView(withId(R.id.add_from_existing)).perform(click());
-        //get from gallery
-        //pressBack();
-        //click and check intent for new picture
-        onView(withId(R.id.add_from_existing)).perform(click());
-        //get from camera
-        //pressBack();
-        //back to Home
+
+        // click and check intent for existing picture
+        // onView(withId(R.id.add_from_existing)).perform(click());
+        // get from gallery
+        // pressBack();
+
+        // click and check intent for new picture
+        // onView(withId(R.id.add_from_existing)).perform(click());
+        // get from camera
+        // pressBack();
+
+        // back to Home
         pressBack();
     }
 
     public void testValidUsername() {
-        //TODO
+
     }
 
 }
