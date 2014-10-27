@@ -18,20 +18,20 @@ import android.view.MenuItem;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ch.tarsier.tarsier.validation.ConnectionInterface;
+
 /**
  * @author amirezza
  */
 public class WiFiDirectDebugActivity
     extends Activity
     implements WifiP2pManager.ConnectionInfoListener,
-               WiFiDirectGroupList.DeviceClickListener,
-               Server.MessageTarget,
-               Handler.Callback {
+               WiFiDirectGroupList.DeviceClickListener
+                {
 
     public static final String TAG = "WiFiDirectDebugActivity";
     public static final int SERVER_PORT = 8888;
-    public static final int MESSAGE_READ = 0x401;
-    public static final int MY_HANDLE = 0x402;
+
 
 
     private WifiP2pManager.PeerListListener peerListListener;
@@ -39,12 +39,13 @@ public class WiFiDirectDebugActivity
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private WiFiDirectBroadcastReceiver mReceiver;
+    private ConnectionInterface connectionInterface;
 
 
     private WiFiDirectGroupList groupList;
     private final ArrayList<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
     private ChatRoom chatRoom;
-    private Handler mHandler = new Handler(this);
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +115,7 @@ public class WiFiDirectDebugActivity
     }
 
 
-    public void initiatePeerDiscovery() {
+    private void initiatePeerDiscovery() {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
@@ -202,12 +203,19 @@ public class WiFiDirectDebugActivity
         * The group owner accepts connections using a server socket and then spawns a
         * client socket for every client.
         */
+        chatRoom = new ChatRoom();
+        if(connectionInterface == null) {
+            connectionInterface = new ConnectionInterface(chatRoom);
+            mHandler = connectionInterface.getHandler();
+        }
+
         if (p2pInfo.isGroupOwner) {
             Log.d(TAG, "Connected as group owner");
             try {
-                handler = new Server(
-                        ((Server.MessageTarget) this).getHandler());
+                handler = new Server(mHandler);
                 handler.start();
+                connectionInterface.setIsServer(true);
+                connectionInterface.setServer((Server)handler);
             } catch (IOException e) {
                 Log.d(TAG,
                         "Failed to create a server thread - " + e.getMessage());
@@ -215,39 +223,15 @@ public class WiFiDirectDebugActivity
             }
         } else {
             Log.d(TAG, "Connected as peer");
-            handler = new Client(
-                    ((Server.MessageTarget) this).getHandler(),
-                    p2pInfo.groupOwnerAddress);
+            handler = new Client(mHandler, p2pInfo.groupOwnerAddress);
             handler.start();
+            connectionInterface.setIsServer(false);
+
         }
 
-        chatRoom = new ChatRoom();
+
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, chatRoom).commit();
 
     }
-
-    @Override
-    public Handler getHandler() {
-        return mHandler;
-    }
-
-    @Override
-    public boolean handleMessage(Message message) {
-
-        switch (message.what) {
-            case MESSAGE_READ:
-                byte[] readBuf = (byte[]) message.obj;
-                // construct a string from the valid bytes in the buffer
-                String readMessage = new String(readBuf, 0, message.arg1);
-                Log.d(TAG, readMessage);
-                (chatRoom).pushMessage("Peer: " + readMessage);
-                break;
-            case MY_HANDLE:
-                Object obj = message.obj;
-                (chatRoom).setMyConnection((MyConnection) obj);
-        }
-        return true;
-    }
-
 }

@@ -8,15 +8,20 @@ import java.net.ServerSocket;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import ch.tarsier.tarsier.validation.MapChangeEvent;
+import ch.tarsier.tarsier.validation.MapChangeListener;
+
 /**
  * Created by amirreza on 10/26/14.
  */
-public class Server extends Thread {
+public class Server extends Thread  {
 
     public static final String TAG = "Server";
     private final HashMap<Integer,MyConnection> connectionsMap = new HashMap<Integer,MyConnection>();
@@ -24,6 +29,7 @@ public class Server extends Thread {
     private final static Random random = new Random();
     ServerSocket socket = null;
     private Handler handler;
+    private CopyOnWriteArrayList<MapChangeListener> listeners;
 
     private MyConnection conn;
 
@@ -52,6 +58,7 @@ public class Server extends Thread {
                 conn = new MyConnection(socket.accept(), handler);
                 pool.execute(conn);
                 connectionsMap.put(random.nextInt(1000),conn);
+                fireChangeEvent();
                 Log.d(TAG, "Launching the I/O handler");
             } catch (IOException e) {
                 try {
@@ -70,13 +77,23 @@ public class Server extends Thread {
         public Handler getHandler();
     }
 
-    public void send(Integer id,byte[] message){
-        if (connectionsMap.containsKey(id) ) {
-            MyConnection conn = connectionsMap.get(id);
-            conn.write(message);
-        }
+
+
+    public void addMyChangeListener(MapChangeListener l) {
+        this.listeners.add(l);
     }
 
+    public void removeMyChangeListener(MapChangeListener l) {
+        this.listeners.remove(l);
+    }
+    protected void fireChangeEvent() {
+        MapChangeEvent evt = new MapChangeEvent(this);
+        if(listeners != null) {
+            for (MapChangeListener l : listeners) {
+                l.changeEventReceived(evt);
+            }
+        }
+    }
     public HashMap<Integer,MyConnection> getConnectionMaps(){
         return connectionsMap;
     }
