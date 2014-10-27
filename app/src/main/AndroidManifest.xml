@@ -41,6 +41,10 @@
             android:label="@string/title_activity_add_profile_picture"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_profile">
+        </activity>
     </application>
 
 </manifest>

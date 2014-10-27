@@ -13,5 +13,8 @@
     <string name="title_activity_add_profile_picture">Add a profile picture</string>
     <string name="add_from_existing">Add from your gallery</string>
     <string name="add_new_picture">Take a new picture</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="save_profile">Save</string>
+    <string name="cancel_profile">Cancel</string>
 
 </resources>
