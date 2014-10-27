@@ -7,7 +7,9 @@ import android.widget.EditText;
  */
 public abstract class EditTextValidator extends AbstractValidator<EditText> {
 
-    protected EditTextValidator() {}
+    protected EditTextValidator() {
+
+    }
 
     @Override
     public boolean validate(EditText editText) {

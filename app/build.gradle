@@ -29,7 +29,7 @@ android {
         textOutput 'stdout'
 
         // Needed because Espresso references APIs that are not supported in Android.
-        ignore 'InvalidPackage'
+        ignore 'InvalidPackage', 'GradleDependency', 'OldTargetApi', 'LabelFor'
     }
 }
 

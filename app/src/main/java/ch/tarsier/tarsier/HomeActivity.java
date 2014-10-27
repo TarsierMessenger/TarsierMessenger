@@ -31,8 +31,8 @@ public class HomeActivity extends Activity {
         setContentView(R.layout.activity_home);
         enableStartButton(false);
 
-        username = (EditText)findViewById(R.id.username);
-        statusMessage = (EditText)findViewById(R.id.status_message);
+        username = (EditText) findViewById(R.id.username);
+        statusMessage = (EditText) findViewById(R.id.status_message);
 
         username.addTextChangedListener(new EditTextWatcher());
         statusMessage.addTextChangedListener(new EditTextWatcher());

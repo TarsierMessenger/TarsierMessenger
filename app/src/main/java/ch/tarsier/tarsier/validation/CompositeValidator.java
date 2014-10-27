@@ -5,10 +5,11 @@ import java.util.List;
 
 /**
  * @author romac
+ * @param <T> The type of the elements to validate.
  */
 public class CompositeValidator<T> extends AbstractValidator<T> {
 
-    List<Validator<T>> mValidators;
+    private List<Validator<T>> mValidators;
 
     public CompositeValidator() {
         this(new ArrayList<Validator<T>>());

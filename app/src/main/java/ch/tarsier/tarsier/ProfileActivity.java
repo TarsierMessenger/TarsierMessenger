@@ -9,11 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import ch.tarsier.tarsier.validation.EditTextLengthValidator;
-import ch.tarsier.tarsier.validation.EditTextValidator;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
-import ch.tarsier.tarsier.validation.Validator;
 
 /**
  * @author Romain Ruetschi (romac)
@@ -28,8 +25,8 @@ public class ProfileActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        username = (EditText)findViewById(R.id.username);
-        statusMessage = (EditText)findViewById(R.id.status_message);
+        username = (EditText) findViewById(R.id.username);
+        statusMessage = (EditText) findViewById(R.id.status_message);
     }
 
 

@@ -9,7 +9,6 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -60,7 +59,7 @@ public class AddProfilePictureActivity extends Activity {
 
             case REQUEST_IMAGE_CAPTURE:
                 onImageCaptured(resultCode, data);
-            break;
+                break;
 
             default:
                 // TODO: Handle unknown request code.

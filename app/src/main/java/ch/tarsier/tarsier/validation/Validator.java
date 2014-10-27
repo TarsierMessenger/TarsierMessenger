@@ -2,12 +2,12 @@ package ch.tarsier.tarsier.validation;
 
 /**
  * @author romac
+ * @param <T> The type of the elements to validate.
  */
 public interface Validator<T> {
 
-    public boolean validate(T t);
+    boolean validate(T t);
 
-    public boolean hasErrorMessage();
-    public String getErrorMessage();
-
+    boolean hasErrorMessage();
+    String getErrorMessage();
 }
