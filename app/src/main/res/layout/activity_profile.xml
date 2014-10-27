@@ -7,11 +7,29 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="ch.tarsier.tarsier.ProfileActivity"
-    android:id="@+id/">
+    android:id="@+id/rel_layout">
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_picture_button"
+            android:src="@drawable/add_picture_profile"
+            android:contentDescription="@string/add_profile_picture_accessibility"
+            android:layout_toEndOf="@+id/add_picture_button" android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/username" android:layout_alignBottom="@+id/add_picture_button"
+            android:layout_toEndOf="@+id/add_picture_button"
+            android:layout_marginBottom="30dp" android:inputType="text"
+            android:layout_alignParentEnd="true" android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statusMessage" android:layout_below="@+id/add_picture_button"
+            android:layout_marginTop="32dp" android:layout_alignParentStart="true"
+            android:inputType="textShortMessage" android:layout_alignEnd="@+id/username"
+            android:hint="@string/status_message_placeholder"/>
 </RelativeLayout>
