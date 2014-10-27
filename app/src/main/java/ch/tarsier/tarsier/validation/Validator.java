@@ -6,7 +6,6 @@ package ch.tarsier.tarsier.validation;
 public interface Validator<T> {
 
     public boolean validate(T t);
-    public boolean isValid(T t);
 
     public boolean hasErrorMessage();
     public String getErrorMessage();

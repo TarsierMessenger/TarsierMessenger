@@ -7,6 +7,8 @@ public abstract class AbstractValidator<T> implements Validator<T> {
 
     private String mErrorMessage = null;
 
+    protected abstract boolean isValid(T t);
+
     @Override
     public boolean validate(T t) {
         return isValid(t);

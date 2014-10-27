@@ -11,17 +11,14 @@ import android.widget.Toast;
 
 import ch.tarsier.tarsier.validation.EditTextLengthValidator;
 import ch.tarsier.tarsier.validation.EditTextValidator;
+import ch.tarsier.tarsier.validation.StatusMessageValidator;
+import ch.tarsier.tarsier.validation.UsernameValidator;
 import ch.tarsier.tarsier.validation.Validator;
 
 /**
  * @author Romain Ruetschi (romac)
  */
 public class ProfileActivity extends Activity {
-
-    private static final int MIN_USERNAME_LENGTH = 1;
-    private static final int MAX_USERNAME_LENGTH = 36;
-    private static final int MIN_STATUS_LENGTH   = 1;
-    private static final int MAX_STATUS_LENGTH   = 140;
 
     private EditText username;
     private EditText statusMessage;
@@ -97,8 +94,7 @@ public class ProfileActivity extends Activity {
      * @return Whether it is valid or not
      */
     private boolean validateUsername() {
-        EditTextValidator validator = new EditTextLengthValidator(MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH);
-        return validator.validate(username);
+        return new UsernameValidator().validate(username);
     }
 
     /**
@@ -108,7 +104,6 @@ public class ProfileActivity extends Activity {
      * @return Whether it is valid or not
      */
     private boolean validateStatusMessage() {
-        EditTextValidator validator = new EditTextLengthValidator(MIN_STATUS_LENGTH, MAX_STATUS_LENGTH);
-        return validator.validate(statusMessage);
+        return new StatusMessageValidator().validate(statusMessage);
     }
 }
