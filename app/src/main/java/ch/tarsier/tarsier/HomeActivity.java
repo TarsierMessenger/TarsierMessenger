@@ -86,6 +86,10 @@ public class HomeActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
+        else if (id == R.id.action_profile) {
+            displayProfileActivty();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -123,4 +127,10 @@ public class HomeActivity extends Activity {
         }
     }
 
+    public void displayProfileActivty() {
+        Intent displayProfileIntent = new Intent(this, ProfileActivity.class);
+        startActivity(displayProfileIntent);
+    }
+
 }
+

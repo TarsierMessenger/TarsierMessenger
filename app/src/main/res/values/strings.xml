@@ -18,5 +18,6 @@
     <string name="cancel_profile">Cancel</string>
     <string name="status_message_placeholder">Enter a status message</string>
     <string name="add_profile_picture_accessibility">Add a profile picture</string>
+    <string name="action_profile">Profile</string>
 
 </resources>

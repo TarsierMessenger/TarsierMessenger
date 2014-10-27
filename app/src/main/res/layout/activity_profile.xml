@@ -29,7 +29,7 @@
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/statusMessage" android:layout_below="@+id/add_picture_button"
+            android:id="@+id/status_message" android:layout_below="@+id/add_picture_button"
             android:layout_marginTop="32dp" android:layout_alignParentStart="true"
             android:inputType="textShortMessage" android:layout_alignEnd="@+id/username"
             android:hint="@string/status_message_placeholder"/>
