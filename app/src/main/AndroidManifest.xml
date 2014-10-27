@@ -61,6 +61,10 @@
             android:label="@string/title_activity_new_discussion" >
         </activity>
         <activity
+            android:name=".ChatRoomParticipantsActivity"
+            android:label="@string/title_activity_chat_room_participants" >
+        </activity>
+        <activity
             android:name=".ui.PreferencesActivity"
             android:label="@string/title_activity_preferences" >
         </activity>

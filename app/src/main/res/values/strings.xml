@@ -16,7 +16,7 @@
     <string name="title_activity_profile">Profile</string>
     <string name="save_profile">Save</string>
     <string name="cancel_profile">Cancel</string>
-    <string name="status_message_placeholder">Enter a status message</string>
+    <string name="status_message_placeholder">Enter a statusMessage message</string>
     <string name="add_profile_picture_desc">Add a profile picture</string>
     <string name="action_profile">Profile</string>
     <string name="action_wifidirectdebug">Wi-Fi Direct Debug</string>
@@ -45,4 +45,6 @@
     <string name="nb_people_online">Online:</string>
     <string name="create_new_discussion">New discussion</string>
     <string name="action_discussions">Discussions</string>
+    <string name="title_activity_chat_room_participants">Chat Room Participants</string>
+    <string name="action_chat_room_participants">Chat Room Participants</string>
 </resources>

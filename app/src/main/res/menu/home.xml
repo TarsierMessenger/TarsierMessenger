@@ -5,6 +5,10 @@
           android:title="@string/action_profile"
           android:orderInCategory="100"
           android:showAsAction="never" />
+    <item android:id="@+id/action_chat_room_participants"
+          android:title="@string/action_chat_room_participants"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
     <item android:id="@+id/action_wifidirectdebug"
           android:title="@string/action_wifidirectdebug"
           android:orderInCategory="100"
