@@ -33,7 +33,7 @@ public class MyConnection implements Runnable {
             out= socket.getOutputStream();
             byte[] buffer = new byte[1024];
             int bytes;
-            handler.obtainMessage(HomeActivity.MY_HANDLE, this)
+            handler.obtainMessage(WiFiDirectDebugActivity.MY_HANDLE, this)
                     .sendToTarget();
 
 
@@ -47,7 +47,7 @@ public class MyConnection implements Runnable {
                     }
                     // Send the obtained bytes to the UI Activity
                     Log.d(TAG, "Rec:" + String.valueOf(buffer));
-                    handler.obtainMessage(HomeActivity.MESSAGE_READ,
+                    handler.obtainMessage(WiFiDirectDebugActivity.MESSAGE_READ,
                             bytes, -1, buffer).sendToTarget();
 
                 } catch (IOException e) {

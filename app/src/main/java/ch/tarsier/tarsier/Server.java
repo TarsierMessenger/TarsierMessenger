@@ -29,7 +29,7 @@ public class Server extends Thread {
 
     public Server(Handler handler) throws IOException {
         try {
-            socket = new ServerSocket(HomeActivity.SERVER_PORT);
+            socket = new ServerSocket(WiFiDirectDebugActivity.SERVER_PORT);
             this.handler = handler;
             Log.d(TAG, "Socket Started");
         } catch (IOException e) {
