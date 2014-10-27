@@ -4,4 +4,5 @@
     <item name="principal_complementary" type="color">#119DCB</item>
     <item name="secondary" type="color">#FF890D</item>
     <item name="secondary_complementary" type="color">#FF330D</item>
+    <item name="dim_grey" type="color">#696969</item>
 </resources>
