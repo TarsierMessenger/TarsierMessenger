@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 
 public class HomeActivity extends Activity {
-    public boolean testUI = true;
+    private boolean testUI = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

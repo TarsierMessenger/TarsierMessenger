@@ -18,7 +18,7 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
 
     @SuppressWarnings("deprecation")
     public HomeActivityTest() {
-        super("ch.tarsier.tarsier",HomeActivity.class);
+        super("ch.tarsier.tarsier", HomeActivity.class);
     }
 
     @Override
