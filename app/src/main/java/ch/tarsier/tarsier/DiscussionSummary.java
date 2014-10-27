@@ -28,4 +28,5 @@ public class DiscussionSummary {
     public static enum TypeConversation {
         PUBLIC_ROOM, PRIVATE_CHAT
     }
+
 }
