@@ -14,7 +14,7 @@
         android:scaleType="fitCenter"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/placeholder"
-        android:layout_marginRight="55dp" />
+        android:layout_marginRight="5dp" />
 
     <ImageView
         android:id="@+id/notification"
@@ -23,18 +23,21 @@
         android:scaleType="fitCenter"
         android:layout_gravity="bottom"
         android:src="@drawable/notification"
-        android:layout_marginLeft="40dp" />
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="35dp" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/avatar" />
 
     <TextView
         android:id="@+id/lastMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" />
+        android:layout_below="@id/name"
+        android:layout_toRightOf="@id/avatar" />
 
     <TextView
         android:id="@+id/humanTime"
@@ -46,11 +49,14 @@
         android:id="@+id/nbOnline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/humanTime" />
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@color/dim_grey" />
+        android:background="@color/dim_grey"
+        android:layout_below="@id/avatar"
+        android:layout_marginTop="5dp" />
 
 </RelativeLayout>
