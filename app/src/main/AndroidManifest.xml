@@ -51,6 +51,7 @@
         <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile" >
+<<<<<<< HEAD
         </activity>
         <activity
             android:name=".WiFiDirectDebugActivity"
@@ -73,6 +74,17 @@
             android:label="Discussions"
             android:theme="@style/CustomActionBarTheme" >
         </activity>
+=======
+        </activity>
+        <activity
+            android:name=".WiFiDirectDebugActivity"
+            android:label="@string/title_activity_wifidirectdebug" >
+        </activity>
+        <activity
+            android:name=".PrivateDiscussionActivity"
+            android:label="@string/title_activity_private_discussion" >
+        </activity>
+>>>>>>> Initial commit for PrivateDiscussionActivity
     </application>
 
 </manifest>
