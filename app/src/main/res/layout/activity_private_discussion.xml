@@ -8,9 +8,20 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="ch.tarsier.tarsier.PrivateDiscussionActivity">
 
-    <TextView
-        android:text="@string/hello_world"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/right_bubble"
+        android:gravity="right"
+        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:layout_marginLeft="50dp"
+        android:background="@drawable/bubble_text_right"
+        android:text="Hello tout le monde comment ca va bien tu peux écrire autant que tu veux tu sais"
+        />
+    </RelativeLayout>
 
 </RelativeLayout>
