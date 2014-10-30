@@ -8,14 +8,12 @@ import android.provider.BaseColumns;
 public final class ChatsContract {
 
 
-
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
 
 
-
-
-    public ChatsContract() {}
+    public ChatsContract() {
+    }
 
 
     public static abstract class ChatRooms implements BaseColumns {

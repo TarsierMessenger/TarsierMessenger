@@ -32,9 +32,9 @@ public class StorageAccess {
         String table;
         String sortOrder;
 
-            table = ChatsContract.ChatRooms.TABLE_NAME;
+        table = ChatsContract.ChatRooms.TABLE_NAME;
 
-            sortOrder = ChatsContract.ChatRooms.COLUMN_NAME_TITLE + "DESC";
+        sortOrder = ChatsContract.ChatRooms.COLUMN_NAME_TITLE + "DESC";
 
 
         //TODO implement the new DB style, chats & chatrooms being in the same table from now on.
@@ -44,7 +44,7 @@ public class StorageAccess {
         //The cursor is full of my data, I now need to extract it in a more conventional form
         c.moveToFirst();
         do {
-            chatRooms.add(new Chat(c.getInt(c.getColumnIndex(ChatsContract.ChatRooms._ID)), c.getString(c.getColumnIndex(ChatsContract.ChatRooms.COLUMN_NAME_TITLE)), c.getString(c.getColumnIndex(ChatsContract.ChatRooms.COLUMN_NAME_HOST)),wantChatrooms));
+            chatRooms.add(new Chat(c.getInt(c.getColumnIndex(ChatsContract.ChatRooms._ID)), c.getString(c.getColumnIndex(ChatsContract.ChatRooms.COLUMN_NAME_TITLE)), c.getString(c.getColumnIndex(ChatsContract.ChatRooms.COLUMN_NAME_HOST)), wantChatrooms));
         } while (c.moveToNext());
 
 
@@ -73,7 +73,7 @@ public class StorageAccess {
         c.moveToFirst();
 
         do {
-            messages.add(new Message(c.getInt(c.getColumnIndex(ChatsContract.Messages._ID)), c.getInt(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_MSG)), c.getString(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_SENDER)),c.getLong(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_DATETIME))));
+            messages.add(new Message(c.getInt(c.getColumnIndex(ChatsContract.Messages._ID)), c.getInt(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_MSG)), c.getString(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_SENDER)), c.getLong(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_DATETIME))));
         } while (c.moveToNext());
 
         return messages;
@@ -90,23 +90,23 @@ public class StorageAccess {
     public void setMessage(Message msg) {
         ContentValues values = new ContentValues();
 
-        values.put(ChatsContract.Messages.COLUMN_NAME_CHATID,msg.getChatID());
-        values.put(ChatsContract.Messages.COLUMN_NAME_MSG,msg.getContent());
+        values.put(ChatsContract.Messages.COLUMN_NAME_CHATID, msg.getChatID());
+        values.put(ChatsContract.Messages.COLUMN_NAME_MSG, msg.getContent());
         values.put(ChatsContract.Messages.COLUMN_NAME_SENDER, msg.getAuthor());
-        values.put(ChatsContract.Messages.COLUMN_NAME_DATETIME,msg.getDateTime());
+        values.put(ChatsContract.Messages.COLUMN_NAME_DATETIME, msg.getDateTime());
 
-        writableDB.insert(ChatsContract.Messages.TABLE_NAME,null,values);
+        writableDB.insert(ChatsContract.Messages.TABLE_NAME, null, values);
 
     }
 
     public void setChatroom(Chat chat) {
         ContentValues values = new ContentValues();
 
-        values.put(ChatsContract.ChatRooms.COLUMN_NAME_TITLE,chat.getTitle());
-        values.put(ChatsContract.ChatRooms.COLUMN_NAME_HOST,chat.getHost());
-        values.put(ChatsContract.ChatRooms.COLUMN_NAME_TYPE,chat.isGroup());
+        values.put(ChatsContract.ChatRooms.COLUMN_NAME_TITLE, chat.getTitle());
+        values.put(ChatsContract.ChatRooms.COLUMN_NAME_HOST, chat.getHost());
+        values.put(ChatsContract.ChatRooms.COLUMN_NAME_TYPE, chat.isGroup());
 
-        writableDB.insert(ChatsContract.ChatRooms.TABLE_NAME,null,values);
+        writableDB.insert(ChatsContract.ChatRooms.TABLE_NAME, null, values);
     }
 
     private class DatabaseAccess extends AsyncTask<String, Void, Void> {

@@ -11,7 +11,6 @@ public class Chat {
     private boolean group;
 
 
-
     public Chat(int id, String title, String host, boolean isgroup) {
         this.id = id;
         this.title = title;

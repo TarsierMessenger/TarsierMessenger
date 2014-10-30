@@ -14,7 +14,7 @@ public class Message {
     private long dateTime;
 
 
-    public Message(int id,int chatID, String content, String author, long dateTime) {
+    public Message(int id, int chatID, String content, String author, long dateTime) {
 
         this.id = id;
 
