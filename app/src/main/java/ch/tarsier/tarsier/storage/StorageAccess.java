@@ -64,7 +64,7 @@ public class StorageAccess {
         return readableDB.query(ChatsContract.Messages.TABLE_NAME, projection, selection, null, null, null, sortOrder);
     }
 
-    //TODO fix this ID thingy, once we got an ID to rule them all
+    //FIXME fix this ID thingy, once we got an ID to rule them all
     public ArrayList<Message> getMessages(int chatID) {
         ArrayList<Message> messages = new ArrayList<Message>();
 
@@ -87,7 +87,7 @@ public class StorageAccess {
         return new Message(c.getInt(c.getColumnIndex(ChatsContract.Messages._ID)), c.getInt(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_MSG)), c.getString(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_SENDER)), c.getLong(c.getColumnIndex(ChatsContract.Messages.COLUMN_NAME_DATETIME)));
     }
 
-    public void setMessage(Message msg) { //TODO setMessage(msg)
+    public void setMessage(Message msg) {
         ContentValues values = new ContentValues();
 
         values.put(ChatsContract.Messages.COLUMN_NAME_CHATID,msg.getChatID());
@@ -95,7 +95,7 @@ public class StorageAccess {
         values.put(ChatsContract.Messages.COLUMN_NAME_SENDER, msg.getAuthor());
         values.put(ChatsContract.Messages.COLUMN_NAME_DATETIME,msg.getDateTime());
 
-
+        writableDB.insert(ChatsContract.Messages.TABLE_NAME,null,values);
 
     }
 
@@ -105,6 +105,8 @@ public class StorageAccess {
         values.put(ChatsContract.ChatRooms.COLUMN_NAME_TITLE,chat.getTitle());
         values.put(ChatsContract.ChatRooms.COLUMN_NAME_HOST,chat.getHost());
         values.put(ChatsContract.ChatRooms.COLUMN_NAME_TYPE,chat.isGroup());
+
+        writableDB.insert(ChatsContract.ChatRooms.TABLE_NAME,null,values);
     }
 
     private class DatabaseAccess extends AsyncTask<String, Void, Void> {
