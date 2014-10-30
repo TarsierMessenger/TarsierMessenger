@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 public final class ChatsContract {
 
 
-    public static final String COLUMN_NAME_ENTRY_ID = "entryid";
+
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
 
@@ -21,16 +21,10 @@ public final class ChatsContract {
     public static abstract class ChatRooms implements BaseColumns {
 
         public static final String TABLE_NAME = "chatrooms";
+        public static final String COLUMN_NAME_CHATID = "chatid";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_HOST = "host";
-
-
-    }
-
-    public static abstract class Chats implements BaseColumns{
-        public static final String TABLE_NAME = "chats";
-        public static final String COLUMN_NAME_TITLE = "title";
-        public static final String COLUMN_NAME_HOST = "host";
+        public static final String COLUMN_NAME_TYPE = "type";
 
     }
 
@@ -39,9 +33,9 @@ public final class ChatsContract {
 
         public static final String TABLE_NAME = "messages";
         public static final String COLUMN_NAME_MSG = "msg";
-        public static final String COLUMN_NAME_TIME = "time";
+        public static final String COLUMN_NAME_DATETIME = "datetime";
         public static final String COLUMN_NAME_SENDER = "sender";
-
+        public static final String COLUMN_NAME_CHATID = "chatid";
 
     }
 
