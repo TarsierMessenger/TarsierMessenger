@@ -1,65 +1,72 @@
 package ch.tarsier.tarsier;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.List;
 
 /**
  * Created by gluthier on 23.10.2014.
  */
-public class DiscussionsAdapter extends RecyclerView.Adapter <DiscussionsAdapter.DiscussionsHolder> {
+public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
 
-    private List<DiscussionSummary> mDiscussions;
+    private DiscussionSummary[] mDiscussions;
+    private int mLayoutResourceId;
     private Context mContext;
 
-    public DiscussionsAdapter(List<DiscussionSummary> discussions, Context context) {
-        this.mDiscussions = discussions;
-        this.mContext = context;
+    public DiscussionsAdapter(Context context, int layoutResourceId, DiscussionSummary[] discussions) {
+        super(context, layoutResourceId, discussions);
+        mContext = context;
+        mLayoutResourceId = layoutResourceId;
+        mDiscussions = discussions;
     }
 
     @Override
-    public DiscussionsHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_discussion, viewGroup, false);
-        return new DiscussionsHolder(v);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View row = convertView;
+        DiscussionSummaryHolder holder = null;
+
+        //TODO understand that
+        if (row == null) {
+            LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
+            row = inflater.inflate(mLayoutResourceId, parent, false);
+
+            holder = new DiscussionSummaryHolder();
+            holder.avatar = (ImageView)row.findViewById(R.id.avatar);
+            holder.notification = (ImageView)row.findViewById(R.id.notification);
+            holder.name = (TextView)row.findViewById(R.id.name);
+            holder.lastMessage = (TextView)row.findViewById(R.id.lastMessage);
+            holder.humanTime = (TextView)row.findViewById(R.id.humanTime);
+            holder.nbOnline = (TextView)row.findViewById(R.id.nbOnline);
+
+            row.setTag(holder);
+        } else {
+            holder = (DiscussionSummaryHolder) row.getTag();
+        }
+
+        DiscussionSummary discussionSummary = mDiscussions[position];
+        //TODO
+        //holder.avatar.setImageResource(discussionSummary.mAvatarImage);
+        // holder.notification.setImageDrawable(discussionSummary.mNotifications);
+        holder.name.setText(discussionSummary.mName);
+        holder.lastMessage.setText(discussionSummary.mLastMessage);
+        holder.humanTime.setText(discussionSummary.mHumanTime);
+        holder.nbOnline.setText(discussionSummary.mNbOnline);
+
+        return row;
     }
 
-    @Override
-    public void onBindViewHolder(DiscussionsHolder viewHolder, int i) {
-        DiscussionSummary discussion = mDiscussions.get(i);
-        viewHolder.name.setText(discussion.mName);
-        viewHolder.lastMessage.setText(discussion.mLastMessage);
-        viewHolder.humanTime.setText(discussion.mHumanTime);
-        viewHolder.nbOnline.setText(discussion.mNbOnline);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mDiscussions == null ? 0 : mDiscussions.size();
-    }
-
-    public static class DiscussionsHolder extends RecyclerView.ViewHolder {
+    private static class DiscussionSummaryHolder {
         ImageView avatar;
         ImageView notification;
         TextView name;
         TextView lastMessage;
         TextView humanTime;
         TextView nbOnline;
-
-        public DiscussionsHolder(View itemView) {
-            super(itemView);
-            avatar = (ImageView) itemView.findViewById(R.id.avatar);
-            notification = (ImageView) itemView.findViewById(R.id.notification);
-            name = (TextView) itemView.findViewById(R.id.name);
-            lastMessage = (TextView) itemView.findViewById(R.id.lastMessage);
-            humanTime = (TextView) itemView.findViewById(R.id.humanTime);
-            nbOnline = (TextView) itemView.findViewById(R.id.nbOnline);
-        }
     }
 
 }
