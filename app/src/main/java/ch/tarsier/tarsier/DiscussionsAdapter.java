@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * Created by gluthier on 23.10.2014.
+ * Created by gluthier
  */
 public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
 
@@ -30,18 +30,17 @@ public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
         View row = convertView;
         DiscussionSummaryHolder holder = null;
 
-        //TODO understand that
         if (row == null) {
-            LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
+            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             row = inflater.inflate(mLayoutResourceId, parent, false);
 
             holder = new DiscussionSummaryHolder();
-            holder.avatar = (ImageView)row.findViewById(R.id.avatar);
-            holder.notification = (ImageView)row.findViewById(R.id.notification);
-            holder.name = (TextView)row.findViewById(R.id.name);
-            holder.lastMessage = (TextView)row.findViewById(R.id.lastMessage);
-            holder.humanTime = (TextView)row.findViewById(R.id.humanTime);
-            holder.nbOnline = (TextView)row.findViewById(R.id.nbOnline);
+            holder.mAvatar = (ImageView) row.findViewById(R.id.avatar);
+            holder.mNotification = (ImageView) row.findViewById(R.id.notification);
+            holder.mName = (TextView) row.findViewById(R.id.name);
+            holder.mLastMessage = (TextView) row.findViewById(R.id.lastMessage);
+            holder.mHhumanTime = (TextView) row.findViewById(R.id.humanTime);
+            holder.mNbOnline = (TextView) row.findViewById(R.id.nbOnline);
 
             row.setTag(holder);
         } else {
@@ -50,23 +49,26 @@ public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
 
         DiscussionSummary discussionSummary = mDiscussions[position];
         //TODO
-        //holder.avatar.setImageResource(discussionSummary.mAvatarImage);
-        // holder.notification.setImageDrawable(discussionSummary.mNotifications);
-        holder.name.setText(discussionSummary.mName);
-        holder.lastMessage.setText(discussionSummary.mLastMessage);
-        holder.humanTime.setText(discussionSummary.mHumanTime);
-        holder.nbOnline.setText(discussionSummary.mNbOnline);
+        //holder.mAvatar.setImageResource(discussionSummary.getAvatar());
+        //holder.mNotification.setImageDrawable(discussionSummary.getNotifications());
+        holder.mName.setText(discussionSummary.getName());
+        holder.mLastMessage.setText(discussionSummary.getLastMessage());
+        holder.mHhumanTime.setText(discussionSummary.getHumanTime());
+        holder.mNbOnline.setText(discussionSummary.getNbOnline());
 
         return row;
     }
 
-    private static class DiscussionSummaryHolder {
-        ImageView avatar;
-        ImageView notification;
-        TextView name;
-        TextView lastMessage;
-        TextView humanTime;
-        TextView nbOnline;
+    /**
+     * DiscussionSummaryHolder is the class containing the discussion's information
+     */
+    private class DiscussionSummaryHolder {
+        private ImageView mAvatar;
+        private ImageView mNotification;
+        private TextView mName;
+        private TextView mLastMessage;
+        private TextView mHhumanTime;
+        private TextView mNbOnline;
     }
 
 }

@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
-
+/**
+ * Created by gluthier
+ */
 public class DiscussionsActivity extends Activity {
-    private ListView mDiscussionsList;
-    private ArrayAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +31,25 @@ public class DiscussionsActivity extends Activity {
             new DiscussionSummary("placeholder", "0", "Hong Kong's umbrella movement", "Everybody to Civic Square! Take umb...",
                     "Friday", "1254", DiscussionSummary.TypeConversation.PRIVATE_CHAT),
             new DiscussionSummary("placeholder", "0", "Benjamin Paccaud", "Oui, tous les tests passent sans problème.",
-                    "Friday","1", DiscussionSummary.TypeConversation.PUBLIC_ROOM),
+                    "Friday", "1", DiscussionSummary.TypeConversation.PUBLIC_ROOM),
             new DiscussionSummary("placeholder", "0", "TA meeting 1", "Non, Romain n'a toujours pas fiat le git work...",
                     "Wednesday", "8", DiscussionSummary.TypeConversation.PRIVATE_CHAT)
         };
 
-        mDiscussionsList = (ListView)findViewById(R.id.list_discussions);
-        mAdapter = new DiscussionsAdapter(this, R.layout.row_discussion, discussionsArray);
+        final ListView discussionsList = (ListView) findViewById(R.id.list_discussions);
+        DiscussionsAdapter adapter = new DiscussionsAdapter(this, R.layout.row_discussion, discussionsArray);
 
-        mDiscussionsList.setAdapter(mAdapter);
+        discussionsList.setAdapter(adapter);
+
+        discussionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                DiscussionSummary discussion = (DiscussionSummary) discussionsList.getItemAtPosition(i);
+                String text = discussion.getName() + ", TODO: send intent";
+
+                Toast.makeText(getBaseContext(), text, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
