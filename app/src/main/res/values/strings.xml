@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+ 
     <string name="app_name">Tarsier</string>
     <string name="create_group_str">Create a new group</string>
     <string name="txt_hint">Type Message</string>
@@ -23,5 +24,11 @@
     <string name="error_username_length">Username should be between 1 and 36 chars long</string>
     <string name="error_status_message_length">Status message length should be between 1 and 50 chars long</string>
     <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
-
+    <string name="title_activity_preferences">Settings</string>
+    <string name="action_search">plop</string>
+    <string name= "button_pswd">password</string>
+    <string name="personnal_file_key">who_am_i</string>
+    <string name="personnal_file_key_myid">uid</string>
+    <string name="personnal_file_key_myusername">username</string>
+    <string name="personnal_file_key_mymood">mood</string>
 </resources>
