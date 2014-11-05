@@ -1,23 +1,29 @@
 package ch.tarsier.tarsier;
 
-import android.app.ActionBar;
 import android.app.Activity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 /**
- * @author marinnicolini and xawill (extrem programming)
+ * @author marinnicolini and xawill (extreme programming)
  *
  * This activity is responsible to display the messages of the current discussion.
  * This discussion can either be a private one, or a chat room (multiple participants).
  *
- * The code for the display of the bubbles in a ListView is mainly inspired from this repository :
- * https://github.com/AdilSoomro/Android-Speech-Bubble.
+ * Bubble's layout is inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
  */
-public class ConversationActivity extends Activity {
+public class ConversationActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+    private static Point windowSize;
+
     private String mDiscussionId;
     private boolean mIsPrivate;
     private ArrayList<Message> mMessages;
@@ -26,7 +32,11 @@ public class ConversationActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_private_discussion);
+        setContentView(R.layout.activity_conversation);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        this.windowSize = new Point();
+        display.getSize(this.windowSize);
     }
 
     @Override
@@ -48,6 +58,33 @@ public class ConversationActivity extends Activity {
 
     private void displayMessages() {
 
+    }
+
+    /**
+     *
+     * @param name can be null if this is a private discussion or if the message is sent by the user
+     * @param message
+     * @param date
+     * @param sentByUser a boolean to determine if the bubble has to be drawn on the left
+     *                   or on the right of the screen (depending on the user sending the message).
+     */
+    private void drawBubble(String name, String message, String date, boolean sentByUser) {
+
+    }
+
+    // Called when a new Loader needs to be created
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Now create and return a CursorLoader that will take care of
+        // creating a Cursor for the data being displayed.
+        return new CursorLoader(this, ContactsContract.Data.CONTENT_URI,
+                PROJECTION, SELECTION, null, null);
+    }
+
+    // Called when a previously created loader has finished loading
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Swap the new cursor in.  (The framework will take care of closing the
+        // old cursor once we return.)
+        mAdapter.swapCursor(data);
     }
 
     @Override
