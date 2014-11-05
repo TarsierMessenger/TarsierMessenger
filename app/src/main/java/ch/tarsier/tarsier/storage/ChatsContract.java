@@ -16,9 +16,9 @@ public final class ChatsContract {
     }
 
 
-    public static abstract class ChatRooms implements BaseColumns {
+    public static abstract class Discussion implements BaseColumns {
 
-        public static final String TABLE_NAME = "chatrooms";
+        public static final String TABLE_NAME = "discussion";
         public static final String COLUMN_NAME_CHATID = "chatid";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_HOST = "host";
@@ -27,14 +27,15 @@ public final class ChatsContract {
     }
 
 
-    public static abstract class Messages implements BaseColumns {
+    public static abstract class Message implements BaseColumns {
 
-        public static final String TABLE_NAME = "messages";
+        public static final String TABLE_NAME = "message";
         public static final String COLUMN_NAME_MSG = "msg";
         public static final String COLUMN_NAME_DATETIME = "datetime";
         public static final String COLUMN_NAME_SENDER = "sender";
         public static final String COLUMN_NAME_CHATID = "chatid";
 
     }
+
 
 }

@@ -5,32 +5,48 @@ package ch.tarsier.tarsier.storage;
  */
 public class Chat {
 
-    private int id;
-    private String title;
-    private String host;
-    private boolean group;
+    private int mId;
+    private String mTitle;
+    private String mHost;
+    private boolean mPrivate;
 
+    /**
+     * Construct a group chat
+     *
+     * @param id the chat ID
+     * @param title the name of the room
+     * @param host the host's ID
+     */
+    public Chat(int id, String title, String host) {
+        mId = id;
+        mTitle = title;
+        mHost = host;
+        mPrivate = false;
+    }
 
-    public Chat(int id, String title, String host, boolean isgroup) {
-        this.id = id;
-        this.title = title;
-        this.host = host;
-        group = isgroup;
+    /**
+     * Construct a private chat
+     *
+     * @param id the chat ID
+     * @param peer the peer's ID
+     */
+    public Chat(int id, String peer) {
+        mId = id;
+        mHost = peer;
+        mPrivate = true;
     }
 
     public int getId() {
-        return id;
+        return mId;
     }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return mPrivate ? mHost : mTitle ; }
 
-    public boolean isGroup() {
-        return group;
+    public boolean isPrivate() {
+        return mPrivate;
     }
 
     public String getHost() {
-        return host;
+        return mHost;
     }
 }

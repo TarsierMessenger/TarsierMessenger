@@ -1,53 +1,48 @@
 package ch.tarsier.tarsier.storage;
 
-import java.sql.Time;
-import java.util.Date;
-
 /**
  * Created by McMoudi on 24/10/14.
  */
 public class Message {
 
-    private int id, chatID;
-    private String content;
-    private String author;
-    private long dateTime;
+    private int mId, mChatID;
+    private String mContent;
+    private String mAuthor;
+    private long mDateTime;
+    private boolean mSentByUser;
 
 
-    public Message(int id, int chatID, String content, String author, long dateTime) {
-
-        this.id = id;
-
-        this.chatID = chatID;
-
-        this.content = content;
-
-        this.author = author;
-
-        this.dateTime = dateTime;
-
-
+    public Message(int id, int chatID, String content, String author, long dateTime,boolean SentByUser) {
+        mId = id;
+        mChatID = chatID;
+        mContent = content;
+        mAuthor = author;
+        mDateTime = dateTime;
+        mSentByUser = SentByUser;
     }
 
 
     public int getId() {
-        return id;
+        return mId;
     }
 
     public String getContent() {
-        return content;
+        return mContent;
     }
 
     public String getAuthor() {
-        return author;
+        return mAuthor;
     }
 
     public int getChatID() {
-        return chatID;
+        return mChatID;
     }
 
     public long getDateTime() {
-        return dateTime;
+        return mDateTime;
     }
+
+    public boolean isSentByUser() { return mSentByUser; }
+
 
 }

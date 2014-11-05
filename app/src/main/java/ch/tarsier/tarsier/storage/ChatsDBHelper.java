@@ -18,25 +18,25 @@ public class ChatsDBHelper extends SQLiteOpenHelper {
     private static final String ID_TYPE = "INTEGER";
 
 
-    private static final String SQL_CREATE_CHATROOMS = "CREATE TABLE " + ChatsContract.ChatRooms.TABLE_NAME + " (" +
-        ChatsContract.ChatRooms._ID + " INTEGER PRIMARY KEY," +
-        ChatsContract.ChatRooms.COLUMN_NAME_CHATID + TEXT_TYPE + COMMA_SEP +
-        ChatsContract.ChatRooms.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
-        ChatsContract.ChatRooms.COLUMN_NAME_HOST + TEXT_TYPE + COMMA_SEP + " )";
+    private static final String SQL_CREATE_CHATROOMS = "CREATE TABLE " + ChatsContract.Discussion.TABLE_NAME + " (" +
+        ChatsContract.Discussion._ID + " INTEGER PRIMARY KEY," +
+        ChatsContract.Discussion.COLUMN_NAME_CHATID + TEXT_TYPE + COMMA_SEP +
+        ChatsContract.Discussion.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
+        ChatsContract.Discussion.COLUMN_NAME_HOST + TEXT_TYPE + COMMA_SEP + " )";
 
 
-    private static final String SQL_CREATE_MESSAGES = "CREATE TABLE" + ChatsContract.Messages.TABLE_NAME + " (" +
-        ChatsContract.Messages._ID + " INTEGER PRIMARY KEY," +
-        ChatsContract.Messages.COLUMN_NAME_MSG + TEXT_TYPE + COMMA_SEP +
-        ChatsContract.Messages.COLUMN_NAME_DATETIME + DATETIME_TYPE + COMMA_SEP +
-        ChatsContract.Messages.COLUMN_NAME_SENDER + TEXT_TYPE + COMMA_SEP +
-        ChatsContract.Messages.COLUMN_NAME_CHATID + " )";
+    private static final String SQL_CREATE_MESSAGES = "CREATE TABLE" + ChatsContract.Message.TABLE_NAME + " (" +
+        ChatsContract.Message._ID + " INTEGER PRIMARY KEY," +
+        ChatsContract.Message.COLUMN_NAME_MSG + TEXT_TYPE + COMMA_SEP +
+        ChatsContract.Message.COLUMN_NAME_DATETIME + DATETIME_TYPE + COMMA_SEP +
+        ChatsContract.Message.COLUMN_NAME_SENDER + TEXT_TYPE + COMMA_SEP +
+        ChatsContract.Message.COLUMN_NAME_CHATID + " )";
 
 
     private static final String SQL_DELETE_CHATROOMS =
-        "DROP TABLE IF EXISTS " + ChatsContract.ChatRooms.TABLE_NAME;
+        "DROP TABLE IF EXISTS " + ChatsContract.Discussion.TABLE_NAME;
     private static final String SQL_DELETE_MESSAGES =
-        "DROP TABLE IF EXISTS " + ChatsContract.Messages.TABLE_NAME;
+        "DROP TABLE IF EXISTS " + ChatsContract.Message.TABLE_NAME;
 
 
     public ChatsDBHelper(Context context) {

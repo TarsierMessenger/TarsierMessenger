@@ -15,8 +15,6 @@ public class PreferencesActivity extends Activity {
         setContentView(R.layout.activity_preferences);
 
         //gets the 'up' button
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
 
 
