@@ -13,6 +13,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
+import ch.tarsier.tarsier.storage.Message;
+
 /**
  * @author marinnicolini and xawill (extreme programming)
  *

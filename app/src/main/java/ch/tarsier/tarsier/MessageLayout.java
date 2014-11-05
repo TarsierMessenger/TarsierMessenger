@@ -3,6 +3,9 @@ package ch.tarsier.tarsier;
 
 import android.graphics.Bitmap;
 
+import ch.tarsier.tarsier.storage.Message;
+import ch.tarsier.tarsier.storage.StorageAccess;
+
 /**
  * @author xawill
  */
@@ -13,8 +16,8 @@ public class MessageLayout {
     private String mAuthorName;
 
     public MessageLayout(Message message) {
-        mText = message.getText();
-        mTimeSent = message.getTime();
+        mText = message.getContent();
+        mTimeSent = message.getDateTime();
         long authorID = message.getAuthor();
         Author author = StorageManager.getAuthor(authorID);
         mPicture = author.getPicture();
