@@ -161,7 +161,7 @@ public class StorageAccess {
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.personnal_file_key), mContext.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(mContext.getString(key), data);
-        editor.commit();
+        editor.apply();
 
     }
 

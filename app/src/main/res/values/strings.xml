@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello_world">Hello, world!</string>
-
+ 
     <string name="app_name">Tarsier</string>
     <string name="create_group_str">Create a new group</string>
     <string name="txt_hint">Type Message</string>

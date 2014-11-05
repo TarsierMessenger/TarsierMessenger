@@ -12,8 +12,7 @@ public final class ChatsContract {
     private static final String COMMA_SEP = ",";
 
 
-    public ChatsContract() {
-    }
+    public ChatsContract() {}
 
 
     public static abstract class Discussion implements BaseColumns {

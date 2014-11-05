@@ -11,59 +11,5 @@
 
 
 
-    <CheckBox
-        android:id="@+id/chck_dark_mode"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="hello"
-        />
-
-
-
-    <CheckBox
-        android:id="@+id/chck_stuff"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/chck_dark_mode"
-        android:text="plop"
-        />
-
-
-    <Button
-        android:id="@+id/prfrcs_button_bckgrd"
-        android:layout_below="@id/chck_stuff"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_pswd"
-        android:onClick="sendMessage"
-        style="?android:attr/borderlessButtonStyle" />
-
-
-
-    <Button
-        android:id="@+id/button_send"
-        android:layout_below="@id/chck_stuff"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_pswd"
-        android:onClick="sendMessage"
-        style="?android:attr/borderlessButtonStyle" />
-
-
-    <CheckBox
-        android:id="@+id/chck_things"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/button_send"
-        android:text="things"
-        />
-
-    <CheckBox
-        android:id="@+id/chck_thingies"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/chck_things"
-        android:text="Thingies"
-        />
 
 </RelativeLayout>
