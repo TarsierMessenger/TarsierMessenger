@@ -25,7 +25,6 @@
     <string name="error_username_length">Username should be between 1 and 36 chars long</string>
     <string name="error_status_message_length">Status message length should be between 1 and 50 chars long</string>
     <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
-    <string name="title_activity_preferences">PreferencesActivity</string>
     <string name="title_activity_preferences">Settings</string>
     <string name="action_search">plop</string>
     <string name= "button_pswd">password</string>
