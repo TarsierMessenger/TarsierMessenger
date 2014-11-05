@@ -16,19 +16,34 @@ import ch.tarsier.tarsier.R;
  */
 public class StorageAccess {
 
+
+
     private ChatsDBHelper mCDBHelper;
     private SQLiteDatabase mReadableDB;
     private SQLiteDatabase mWritableDB;
     private boolean mIsReady;
     private Context mContext;
 
-    public StorageAccess(Context context) {
+    private static StorageAccess instance = null;
+
+    private StorageAccess(Context context) {
         mCDBHelper = new ChatsDBHelper(context);
         mIsReady = false;
         mContext = context;
         new DatabaseAccess().execute();
     }
 
+    /**
+     * Gives access to THE StorageAccess singleton
+     * @param context needed for the singleton's creation, of no use afterwards
+     * @return the StorageAccess singleton
+     */
+    public static StorageAccess getInstance(Context context) {
+        if(instance == null){
+            instance = new StorageAccess(context);
+        }
+        return instance;
+    }
 
     public ArrayList<Chat> getChats(boolean wantChatrooms) {
         isReady();
