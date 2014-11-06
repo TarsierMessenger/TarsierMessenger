@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ch.tarsier.tarsier.NewDiscussionActivity" >
+
+    <item android:id="@+id/create_room"
+        android:icon="@drawable/check_profile"
+        android:title="@string/create_room"
+        android:showAsAction="always"
+        />
+
+</menu>
