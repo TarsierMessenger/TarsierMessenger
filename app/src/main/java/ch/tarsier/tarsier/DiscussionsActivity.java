@@ -14,6 +14,7 @@ import android.widget.Toast;
  * Created by gluthier
  */
 public class DiscussionsActivity extends Activity {
+    public final static String ID_DISCUSSION_MESSAGE = "ch.tarsier.tarsier.ID_DISCUSSION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,19 +22,19 @@ public class DiscussionsActivity extends Activity {
         setContentView(R.layout.activity_discussions);
 
         DiscussionSummary[] discussionsArray = {
-            new DiscussionSummary("placeholder", "1", "SwEng", "A fond, mais je bosse dur, aussi!",
+            new DiscussionSummary(7, "placeholder", "1", "SwEng", "A fond, mais je bosse dur, aussi!",
                     "Just now", "37", DiscussionSummary.TypeConversation.PRIVATE_CHAT),
-            new DiscussionSummary("placeholder", "3", "Romain Ruetschi", "Typing...",
+            new DiscussionSummary(6, "placeholder", "3", "Romain Ruetschi", "Typing...",
                     "13:10", "1",  DiscussionSummary.TypeConversation.PUBLIC_ROOM),
-            new DiscussionSummary("placeholder", "0", "Yann Mahmoudi", "That's because C just has no class!",
+            new DiscussionSummary(5, "placeholder", "0", "Yann Mahmoudi", "That's because C just has no class!",
                     "Yesterday", "1", DiscussionSummary.TypeConversation.PUBLIC_ROOM),
-            new DiscussionSummary("placeholder", "0", "Marin-Jerry Nicolini", "Ouais, pas de problème pour vendredi.",
+            new DiscussionSummary(4, "placeholder", "0", "Marin-Jerry Nicolini", "Ouais, pas de problème pour vendredi.",
                     "Sunday", "1", DiscussionSummary.TypeConversation.PUBLIC_ROOM),
-            new DiscussionSummary("placeholder", "0", "Hong Kong's umbrella movement", "Everybody to Civic Square! Take umb...",
+            new DiscussionSummary(3, "placeholder", "0", "Hong Kong's umbrella movement", "Everybody to Civic Square! Take umb...",
                     "Friday", "1254", DiscussionSummary.TypeConversation.PRIVATE_CHAT),
-            new DiscussionSummary("placeholder", "0", "Benjamin Paccaud", "Oui, tous les tests passent sans problème.",
+            new DiscussionSummary(2 ,"placeholder", "0", "Benjamin Paccaud", "Oui, tous les tests passent sans problème.",
                     "Friday", "1", DiscussionSummary.TypeConversation.PUBLIC_ROOM),
-            new DiscussionSummary("placeholder", "0", "TA meeting 1", "Non, Romain n'a toujours pas fiat le git work...",
+            new DiscussionSummary(1 ,"placeholder", "0", "TA meeting 1", "Non, Romain n'a toujours pas fiat le git work...",
                     "Wednesday", "8", DiscussionSummary.TypeConversation.PRIVATE_CHAT)
         };
 
@@ -46,14 +47,13 @@ public class DiscussionsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DiscussionSummary discussion = (DiscussionSummary) discussionsList.getItemAtPosition(i);
-                // TODO check
+                // TODO check if getApplicationContext() is right
                 Intent discussionIdIntent = new Intent(getApplicationContext(), ChatRoom.class);
-                // TODO good values
-                int value = 1;
-                discussionIdIntent.putExtra("id", value);
-                String text = discussion.getName() + ", TODO: send intent";
+                discussionIdIntent.putExtra(ID_DISCUSSION_MESSAGE, discussion.getId());
 
-                Toast.makeText(getBaseContext(), text, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), discussion.getName(), Toast.LENGTH_SHORT).show();
+
+                startActivity(discussionIdIntent);
             }
         });
 

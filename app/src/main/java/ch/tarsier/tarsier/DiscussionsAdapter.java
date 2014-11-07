@@ -35,6 +35,8 @@ public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
             row = inflater.inflate(mLayoutResourceId, parent, false);
 
             holder = new DiscussionSummaryHolder();
+            //TODO check if row.getId() is the good id
+            holder.mId = row.getId();
             holder.mAvatar = (ImageView) row.findViewById(R.id.avatar);
             holder.mNotification = (ImageView) row.findViewById(R.id.notification);
             holder.mName = (TextView) row.findViewById(R.id.name);
@@ -48,6 +50,7 @@ public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
         }
 
         DiscussionSummary discussionSummary = mDiscussions[position];
+        holder.mId = discussionSummary.getId();
         //TODO
         //holder.mAvatar.setImageResource(discussionSummary.getAvatar());
         //holder.mNotification.setImageDrawable(discussionSummary.getNotifications());
@@ -63,6 +66,7 @@ public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
      * DiscussionSummaryHolder is the class containing the discussion's information
      */
     private class DiscussionSummaryHolder {
+        private int mId;
         private ImageView mAvatar;
         private ImageView mNotification;
         private TextView mName;

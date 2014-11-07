@@ -4,6 +4,7 @@ package ch.tarsier.tarsier;
  * Created by gluthier
  */
 public class DiscussionSummary {
+    private int mId;
     private String mAvatar;
     private String mNotifications;
     private String mName;
@@ -12,9 +13,10 @@ public class DiscussionSummary {
     private String mNbOnline;
     private TypeConversation mType;
 
-    public DiscussionSummary(String avatar, String notifications, String name,
+    public DiscussionSummary(int id, String avatar, String notifications, String name,
                              String lastMessage, String humanTime, String nbOnline,
                              TypeConversation type) {
+        mId = id;
         mAvatar = avatar;
         mNotifications = notifications;
         mName = name;
@@ -22,6 +24,10 @@ public class DiscussionSummary {
         mHumanTime = humanTime;
         mNbOnline = nbOnline;
         mType = type;
+    }
+
+    public int getId() {
+        return mId;
     }
 
     public String getAvatar() {
