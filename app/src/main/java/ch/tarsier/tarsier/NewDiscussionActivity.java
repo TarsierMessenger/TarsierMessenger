@@ -10,6 +10,10 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ch.tarsier.tarsier.storage.Chat;
+import ch.tarsier.tarsier.storage.Message;
+import ch.tarsier.tarsier.storage.StorageAccess;
+
 public class NewDiscussionActivity extends Activity {
 
     @Override
