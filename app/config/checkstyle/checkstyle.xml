@@ -89,7 +89,7 @@
     <module name="InterfaceIsType"/>
     <module name="VisibilityModifier"/>
     <module name="ArrayTypeStyle"/>
-    <module name="TodoComment"/>
+    <!-- <module name="TodoComment"/> -->
     <module name="UpperEll"/>
     <module name="ImportOrder">
       <property name="ordered" value="false"/>
