@@ -47,13 +47,12 @@ public class DiscussionsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DiscussionSummary discussion = (DiscussionSummary) discussionsList.getItemAtPosition(i);
+                Toast.makeText(getApplicationContext(), Integer.toString(discussion.getId()), Toast.LENGTH_SHORT).show();
                 // TODO check if getApplicationContext() is right
-                Intent discussionIdIntent = new Intent(getApplicationContext(), ChatRoom.class);
+                /*Intent discussionIdIntent = new Intent(getApplicationContext(), ???.class);
                 discussionIdIntent.putExtra(ID_DISCUSSION_MESSAGE, discussion.getId());
 
-                Toast.makeText(getBaseContext(), discussion.getName(), Toast.LENGTH_SHORT).show();
-
-                startActivity(discussionIdIntent);
+                startActivity(discussionIdIntent);*/
             }
         });
 
