@@ -9,13 +9,13 @@ import ch.tarsier.tarsier.storage.StorageAccess;
 /**
  * @author xawill
  */
-public class MessageLayout {
+public class MessageViewModel {
     private String mText;
     private long mTimeSent;
     private Bitmap mPicture;
     private String mAuthorName;
 
-    public MessageLayout(Message message) {
+    public MessageViewModel(Message message) {
         mText = message.getContent();
         mTimeSent = message.getDateTime();
         long authorID = message.getAuthor();

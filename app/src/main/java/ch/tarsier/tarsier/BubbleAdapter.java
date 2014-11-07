@@ -23,27 +23,36 @@ import java.util.Date;
  */
 public class BubbleAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<MessageLayout> mMessageLayouts;
+    private ArrayList<MessageViewModel> mMessageViewModels;
+    private int mNumberOfMessages; //TODO : must be adapted when new messages are sent
+    private static final int NUMBER_OF_MESSAGES_TO_FETCH = 10;
 
-    public BubbleAdapter(Context context, ArrayList<MessageLayout> messages) {
+    public BubbleAdapter(Context context) {
         super();
         this.mContext = context;
-        this.mMessageLayouts = messages;
+        this.mMessageViewModels = StorageAccess.getMessages(NUMBER_OF_MESSAGES_TO_FETCH, DateUtil.getNowTimestamp());
+        this.mNumberOfMessages = StorageAccess.getMessageCount();
     }
 
     @Override
     public int getCount() {
-        return mMessageLayouts.size();
+        return mNumberOfMessages;
     }
 
     @Override
     public Object getItem(int position) {
-        return mMessageLayouts.get(position);
+        if(position < mMessageViewModels.size()) {
+            return mMessageViewModels.get(position);
+        } else {
+            long lastMessageTimestamp = mMessageViewModels.get(mMessageViewModels.size()-1).getTimeSent();
+            mMessageViewModels.add(StorageAccess.getMessages(NUMBER_OF_MESSAGES_TO_FETCH, lastMessageTimestamp));
+            return mMessageViewModels.get(position);
+        }
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MessageLayout messageLayout = (MessageLayout) this.getItem(position);
+        MessageViewModel messageLayout = (MessageViewModel) this.getItem(position);
 
         ViewHolder holder;
         if(convertView == null) {
@@ -60,11 +69,11 @@ public class BubbleAdapter extends BaseAdapter {
         }
 
 
-        holder.dateSeparator.setText(computeDateSeparator(messageLayout.getTimeSent()));
+        holder.dateSeparator.setText(DateUtil.computeDateSeparator(messageLayout.getTimeSent()));
         holder.picture.setImageBitmap(messageLayout.getPicture());
         holder.name.setText(messageLayout.getAuthorName());
         holder.message.setText(messageLayout.getText());
-        holder.hour.setText(computeHour(messageLayout.getTimeSent()));
+        holder.hour.setText(DateUtil.computeHour(messageLayout.getTimeSent()));
 
         /**
         LayoutParams lp = (LayoutParams) holder.message.getLayoutParams();
@@ -99,42 +108,6 @@ public class BubbleAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    private String computeHour(long timestamp) {
-        Date sentHour = new Date(timestamp);
-
-        Format format = new SimpleDateFormat("HH:mm");
-        return format.format(sentHour);
-    }
-
-    private String computeDateSeparator(long timestamp) {
-        Calendar calendar = Calendar.getInstance();
-
-        int currentYear = calendar.get(Calendar.YEAR);
-        int currentMonth = calendar.get(Calendar.MONTH);
-        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-        calendar.set(currentYear, currentMonth, currentDay);//Today at 00:00
-        long todayTimestamp = calendar.getTimeInMillis();
-
-        calendar.add(Calendar.DAY_OF_MONTH, -1);//Yesterday at 00:00
-        long yesterdayTimestamp = calendar.getTimeInMillis();
-
-        calendar.add(Calendar.DAY_OF_MONTH, -5);//One week ago at 00:00
-        long weekTimestamp = calendar.getTimeInMillis();
-
-        Format format;
-        if(timestamp >= todayTimestamp) { // today
-            return "Today";
-        } else if(timestamp >= yesterdayTimestamp) { // yesterday
-            return "Yesterday";
-        } else if(timestamp >= weekTimestamp) { // one week ago
-            format = new SimpleDateFormat("E");
-            return format.format(timestamp);
-        } else { // further
-            format = new SimpleDateFormat("dd.MM.yyyy");
-            return format.format(timestamp);
-        }
     }
 
     static class ViewHolder {
