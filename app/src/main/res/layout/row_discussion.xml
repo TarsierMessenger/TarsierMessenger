@@ -30,27 +30,31 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/avatar" />
+        android:layout_toRightOf="@id/avatar"
+        android:textColor="@color/tarsier_font" />
 
     <TextView
         android:id="@+id/lastMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/name"
-        android:layout_toRightOf="@id/avatar" />
+        android:layout_toRightOf="@id/avatar"
+        android:textColor="@color/tarsier_font_secondary" />
 
     <TextView
         android:id="@+id/humanTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:textColor="@color/tarsier_font_secondary" />
 
     <TextView
         android:id="@+id/nbOnline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/humanTime" />
+        android:layout_below="@id/humanTime"
+        android:textColor="@color/tarsier_font_secondary" />
 
     <View
         android:layout_width="fill_parent"
