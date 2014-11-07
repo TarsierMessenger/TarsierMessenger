@@ -28,4 +28,5 @@ public class DiscussionsActivityTest extends ActivityInstrumentationTestCase2<Di
     public void testEachElementOfListIsClickable() {
         onView(withId(R.id.list_discussions)).check(matches(isClickable()));
     }
+
 }

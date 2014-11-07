@@ -1,6 +1,7 @@
 package ch.tarsier.tarsier;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +46,11 @@ public class DiscussionsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DiscussionSummary discussion = (DiscussionSummary) discussionsList.getItemAtPosition(i);
+                // TODO check
+                Intent discussionIdIntent = new Intent(getApplicationContext(), ChatRoom.class);
+                // TODO good values
+                int value = 1;
+                discussionIdIntent.putExtra("id", value);
                 String text = discussion.getName() + ", TODO: send intent";
 
                 Toast.makeText(getBaseContext(), text, Toast.LENGTH_SHORT).show();
