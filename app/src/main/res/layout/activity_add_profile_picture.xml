@@ -37,6 +37,14 @@
             android:onClick="onClickNewPicture"
             />
 
+        <ImageView
+            android:layout_width="@dimen/add_picture"
+            android:layout_height="@dimen/add_picture"
+            android:layout_below="@id/add_new_picture"
+            android:layout_marginTop="@dimen/view_spacing"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/testImage"/>
+
 
         </RelativeLayout>
 
