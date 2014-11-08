@@ -23,7 +23,6 @@ import java.util.List;
 public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
     private Context mContext;
     private List<MessageViewModel> mMessageViewModels;
-    private static final int NUMBER_OF_MESSAGES_TO_FETCH = 10;
     private int mLayoutId;
 
     public BubbleAdapter(Context context, int layoutId, List<MessageViewModel> messageViewModel) {
@@ -42,20 +41,20 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
     @Override
     public MessageViewModel getItem(int position) {
         return mMessageViewModels.get(position);
-
-        /*if(position < mMessageViewModels.size()) {
-            return mMessageViewModels.get(position);
-        } else {
-            long lastMessageTimestamp = mMessageViewModels.get(mMessageViewModels.size()-1).getTimeSent();
-            mMessageViewModels.add(StorageAccess.getMessages(NUMBER_OF_MESSAGES_TO_FETCH, lastMessageTimestamp));
-            return mMessageViewModels.get(position);
-        }*/
     }
 
     @Override
     public long getItemId(int position) {
         //TODO : implement with database ID ?
         return position;
+    }
+
+    public long getLastMessageTimestamp() {
+        if(mMessageViewModels.size() > 0) {
+            return mMessageViewModels.get(mMessageViewModels.size()-1).getTimeSent();
+        } else {
+            return DateUtil.getNowTimestamp();
+        }
     }
 
     @Override
@@ -65,7 +64,7 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
         ViewHolder holder;
         if(convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.messageRow, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(mLayoutId, parent, false);
             holder.dateSeparator = (TextView) convertView.findViewById(R.id.dateSeparator);
             holder.picture = (ImageView) convertView.findViewById(R.id.picture);
             holder.name = (TextView) convertView.findViewById(R.id.name);

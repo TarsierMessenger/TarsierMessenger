@@ -3,6 +3,7 @@ package ch.tarsier.tarsier;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.view.Display;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.tarsier.tarsier.storage.Message;
 
@@ -22,12 +24,9 @@ import ch.tarsier.tarsier.storage.Message;
  * Bubble's layout is inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
  */
 public class ConversationActivity extends Activity implements EndlessListener {
+    private static final int NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE = 10;
     private static Point windowSize;
-
     private String mDiscussionId;
-    private boolean mIsPrivate;
-    private ArrayList<Message> mMessages;
-    private String mTitle;
     private BubbleAdapter mListViewAdapter;
     private EndlessListView mListView;
 
@@ -36,21 +35,20 @@ public class ConversationActivity extends Activity implements EndlessListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
 
-        Display display = getWindowManager().getDefaultDisplay();
+        /*Display display = getWindowManager().getDefaultDisplay();
         this.windowSize = new Point();
-        display.getSize(this.windowSize);
+        display.getSize(this.windowSize);*/
 
         Intent startingIntent = getIntent();
-
         this.mDiscussionId = startingIntent.getStringExtra(DiscussionsActivity.class.getID());
-        this.mMessages = StorageManager.getMessages(this.mDiscussionId);
-        this.mTitle = StorageManager.getChat(this.mDiscussionId).getTitle();
-        this.mIsPrivate = StorageManager.getChat(this.mDiscussionId).isPrivate();
 
         mListView = findViewById(R.id.list);
         mListView.setLoadingView(R.layout.loading_layout);
 
-        mListViewAdapter = new BubbleAdapter(this);
+        DatabaseLoader dbl = new DatabaseLoader();
+        List<MessageViewModel> firstMessages = dbl.doInBackground();
+
+        mListViewAdapter = new BubbleAdapter(this, R.layout.messageRow, firstMessages);
         mListView.setBubbleAdapter(mListViewAdapter);
         mListView.setEndlessListener(this);
     }
@@ -63,8 +61,27 @@ public class ConversationActivity extends Activity implements EndlessListener {
         return super.onCreateOptionsMenu(menu);
     }
 
+    private class DatabaseLoader extends AsyncTask<Void, Void, List<MessageViewModel>> {
+
+        @Override
+        protected List<MessageViewModel> doInBackground(Void... params) {
+            long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
+
+            List<MessageViewModel> newMessages = StorageAccess.getMessages(NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE, lastMessageTimestamp);
+
+            return newMessages;
+        }
+
+        @Override
+        protected void onPostExecute(List<MessageViewModel> result) {
+            super.onPostExecute(result);
+            mListView.addNewData(result);
+        }
+    }
+
     @Override
     public void loadData() {
-
+        DatabaseLoader dbl = new DatabaseLoader();
+        dbl.execute();
     }
 }

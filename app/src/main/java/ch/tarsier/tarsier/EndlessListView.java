@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import java.util.List;
+
 /**
  * @author xawill
  */
@@ -20,7 +22,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
         this.setOnScrollListener(this);
     }
 
-    public void addNewData(List<String> data) {
+    public void addNewData(List<MessageViewModel> data) {
         this.removeFooterView(mFooter);
 
         mBubbleAdapter.addAll(data);
