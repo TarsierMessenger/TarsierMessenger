@@ -1,19 +1,13 @@
 package ch.tarsier.tarsier;
 
 import android.app.Activity;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -35,6 +29,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
     private ArrayList<Message> mMessages;
     private String mTitle;
     private BubbleAdapter mListViewAdapter;
+    private EndlessListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +47,12 @@ public class ConversationActivity extends Activity implements EndlessListener {
         this.mTitle = StorageManager.getChat(this.mDiscussionId).getTitle();
         this.mIsPrivate = StorageManager.getChat(this.mDiscussionId).isPrivate();
 
-        EndlessListView listView = findViewById(R.id.list);
+        mListView = findViewById(R.id.list);
+        mListView.setLoadingView(R.layout.loading_layout);
+
         mListViewAdapter = new BubbleAdapter(this);
-        listView.setAdapter(mListViewAdapter);
-        listView.setEndlessListener(this);
+        mListView.setBubbleAdapter(mListViewAdapter);
+        mListView.setEndlessListener(this);
     }
 
     @Override

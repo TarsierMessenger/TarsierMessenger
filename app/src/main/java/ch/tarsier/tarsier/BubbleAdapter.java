@@ -1,18 +1,16 @@
 package ch.tarsier.tarsier;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 /**
  * @author marinnicolini and xawill (extreme programming)
@@ -20,39 +18,49 @@ import java.util.Date;
  * Custom class to display the bubbles in the ConversationActivity ListView
  *
  * Inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
+ * and https://github.com/survivingwithandroid/Surviving-with-android/tree/master/EndlessAdapter
  */
-public class BubbleAdapter extends BaseAdapter {
+public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
     private Context mContext;
-    private ArrayList<MessageViewModel> mMessageViewModels;
-    private int mNumberOfMessages; //TODO : must be adapted when new messages are sent
+    private List<MessageViewModel> mMessageViewModels;
     private static final int NUMBER_OF_MESSAGES_TO_FETCH = 10;
+    private int mLayoutId;
 
-    public BubbleAdapter(Context context) {
-        super();
+    public BubbleAdapter(Context context, int layoutId, List<MessageViewModel> messageViewModel) {
+        super(context, layoutId, messageViewModel);
+
         this.mContext = context;
-        this.mMessageViewModels = StorageAccess.getMessages(NUMBER_OF_MESSAGES_TO_FETCH, DateUtil.getNowTimestamp());
-        this.mNumberOfMessages = StorageAccess.getMessageCount();
+        this.mLayoutId = layoutId;
+        this.mMessageViewModels = messageViewModel;
     }
 
     @Override
     public int getCount() {
-        return mNumberOfMessages;
+        return mMessageViewModels.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        if(position < mMessageViewModels.size()) {
+    public MessageViewModel getItem(int position) {
+        return mMessageViewModels.get(position);
+
+        /*if(position < mMessageViewModels.size()) {
             return mMessageViewModels.get(position);
         } else {
             long lastMessageTimestamp = mMessageViewModels.get(mMessageViewModels.size()-1).getTimeSent();
             mMessageViewModels.add(StorageAccess.getMessages(NUMBER_OF_MESSAGES_TO_FETCH, lastMessageTimestamp));
             return mMessageViewModels.get(position);
-        }
+        }*/
+    }
+
+    @Override
+    public long getItemId(int position) {
+        //TODO : implement with database ID ?
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MessageViewModel messageLayout = (MessageViewModel) this.getItem(position);
+        MessageViewModel messageViewModel = (MessageViewModel) this.getItem(position);
 
         ViewHolder holder;
         if(convertView == null) {
@@ -68,46 +76,25 @@ public class BubbleAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        holder.dateSeparator.setText(DateUtil.computeDateSeparator(messageViewModel.getTimeSent()));
+        holder.picture.setImageBitmap(messageViewModel.getPicture());
+        holder.name.setText(messageViewModel.getAuthorName());
+        holder.message.setText(messageViewModel.getText());
+        holder.hour.setText(DateUtil.computeHour(messageViewModel.getTimeSent()));
 
-        holder.dateSeparator.setText(DateUtil.computeDateSeparator(messageLayout.getTimeSent()));
-        holder.picture.setImageBitmap(messageLayout.getPicture());
-        holder.name.setText(messageLayout.getAuthorName());
-        holder.message.setText(messageLayout.getText());
-        holder.hour.setText(DateUtil.computeHour(messageLayout.getTimeSent()));
-
-        /**
         LayoutParams lp = (LayoutParams) holder.message.getLayoutParams();
-        //check if it is a status message then remove background, and change text color.
-        if(message.isStatusMessage())
-        {
-            holder.message.setBackgroundDrawable(null);
-            lp.gravity = Gravity.LEFT;
-            holder.message.setTextColor(R.color.textFieldColor);
-        }
-        else
-        {
-            //Check whether message is mine to show green background and align to right
-            if(message.isMine())
-            {
-                holder.message.setBackgroundResource(R.drawable.speech_bubble_green);
-                lp.gravity = Gravity.RIGHT;
-            }
-            //If not mine then it is from sender to show orange background and align to left
-            else
-            {
-                holder.message.setBackgroundResource(R.drawable.speech_bubble_orange);
-                lp.gravity = Gravity.LEFT;
-            }
-            holder.message.setLayoutParams(lp);
-            holder.message.setTextColor(R.color.textColor);
-        }
-         **/
-        return convertView;
-    }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
+        if(messageViewModel.isMessageSentByUser()) {
+            holder.message.setBackgroundResource(R.drawable.bubble_text_right);
+            lp.gravity = Gravity.RIGHT;
+        } else {
+            holder.message.setBackgroundResource(R.drawable.bubble_text_left);
+            lp.gravity = Gravity.LEFT;
+        }
+
+        holder.message.setLayoutParams(lp);
+
+        return convertView;
     }
 
     static class ViewHolder {

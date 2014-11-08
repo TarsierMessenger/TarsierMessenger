@@ -10,6 +10,7 @@ import ch.tarsier.tarsier.storage.StorageAccess;
  * @author xawill
  */
 public class MessageViewModel {
+    private final boolean isSentByUser;
     private String mText;
     private long mTimeSent;
     private Bitmap mPicture;
@@ -22,6 +23,7 @@ public class MessageViewModel {
         Author author = StorageManager.getAuthor(authorID);
         mPicture = author.getPicture();
         mAuthorName = author.getName();
+        isSentByUser = message.isSentByUser();
     }
 
     public long getTimeSent() {
@@ -38,5 +40,9 @@ public class MessageViewModel {
 
     public String getText() {
         return mText;
+    }
+
+    public boolean isMessageSentByUser() {
+        return isSentByUser;
     }
 }
