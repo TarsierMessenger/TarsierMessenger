@@ -1,19 +1,37 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="ch.tarsier.tarsier.ConversationActivity">
+    tools:context="ch.tarsier.tarsier.ConversationActivity"
+    android:orientation="vertical" >
 
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="fill_parent"
+        android:stackFromBottom="true"
+        android:layout_weight="1">
     </ListView>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list" >
+
+        <TextView
+            android:id="@+id/message_to_send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/send_message_hint" />
+
+        <ImageButton
+            android:id="@+id/send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/message_to_send"
+            android:src="@drawable/send_message_icon"
+            android:onClick="sendMessage" />
+    </RelativeLayout>
 
     <!--//LEFT_BUBBLE
     <LinearLayout
@@ -61,5 +79,4 @@
     </LinearLayout>
 -->
 
-</RelativeLayout>
-
+</LinearLayout>

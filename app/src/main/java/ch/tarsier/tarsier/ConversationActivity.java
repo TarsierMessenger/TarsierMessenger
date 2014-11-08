@@ -9,11 +9,14 @@ import android.os.storage.StorageManager;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.storage.Message;
+import ch.tarsier.tarsier.storage.StorageAccess;
 
 /**
  * @author marinnicolini and xawill (extreme programming)
@@ -47,6 +50,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
 
         DatabaseLoader dbl = new DatabaseLoader();
         List<MessageViewModel> firstMessages = dbl.doInBackground();
+        dbl.onPostExecute(firstMessages);
 
         mListViewAdapter = new BubbleAdapter(this, R.layout.messageRow, firstMessages);
         mListView.setBubbleAdapter(mListViewAdapter);
@@ -67,7 +71,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
         protected List<MessageViewModel> doInBackground(Void... params) {
             long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
 
-            List<MessageViewModel> newMessages = StorageAccess.getMessages(NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE, lastMessageTimestamp);
+            List<MessageViewModel> newMessages = StorageAccess.getInstance().getMessages(NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE, lastMessageTimestamp);
 
             return newMessages;
         }
@@ -76,7 +80,24 @@ public class ConversationActivity extends Activity implements EndlessListener {
         protected void onPostExecute(List<MessageViewModel> result) {
             super.onPostExecute(result);
             mListView.addNewData(result);
+
+            // Tell the ListView to stop retrieving messages since there all loaded in it.
+            if(result.size() < NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE) {
+                mListView.setAllMessagesLoaded(true);
+            }
         }
+    }
+
+    public void sendMessage(View view) {
+        String messageText = ((TextView) findViewById(R.id.message_to_send)).getText();
+        Message sentMessage = new Message(mDiscussionId, messageText, DateUtil.getNowTimestamp(), true);
+
+        //Add the message to the ListView
+        MessageViewModel messageViewModel = new MessageViewModel(sentMessage);
+        mListView.addNewData(messageViewModel);
+
+        //Add the message to the database
+        StorageAccess.getInstance().addMessage(sentMessage);
     }
 
     @Override

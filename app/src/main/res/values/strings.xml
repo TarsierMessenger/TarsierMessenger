@@ -50,6 +50,7 @@
     <string name="chatroom_participant_image_desc">Participant\'s profile picture</string>
     <string name="title_activity_private_discussion">PrivateDiscussionActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="send_message_hint">Type new message</string>
 
     <string name="preferences_file_key">settings</string>
     <string name="preferences_file_key_password">password</string>

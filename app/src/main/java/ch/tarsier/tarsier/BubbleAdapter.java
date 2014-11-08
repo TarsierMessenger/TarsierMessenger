@@ -38,9 +38,14 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
         return mMessageViewModels.size();
     }
 
+    /**
+     * Return the element at the opposite of the position, since we want the messages in the reverse order.
+     * @param position
+     * @return The element at the given position (reverse order)
+     */
     @Override
     public MessageViewModel getItem(int position) {
-        return mMessageViewModels.get(position);
+        return mMessageViewModels.get(mMessageViewModels.size()-1-position);
     }
 
     @Override
