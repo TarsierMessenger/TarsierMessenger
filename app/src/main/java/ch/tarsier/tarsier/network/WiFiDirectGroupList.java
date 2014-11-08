@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.network;
 
 import android.app.ListFragment;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.tarsier.tarsier.R;
 
 /**
  * Created by amirreza on 10/27/14.
@@ -36,13 +38,12 @@ public class WiFiDirectGroupList extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
         listAdapter = new WiFiDevicesAdapter(this.getActivity(),
                 android.R.layout.simple_list_item_2, android.R.id.text1,
                 new ArrayList<WifiP2pDevice>());
         setListAdapter(listAdapter);
     }
-
-
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {

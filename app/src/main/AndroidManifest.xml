@@ -50,7 +50,7 @@
         </activity>
 
         <activity
-                android:name=".WiFiDirectDebugActivity"
+                android:name=".network.WiFiDirectDebugActivity"
                 android:label="@string/title_activity_wifidirectdebug">
         </activity>
 

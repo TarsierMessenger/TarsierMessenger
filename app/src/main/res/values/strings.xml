@@ -31,4 +31,5 @@
     <string name="personnal_file_key_myid">uid</string>
     <string name="personnal_file_key_myusername">username</string>
     <string name="personnal_file_key_mymood">mood</string>
+    <string name="create_group_string">Create Group</string>
 </resources>

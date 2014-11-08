@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.network;
 
 import android.os.Handler;
 import android.util.Log;
@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+
+import ch.tarsier.tarsier.network.NetworkMessages.MessageType;
 
 /**
  * Created by amirreza on 10/26/14.
@@ -20,10 +22,12 @@ public class MyConnection implements Runnable {
 
     private InputStream in;
     private OutputStream out;
+    private boolean mIsClient;
 
-    public MyConnection(Socket socket, Handler handler) {
-        this.socket = socket;
-        this.handler = handler;
+    public MyConnection(Socket socket, Handler handler, boolean isClient) {
+        this.socket    = socket;
+        this.handler   = handler;
+        this.mIsClient = isClient;
     }
 
     @Override
@@ -36,7 +40,9 @@ public class MyConnection implements Runnable {
             handler.obtainMessage(WiFiDirectDebugActivity.MY_HANDLE, this)
                     .sendToTarget();
 
-
+            if (mIsClient) {
+                // TODO:FRED out.write();
+            }
 
             while (true) {
                 try {
@@ -47,6 +53,24 @@ public class MyConnection implements Runnable {
                     }
                     // Send the obtained bytes to the UI Activity
                     Log.d(TAG, "Rec:" + String.valueOf(buffer));
+                    if (!mIsClient) {
+                        switch (MessageType.messageTypeFromData(buffer)){
+                            case MessageType.MESSAGE_TYPE_HELLO:;
+                                // stocker ids dans la map
+                                // envoyer a tout le monde liste des noms + cles publiques
+                                break;
+                            case MessageType.MESSAGE_TYPE_PRIVATE:;
+                                // verifier destinataire == moi
+                                // si oui, message handler, sinon envoyer destinataire
+                                break;
+                            case MessageType.MESSAGE_TYPE_PUBLIC:;
+                                // broadcast to everyone but sender
+                                break;
+                        }
+
+
+                    }
+
                     handler.obtainMessage(WiFiDirectDebugActivity.MESSAGE_READ,
                             bytes, -1, buffer).sendToTarget();
 

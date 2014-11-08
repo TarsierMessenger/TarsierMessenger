@@ -5,6 +5,12 @@
     android:orientation="vertical"
     android:layout_gravity="top"
     android:gravity="top" >
+    <Button
+        android:id="@+id/create_group_button"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:text="@string/create_group_string"
+        android:onClick="onCreateGroup" />
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
@@ -29,4 +35,5 @@
             style="@android:style/Widget.ProgressBar.Small" >
         </ProgressBar>
     </LinearLayout>
+
 </LinearLayout>

@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.network;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

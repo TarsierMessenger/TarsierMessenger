@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.network;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -15,12 +15,19 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+
 import java.io.IOException;
 import java.util.ArrayList;
+
+import ch.tarsier.tarsier.R;
 
 /**
  * @author amirezza
  */
+
+//IMPORTANT TODO : handler must be changed to "null" whenever a connection is finished.
+
 public class WiFiDirectDebugActivity
     extends Activity
     implements WifiP2pManager.ConnectionInfoListener,
@@ -32,6 +39,7 @@ public class WiFiDirectDebugActivity
     public static final int SERVER_PORT = 8888;
     public static final int MESSAGE_READ = 0x401;
     public static final int MY_HANDLE = 0x402;
+    private boolean isServer = false;
 
 
     private WifiP2pManager.PeerListListener peerListListener;
@@ -39,6 +47,8 @@ public class WiFiDirectDebugActivity
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private WiFiDirectBroadcastReceiver mReceiver;
+    private Thread handler = null;
+
 
 
     private WiFiDirectGroupList groupList;
@@ -141,6 +151,11 @@ public class WiFiDirectDebugActivity
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = device.deviceAddress;
         config.wps.setup = WpsInfo.PBC;
+        if(isServer){
+            config.groupOwnerIntent = 0;
+        }else{
+            config.groupOwnerIntent = 15;
+        }
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
@@ -153,6 +168,22 @@ public class WiFiDirectDebugActivity
         });
     }
 
+    public void onCreateGroup(View view){
+        Log.d(TAG, "Create Group clicked");
+        isServer = true;
+        mManager.createGroup(mChannel,new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "Group created");
+            }
+
+
+            @Override
+            public void onFailure(int errorCode) {
+                    Log.d(TAG, "Failed create group");
+            }
+        });
+    }
     /* register the broadcast receiver with the intent values to be matched */
     @Override
     public void onResume() {
@@ -197,28 +228,32 @@ public class WiFiDirectDebugActivity
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
-        Thread handler = null;
+
         /*
         * The group owner accepts connections using a server socket and then spawns a
         * client socket for every client.
         */
-        if (p2pInfo.isGroupOwner) {
-            Log.d(TAG, "Connected as group owner");
-            try {
-                handler = new Server(
-                        ((Server.MessageTarget) this).getHandler());
+        if(handler == null) {
+            if (p2pInfo.isGroupOwner) {
+                Log.d(TAG, "Connected as group owner");
+                try {
+
+                 handler = new Server(
+                         ((Server.MessageTarget) this).getHandler());
+                 handler.start();
+
+                } catch (IOException e) {
+                    Log.d(TAG,
+                            "Failed to create a server thread - " + e.getMessage());
+                    return;
+                }
+            } else {
+                Log.d(TAG, "Connected as peer");
+                handler = new Client(
+                        ((Server.MessageTarget) this).getHandler(),
+                        p2pInfo.groupOwnerAddress);
                 handler.start();
-            } catch (IOException e) {
-                Log.d(TAG,
-                        "Failed to create a server thread - " + e.getMessage());
-                return;
             }
-        } else {
-            Log.d(TAG, "Connected as peer");
-            handler = new Client(
-                    ((Server.MessageTarget) this).getHandler(),
-                    p2pInfo.groupOwnerAddress);
-            handler.start();
         }
 
         chatRoom = new ChatRoom();

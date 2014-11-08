@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
