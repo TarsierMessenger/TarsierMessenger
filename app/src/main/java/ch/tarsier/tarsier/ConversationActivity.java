@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.storage.StorageManager;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +27,7 @@ import ch.tarsier.tarsier.storage.Message;
  *
  * Bubble's layout is inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
  */
-public class ConversationActivity extends Activity {
+public class ConversationActivity extends Activity implements EndlessListener {
     private static Point windowSize;
 
     private String mDiscussionId;
@@ -51,9 +52,10 @@ public class ConversationActivity extends Activity {
         this.mTitle = StorageManager.getChat(this.mDiscussionId).getTitle();
         this.mIsPrivate = StorageManager.getChat(this.mDiscussionId).isPrivate();
 
-        ListView listView = findViewById(R.id.list);
+        EndlessListView listView = findViewById(R.id.list);
         mListViewAdapter = new BubbleAdapter(this);
         listView.setAdapter(mListViewAdapter);
+        listView.setEndlessListener(this);
     }
 
     @Override
@@ -62,5 +64,10 @@ public class ConversationActivity extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.private_discussion, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void loadData() {
+
     }
 }
