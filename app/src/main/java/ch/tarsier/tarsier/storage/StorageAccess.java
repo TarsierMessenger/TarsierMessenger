@@ -38,6 +38,8 @@ public class StorageAccess {
      */
     public static StorageAccess getInstance(Context context) {
         if(instance == null){
+            if(context == null)
+                throw new IllegalArgumentException("The context is null!");
             instance = new StorageAccess(context);
         }
         return instance;
@@ -166,6 +168,18 @@ public class StorageAccess {
     public void setMyId(String id){ setMyPersonalSharedPref(R.string.personnal_file_key_myid, id); }
     public void setMyUsername(String username){ setMyPersonalSharedPref(R.string.personnal_file_key_myusername,username);}
     public void setMyMood(String mood){ setMyPersonalSharedPref(R.string.personnal_file_key_mymood, mood);}
+
+
+    private String getMyPreferences(int key){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.preferences_file_key), mContext.MODE_PRIVATE);
+        return sharedPref.getString(mContext.getString(key), "");
+    }
+
+    public String hasPassword(){return "";   } //FIXME once the database in encrypted, if it is one day
+    public String getBackground(){return getMyPreferences(R.string.preferences_file_key_background);}
+    public String getSound(){return getMyPreferences(R.string.preferences_file_key_sound);}
+    public String getVibration(){return getMyPreferences(R.string.preferences_file_key_vibration);}
+
 
     private class DatabaseAccess extends AsyncTask<String, Void, Void> {
 
