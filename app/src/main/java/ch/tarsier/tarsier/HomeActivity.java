@@ -93,7 +93,10 @@ public class HomeActivity extends Activity {
      * @return Whether or not both are valid.
      */
     private boolean validateFields() {
-        return validateUsername() && validateStatusMessage();
+        boolean valid;
+        valid = validateStatusMessage();
+        valid = validateUsername() && valid;
+        return valid;
     }
 
     public void onClickAddPicture(View view) {

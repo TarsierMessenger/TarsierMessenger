@@ -5,10 +5,12 @@ import android.test.ActivityInstrumentationTestCase2;
 import ch.tarsier.tarsier.HomeActivity;
 import ch.tarsier.tarsier.R;
 
+import static ch.tarsier.tarsier.test.matchers.HasErrorMatcher.hasError;
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.pressBack;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.clearText;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
+import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.closeSoftKeyboard;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.typeText;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isClickable;
@@ -35,19 +37,15 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
         onView(withId(R.id.username)).perform(typeText("benpac"));
         onView(withId(R.id.lets_chat)).perform(click());
         //nothing should happen
-        onView(withId(R.id.status_message)).perform(typeText("my status"));
+        onView(withId(R.id.status_message)).perform(typeText("my status"), closeSoftKeyboard());
         onView(withId(R.id.lets_chat)).check(matches(isClickable()));
-        onView(withId(R.id.username)).perform(clearText());
+        onView(withId(R.id.username)).perform(clearText(), closeSoftKeyboard());
         onView(withId(R.id.lets_chat)).perform(click());
         // nothing should happen
-        onView(withId(R.id.username)).perform(typeText("Benpac"));
+        onView(withId(R.id.username)).perform(typeText("Benpac"), closeSoftKeyboard());
         onView(withId(R.id.lets_chat)).check(matches(isClickable()));
         onView(withId(R.id.lets_chat)).perform(click());
 
-        // we go to new activity
-        // basic check
-        // pressBack();
-        // we are back to home activity
     }
 
     public void testAddPictureClick() {
@@ -72,8 +70,33 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
         pressBack();
     }
 
-    public void testValidUsername() {
-
+    public void testUsernameTooShort() {
+        onView(withId(R.id.username)).perform(typeText("benpac"), closeSoftKeyboard());
+        onView(withId(R.id.username)).perform(clearText());
+        onView(withId(R.id.username)).check(matches(hasError(R.string.error_username_length)));
+        onView(withId(R.id.username)).perform(clearText(), typeText("  "), closeSoftKeyboard());
+        onView(withId(R.id.username)).check(matches(hasError(R.string.error_username_length)));
     }
+
+    public void testUsernameTooLong() {
+        onView(withId(R.id.username)).perform(typeText("Benpac benpac benpac this is longer that the accepted value of 36 caracters"),
+                closeSoftKeyboard());
+        onView(withId(R.id.username)).check(matches(hasError(R.string.error_username_length)));
+    }
+
+    public void testStatusTooShort() {
+        onView(withId(R.id.status_message)).perform(typeText("benpac"), closeSoftKeyboard());
+        onView(withId(R.id.status_message)).perform(clearText());
+        onView(withId(R.id.status_message)).check(matches(hasError(R.string.error_status_message_length)));
+        onView(withId(R.id.username)).perform(clearText(), typeText("  "), closeSoftKeyboard());
+        onView(withId(R.id.username)).check(matches(hasError(R.string.error_status_message_length)));
+    }
+
+    public void testStatusTooLong() {
+        onView(withId(R.id.status_message)).perform(typeText("A very long status message that should not pass "
+                                                            + "as it clearly has more than 50 caracters"), closeSoftKeyboard());
+        onView(withId(R.id.status_message)).check(matches(hasError(R.string.error_status_message_length)));
+    }
+
 
 }
