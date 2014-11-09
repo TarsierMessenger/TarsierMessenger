@@ -2,7 +2,10 @@ package ch.tarsier.tarsier;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -10,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
@@ -24,6 +28,7 @@ public class HomeActivity extends Activity {
 
     private EditText username;
     private EditText statusMessage;
+    private ImageView mProfilePicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,8 @@ public class HomeActivity extends Activity {
 
         username.addTextChangedListener(new EditTextWatcher());
         statusMessage.addTextChangedListener(new EditTextWatcher());
+
+        mProfilePicture = (ImageView) findViewById(R.id.picture);
 
     }
 
@@ -118,6 +125,20 @@ public class HomeActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //check existence of picture profile
+        String filePath= Environment.getExternalStorageDirectory()
+                              +"/"+AddProfilePictureActivity.TEMP_PHOTO_FILE;
+        Bitmap profilePicture = BitmapFactory.decodeFile(filePath);
+        if (profilePicture != null) {
+            mProfilePicture.setImageBitmap(profilePicture);
+        } else {
+            mProfilePicture.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.add_picture_home));
+        }
     }
 
     /**

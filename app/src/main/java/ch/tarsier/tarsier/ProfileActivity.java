@@ -2,11 +2,15 @@ package ch.tarsier.tarsier;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
@@ -19,6 +23,7 @@ public class ProfileActivity extends Activity {
 
     private EditText username;
     private EditText statusMessage;
+    private ImageView mProfilePicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +32,8 @@ public class ProfileActivity extends Activity {
 
         username = (EditText) findViewById(R.id.username);
         statusMessage = (EditText) findViewById(R.id.status_message);
+        mProfilePicture = (ImageView) findViewById(R.id.add_picture_button);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,6 +77,20 @@ public class ProfileActivity extends Activity {
             Toast.makeText(this, "Valid", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Invalid!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //check existence of picture profile
+        String filePath= Environment.getExternalStorageDirectory()
+                +"/"+AddProfilePictureActivity.TEMP_PHOTO_FILE;
+        Bitmap profilePicture = BitmapFactory.decodeFile(filePath);
+        if (profilePicture != null) {
+            mProfilePicture.setImageBitmap(profilePicture);
+        } else {
+            mProfilePicture.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.add_picture_home));
         }
     }
 

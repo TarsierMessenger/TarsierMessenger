@@ -43,7 +43,8 @@
             android:layout_below="@id/add_new_picture"
             android:layout_marginTop="@dimen/view_spacing"
             android:layout_centerHorizontal="true"
-            android:id="@+id/testImage"/>
+            android:id="@+id/preview_profile_picture"
+            android:contentDescription="@string/content_description_add_profile_picture"/>
 
 
         </RelativeLayout>
