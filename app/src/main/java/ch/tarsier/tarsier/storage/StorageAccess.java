@@ -33,12 +33,13 @@ public class StorageAccess {
 
     /**
      * Gives access to THE StorageAccess singleton
+     *
      * @param context needed for the singleton's creation, of no use afterwards
      * @return the StorageAccess singleton
      */
     public static StorageAccess getInstance(Context context) {
-        if(instance == null){
-            if(context == null)
+        if (instance == null) {
+            if (context == null)
                 throw new IllegalArgumentException("The context is null!");
             instance = new StorageAccess(context);
         }
@@ -95,19 +96,49 @@ public class StorageAccess {
      * @return an ArrayList of Message
      */
     public ArrayList<Message> getMessages(int chatID, int messagesRetrieved) {
+        if (messagesRetrieved < -1)
+            throw new IllegalArgumentException("gimme some positive int for getMessages!");
+
         ArrayList<Message> messages = new ArrayList<Message>();
 
         Cursor c = getMsg(chatID);
         c.moveToLast();
 
-
+        int i = 0;
         do {
             String sender = c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER));
             messages.add(new Message(c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)), sender, c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)), (sender == getMyId())));
-        } while (c.moveToPrevious());
+            i++;
+        } while (c.moveToPrevious() && (messagesRetrieved == -1 ? true : i < messagesRetrieved));
 
         return messages;
     }
+
+    /**
+     * //TODO
+     *
+     * @param nMessages the number of elements to return
+     * @param timestamp the time from which we shall return messages
+     * @return the nMessages before timestamp, if it can, Can return arraylist with  < nMessages elements
+     */
+    public ArrayList<Message> getMessages(int chatID, int nMessages, long timestamp) { //TODO
+        ArrayList<Message> messages = new ArrayList<Message>();
+        Cursor c = getMsg(chatID);
+
+        c.moveToLast();
+        while (c.moveToPrevious() && (timestamp < c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME))));
+
+        int i = 0;
+        do {
+            String sender = c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER));
+            messages.add(new Message(c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)), sender, c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)), (sender == getMyId())));
+            i++;
+        } while (c.moveToPrevious() && (nMessages == -1 ? true : i < nMessages));
+
+
+        return messages;
+    }
+
 
     public Message getLastMessage(int id) {
         Cursor c = getMsg(id);
@@ -143,7 +174,10 @@ public class StorageAccess {
         mWritableDB.insert(ChatsContract.Discussion.TABLE_NAME, null, values);
     }
 
-    private void isReady() { while (!mIsReady) {} }
+    private void isReady() {
+        while (!mIsReady) {
+        }
+    }
 
     private String getMyPersonalSharedPref(int key) {
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.personnal_file_key), mContext.MODE_PRIVATE);
@@ -152,9 +186,17 @@ public class StorageAccess {
 
     }
 
-    public String getMyId() { return getMyPersonalSharedPref(R.string.personnal_file_key_myid); }
-    public String getMyUsername() { return getMyPersonalSharedPref(R.string.personnal_file_key_myusername); }
-    public String getMyMood() { return getMyPersonalSharedPref(R.string.personnal_file_key_mymood); }
+    public String getMyId() {
+        return getMyPersonalSharedPref(R.string.personnal_file_key_myid);
+    }
+
+    public String getMyUsername() {
+        return getMyPersonalSharedPref(R.string.personnal_file_key_myusername);
+    }
+
+    public String getMyMood() {
+        return getMyPersonalSharedPref(R.string.personnal_file_key_mymood);
+    }
 
     private void setMyPersonalSharedPref(int key, String data) {
 
@@ -165,20 +207,39 @@ public class StorageAccess {
 
     }
 
-    public void setMyId(String id){ setMyPersonalSharedPref(R.string.personnal_file_key_myid, id); }
-    public void setMyUsername(String username){ setMyPersonalSharedPref(R.string.personnal_file_key_myusername,username);}
-    public void setMyMood(String mood){ setMyPersonalSharedPref(R.string.personnal_file_key_mymood, mood);}
+    public void setMyId(String id) {
+        setMyPersonalSharedPref(R.string.personnal_file_key_myid, id);
+    }
+
+    public void setMyUsername(String username) {
+        setMyPersonalSharedPref(R.string.personnal_file_key_myusername, username);
+    }
+
+    public void setMyMood(String mood) {
+        setMyPersonalSharedPref(R.string.personnal_file_key_mymood, mood);
+    }
 
 
-    private String getMyPreferences(int key){
+    private String getMyPreferences(int key) {
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.preferences_file_key), mContext.MODE_PRIVATE);
         return sharedPref.getString(mContext.getString(key), "");
     }
 
-    public String hasPassword(){return "";   } //FIXME once the database in encrypted, if it is one day
-    public String getBackground(){return getMyPreferences(R.string.preferences_file_key_background);}
-    public String getSound(){return getMyPreferences(R.string.preferences_file_key_sound);}
-    public String getVibration(){return getMyPreferences(R.string.preferences_file_key_vibration);}
+    public String hasPassword() {
+        return "";
+    } //FIXME once the database in encrypted, if it is one day
+
+    public String getBackground() {
+        return getMyPreferences(R.string.preferences_file_key_background);
+    }
+
+    public String getSound() {
+        return getMyPreferences(R.string.preferences_file_key_sound);
+    }
+
+    public String getVibration() {
+        return getMyPreferences(R.string.preferences_file_key_vibration);
+    }
 
 
     private class DatabaseAccess extends AsyncTask<String, Void, Void> {
