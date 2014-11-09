@@ -75,7 +75,7 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
         onView(withId(R.id.username)).perform(clearText());
         onView(withId(R.id.username)).check(matches(hasError(R.string.error_username_length)));
         onView(withId(R.id.username)).perform(clearText(), typeText("  "), closeSoftKeyboard());
-        onView(withId(R.id.username)).check(matches(hasError(R.string.error_username_length)));
+        onView(withId(R.id.username)).check(matches(hasError(R.string.error_username_whitespace)));
     }
 
     public void testUsernameTooLong() {
@@ -88,8 +88,8 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
         onView(withId(R.id.status_message)).perform(typeText("benpac"), closeSoftKeyboard());
         onView(withId(R.id.status_message)).perform(clearText());
         onView(withId(R.id.status_message)).check(matches(hasError(R.string.error_status_message_length)));
-        onView(withId(R.id.username)).perform(clearText(), typeText("  "), closeSoftKeyboard());
-        onView(withId(R.id.username)).check(matches(hasError(R.string.error_status_message_length)));
+        onView(withId(R.id.status_message)).perform(clearText(), typeText("  "), closeSoftKeyboard());
+        onView(withId(R.id.status_message)).check(matches(hasError(R.string.error_status_message_whitespace)));
     }
 
     public void testStatusTooLong() {
