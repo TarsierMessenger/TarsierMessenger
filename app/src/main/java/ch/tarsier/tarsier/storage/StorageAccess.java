@@ -129,19 +129,20 @@ public class StorageAccess {
         while (c.moveToPrevious() && (timestamp < c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME))));
 
         int i = 0;
-        do {
-            String sender = c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER));
-            messages.add(new Message(c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)), sender, c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)), (sender == getMyId())));
-            i++;
-        } while (c.moveToPrevious() && (nMessages == -1 ? true : i < nMessages));
+        if (c.getPosition() >= 0)
+            do {
+                String sender = c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER));
+                messages.add(new Message(c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)), sender, c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)), (sender == getMyId())));
+                i++;
+            } while (c.moveToPrevious() && (nMessages == -1 ? true : i < nMessages));
 
 
         return messages;
     }
 
 
-    public Message getLastMessage(int id) {
-        Cursor c = getMsg(id);
+    public Message getLastMessage(int chatID) {
+        Cursor c = getMsg(chatID);
         c.moveToLast();
 
         String sender = c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER));
