@@ -18,10 +18,10 @@
     <uses-permission
         android:required="true"
         android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- For reading sd card -->
+    <!-- to write on sd card -->
     <uses-permission
         android:required="true"
-        android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -46,7 +46,7 @@
         <activity
             android:name=".AddProfilePictureActivity"
             android:label="@string/title_activity_add_profile_picture"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+            android:theme="@style/AppTheme" >
         </activity>
         <activity
             android:name=".ProfileActivity"
