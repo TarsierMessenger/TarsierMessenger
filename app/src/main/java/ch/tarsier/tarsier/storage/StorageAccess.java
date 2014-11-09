@@ -103,7 +103,7 @@ public class StorageAccess {
 
         do {
             String sender = c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER));
-            messages.add(new Message(c.getInt(c.getColumnIndex(ChatsContract.Message._ID)), c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)), sender, c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)), (sender == getMyId())));
+            messages.add(new Message(c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)), sender, c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)), (sender == getMyId())));
         } while (c.moveToPrevious());
 
         return messages;
@@ -115,16 +115,16 @@ public class StorageAccess {
 
         String sender = c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER));
 
-        return new Message(c.getInt(c.getColumnIndex(ChatsContract.Message._ID)), c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)), sender, c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)), (sender == getMyId()));
+        return new Message(c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)), sender, c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)), (sender == getMyId()));
 
     }
 
-    public void setMessage(Message msg) {
+    public void addMessage(Message msg) {
         isReady();
         ContentValues values = new ContentValues();
 
         values.put(ChatsContract.Message.COLUMN_NAME_CHATID, msg.getChatID());
-        values.put(ChatsContract.Message.COLUMN_NAME_MSG, msg.getContent());
+        values.put(ChatsContract.Message.COLUMN_NAME_MSG, msg.getText());
         values.put(ChatsContract.Message.COLUMN_NAME_SENDER, msg.getAuthor());
         values.put(ChatsContract.Message.COLUMN_NAME_DATETIME, msg.getDateTime());
 
@@ -132,7 +132,7 @@ public class StorageAccess {
 
     }
 
-    public void setChatroom(Chat chat) {
+    public void addChatroom(Chat chat) {
         isReady();
         ContentValues values = new ContentValues();
 

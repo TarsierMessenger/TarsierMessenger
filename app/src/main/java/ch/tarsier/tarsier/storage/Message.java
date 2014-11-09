@@ -6,23 +6,23 @@ package ch.tarsier.tarsier.storage;
 public class Message {
 
     private int mChatID;
-    private String mContent;
+    private String mText;
     private String mAuthor;
     private long mDateTime;
     private boolean mSentByUser;
 
 
-    public Message(int chatID, String content, String author, long dateTime,boolean SentByUser) {
+    public Message(int chatID, String text, String author, long dateTime,boolean SentByUser) {
         mChatID = chatID;
-        mContent = content;
+        mText = text;
         mAuthor = author;
         mDateTime = dateTime;
         mSentByUser = SentByUser;
     }
 
 
-    public String getContent() {
-        return mContent;
+    public String getText() {
+        return mText;
     }
 
     public String getAuthor() {
