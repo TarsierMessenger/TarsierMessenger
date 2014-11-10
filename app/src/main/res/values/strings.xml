@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
- 
     <string name="app_name">Tarsier</string>
     <string name="create_group_str">Create a new group</string>
     <string name="txt_hint">Type Message</string>
@@ -23,6 +22,8 @@
     <string name="action_wifidirectdebug">Wi-Fi Direct Debug</string>
     <string name="error_username_length">Username should be between 1 and 36 chars long</string>
     <string name="error_status_message_length">Status message length should be between 1 and 50 chars long</string>
+    <string name="error_username_whitespace">Username should not be composed of whitespace only</string>
+    <string name="error_status_message_whitespace">Status message should not be composed of whitespace only</string>
     <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
     <string name="title_activity_preferences">Settings</string>
     <string name="action_search">plop</string>
@@ -31,4 +32,7 @@
     <string name="personnal_file_key_myid">uid</string>
     <string name="personnal_file_key_myusername">username</string>
     <string name="personnal_file_key_mymood">mood</string>
+    <string name="error_add_profile_picture">Unable to add a profile picture</string>
+    <string name="content_description_add_profile_picture">Preview of Profile picture</string>
+
 </resources>

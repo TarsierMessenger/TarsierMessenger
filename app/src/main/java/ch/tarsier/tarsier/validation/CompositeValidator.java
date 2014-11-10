@@ -25,16 +25,17 @@ public class CompositeValidator<T> extends AbstractValidator<T> {
 
     @Override
     protected boolean isValid(T t) {
+        boolean allValid = true;
         for (Validator<T> validator : mValidators) {
             if (!validator.validate(t)) {
                 if (validator.hasErrorMessage()) {
                     setErrorMessage(validator.getErrorMessage());
+                    allValid = false;
                 }
-                return false;
+
             }
         }
-
-        return true;
+        return allValid;
     }
 
 }

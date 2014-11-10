@@ -21,6 +21,10 @@ public class StatusMessageValidator extends CompositeValidator<EditText> {
                 Tarsier.app().getResources().getString(R.string.error_status_message_length)
             )
         );
+        addValidator(new EditTextNoWhitespaceValidator(
+                        Tarsier.app().getResources().getString(R.string.error_status_message_whitespace)
+                     )
+        );
     }
 
 }
