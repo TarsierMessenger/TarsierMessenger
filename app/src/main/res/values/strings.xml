@@ -36,4 +36,5 @@
     <string name="content_description_add_profile_picture">Preview of Profile picture</string>
     <string name="too_much_notifications">9+</string>
     <string name="nb_people_online">Online:</string>
+    <string name="create_new_discussion">New discussion</string>
 </resources>

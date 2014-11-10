@@ -73,6 +73,9 @@ public class DiscussionsActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
+            case R.id.create_new_discussion:
+                openNewDiscussion();
+                return true;
             case R.id.action_settings:
                 openSettings();
                 return true;
@@ -81,7 +84,12 @@ public class DiscussionsActivity extends Activity {
         }
     }
 
+    private void openNewDiscussion() {
+        //TODO
+        Toast.makeText(this, "create new discussion", Toast.LENGTH_SHORT).show();
+    }
     private void openSettings() {
-        // TODO
+        //TODO
+        Toast.makeText(this, "open settings", Toast.LENGTH_SHORT).show();
     }
 }

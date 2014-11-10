@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".DiscussionsActivity" >
 
+    <item android:id="@+id/create_new_discussion"
+        android:title="@string/create_new_discussion"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_new" />
+
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
