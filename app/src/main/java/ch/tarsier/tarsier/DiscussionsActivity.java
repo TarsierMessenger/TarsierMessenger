@@ -30,11 +30,11 @@ public class DiscussionsActivity extends Activity {
                     "Yesterday", "1", DiscussionSummary.TypeConversation.PUBLIC_ROOM),
             new DiscussionSummary(4, "placeholder", "0", "Marin-Jerry Nicolini", "Ouais, pas de problème pour vendredi.",
                     "Sunday", "1", DiscussionSummary.TypeConversation.PUBLIC_ROOM),
-            new DiscussionSummary(3, "placeholder", "0", "Hong Kong's umbrella movement", "Everybody to Civic Square! Take...",
+            new DiscussionSummary(3, "placeholder", "0", "Hong Kong's umbrella movement", "Everybody to Civic Square! Ta...",
                     "Friday", "1254", DiscussionSummary.TypeConversation.PRIVATE_CHAT),
             new DiscussionSummary(2 ,"placeholder", "9", "Benjamin Paccaud", "Oui, tous les tests passent sans problème.",
                     "Friday", "1", DiscussionSummary.TypeConversation.PUBLIC_ROOM),
-            new DiscussionSummary(1 ,"placeholder", "10", "TA meeting 1", "Non, Romain n'a toujours pas fait le...",
+            new DiscussionSummary(1 ,"placeholder", "10", "TA meeting 1", "Non, Romain n'a toujours pas fait...",
                     "Wednesday", "8", DiscussionSummary.TypeConversation.PRIVATE_CHAT)
         };
 
