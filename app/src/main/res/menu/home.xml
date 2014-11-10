@@ -9,6 +9,10 @@
           android:title="@string/action_wifidirectdebug"
           android:orderInCategory="100"
           android:showAsAction="never" />
+    <item android:id="@+id/action_discussions"
+          android:title="@string/action_discussions"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"

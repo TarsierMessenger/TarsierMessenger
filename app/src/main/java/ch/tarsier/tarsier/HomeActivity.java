@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import ch.tarsier.tarsier.storage.ChatsContract;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
@@ -125,6 +126,8 @@ public class HomeActivity extends Activity {
             displayProfileActivity();
         } else if (id == R.id.action_wifidirectdebug) {
             displayWifiDirectDebugActivity();
+        } else if (id == R.id.action_discussions) {
+            displayDiscussionsActivity();
         }
 
         return super.onOptionsItemSelected(item);
@@ -179,6 +182,12 @@ public class HomeActivity extends Activity {
         Intent displayWifiDirectDebugIntent = new Intent(this, WiFiDirectDebugActivity.class);
         startActivity(displayWifiDirectDebugIntent);
     }
+
+    private void displayDiscussionsActivity() {
+        Intent discussionsActivity= new Intent(this, DiscussionsActivity.class);
+        startActivity(discussionsActivity);
+    }
+
 
 }
 

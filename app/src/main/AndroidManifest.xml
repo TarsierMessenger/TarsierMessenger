@@ -52,7 +52,6 @@
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile">
         </activity>
-
         <activity
                 android:name=".WiFiDirectDebugActivity"
                 android:label="@string/title_activity_wifidirectdebug">
@@ -61,6 +60,11 @@
         <activity
             android:name=".ui.PreferencesActivity"
             android:label="@string/title_activity_preferences" >
+        </activity>
+
+        <activity android:name=".DiscussionsActivity"
+            android:label="Discussions"
+            android:theme="@style/CustomActionBarTheme" >
         </activity>
     </application>
 

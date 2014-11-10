@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <RelativeLayout
+        android:id="@+id/icons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/placeholder"
+            android:layout_marginRight="5dp" />
+
+        <ImageView
+            android:id="@+id/mask"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignTop="@id/avatar"
+            android:layout_alignBottom="@id/avatar"
+            android:layout_alignLeft="@id/avatar"
+            android:layout_alignRight="@id/avatar"
+            android:scaleType="fitXY"
+            android:src="@drawable/mask" />
+
+        <TextView
+            android:id="@+id/notification"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/red_dot"
+            android:textColor="@color/tarsier_font_complementary" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/icons">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tarsier_font" />
+
+        <TextView
+            android:id="@+id/lastMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:textColor="@color/tarsier_font_secondary" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true">
+
+        <TextView
+            android:id="@+id/humanTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/tarsier_font_secondary" />
+
+        <TextView
+            android:id="@+id/nbOnline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/humanTime"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/tarsier_font_secondary" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
