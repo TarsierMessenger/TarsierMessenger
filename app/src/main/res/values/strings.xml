@@ -34,5 +34,6 @@
     <string name="personnal_file_key_mymood">mood</string>
     <string name="error_add_profile_picture">Unable to add a profile picture</string>
     <string name="content_description_add_profile_picture">Preview of Profile picture</string>
-
+    <string name="too_much_notifications">9+</string>
+    <string name="nb_people_online">Online:</string>
 </resources>

@@ -38,7 +38,7 @@ public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
             //TODO check if row.getId() is the good id
             holder.mId = row.getId();
             holder.mAvatar = (ImageView) row.findViewById(R.id.avatar);
-            holder.mNotification = (ImageView) row.findViewById(R.id.notification);
+            holder.mNotification = (TextView) row.findViewById(R.id.notification);
             holder.mName = (TextView) row.findViewById(R.id.name);
             holder.mLastMessage = (TextView) row.findViewById(R.id.lastMessage);
             holder.mHhumanTime = (TextView) row.findViewById(R.id.humanTime);
@@ -51,13 +51,26 @@ public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
 
         DiscussionSummary discussionSummary = mDiscussions[position];
         holder.mId = discussionSummary.getId();
-        //TODO
+        //TODO:
         //holder.mAvatar.setImageResource(discussionSummary.getAvatar());
-        //holder.mNotification.setImageDrawable(discussionSummary.getNotifications());
         holder.mName.setText(discussionSummary.getName());
         holder.mLastMessage.setText(discussionSummary.getLastMessage());
         holder.mHhumanTime.setText(discussionSummary.getHumanTime());
-        holder.mNbOnline.setText(discussionSummary.getNbOnline());
+
+        if (Integer.parseInt(discussionSummary.getNotifications()) > 9) {
+            holder.mNotification.setText(R.string.too_much_notifications);
+        } else if (Integer.parseInt(discussionSummary.getNotifications()) > 0) {
+            holder.mNotification.setText(discussionSummary.getNotifications());
+        } else {
+            holder.mNotification.setVisibility(View.GONE);
+        }
+
+        //TODO fetch in the db the kind of discussion
+        if (Integer.parseInt(discussionSummary.getNbOnline()) > 1) {
+            holder.mNbOnline.setText(getContext().getString(R.string.nb_people_online) + " " + discussionSummary.getNbOnline());
+        } else {
+            holder.mNbOnline.setVisibility(View.GONE);
+        }
 
         return row;
     }
@@ -68,7 +81,7 @@ public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
     private class DiscussionSummaryHolder {
         private int mId;
         private ImageView mAvatar;
-        private ImageView mNotification;
+        private TextView mNotification;
         private TextView mName;
         private TextView mLastMessage;
         private TextView mHhumanTime;
