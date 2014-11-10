@@ -18,6 +18,7 @@ import java.util.Set;
 
 import ch.tarsier.tarsier.network.networkMessages.TarsierWireProtos;
 import ch.tarsier.tarsier.network.networkMessages.MessageType;
+import ch.tarsier.tarsier.network.ByteUtils;
 
 public class TarsierServerConnection implements Runnable {
     private static final String TAG = "TarsierServerConnection";
@@ -82,7 +83,7 @@ public class TarsierServerConnection implements Runnable {
             peerList.addPeer(tarsierPeer.build());
         }
 
-        broadcast(peerList.build().toByteArray());
+        broadcast(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PEER_LIST, peerList.build().toByteArray()));
     }
 
     public void sendMessage(Peer peer, byte[] message) {
@@ -148,12 +149,12 @@ class ConnectionHandler implements Runnable {
                             mSocket.close();
                         }
 
-                        byte[] typeAndMessage = split(buffer,bytes,0)[0];
-                        byte[] serializedProtoBuffer = split(typeAndMessage, 1, typeAndMessage.length-1)[1];
+                        byte[] typeAndMessage = ByteUtils.split(buffer,bytes,0)[0];
+                        byte[] serializedProtoBuffer = ByteUtils.split(typeAndMessage, 1, typeAndMessage.length-1)[1];
 
                         switch (MessageType.messageTypeFromData(buffer)){
                             case MessageType.MESSAGE_TYPE_HELLO:
-                                TarsierWireProtos.HelloMessage helloMessage = TarsierWireProtos.HelloMessage.parseFrom(split(buffer, 1, buffer.length-1)[1]);
+                                TarsierWireProtos.HelloMessage helloMessage = TarsierWireProtos.HelloMessage.parseFrom(ByteUtils.split(buffer, 1, buffer.length-1)[1]);
                                 peer  = helloMessage.getPeer();
                                 serverConnection.addPeer(peer, this);
                                 serverConnection.broadcastUpdatedPeerList();
@@ -199,17 +200,5 @@ class ConnectionHandler implements Runnable {
             handler.sendEmptyMessage(MessageType.MESSAGE_TYPE_DISCONNECT);
             Log.e(TAG, "Exception during write", e);
         }
-    }
-
-    public static byte[][] split(byte[] input, int firstLength, int secondLength) {
-        byte[][] parts = new byte[2][];
-
-        parts[0] = new byte[firstLength];
-        System.arraycopy(input, 0, parts[0], 0, firstLength);
-
-        parts[1] = new byte[secondLength];
-        System.arraycopy(input, firstLength, parts[1], 0, secondLength);
-
-        return parts;
     }
 }

@@ -18,11 +18,13 @@ import com.google.protobuf.ByteString;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ch.tarsier.tarsier.network.ByteUtils;
 import ch.tarsier.tarsier.network.ConversationStorageDelegate;
 import ch.tarsier.tarsier.network.ConversationViewDelegate;
 import ch.tarsier.tarsier.network.MessagingInterface;
 import ch.tarsier.tarsier.network.Peer;
 import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
+import ch.tarsier.tarsier.network.networkMessages.MessageType;
 import ch.tarsier.tarsier.network.networkMessages.TarsierWireProtos;
 
 /**
@@ -65,7 +67,14 @@ public class TarsierMessagingServer extends BroadcastReceiver implements  Messag
                 mServerConnection = new TarsierServerConnection(new Handler(new Handler.Callback() {
                     @Override
                     public boolean handleMessage(Message msg) {
-                        //TODO: HANDLE MESSAGES WE'RE GETTING
+                        switch (msg.what){
+                            case MessageType.MESSAGE_TYPE_PUBLIC:
+                                // See how we want to store messages
+                            case MessageType.MESSAGE_TYPE_PRIVATE:
+                                // See how we want to store messages
+                            case MessageType.MESSAGE_TYPE_PEER_LIST:
+                                mConversationViewDelegate.receivedNewPeersList(getMembersList());
+                        }
                         return true;
                     }
                 }));
@@ -112,8 +121,8 @@ public class TarsierMessagingServer extends BroadcastReceiver implements  Messag
         TarsierWireProtos.TarsierPublicMessage.Builder publicMessage = TarsierWireProtos.TarsierPublicMessage.newBuilder();
         publicMessage.setPlainText(ByteString.copyFrom(message.getBytes()));
         publicMessage.setSenderPublicKey(ByteString.copyFrom("TEMPLATEPUBLICKEY".getBytes())); //TODO:Get key from Storage
-
-        mServerConnection.broadcast(publicMessage.build().toByteArray());
+        byte[] wireMessage = ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PUBLIC, publicMessage.build().toByteArray());
+        mServerConnection.broadcast(wireMessage);
     }
 
     @Override
@@ -124,7 +133,8 @@ public class TarsierMessagingServer extends BroadcastReceiver implements  Messag
         privateMessage.setCipherText(ByteString.copyFrom("THIS IS SUPERSECRET".getBytes()));
         privateMessage.setIV(ByteString.copyFrom("PRIVATEMESSAGEIV".getBytes())); //TODO: Encrypt messages
 
-        mServerConnection.sendMessage(peer, privateMessage.build().toByteArray());
+        byte[] wireMessage = ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE, privateMessage.build().toByteArray());
+        mServerConnection.sendMessage(peer, wireMessage);
     }
 
     @Override
