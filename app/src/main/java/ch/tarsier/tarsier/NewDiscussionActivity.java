@@ -7,19 +7,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import ch.tarsier.tarsier.storage.Chat;
 import ch.tarsier.tarsier.storage.Message;
 import ch.tarsier.tarsier.storage.StorageAccess;
+import ch.tarsier.tarsier.validation.ChatRoomNameValidator;
 
 public class NewDiscussionActivity extends Activity {
+
+    private EditText mChatRoomName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_discussion);
+
+        mChatRoomName = (EditText) findViewById(R.id.chat_room_name);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
@@ -57,12 +63,19 @@ public class NewDiscussionActivity extends Activity {
     }
 
     private void createRoom() {
-        /*
-        TODO verify user input
-        TODO create AddNewDiscussionActivity class OR link to the good class
-        Intent newRoomIntent = new Intent(this, AddNewDiscussionActivity.class);
-        startActivity(newRoomIntent);
-        */
-        Toast.makeText(this, "create room", Toast.LENGTH_SHORT).show();
+        if (validateChatRoomName()) {
+            Toast.makeText(this, "Valid", Toast.LENGTH_SHORT).show();
+            /*
+            TODO create AddNewDiscussionActivity class OR link to the good class
+            Intent newRoomIntent = new Intent(this, AddNewDiscussionActivity.class);
+            startActivity(newRoomIntent);
+            */
+        } else {
+            Toast.makeText(this, "Invalid", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean validateChatRoomName() {
+        return new ChatRoomNameValidator().validate(mChatRoomName);
     }
 }

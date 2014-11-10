@@ -34,8 +34,9 @@
     <string name="title_activity_new_discussion">New Discussion</string>
     <string name="chat_room_name">Chat room name</string>
     <string name="join_on_invitation">Join on invitation only</string>
-    <string name="information_invitation_close">Users will only be able to join the chat room on your approval.</string>
+    <string name="information_invitation_close">Users will be able to join the chat room only on your approval.</string>
     <string name="information_invitation_open">Users will be able to join the chat room by themselves.</string>
     <string name="create_room">Create a new room</string>
+    <string name="error_chat_room_name_length">Chat room name should be between 1 and 40 chars long</string>
 
 </resources>
