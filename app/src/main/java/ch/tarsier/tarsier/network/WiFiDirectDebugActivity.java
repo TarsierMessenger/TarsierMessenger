@@ -167,8 +167,6 @@ public class WiFiDirectDebugActivity
     }
 
     public void onCreateGroup(View view){
-        TarsierMessagingServer
-
         Log.d(TAG, "Create Group clicked");
         isServer = true;
         mManager.createGroup(mChannel,new WifiP2pManager.ActionListener() {

@@ -63,12 +63,26 @@ public class TarsierServerConnection implements Runnable {
     public void peerDisconnected(TarsierWireProtos.Peer peer){
         mConnectionMap.remove(peer.getPublicKey().toByteArray());
         mPeersMap.remove(peer.getPublicKey().toByteArray());
+
     }
 
     public void broadcast(byte [] message) {
         for (Peer peer : getPeers()){
             sendMessage(peer, message);
         }
+    }
+
+    public void broadcastUpdatedPeerList (){
+        TarsierWireProtos.PeerUpdatedList.Builder peerList = TarsierWireProtos.PeerUpdatedList.newBuilder();
+
+        for (Peer aPeer : getPeers()){
+            TarsierWireProtos.Peer.Builder tarsierPeer = TarsierWireProtos.Peer.newBuilder();
+            tarsierPeer.setPublicKey(ByteString.copyFrom(aPeer.getPublicKey()));
+            tarsierPeer.setName(aPeer.getPeerName());
+            peerList.addPeer(tarsierPeer.build());
+        }
+
+        broadcast(peerList.build().toByteArray());
     }
 
     public void sendMessage(Peer peer, byte[] message) {
@@ -142,17 +156,7 @@ class ConnectionHandler implements Runnable {
                                 TarsierWireProtos.HelloMessage helloMessage = TarsierWireProtos.HelloMessage.parseFrom(split(buffer, 1, buffer.length-1)[1]);
                                 peer  = helloMessage.getPeer();
                                 serverConnection.addPeer(peer, this);
-
-                                TarsierWireProtos.PeerUpdatedList.Builder peerList = TarsierWireProtos.PeerUpdatedList.newBuilder();
-
-                                for (Peer aPeer : this.serverConnection.getPeers()){
-                                    TarsierWireProtos.Peer.Builder tarsierPeer = TarsierWireProtos.Peer.newBuilder();
-                                    tarsierPeer.setPublicKey(ByteString.copyFrom(aPeer.getPublicKey()));
-                                    tarsierPeer.setName(aPeer.getPeerName());
-                                    peerList.addPeer(tarsierPeer.build());
-                                }
-
-                                serverConnection.broadcast(peerList.build().toByteArray());
+                                serverConnection.broadcastUpdatedPeerList();
                                 break;
                             case MessageType.MESSAGE_TYPE_PEER_LIST:
                                 Log.e(TAG, "Server shouldn't be receiving this");
@@ -180,6 +184,7 @@ class ConnectionHandler implements Runnable {
         } catch (IOException e) {
             if (peer != null){
                 serverConnection.peerDisconnected(peer);
+                serverConnection.broadcastUpdatedPeerList();
             }
 
             e.printStackTrace();
