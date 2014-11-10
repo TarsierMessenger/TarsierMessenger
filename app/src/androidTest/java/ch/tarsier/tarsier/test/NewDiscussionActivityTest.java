@@ -1,9 +1,6 @@
 package ch.tarsier.tarsier.test;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.widget.CheckBox;
-
-import com.google.android.apps.common.testing.ui.espresso.action.ViewActions;
 
 import ch.tarsier.tarsier.NewDiscussionActivity;
 import ch.tarsier.tarsier.R;

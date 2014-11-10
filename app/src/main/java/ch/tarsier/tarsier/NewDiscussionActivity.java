@@ -1,7 +1,6 @@
 package ch.tarsier.tarsier;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,9 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ch.tarsier.tarsier.storage.Chat;
-import ch.tarsier.tarsier.storage.Message;
-import ch.tarsier.tarsier.storage.StorageAccess;
 import ch.tarsier.tarsier.validation.ChatRoomNameValidator;
 
 /**
