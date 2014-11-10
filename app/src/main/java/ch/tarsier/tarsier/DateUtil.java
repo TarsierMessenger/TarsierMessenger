@@ -21,18 +21,18 @@ public class DateUtil {
         calendar.set(Calendar.SECOND, 0);
         long todayTimestamp = getNowTimestamp();
 
-        calendar.add(Calendar.DAY_OF_MONTH, -1);//Yesterday at 00:00
+        calendar.add(Calendar.DAY_OF_MONTH, -1); //Yesterday at 00:00
         long yesterdayTimestamp = calendar.getTimeInMillis();
 
-        calendar.add(Calendar.DAY_OF_MONTH, -5);//One week ago at 00:00
+        calendar.add(Calendar.DAY_OF_MONTH, -5); //One week ago at 00:00
         long weekTimestamp = calendar.getTimeInMillis();
 
         Format format;
-        if(timestamp >= todayTimestamp) { // today
+        if (timestamp >= todayTimestamp) { // today
             return "Today";
-        } else if(timestamp >= yesterdayTimestamp) { // yesterday
+        } else if (timestamp >= yesterdayTimestamp) { // yesterday
             return "Yesterday";
-        } else if(timestamp >= weekTimestamp) { // one week ago
+        } else if (timestamp >= weekTimestamp) { // one week ago
             format = new SimpleDateFormat("E");
             return format.format(timestamp);
         } else { // further

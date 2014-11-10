@@ -16,12 +16,12 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
     private BubbleAdapter mBubbleAdapter;
     private View mHeader;
     private boolean isLoading;
-    private boolean allMessagesLoaded;
+    private boolean mAllMessagesLoaded;
 
-    public EndlessListView(Context context){
+    public EndlessListView(Context context) {
         super(context);
         this.setOnScrollListener(this);
-        allMessagesLoaded = false;
+        mAllMessagesLoaded = false;
     }
 
     public void addNewData(List<MessageViewModel> data) {
@@ -43,7 +43,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
         this.addHeaderView(mHeader);
     }
 
-    public void setEndlessListener(EndlessListener endlessListener){
+    public void setEndlessListener(EndlessListener endlessListener) {
         this.mEndlessListener = endlessListener;
     }
 
@@ -53,13 +53,13 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
     }
 
     public void setAllMessagesLoaded(boolean allMessagesLoaded) {
-        this.allMessagesLoaded = allMessagesLoaded;
+        this.mAllMessagesLoaded = allMessagesLoaded;
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if(firstVisibleItem + visibleItemCount >= totalItemCount){
-            if(!allMessagesLoaded) {
+        if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+            if (!mAllMessagesLoaded) {
                 this.addHeaderView(mHeader);
                 isLoading = true;
                 mEndlessListener.loadData();

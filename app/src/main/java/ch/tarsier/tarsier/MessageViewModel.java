@@ -20,7 +20,7 @@ public class MessageViewModel {
         mText = message.getContent();
         mTimeSent = message.getDateTime();
         long authorID = message.getAuthor();
-        Author author = StorageManager.getAuthor(authorID);
+        Author author = StorageAccess.getInstance().getAuthor(authorID);
         mPicture = author.getPicture();
         mAuthorName = author.getName();
         isSentByUser = message.isSentByUser();

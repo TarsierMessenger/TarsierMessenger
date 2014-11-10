@@ -40,7 +40,7 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
 
     /**
      * Return the element at the opposite of the position, since we want the messages in the reverse order.
-     * @param position
+     * @param position The position of the item to get (from the top)
      * @return The element at the given position (reverse order)
      */
     @Override
@@ -55,7 +55,7 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
     }
 
     public long getLastMessageTimestamp() {
-        if(mMessageViewModels.size() > 0) {
+        if (mMessageViewModels.size() > 0) {
             return mMessageViewModels.get(mMessageViewModels.size()-1).getTimeSent();
         } else {
             return DateUtil.getNowTimestamp();
@@ -64,10 +64,10 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MessageViewModel messageViewModel = (MessageViewModel) this.getItem(position);
+        MessageViewModel messageViewModel = this.getItem(position);
 
         ViewHolder holder;
-        if(convertView == null) {
+        if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(mLayoutId, parent, false);
             holder.dateSeparator = (TextView) convertView.findViewById(R.id.dateSeparator);
@@ -88,7 +88,7 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
 
         LayoutParams lp = (LayoutParams) holder.message.getLayoutParams();
 
-        if(messageViewModel.isMessageSentByUser()) {
+        if (messageViewModel.isMessageSentByUser()) {
             holder.message.setBackgroundResource(R.drawable.bubble_text_right);
             lp.gravity = Gravity.RIGHT;
         } else {
@@ -101,11 +101,14 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
         return convertView;
     }
 
+    /**
+     * Class encapsulating ListView row in a view from the message_row XML
+     */
     static class ViewHolder {
-        TextView dateSeparator;
-        ImageView picture;
-        TextView name;
-        TextView message;
-        TextView hour;
+        private TextView dateSeparator;
+        private ImageView picture;
+        private TextView name;
+        private TextView message;
+        private TextView hour;
     }
 }

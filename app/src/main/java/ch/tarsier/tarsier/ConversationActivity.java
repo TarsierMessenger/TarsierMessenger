@@ -5,14 +5,10 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.storage.StorageManager;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.storage.Message;
@@ -65,13 +61,17 @@ public class ConversationActivity extends Activity implements EndlessListener {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Async Task for the loading of the messages from the database on another thread.
+     */
     private class DatabaseLoader extends AsyncTask<Void, Void, List<MessageViewModel>> {
 
         @Override
         protected List<MessageViewModel> doInBackground(Void... params) {
             long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
 
-            List<MessageViewModel> newMessages = StorageAccess.getInstance().getMessages(NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE, lastMessageTimestamp);
+            List<MessageViewModel> newMessages = StorageAccess.getInstance().
+                    getMessages(NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE, lastMessageTimestamp);
 
             return newMessages;
         }
@@ -82,7 +82,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
             mListView.addNewData(result);
 
             // Tell the ListView to stop retrieving messages since there all loaded in it.
-            if(result.size() < NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE) {
+            if (result.size() < NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE) {
                 mListView.setAllMessagesLoaded(true);
             }
         }
