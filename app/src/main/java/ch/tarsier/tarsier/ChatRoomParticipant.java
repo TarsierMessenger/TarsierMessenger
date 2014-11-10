@@ -7,10 +7,12 @@ public class ChatRoomParticipant {
 
     private String mName;
     private String mStatusMessage;
+    private boolean mOnline;
 
     public ChatRoomParticipant(String name, String statusMessage) {
         this.mName = name;
         this.mStatusMessage = statusMessage;
+        this.mOnline = Math.random() < 0.5;
     }
 
     public String getName() {
@@ -27,5 +29,9 @@ public class ChatRoomParticipant {
 
     public void setStatusMessage(String statusMessage) {
         this.mStatusMessage = statusMessage;
+    }
+
+    public boolean isOnline() {
+        return mOnline;
     }
 }

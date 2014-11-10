@@ -3,6 +3,7 @@ package ch.tarsier.tarsier;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,19 +23,32 @@ import java.util.Arrays;
  */
 public class ChatRoomParticipantsActivity extends ListActivity {
 
+    public final static String EXTRAS_PARTICIPANTS_KEY = "participants";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final ChatRoomParticipant[] values = new ChatRoomParticipant[] {
-            new ChatRoomParticipant("Amirezza Bahreini", "At Sat', come join me !"),
-            new ChatRoomParticipant("Frederic Jacobs", "Tarsier will beat ISIS !"),
-            new ChatRoomParticipant("Gabriel Luthier", "There's no place like 127.0.0.1"),
-            new ChatRoomParticipant("Radu Banabic", "Happy coding !"),
-            new ChatRoomParticipant("Romain Ruetschi", "Let me rewrite this in Haskell, please.")
-        };
+        Intent sender = getIntent();
+        Bundle extras = sender.getExtras();
 
-        setListAdapter(new ChatRoomParticipantArrayAdapter(this, values));
+        ChatRoomParticipant[] participants = null;
+
+        if (extras != null && extras.containsKey(EXTRAS_PARTICIPANTS_KEY)) {
+            participants = (ChatRoomParticipant[]) extras.get(EXTRAS_PARTICIPANTS_KEY);
+        } else {
+            // Just some test data in case we got nothing from the parent,
+            // as it is the case when accessing this view from the menu.
+            participants = new ChatRoomParticipant[] {
+                new ChatRoomParticipant("Amirezza Bahreini", "At Sat', come join me !"),
+                new ChatRoomParticipant("Frederic Jacobs", "Tarsier will beat ISIS !"),
+                new ChatRoomParticipant("Gabriel Luthier", "There's no place like 127.0.0.1"),
+                new ChatRoomParticipant("Radu Banabic", "Happy coding !"),
+                new ChatRoomParticipant("Romain Ruetschi", "Let me rewrite this in Haskell, please.")
+            };
+        }
+
+        setListAdapter(new ChatRoomParticipantArrayAdapter(this, participants));
     }
 
     @Override
@@ -78,6 +92,7 @@ public class ChatRoomParticipantsActivity extends ListActivity {
                 convertView.setTag(R.id.name, convertView.findViewById(R.id.name));
                 convertView.setTag(R.id.status_message, convertView.findViewById(R.id.status_message));
                 convertView.setTag(R.id.icon, convertView.findViewById(R.id.icon));
+                convertView.setTag(R.id.badge, convertView.findViewById(R.id.badge));
             }
 
             View rowView = convertView;
@@ -85,12 +100,14 @@ public class ChatRoomParticipantsActivity extends ListActivity {
             TextView nameView = (TextView) convertView.getTag(R.id.name);
             TextView statusView = (TextView) convertView.getTag(R.id.status_message);
             ImageView imageView = (ImageView) convertView.getTag(R.id.icon);
+            TextView badgeView = (TextView) convertView.getTag(R.id.badge);
 
             ChatRoomParticipant p = getItem(position);
 
             nameView.setText(p.getName());
             statusView.setText(p.getStatusMessage());
             imageView.setImageResource(R.drawable.ic_launcher);
+            badgeView.setVisibility((p.isOnline()) ? View.VISIBLE : View.INVISIBLE);
 
             return rowView;
         }
