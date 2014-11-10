@@ -6,7 +6,7 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
 public class ChatRoomNameValidator extends CompositeValidator<EditText> {
     
