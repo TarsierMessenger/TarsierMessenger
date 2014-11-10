@@ -16,6 +16,9 @@ import ch.tarsier.tarsier.storage.Message;
 import ch.tarsier.tarsier.storage.StorageAccess;
 import ch.tarsier.tarsier.validation.ChatRoomNameValidator;
 
+/**
+ * @author gluthier
+ */
 public class NewDiscussionActivity extends Activity {
 
     private EditText mChatRoomName;

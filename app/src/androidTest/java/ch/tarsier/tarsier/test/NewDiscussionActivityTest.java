@@ -1,16 +1,19 @@
 package ch.tarsier.tarsier.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.CheckBox;
+
+import com.google.android.apps.common.testing.ui.espresso.action.ViewActions;
 
 import ch.tarsier.tarsier.NewDiscussionActivity;
 import ch.tarsier.tarsier.R;
 
 import static ch.tarsier.tarsier.test.matchers.HasErrorMatcher.hasError;
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
-import static com.google.android.apps.common.testing.ui.espresso.Espresso.pressBack;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.clearText;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.typeText;
+import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.closeSoftKeyboard;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isChecked;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isClickable;
@@ -18,7 +21,7 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withText;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
 public class NewDiscussionActivityTest extends ActivityInstrumentationTestCase2<NewDiscussionActivity> {
 
@@ -32,28 +35,50 @@ public class NewDiscussionActivityTest extends ActivityInstrumentationTestCase2<
         getActivity();
     }
 
-    public void testCheckboxShouldBeCheckedByDefault() {
-        onView(withId(R.id.join_on_invitation)).check(matches(isChecked()));
+    public void testCreateRoomButtonShouldBeClickable() {
+        onView(withId(R.id.create_room))
+                .check(matches(isClickable()));
     }
 
-    public void testCreateRoomShouldBeClickable() {
-        onView(withId(R.id.create_room)).check(matches(isClickable()));
+    public void testCheckBoxShouldBeCheckedByDefault() {
+        onView(withId(R.id.join_on_invitation))
+                .check(matches(isChecked()));
     }
 
-    public void testTypingTooLongChatRoomName() {
-        onView(withId(R.id.chat_room_name)).perform(typeText("This a really too long name for a chat room!"));
-        onView(withId(R.id.create_room)).perform(click());
-        //TODO
-        //onView(withId(R.id.chat_room_name)).check(matches(hasError(R.string.error_username_length)));
+    public void testCheckBoxInformationMatchesCheckBoxState() {
+        // Should be checked by default (see previous test)
+        onView(withId(R.id.information_invitation))
+                .check(matches(withText(R.string.information_invitation_close)));
+
+        onView(withId(R.id.join_on_invitation))
+                .perform(click());
+
+        onView(withId(R.id.information_invitation))
+                .check(matches(withText(R.string.information_invitation_open)));
     }
 
-    public void testTypingAndPressBack() {
-        onView(withId(R.id.chat_room_name)).perform(typeText("Chat name example"));
-        onView(withId(R.id.create_room)).perform(click());
-        //We should be on the new activity
-        //TODO R.id.new_name
-        // onView(withId(R.id.new_name)).check(matches(withText("Chat name example")));
-        pressBack();
-        onView(withId(R.id.chat_room_name)).check(matches(withText("Chat name example")));
+    public void testChatRoomNameRejectedIfTooShort() {
+        onView(withId(R.id.chat_room_name))
+                .perform(click(), clearText(), closeSoftKeyboard());
+
+        onView(withId(R.id.create_room))
+                .perform(click());
+
+        onView(withId(R.id.chat_room_name))
+                .check(matches(hasError(R.string.error_chat_room_name_length)));
+    }
+
+    public void testChatRoomNameRejectedIfTooLong() {
+        String text = "This chat room name is longer than 36 characters";
+
+        onView(withId(R.id.chat_room_name))
+                .perform(click(), clearText())
+                .perform(typeText(text), closeSoftKeyboard());
+
+        onView(withId(R.id.create_room))
+                .perform(click());
+
+        onView(withId(R.id.chat_room_name))
+                .check(matches(hasError(R.string.error_chat_room_name_length)));
     }
 }
