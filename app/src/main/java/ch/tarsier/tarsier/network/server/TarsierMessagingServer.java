@@ -37,11 +37,11 @@ public class TarsierMessagingServer extends BroadcastReceiver implements  Messag
     private ConversationViewDelegate    mConversationViewDelegate;
     private TarsierServerConnection mServerConnection;
 
-    public TarsierMessagingServer(Object WiFiP2pService, Looper looper, ConversationViewDelegate cvd, ConversationStorageDelegate csd) {
+    public TarsierMessagingServer(final Context context, WifiP2pManager WiFiP2pService, Looper looper, ConversationViewDelegate cvd, ConversationStorageDelegate csd) {
         mConversationStorageDelegate = csd;
         mConversationViewDelegate    = cvd;
-        mWiFiManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        mChannel     = mWiFiManager.initialize(this, getMainLooper(), null);
+        mWiFiManager = WiFiP2pService;
+        mChannel     = mWiFiManager.initialize(context, looper, null);
 
         mWiFiManager.createGroup(mChannel,new WifiP2pManager.ActionListener() {
             @Override
@@ -51,7 +51,7 @@ public class TarsierMessagingServer extends BroadcastReceiver implements  Messag
 
             @Override
             public void onFailure(int errorCode) {
-                Toast.makeText(getApplicationContext(), "Tarsier failed to initiate a new group", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Tarsier failed to initiate a new group", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -62,14 +62,14 @@ public class TarsierMessagingServer extends BroadcastReceiver implements  Messag
         if (info.isGroupOwner) {
             Log.d(TAG, "Connected as group owner");
             try {
-                peerConnection = new TarsierServerConnection(new Handler(new Handler.Callback() {
+                mServerConnection = new TarsierServerConnection(new Handler(new Handler.Callback() {
                     @Override
                     public boolean handleMessage(Message msg) {
                         //TODO: HANDLE MESSAGES WE'RE GETTING
                         return true;
                     }
                 }));
-                peerConnection.run();
+                mServerConnection.run();
                 mConversationViewDelegate.connected();
             } catch (IOException e) {
                 Log.d(TAG, "Failed to create a server thread - " + e.getMessage());
