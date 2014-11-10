@@ -6,6 +6,7 @@ import ch.tarsier.tarsier.NewDiscussionActivity;
 import ch.tarsier.tarsier.R;
 
 import static ch.tarsier.tarsier.test.matchers.HasErrorMatcher.hasError;
+
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.clearText;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
