@@ -55,10 +55,9 @@ public class ProfileActivityTest extends
                 .check(matches(hasError(R.string.error_username_length)));
     }
 
-    /*
     public void testStatusMessageRejectedIfTooShort() {
         onView(withId(R.id.username))
-                .perform(click(), clearText(), closeSoftKeyboard());
+                .perform(click(), typeText("romac"), closeSoftKeyboard());
 
         onView(withId(R.id.status_message))
                 .perform(click(), clearText(), closeSoftKeyboard());
@@ -75,7 +74,7 @@ public class ProfileActivityTest extends
                     + "It really is longer than 50, hence the need for multiple lines.";
 
         onView(withId(R.id.username))
-                .perform(click(), clearText(), closeSoftKeyboard());
+                .perform(click(), typeText("romac"), closeSoftKeyboard());
 
         onView(withId(R.id.status_message))
                 .perform(click(), clearText())
@@ -87,6 +86,5 @@ public class ProfileActivityTest extends
         onView(withId(R.id.status_message))
                 .check(matches(hasError(R.string.error_status_message_length)));
     }
-    */
 
 }

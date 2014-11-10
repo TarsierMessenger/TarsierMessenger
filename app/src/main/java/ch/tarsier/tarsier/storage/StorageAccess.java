@@ -16,8 +16,6 @@ import ch.tarsier.tarsier.R;
  */
 public class StorageAccess {
 
-
-
     private ChatsDBHelper mCDBHelper;
     private SQLiteDatabase mReadableDB;
     private SQLiteDatabase mWritableDB;
