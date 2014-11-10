@@ -22,7 +22,6 @@
     <uses-permission
         android:required="true"
         android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -60,6 +59,10 @@
         <activity
             android:name=".NewDiscussionActivity"
             android:label="@string/title_activity_new_discussion" >
+        </activity>
+        <activity
+            android:name=".ChatRoomParticipantsActivity"
+            android:label="@string/title_activity_chat_room_participants" >
         </activity>
         <activity
             android:name=".ui.PreferencesActivity"

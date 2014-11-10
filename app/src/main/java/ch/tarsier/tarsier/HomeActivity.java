@@ -120,6 +120,7 @@ public class HomeActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_profile) {
@@ -130,7 +131,26 @@ public class HomeActivity extends Activity {
             displayDiscussionsActivity();
         }
 
-        return super.onOptionsItemSelected(item);
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+
+            case R.id.action_profile:
+                displayProfileActivity();
+                return true;
+
+            case R.id.action_wifidirectdebug:
+                displayWifiDirectDebugActivity();
+                return true;
+
+            case R.id.action_chat_room_participants:
+                displayChatRoomParticipants();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     @Override
@@ -188,6 +208,10 @@ public class HomeActivity extends Activity {
         startActivity(discussionsActivity);
     }
 
+    private void displayChatRoomParticipants() {
+        Intent displayChatRoomParticipants = new Intent(this, ChatRoomParticipantsActivity.class);
+        startActivity(displayChatRoomParticipants);
+    }
 
 }
 
