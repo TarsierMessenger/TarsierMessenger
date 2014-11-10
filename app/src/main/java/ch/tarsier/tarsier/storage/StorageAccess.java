@@ -9,10 +9,14 @@ import android.os.AsyncTask;
 
 import java.util.ArrayList;
 
+import ch.tarsier.tarsier.App;
 import ch.tarsier.tarsier.R;
 
 /**
  * Created by McMoudi
+ *
+ * @xawill : Solution to global context :
+ * http://stackoverflow.com/questions/14057273/android-singleton-with-global-context
  */
 public class StorageAccess {
 
@@ -20,28 +24,30 @@ public class StorageAccess {
     private SQLiteDatabase mReadableDB;
     private SQLiteDatabase mWritableDB;
     private boolean mIsReady;
-    private Context mContext;
 
     private static StorageAccess instance = null;
 
-    private StorageAccess(Context context) {
-        mCDBHelper = new ChatsDBHelper(context);
+    private StorageAccess() {
+        mCDBHelper = new ChatsDBHelper(App.getContext());
         mIsReady = false;
-        mContext = context;
         new DatabaseAccess().execute();
     }
 
     /**
      * Gives access to THE StorageAccess singleton
      *
-     * @param context needed for the singleton's creation, of no use afterwards
      * @return the StorageAccess singleton
      */
-    public static StorageAccess getInstance(Context context) {
+    public static StorageAccess getInstance() {
         if (instance == null) {
-            if (context == null)
-                throw new IllegalArgumentException("The context is null!");
-            instance = new StorageAccess(context);
+            instance = getSync();
+        }
+        return instance;
+    }
+
+    private static synchronized StorageAccess getSync() {
+        if (instance == null) {
+            instance = new StorageAccess();
         }
         return instance;
     }
@@ -49,9 +55,12 @@ public class StorageAccess {
     public ArrayList<Chat> getChats(boolean wantChatrooms) {
         isReady();
 
-
         ArrayList<Chat> chatRooms = new ArrayList<Chat>();
-        String[] projection = {ChatsContract.Discussion._ID, ChatsContract.Discussion.COLUMN_NAME_TITLE, ChatsContract.Discussion.COLUMN_NAME_HOST};
+        String[] projection = {
+            ChatsContract.Discussion._ID,
+            ChatsContract.Discussion.COLUMN_NAME_TITLE,
+            ChatsContract.Discussion.COLUMN_NAME_HOST
+        };
         String table;
         String sortOrder;
 
@@ -65,9 +74,12 @@ public class StorageAccess {
         c.moveToFirst();
         do {
             if (wantChatrooms) {
-                chatRooms.add(new Chat(c.getInt(c.getColumnIndex(ChatsContract.Discussion._ID)), c.getString(c.getColumnIndex(ChatsContract.Discussion.COLUMN_NAME_TITLE)), c.getString(c.getColumnIndex(ChatsContract.Discussion.COLUMN_NAME_HOST))));
+                chatRooms.add(new Chat(c.getInt(c.getColumnIndex(ChatsContract.Discussion._ID)),
+                        c.getString(c.getColumnIndex(ChatsContract.Discussion.COLUMN_NAME_TITLE)),
+                        c.getString(c.getColumnIndex(ChatsContract.Discussion.COLUMN_NAME_HOST))));
             } else {
-                chatRooms.add(new Chat(c.getInt(c.getColumnIndex(ChatsContract.Discussion._ID)), c.getString(c.getColumnIndex(ChatsContract.Discussion.COLUMN_NAME_HOST))));
+                chatRooms.add(new Chat(c.getInt(c.getColumnIndex(ChatsContract.Discussion._ID)),
+                        c.getString(c.getColumnIndex(ChatsContract.Discussion.COLUMN_NAME_HOST))));
             }
         } while (c.moveToNext());
 
@@ -79,25 +91,32 @@ public class StorageAccess {
         isReady();
         String sortOrder = ChatsContract.Message.COLUMN_NAME_DATETIME + "ASC";
 
-        String[] projection = {ChatsContract.Message._ID, ChatsContract.Message.COLUMN_NAME_MSG, ChatsContract.Message.COLUMN_NAME_DATETIME, ChatsContract.Message.COLUMN_NAME_SENDER};
-
+        String[] projection = {
+            ChatsContract.Message._ID,
+            ChatsContract.Message.COLUMN_NAME_MSG,
+            ChatsContract.Message.COLUMN_NAME_DATETIME,
+            ChatsContract.Message.COLUMN_NAME_SENDER_ID
+        };
 
         //got to do a SQL "WHERE", as projectionArgs, to select the messages with the id @id
-        String selection = ChatsContract.Message.COLUMN_NAME_CHATID + " = '" + id + "'";
+        String selection = ChatsContract.Message.COLUMN_NAME_CHAT_ID + " = '" + id + "'";
 
-        return mReadableDB.query(ChatsContract.Message.TABLE_NAME, projection, selection, null, null, null, sortOrder);
+        return mReadableDB.query(ChatsContract.Message.TABLE_NAME, projection, selection,
+                null, null, null, sortOrder);
     }
 
     //FIXME fix this ID thingy, once we got an ID to rule them all
 
     /**
-     * @param chatID
-     * @param messagesRetrieved number of messages retrieved, starting from latest, 0 means all
+     * @param chatID the id of the discussion in which we want to retrieve the messages
+     * @param messagesToFetch number of messages retrieved, starting from latest, 0 means all
      * @return an ArrayList of Message
      */
-    public ArrayList<Message> getMessages(int chatID, int messagesRetrieved) {
-        if (messagesRetrieved < -1)
+    public ArrayList<Message> getMessages(int chatID, int messagesToFetch) {
+        if (messagesToFetch < -1) {
+            //FIXME @xawill : Should not throw an exception. Just ignore the call (do nothing, return null)
             throw new IllegalArgumentException("gimme some positive int for getMessages!");
+        }
 
         ArrayList<Message> messages = new ArrayList<Message>();
 
@@ -106,10 +125,14 @@ public class StorageAccess {
 
         int i = 0;
         do {
-            String sender = c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER));
-            messages.add(new Message(c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)), sender, c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)), (sender == getMyId())));
+            int senderId = c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER_ID));
+            messages.add(new Message(
+                    c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHAT_ID)),
+                    c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)),
+                    senderId,
+                    c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME))));
             i++;
-        } while (c.moveToPrevious() && (messagesRetrieved == -1 ? true : i < messagesRetrieved));
+        } while (c.moveToPrevious() && (messagesToFetch == -1 || i < messagesToFetch));
 
         return messages;
     }
@@ -117,11 +140,11 @@ public class StorageAccess {
     /**
      * //TODO
      *
-     * @param nMessages the number of elements to return
+     * @param messagesToFetch the number of elements to return
      * @param timestamp the time from which we shall return messages
-     * @return the nMessages before timestamp, if it can, Can return arraylist with  < nMessages elements
+     * @return the messagesToFetch before timestamp, if it can, Can return arraylist with  < messagesToFetch elements
      */
-    public ArrayList<Message> getMessages(int chatID, int nMessages, long timestamp) { //TODO
+    public ArrayList<Message> getMessages(int chatID, int messagesToFetch, long timestamp) { //TODO
         ArrayList<Message> messages = new ArrayList<Message>();
         Cursor c = getMsg(chatID);
 
@@ -129,13 +152,17 @@ public class StorageAccess {
         while (c.moveToPrevious() && (timestamp < c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME))));
 
         int i = 0;
-        if (c.getPosition() >= 0)
+        if (c.getPosition() >= 0) {
             do {
-                String sender = c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER));
-                messages.add(new Message(c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)), sender, c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)), (sender == getMyId())));
+                int senderId = c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER_ID));
+                messages.add(new Message(
+                        c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHAT_ID)),
+                        c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)),
+                        senderId,
+                        c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME))));
                 i++;
-            } while (c.moveToPrevious() && (nMessages == -1 ? true : i < nMessages));
-
+            } while (c.moveToPrevious() && (messagesToFetch == -1 || i < messagesToFetch));
+        }
 
         return messages;
     }
@@ -145,19 +172,21 @@ public class StorageAccess {
         Cursor c = getMsg(chatID);
         c.moveToLast();
 
-        String sender = c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER));
+        int senderID = c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER_ID));
 
-        return new Message(c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHATID)), c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)), sender, c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)), (sender == getMyId()));
-
+        return new Message(c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHAT_ID)),
+                c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)),
+                senderID,
+                c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)));
     }
 
     public void addMessage(Message msg) {
         isReady();
         ContentValues values = new ContentValues();
 
-        values.put(ChatsContract.Message.COLUMN_NAME_CHATID, msg.getChatID());
+        values.put(ChatsContract.Message.COLUMN_NAME_CHAT_ID, msg.getChatID());
         values.put(ChatsContract.Message.COLUMN_NAME_MSG, msg.getText());
-        values.put(ChatsContract.Message.COLUMN_NAME_SENDER, msg.getAuthor());
+        values.put(ChatsContract.Message.COLUMN_NAME_SENDER_ID, msg.getAuthor());
         values.put(ChatsContract.Message.COLUMN_NAME_DATETIME, msg.getDateTime());
 
         mWritableDB.insert(ChatsContract.Message.TABLE_NAME, null, values);
@@ -181,14 +210,14 @@ public class StorageAccess {
     }
 
     private String getMyPersonalSharedPref(int key) {
-        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.personnal_file_key), mContext.MODE_PRIVATE);
+        SharedPreferences sharedPref = App.getContext().getSharedPreferences(
+                App.getContext().getString(R.string.personnal_file_key), Context.MODE_PRIVATE);
 
-        return sharedPref.getString(mContext.getString(key), "");
-
+        return sharedPref.getString(App.getContext().getString(key), "");
     }
 
-    public String getMyId() {
-        return getMyPersonalSharedPref(R.string.personnal_file_key_myid);
+    public int getMyId() {
+        return Integer.parseInt(getMyPersonalSharedPref(R.string.personnal_file_key_myid));
     }
 
     public String getMyUsername() {
@@ -200,12 +229,12 @@ public class StorageAccess {
     }
 
     private void setMyPersonalSharedPref(int key, String data) {
+        SharedPreferences sharedPref = App.getContext().getSharedPreferences(
+                App.getContext().getString(R.string.personnal_file_key), Context.MODE_PRIVATE);
 
-        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.personnal_file_key), mContext.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(mContext.getString(key), data);
+        editor.putString(App.getContext().getString(key), data);
         editor.apply();
-
     }
 
     public void setMyId(String id) {
@@ -220,15 +249,16 @@ public class StorageAccess {
         setMyPersonalSharedPref(R.string.personnal_file_key_mymood, mood);
     }
 
-
     private String getMyPreferences(int key) {
-        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.preferences_file_key), mContext.MODE_PRIVATE);
-        return sharedPref.getString(mContext.getString(key), "");
+        SharedPreferences sharedPref = App.getContext().getSharedPreferences(
+                App.getContext().getString(R.string.personnal_file_key), Context.MODE_PRIVATE);
+        return sharedPref.getString(App.getContext().getString(key), "");
     }
 
+    //FIXME once the database in encrypted, if it is one day
     public String hasPassword() {
         return "";
-    } //FIXME once the database in encrypted, if it is one day
+    }
 
     public String getBackground() {
         return getMyPreferences(R.string.preferences_file_key_background);
@@ -242,7 +272,9 @@ public class StorageAccess {
         return getMyPreferences(R.string.preferences_file_key_vibration);
     }
 
-
+    /**
+     * AsyncTask to access the database on a different thread
+     */
     private class DatabaseAccess extends AsyncTask<String, Void, Void> {
 
         @Override
@@ -256,6 +288,5 @@ public class StorageAccess {
         protected void onPostExecute(Void result) {
             mIsReady = true;
         }
-
     }
 }

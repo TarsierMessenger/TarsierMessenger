@@ -20,7 +20,7 @@ public class ChatsDBHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_CHATROOMS = "CREATE TABLE " + ChatsContract.Discussion.TABLE_NAME + " (" +
         ChatsContract.Discussion._ID + " INTEGER PRIMARY KEY," +
-        ChatsContract.Discussion.COLUMN_NAME_CHATID + TEXT_TYPE + COMMA_SEP +
+        ChatsContract.Discussion.COLUMN_NAME_CHAT_ID + TEXT_TYPE + COMMA_SEP +
         ChatsContract.Discussion.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
         ChatsContract.Discussion.COLUMN_NAME_HOST + TEXT_TYPE + COMMA_SEP + " )";
 
@@ -29,8 +29,8 @@ public class ChatsDBHelper extends SQLiteOpenHelper {
         ChatsContract.Message._ID + " INTEGER PRIMARY KEY," +
         ChatsContract.Message.COLUMN_NAME_MSG + TEXT_TYPE + COMMA_SEP +
         ChatsContract.Message.COLUMN_NAME_DATETIME + DATETIME_TYPE + COMMA_SEP +
-        ChatsContract.Message.COLUMN_NAME_SENDER + TEXT_TYPE + COMMA_SEP +
-        ChatsContract.Message.COLUMN_NAME_CHATID + " )";
+        ChatsContract.Message.COLUMN_NAME_SENDER_ID + TEXT_TYPE + COMMA_SEP +
+        ChatsContract.Message.COLUMN_NAME_CHAT_ID + " )";
 
 
     private static final String SQL_DELETE_CHATROOMS =
