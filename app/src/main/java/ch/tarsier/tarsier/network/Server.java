@@ -6,25 +6,25 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import ch.tarsier.tarsier.network.client.TarsierMessagingClient;
+
 /**
  * Created by amirreza on 10/26/14.
  */
-public class Server extends Thread implements MessagingInterface{
-
+public class Server extends Thread{
     public static final String TAG = "Server";
-    private final HashMap<Integer,MyConnection> mConnectionsMap = new HashMap<Integer,MyConnection>();
+    private final HashMap<Integer,TarsierMessagingClient.MyConnection> mConnectionsMap = new HashMap<Integer,TarsierMessagingClient.MyConnection>();
     private final int THREAD_COUNT = 10;
     private final static Random random = new Random();
     ServerSocket socket = null;
     private Handler handler;
 
-    private MyConnection conn;
+    private TarsierMessagingClient.MyConnection conn;
 
     public Server(Handler handler) throws IOException {
         try {
@@ -48,7 +48,7 @@ public class Server extends Thread implements MessagingInterface{
         while (true) {
             try {
                 // A blocking operation.
-                conn = new MyConnection(socket.accept(), handler, false);
+                conn = new TarsierMessagingClient.MyConnection(socket.accept(), handler, false);
                 pool.execute(conn);
                 mConnectionsMap.put(random.nextInt(1000),conn);
                 Log.d(TAG, "Launching the I/O handler");
@@ -64,51 +64,4 @@ public class Server extends Thread implements MessagingInterface{
             }
         }
     }
-
-    @Override
-    public List<TarsierMember> getMembersList() {
-        return null;
-    }
-
-    @Override
-    public void broadcastMessage(byte[] message) {
-        if(mConnectionsMap == null){
-             return;
-             }
-         for(MyConnection conn : mConnectionsMap.values()){
-             conn.write(message);
-             }
-    }
-    //TODO: Integer may be changed by TarsierMember
-    @Override
-    public void sendMessage(Integer member, byte[] message) {
-        if(mConnectionsMap == null){
-             return;
-             }
-         if (mConnectionsMap.containsKey(member) ) {
-             MyConnection conn = mConnectionsMap.get(member);
-             conn.write(message);
-             }
-    }
-
-    @Override
-    public void registerReceiveMessageHandler(MessageHandler handler) {
-
-    }
-
-    @Override
-    public void registerMemberChangeHandler(MessageHandler handler) {
-
-    }
-
-    public interface MessageTarget {
-        public Handler getHandler();
-    }
-
-
-    public HashMap<Integer,MyConnection> getConnectionMaps(){
-        return mConnectionsMap;
-    }
-
-
 }

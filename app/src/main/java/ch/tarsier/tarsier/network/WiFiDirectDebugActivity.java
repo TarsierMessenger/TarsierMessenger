@@ -16,17 +16,17 @@ import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.network.client.TarsierMessagingClient;
 
-/**
- * @author amirezza
- */
+// Important note: This is currently an activity, it will later be a ran as a service so that it
+// can run in the background too.
 
-//IMPORTANT TODO : handler must be changed to "null" whenever a connection is finished.
 
 public class WiFiDirectDebugActivity
     extends Activity
@@ -48,8 +48,6 @@ public class WiFiDirectDebugActivity
     private WifiP2pManager.Channel mChannel;
     private WiFiDirectBroadcastReceiver mReceiver;
     private Thread handler = null;
-
-
 
     private WiFiDirectGroupList groupList;
     private final ArrayList<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
@@ -169,27 +167,21 @@ public class WiFiDirectDebugActivity
     }
 
     public void onCreateGroup(View view){
+        TarsierMessagingServer
+
         Log.d(TAG, "Create Group clicked");
         isServer = true;
         mManager.createGroup(mChannel,new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Log.d(TAG, "Group created");
+                Log.d(TAG, "Group successfully created.");
             }
-
 
             @Override
             public void onFailure(int errorCode) {
-                    Log.d(TAG, "Failed create group");
+                Toast.makeText(getApplicationContext(), "Tarsier failed to initiate a new group", Toast.LENGTH_LONG).show();
             }
         });
-    }
-    /* register the broadcast receiver with the intent values to be matched */
-    @Override
-    public void onResume() {
-        super.onResume();
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this, peerListListener);
-        registerReceiver(mReceiver, mIntentFilter);
     }
 
     @Override
@@ -202,12 +194,6 @@ public class WiFiDirectDebugActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(mReceiver);
     }
 
     @Override
@@ -228,11 +214,11 @@ public class WiFiDirectDebugActivity
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
-
         /*
         * The group owner accepts connections using a server socket and then spawns a
         * client socket for every client.
         */
+
         if(handler == null) {
             if (p2pInfo.isGroupOwner) {
                 Log.d(TAG, "Connected as group owner");
@@ -257,6 +243,7 @@ public class WiFiDirectDebugActivity
         }
 
         chatRoom = new ChatRoom();
+        chatRoom.setMessengerDelegate();
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, chatRoom).commit();
 
@@ -272,15 +259,13 @@ public class WiFiDirectDebugActivity
 
         switch (message.what) {
             case MESSAGE_READ:
-                byte[] readBuf = (byte[]) message.obj;
-                // construct a string from the valid bytes in the buffer
-                String readMessage = new String(readBuf, 0, message.arg1);
+
                 Log.d(TAG, readMessage);
                 (chatRoom).pushMessage("Peer: " + readMessage);
                 break;
             case MY_HANDLE:
                 Object obj = message.obj;
-                (chatRoom).setMyConnection((MyConnection) obj);
+                (chatRoom).setMyConnection((TarsierMessagingClient.MyConnection) obj);
         }
         return true;
     }

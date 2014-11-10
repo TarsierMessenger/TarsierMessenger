@@ -20,15 +20,17 @@ import ch.tarsier.tarsier.R;
  * Created by amirreza on 10/27/14.
  */
     public class ChatRoom extends Fragment {
-
-
-        private MyConnection myConnection;
+        private MessagingInterface mMessengerDelegate;
 
         private View view;
         private TextView chatLine;
         private ListView listView;
         ChatMessageAdapter adapter = null;
         private List<String> items = new ArrayList<String>();
+
+        public void setMessengerDelegate (MessagingInterface messagingInterface){
+            mMessengerDelegate = messagingInterface;
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,12 +45,10 @@ import ch.tarsier.tarsier.R;
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View arg0) {
-                            if (myConnection != null) {
-                                myConnection.write(chatLine.getText().toString()
-                                        .getBytes());
+                            if (mMessengerDelegate != null) {
+                                mMessengerDelegate.broadcastMessage(chatLine.getText().toString().getBytes());
                                 pushMessage("Me: " + chatLine.getText().toString());
                                 chatLine.setText("");
-                                chatLine.clearFocus();
                             }
                         }
                     });
@@ -57,9 +57,7 @@ import ch.tarsier.tarsier.R;
         public interface MessageTarget {
             public Handler getHandler();
         }
-        public void setMyConnection(MyConnection obj) {
-            myConnection = obj;
-        }
+
         public void pushMessage(String readMessage) {
             adapter.add(readMessage);
             adapter.notifyDataSetChanged();

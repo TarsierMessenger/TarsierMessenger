@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.network;
+package ch.tarsier.tarsier.network.client;
 
 import android.os.Handler;
 import android.util.Log;
@@ -8,15 +8,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import ch.tarsier.tarsier.network.NetworkMessages.MessageType;
+import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
+import ch.tarsier.tarsier.network.networkMessages.MessageType;
 
 /**
  * Created by amirreza on 10/26/14.
  */
-public class MyConnection implements Runnable {
-
-
-    private static final String TAG = "MyConnection";
+public class TarsierClientConnection implements Runnable {
+    private static final String TAG = "TarsierClientConnection";
     private Socket socket = null;
     private Handler handler;
 
@@ -24,7 +23,7 @@ public class MyConnection implements Runnable {
     private OutputStream out;
     private boolean mIsClient;
 
-    public MyConnection(Socket socket, Handler handler, boolean isClient) {
+    public TarsierClientConnection(Socket socket, Handler handler, boolean isClient) {
         this.socket    = socket;
         this.handler   = handler;
         this.mIsClient = isClient;
@@ -40,9 +39,6 @@ public class MyConnection implements Runnable {
             handler.obtainMessage(WiFiDirectDebugActivity.MY_HANDLE, this)
                     .sendToTarget();
 
-            if (mIsClient) {
-                // TODO:FRED out.write();
-            }
 
             while (true) {
                 try {
@@ -51,25 +47,12 @@ public class MyConnection implements Runnable {
                     if (bytes == -1) {
                         break;
                     }
+
+                    byte[] readBuf = (byte[]) message.obj;
+                    // construct a string from the valid bytes in the buffer
+
                     // Send the obtained bytes to the UI Activity
-                    Log.d(TAG, "Rec:" + String.valueOf(buffer));
-                    if (!mIsClient) {
-                        switch (MessageType.messageTypeFromData(buffer)){
-                            case MessageType.MESSAGE_TYPE_HELLO:;
-                                // stocker ids dans la map
-                                // envoyer a tout le monde liste des noms + cles publiques
-                                break;
-                            case MessageType.MESSAGE_TYPE_PRIVATE:;
-                                // verifier destinataire == moi
-                                // si oui, message handler, sinon envoyer destinataire
-                                break;
-                            case MessageType.MESSAGE_TYPE_PUBLIC:;
-                                // broadcast to everyone but sender
-                                break;
-                        }
-
-
-                    }
+                    Log.d(TAG, "Rec:" + String.valueOf(buffer.toString()));
 
                     handler.obtainMessage(WiFiDirectDebugActivity.MESSAGE_READ,
                             bytes, -1, buffer).sendToTarget();

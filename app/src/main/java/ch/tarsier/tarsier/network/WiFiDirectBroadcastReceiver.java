@@ -26,8 +26,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver  {
     Server server = null;
 
 
-
-
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
                                        WiFiDirectDebugActivity activity,WifiP2pManager.PeerListListener peerListListener) {
         super();
@@ -43,6 +41,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver  {
         Log.d(WiFiDirectDebugActivity.TAG, action);
         if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             if (mManager == null) {
+                // TODO: (AMIREZZA) WHEN DOES THIS HAPPEN?
                 return;
             }
             NetworkInfo networkInfo = (NetworkInfo) intent
@@ -55,7 +54,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver  {
                 mManager.requestConnectionInfo(mChannel,
                         (WifiP2pManager.ConnectionInfoListener) mActivity);
             } else {
-            // It's a disconnect
+                Log.d(TAG, "Did receive a Intent action : " + action);
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
                 .equals(action)) {

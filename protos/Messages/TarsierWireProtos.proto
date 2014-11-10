@@ -1,0 +1,24 @@
+message HelloMessage {
+  required Peer peer = 1;
+}
+
+message PeerUpdatedList {
+  repeated Peer peer = 1;
+}
+
+message Peer {
+  required string name      = 1;
+  required bytes  publicKey = 2;
+}
+
+message TarsierPrivateMessage {
+   required bytes  cipherText        = 1;
+   required bytes  receiverPublicKey = 2;
+   required bytes  senderPublicKey   = 3;
+   required bytes  IV                = 4;
+}
+
+message TarsierPublicMessage {
+	required bytes plainText         = 1;
+	required bytes senderPublicKey   = 2;
+}

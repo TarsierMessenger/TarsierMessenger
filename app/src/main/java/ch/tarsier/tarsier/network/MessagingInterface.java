@@ -4,15 +4,13 @@ import java.util.EventListener;
 import java.util.List;
 import java.util.Observer;
 
-/**
- * Created by amirreza on 11/8/14.
- */
 public interface MessagingInterface {
-    public List<TarsierMember> getMembersList();
-    public void broadcastMessage(byte[] message);
-    //TODO: Integer may be changed by TarsierMember
-    public void sendMessage(Integer member, byte[] message);
+    static final int SERVER_PORT = 8888;
 
-    public void registerReceiveMessageHandler(MessageHandler handler);
-    public void registerMemberChangeHandler(MessageHandler handler);
+    public List<Peer> getMembersList();
+    public void broadcastMessage(String message);
+    public void sendMessage(Peer peer, String message);
+
+    public void setConversationViewDelegate(ConversationViewDelegate delegate);
+    public void setConversationStorageDelegate(ConversationStorageDelegate delegate);
 }

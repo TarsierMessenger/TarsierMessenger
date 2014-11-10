@@ -7,16 +7,16 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.List;
+
+import ch.tarsier.tarsier.network.client.TarsierMessagingClient;
 
 /**
  * Created by amirreza on 10/26/14.
  */
-public class Client extends Thread implements MessagingInterface{
+public class Client extends Thread{
 
     private static final String TAG = "Client";
     private Handler handler;
-    private MyConnection chat;
     private InetAddress mAddress;
     public Client(Handler handler, InetAddress groupOwnerAddress) {
         this.handler = handler;
@@ -30,7 +30,7 @@ public class Client extends Thread implements MessagingInterface{
             socket.connect(new InetSocketAddress(mAddress.getHostAddress(),
                     WiFiDirectDebugActivity.SERVER_PORT), 5000);
             Log.d(TAG, "Launching the I/O handler");
-            chat = new MyConnection(socket, handler, true);
+            chat = new TarsierMessagingClient.MyConnection(socket, handler, true);
             new Thread(chat).start();
 
 
@@ -43,33 +43,5 @@ public class Client extends Thread implements MessagingInterface{
             }
             return;
         }
-    }
-    public MyConnection getChat() {
-        return chat;
-    }
-
-    @Override
-    public List<TarsierMember> getMembersList() {
-        return null;
-    }
-
-    @Override
-    public void broadcastMessage(byte[] message) {
-
-    }
-
-    @Override
-    public void sendMessage(Integer member, byte[] message) {
-
-    }
-
-    @Override
-    public void registerReceiveMessageHandler(MessageHandler handler) {
-
-    }
-
-    @Override
-    public void registerMemberChangeHandler(MessageHandler handler) {
-
     }
 }
