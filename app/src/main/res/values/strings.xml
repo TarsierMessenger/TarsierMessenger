@@ -37,4 +37,5 @@
     <string name="too_much_notifications">9+</string>
     <string name="nb_people_online">Online:</string>
     <string name="create_new_discussion">New discussion</string>
+    <string name="action_discussions">Discussions</string>
 </resources>
