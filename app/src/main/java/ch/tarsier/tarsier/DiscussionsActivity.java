@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
 public class DiscussionsActivity extends Activity {
     public final static String ID_DISCUSSION_MESSAGE = "ch.tarsier.tarsier.ID_DISCUSSION";

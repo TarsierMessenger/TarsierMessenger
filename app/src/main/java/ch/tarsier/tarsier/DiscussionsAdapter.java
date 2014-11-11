@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
 public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
 
