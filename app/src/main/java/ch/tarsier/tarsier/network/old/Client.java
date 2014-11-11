@@ -1,10 +1,8 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.network.old;
 
 import android.os.Handler;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;

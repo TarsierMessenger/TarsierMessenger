@@ -9,8 +9,8 @@ import android.os.AsyncTask;
 
 import java.util.ArrayList;
 
-import ch.tarsier.tarsier.App;
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.Tarsier;
 
 /**
  * Created by McMoudi
@@ -28,7 +28,7 @@ public class StorageAccess {
     private static StorageAccess instance = null;
 
     private StorageAccess() {
-        mCDBHelper = new ChatsDBHelper(App.getContext());
+        mCDBHelper = new ChatsDBHelper(Tarsier.app());
         mIsReady = false;
         new DatabaseAccess().execute();
     }
@@ -215,10 +215,10 @@ public class StorageAccess {
     }
 
     private String getMyPersonalSharedPref(int key) {
-        SharedPreferences sharedPref = App.getContext().getSharedPreferences(
-                App.getContext().getString(R.string.personnal_file_key), Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = Tarsier.app().getSharedPreferences(
+                Tarsier.app().getString(R.string.personnal_file_key), Context.MODE_PRIVATE);
 
-        return sharedPref.getString(App.getContext().getString(key), "");
+        return sharedPref.getString(Tarsier.app().getString(key), "");
     }
 
     public int getMyId() {
@@ -234,11 +234,11 @@ public class StorageAccess {
     }
 
     private void setMyPersonalSharedPref(int key, String data) {
-        SharedPreferences sharedPref = App.getContext().getSharedPreferences(
-                App.getContext().getString(R.string.personnal_file_key), Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = Tarsier.app().getSharedPreferences(
+                Tarsier.app().getString(R.string.personnal_file_key), Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(App.getContext().getString(key), data);
+        editor.putString(Tarsier.app().getString(key), data);
         editor.apply();
     }
 
@@ -255,9 +255,9 @@ public class StorageAccess {
     }
 
     private String getMyPreferences(int key) {
-        SharedPreferences sharedPref = App.getContext().getSharedPreferences(
-                App.getContext().getString(R.string.personnal_file_key), Context.MODE_PRIVATE);
-        return sharedPref.getString(App.getContext().getString(key), "");
+        SharedPreferences sharedPref = Tarsier.app().getSharedPreferences(
+                Tarsier.app().getString(R.string.personnal_file_key), Context.MODE_PRIVATE);
+        return sharedPref.getString(Tarsier.app().getString(key), "");
     }
 
     //FIXME once the database in encrypted, if it is one day

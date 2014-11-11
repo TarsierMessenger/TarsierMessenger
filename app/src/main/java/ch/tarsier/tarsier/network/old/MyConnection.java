@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.network.old;
 
 import android.os.Handler;
 import android.util.Log;

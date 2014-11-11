@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,6 +13,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
+import ch.tarsier.tarsier.util.DateUtil;
+import ch.tarsier.tarsier.ui.view.EndlessListView;
+import ch.tarsier.tarsier.ui.view.EndlessListener;
+import ch.tarsier.tarsier.storage.MessageViewModel;
+import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.storage.Message;
 import ch.tarsier.tarsier.storage.StorageAccess;
 

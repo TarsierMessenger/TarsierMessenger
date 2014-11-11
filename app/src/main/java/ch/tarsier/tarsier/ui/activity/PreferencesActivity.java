@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.ui;
+package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
 import android.os.Bundle;

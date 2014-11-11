@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.util;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;

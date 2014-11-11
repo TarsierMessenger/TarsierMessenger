@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.ui.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,9 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 
 import java.util.List;
+
+import ch.tarsier.tarsier.storage.MessageViewModel;
+import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 
 /**
  * @author xawill

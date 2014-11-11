@@ -2,11 +2,8 @@ package ch.tarsier.tarsier.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import ch.tarsier.tarsier.AddProfilePictureActivity;
-import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity;
 
-import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
-import static com.google.android.apps.common.testing.ui.espresso.Espresso.pressBack;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
 

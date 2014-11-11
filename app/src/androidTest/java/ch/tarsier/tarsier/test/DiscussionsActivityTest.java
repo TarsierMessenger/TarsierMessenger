@@ -3,7 +3,7 @@ package ch.tarsier.tarsier.test;
 import android.test.ActivityInstrumentationTestCase2;
 import ch.tarsier.tarsier.R;
 
-import ch.tarsier.tarsier.DiscussionsActivity;
+import ch.tarsier.tarsier.ui.activity.DiscussionsActivity;
 
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;

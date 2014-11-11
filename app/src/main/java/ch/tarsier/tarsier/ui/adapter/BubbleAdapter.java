@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.ui.adapter;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -11,6 +11,10 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import java.util.List;
+
+import ch.tarsier.tarsier.util.DateUtil;
+import ch.tarsier.tarsier.storage.MessageViewModel;
+import ch.tarsier.tarsier.R;
 
 /**
  * @author marinnicolini and xawill (extreme programming)
