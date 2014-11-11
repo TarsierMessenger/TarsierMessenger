@@ -14,7 +14,6 @@ public class PreferencesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
 
-        //gets the 'up' button
 
 
 
@@ -41,4 +40,10 @@ public class PreferencesActivity extends Activity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+    private void restoreState(){
+
+    }
+
+
 }

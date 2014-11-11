@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
+                xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 android:padding="6dip"
                 android:background="@android:color/white">
@@ -13,7 +13,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="6dip"
-            android:contentDescription="TODO"
+            android:contentDescription="@string/chatroom_participant_image_desc"
             android:src="@drawable/ic_launcher" />
 
     <TextView
@@ -25,7 +25,6 @@
             android:layout_toRightOf="@id/icon"
             android:ellipsize="marquee"
             android:singleLine="true"
-            android:text="Description"
             android:textSize="14sp"
             android:textColor="@android:color/secondary_text_light"/>
 
@@ -38,7 +37,6 @@
             android:layout_alignWithParentIfMissing="true"
             android:layout_toRightOf="@id/icon"
             android:gravity="center_vertical"
-            android:text="Lorem Ipsum"
             android:textSize="16sp"
             android:singleLine="true"
             android:textStyle="bold" />
@@ -51,12 +49,12 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="2dp"
             android:background="@drawable/badge"
-            android:text="Online"
             android:gravity="center"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
             android:paddingStart="10dp"
-            android:paddingEnd="10dp"/>
+            android:paddingEnd="10dp"
+            tools:ignore="RelativeOverlap" />
 
 </RelativeLayout>

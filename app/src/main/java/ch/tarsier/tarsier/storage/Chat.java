@@ -40,7 +40,12 @@ public class Chat {
         return mId;
     }
 
-    public String getTitle() { return mPrivate ? mHost : mTitle ; }
+    /**
+     * @return the other peer in a private chat or the name of the chatroom in a chatroom.
+     */
+    public String getTitle() {
+        return mPrivate ? mHost : mTitle;
+    }
 
     public boolean isPrivate() {
         return mPrivate;
