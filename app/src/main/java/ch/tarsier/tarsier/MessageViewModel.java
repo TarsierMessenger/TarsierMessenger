@@ -4,6 +4,7 @@ package ch.tarsier.tarsier;
 import android.graphics.Bitmap;
 
 import ch.tarsier.tarsier.storage.Message;
+import ch.tarsier.tarsier.storage.Peer;
 import ch.tarsier.tarsier.storage.StorageAccess;
 
 /**
@@ -13,16 +14,16 @@ public class MessageViewModel {
     private final boolean isSentByUser;
     private String mText;
     private long mTimeSent;
-    private Bitmap mPicture;
-    private String mAuthorName;
+    private Bitmap mPeerPicture;
+    private String mPeerName;
 
     public MessageViewModel(Message message) {
         mText = message.getContent();
         mTimeSent = message.getDateTime();
-        long authorID = message.getAuthor();
-        Author author = StorageAccess.getInstance().getAuthor(authorID);
-        mPicture = author.getPicture();
-        mAuthorName = author.getName();
+        long authorID = message.getPeerId();
+        Peer peer = StorageAccess.getInstance().getAuthor(authorID);
+        mPeerPicture = peer.getPicture();
+        mPeerName = peer.getName();
         isSentByUser = message.isSentByUser();
     }
 
@@ -31,11 +32,11 @@ public class MessageViewModel {
     }
 
     public Bitmap getPicture() {
-        return mPicture;
+        return mPeerPicture;
     }
 
     public String getAuthorName() {
-        return mAuthorName;
+        return mPeerName;
     }
 
     public String getText() {

@@ -90,7 +90,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
 
     public void sendMessage(View view) {
         String messageText = ((TextView) findViewById(R.id.message_to_send)).getText();
-        Message sentMessage = new Message(mDiscussionId, messageText, DateUtil.getNowTimestamp(), true);
+        Message sentMessage = new Message(mDiscussionId, messageText, DateUtil.getNowTimestamp());
 
         //Add the message to the ListView
         MessageViewModel messageViewModel = new MessageViewModel(sentMessage);
