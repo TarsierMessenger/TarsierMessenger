@@ -9,7 +9,7 @@ import ch.tarsier.tarsier.storage.Message;
 import ch.tarsier.tarsier.storage.StorageAccess;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
 public class FillDatabaseWithFictionalData {
     private static final String AMIRREZA_BAHREINI_ID = "1";

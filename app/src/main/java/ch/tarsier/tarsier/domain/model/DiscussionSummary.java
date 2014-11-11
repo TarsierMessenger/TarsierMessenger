@@ -1,7 +1,7 @@
 package ch.tarsier.tarsier.domain.model;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
 public class DiscussionSummary {
     private int mId;
