@@ -18,10 +18,10 @@ public class MessageViewModel {
     private String mPeerName;
 
     public MessageViewModel(Message message) {
-        mText = message.getContent();
+        mText = message.getText();
         mTimeSent = message.getDateTime();
-        long authorID = message.getPeerId();
-        Peer peer = StorageAccess.getInstance().getAuthor(authorID);
+        int peerId = message.getPeerId();
+        Peer peer = StorageAccess.getInstance().getPeer(peerId);
         mPeerPicture = peer.getPicture();
         mPeerName = peer.getName();
         isSentByUser = message.isSentByUser();

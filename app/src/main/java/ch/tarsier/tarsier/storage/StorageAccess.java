@@ -204,6 +204,11 @@ public class StorageAccess {
         mWritableDB.insert(ChatsContract.Discussion.TABLE_NAME, null, values);
     }
 
+    public Peer getPeer(int peerId) {
+        // TODO implement
+        return null;
+    }
+
     private void isReady() {
         while (!mIsReady) {
         }

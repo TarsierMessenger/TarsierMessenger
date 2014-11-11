@@ -5,13 +5,13 @@
     tools:context="ch.tarsier.tarsier.ConversationActivity"
     android:orientation="vertical" >
 
-    <ListView
+    <EndlessListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:stackFromBottom="true"
         android:layout_weight="1">
-    </ListView>
+    </EndlessListView>
 
     <RelativeLayout
         android:layout_width="match_parent"

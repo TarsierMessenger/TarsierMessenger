@@ -9,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.storage.Message;
@@ -25,7 +27,7 @@ import ch.tarsier.tarsier.storage.StorageAccess;
 public class ConversationActivity extends Activity implements EndlessListener {
     private static final int NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE = 10;
     private static Point windowSize;
-    private String mDiscussionId;
+    private int mDiscussionId;
     private BubbleAdapter mListViewAdapter;
     private EndlessListView mListView;
 
@@ -39,16 +41,16 @@ public class ConversationActivity extends Activity implements EndlessListener {
         display.getSize(this.windowSize);*/
 
         Intent startingIntent = getIntent();
-        this.mDiscussionId = startingIntent.getStringExtra(DiscussionsActivity.class.getID());
+        this.mDiscussionId = startingIntent.getStringExtra(DiscussionsActivity.class.getId());
 
-        mListView = findViewById(R.id.list);
+        mListView = (EndlessListView) findViewById(R.id.list);
         mListView.setLoadingView(R.layout.loading_layout);
 
         DatabaseLoader dbl = new DatabaseLoader();
         List<MessageViewModel> firstMessages = dbl.doInBackground();
         dbl.onPostExecute(firstMessages);
 
-        mListViewAdapter = new BubbleAdapter(this, R.layout.messageRow, firstMessages);
+        mListViewAdapter = new BubbleAdapter(this, R.layout.message_row, firstMessages);
         mListView.setBubbleAdapter(mListViewAdapter);
         mListView.setEndlessListener(this);
     }
@@ -70,10 +72,16 @@ public class ConversationActivity extends Activity implements EndlessListener {
         protected List<MessageViewModel> doInBackground(Void... params) {
             long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
 
-            List<MessageViewModel> newMessages = StorageAccess.getInstance().
-                    getMessages(NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE, lastMessageTimestamp);
+            List<Message> newMessages = StorageAccess.getInstance().
+                    getMessages(mDiscussionId, NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE, lastMessageTimestamp);
 
-            return newMessages;
+            //Encapsulate messages into messageViewModels
+            ArrayList<MessageViewModel> newMessageViewModels = new ArrayList<MessageViewModel>();
+            for (Message message: newMessages) {
+                newMessageViewModels.add(new MessageViewModel(message));
+            }
+
+            return newMessageViewModels;
         }
 
         @Override
@@ -89,7 +97,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
     }
 
     public void sendMessage(View view) {
-        String messageText = ((TextView) findViewById(R.id.message_to_send)).getText();
+        String messageText = ((TextView) findViewById(R.id.message_to_send)).getText().toString();
         Message sentMessage = new Message(mDiscussionId, messageText, DateUtil.getNowTimestamp());
 
         //Add the message to the ListView
