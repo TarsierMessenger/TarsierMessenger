@@ -35,7 +35,8 @@ android {
                'LabelFor',
                'IconDipSize',
                'IconDuplicatesConfig',
-               'UselessParent'
+               'UselessParent',
+               'IconColors'
 
     }
 }
