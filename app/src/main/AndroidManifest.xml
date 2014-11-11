@@ -75,12 +75,8 @@
         </activity>
 
         <activity
-            android:name=".WiFiDirectDebugActivity"
-            android:label="@string/title_activity_wifidirectdebug" >
-        </activity>
-        <activity
-            android:name=".PrivateDiscussionActivity"
-            android:label="@string/title_activity_private_discussion" >
+            android:name=".ConversationActivity"
+            android:label="@string/title_activity_conversation" >
         </activity>
     </application>
 
