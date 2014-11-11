@@ -2,7 +2,7 @@ package ch.tarsier.tarsier.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import ch.tarsier.tarsier.HomeActivity;
+import ch.tarsier.tarsier.ui.activity.HomeActivity;
 import ch.tarsier.tarsier.R;
 
 import static ch.tarsier.tarsier.test.matchers.HasErrorMatcher.hasError;

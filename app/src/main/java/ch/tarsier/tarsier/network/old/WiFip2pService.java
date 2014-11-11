@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.network.old;
 
 import android.net.wifi.p2p.WifiP2pDevice;
 

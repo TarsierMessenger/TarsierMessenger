@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.ui.adapter;
 
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -12,6 +12,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import ch.tarsier.tarsier.R;
 
 /**
  * Created by amirreza on 10/26/14.
