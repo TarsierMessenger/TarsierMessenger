@@ -49,8 +49,10 @@ public class FillDatabaseWithFictionalData {
         // 86400000 milliseconds = 24 hours
         int n = 86400000;
 
-        User user = new User(GABRIEL_LUTHIER, "Coucou les cop1");
-        //TODO give the information about who the user is to the StorageAccess
+        //User user = new User(GABRIEL_LUTHIER, "Coucou les cop1");
+        storageAccess.setMyId(Integer.toString(GABRIEL_LUTHIER_ID));
+        storageAccess.setMyUsername(GABRIEL_LUTHIER);
+        storageAccess.setMyMood("Yolo");
 
         //Generate the chats
         ArrayList<Chat> chats = new ArrayList<Chat>(10);
