@@ -1,11 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-<<<<<<< HEAD:app/src/main/res/menu/add_profile_picture.xml
     tools:context="ch.tarsier.tarsier.AddProfilePictureActivity" >
-=======
-    tools:context="ch.tarsier.tarsier.ConversationActivity" >
 
->>>>>>> Compute date and layout the message row for the ListView:app/src/main/res/menu/private_discussion.xml
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
