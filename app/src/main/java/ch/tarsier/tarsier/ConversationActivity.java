@@ -26,6 +26,11 @@ import ch.tarsier.tarsier.storage.StorageAccess;
  */
 public class ConversationActivity extends Activity implements EndlessListener {
     private static final int NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE = 10;
+
+    // TODO: Store those IDs in their own class, so that they can be shared between classes
+    //       while reducing the coupling a little.
+    private static final String EXTRA_DISCUSSION_ID = "discussionId";
+
     private static Point windowSize;
     private int mDiscussionId;
     private BubbleAdapter mListViewAdapter;
@@ -41,7 +46,11 @@ public class ConversationActivity extends Activity implements EndlessListener {
         display.getSize(this.windowSize);*/
 
         Intent startingIntent = getIntent();
-        this.mDiscussionId = startingIntent.getStringExtra(DiscussionsActivity.class.getId());
+        mDiscussionId = startingIntent.getIntExtra(EXTRA_DISCUSSION_ID, -1);
+
+        if (mDiscussionId == -1) {
+            // FIXME: Handle this
+        }
 
         mListView = (EndlessListView) findViewById(R.id.list);
         mListView.setLoadingView(R.layout.loading_layout);

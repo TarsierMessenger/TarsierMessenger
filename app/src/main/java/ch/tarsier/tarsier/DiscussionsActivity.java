@@ -48,7 +48,7 @@ public class DiscussionsActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DiscussionSummary discussion = (DiscussionSummary) discussionsList.getItemAtPosition(i);
                 Toast.makeText(getApplicationContext(), Integer.toString(discussion.getId()), Toast.LENGTH_SHORT).show();
-                // TODO check if getApplicationContext() is right
+                // TODO: check if getApplicationContext() is right
                 /*Intent discussionIdIntent = new Intent(getApplicationContext(), ???.class);
                 discussionIdIntent.putExtra(ID_DISCUSSION_MESSAGE, discussion.getId());
 
@@ -56,6 +56,7 @@ public class DiscussionsActivity extends Activity {
             }
         });
 
+        // FIXME: Handle potential NullPointerException
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
     }
