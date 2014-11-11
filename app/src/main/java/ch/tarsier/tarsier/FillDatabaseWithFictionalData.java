@@ -420,12 +420,12 @@ public class FillDatabaseWithFictionalData {
 =======
 
     public static void populateDb(Context context) {
-        StorageAccess storageAccess = StorageAccess.getInstance(context);
+        //StorageAccess storageAccess = StorageAccess.getInstance(context);
         Date date = new Date();
 
         Chat chat1 = new Chat(CHAT_ID_1, "TA meeting 1", ROMAIN_RUETSCHI_ID);
-        Message chat1mess1 = new Message(1, CHAT_ID_1, "À fond, mais je bosse dur, aussi!",
-                GABRIEL_LUTHIER_ID, date.getTime(), false);
+       // Message chat1mess1 = new Message(1, CHAT_ID_1, "À fond, mais je bosse dur, aussi!",
+       //         GABRIEL_LUTHIER_ID, date.getTime(), false);
 
 
         Chat chat2 = new Chat(CHAT_ID_2, BENJAMIN_PACCAUD_ID);
@@ -436,8 +436,8 @@ public class FillDatabaseWithFictionalData {
         Chat chat7 = new Chat(CHAT_ID_7, "SwEng", XAVIER_WILLEMIN_ID);
 
         Chat chat8 = new Chat(CHAT_ID_8, AMIRREZA_BAHREINI_ID);
-        Message chat8mess1 = new Message(1, CHAT_ID_8, "ça se passe avec ces réseaux de neurones et ces Google Glass !?",
-                ROMAIN_RUETSCHI_ID, date.getTime(), true);
+        //Message chat8mess1 = new Message(1, CHAT_ID_8, "ça se passe avec ces réseaux de neurones et ces Google Glass !?",
+        //        ROMAIN_RUETSCHI_ID, date.getTime(), true);
 
 
 >>>>>>> first mockup, postponed until StorageAcess is changed
