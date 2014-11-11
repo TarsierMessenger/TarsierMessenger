@@ -47,5 +47,15 @@
     <string name="action_discussions">Discussions</string>
     <string name="title_activity_chat_room_participants">Chat Room Participants</string>
     <string name="action_chat_room_participants">Chat Room Participants</string>
-    <string name="chatroom_participant_image_desc">Participant's profile picture</string>
+    <string name="chatroom_participant_image_desc">Participant\'s profile picture</string>
+
+    <string name="preferences_file_key">settings</string>
+    <string name="preferences_file_key_password">password</string>
+    <string name="preferences_file_key_background">background</string>
+    <string name="preferences_file_key_sound">sound</string>
+    <string name="preferences_file_key_vibration">vibration</string>
+    <string name="preferences_file_key_enter_key">enter key</string>
+    <string name="preferences_file_key_enter_send">enter send</string>
+    <string name="preferences_file_key_delete_messages">delete messages</string>
+    <string name="preferences_file_key_mesage_limit">message limit</string>
 </resources>
