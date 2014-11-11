@@ -24,7 +24,7 @@ public class FillDatabaseWithFictionalData {
 
     private static final String AMIRREZA_BAHREINI = "Amirreza Bahreini";
     private static final String BENJAMIN_PACCAUD = "Benjamin Paccaud";
-    private static final String FREDERIC_JACOBS = "Frédéric Jacobs";
+    private static final String FREDERIC_JACOBS = "Frederic Jacobs";
     private static final String GABRIEL_LUTHIER = "Gabriel Luthier";
     private static final String MARIN_JERRY_NICOLINI = "Marin-Jerry Nicolini";
     private static final String ROMAIN_RUETSCHI = "Romain Ruetschi";
