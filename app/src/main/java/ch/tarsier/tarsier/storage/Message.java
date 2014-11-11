@@ -54,6 +54,10 @@ public class Message {
         return mChatId;
     }
 
+    public int getPeerId() {
+        return mPeerId;
+    }
+
     public long getDateTime() {
         return mDateTime;
     }

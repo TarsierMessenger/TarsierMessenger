@@ -4,6 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="add_picture">100dp</dimen>
     <dimen name="view_spacing">20dp</dimen>
-
+    <dimen name="bubble_maximum_margin">40dp</dimen>
     <dimen name="lets_chat_size">14pt</dimen>
 </resources>

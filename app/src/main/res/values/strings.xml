@@ -48,6 +48,9 @@
     <string name="title_activity_chat_room_participants">Chat Room Participants</string>
     <string name="action_chat_room_participants">Chat Room Participants</string>
     <string name="chatroom_participant_image_desc">Participant\'s profile picture</string>
+    <string name="title_activity_private_discussion">PrivateDiscussionActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="send_message_hint">Type new message</string>
 
     <string name="preferences_file_key">settings</string>
     <string name="preferences_file_key_password">password</string>
@@ -58,4 +61,5 @@
     <string name="preferences_file_key_enter_send">enter send</string>
     <string name="preferences_file_key_delete_messages">delete messages</string>
     <string name="preferences_file_key_mesage_limit">message limit</string>
+    <string name="title_activity_conversation">Conversation</string>
 </resources>

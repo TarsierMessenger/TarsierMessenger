@@ -11,5 +11,62 @@
 
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/Day"
+        android:text="Today"/>
+
+
+    //LEFT_BUBBLE
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/left_bubble"
+        android:paddingRight="@dimen/bubble_maximum_margin"
+        android:layout_below="@id/Day"
+        >
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/amirrezaw_picture"
+            android:src="@drawable/amirrezaw"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bubble_text_left"
+            android:text="Hello tout le monde comment ca va bien tu peux écrire autant que tu veux tu sais"
+            />
+
+    </LinearLayout>
+
+    //RIGHT_BUBBLE
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/left_bubble"
+        android:paddingLeft="@dimen/bubble_maximum_margin">
+
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/romac_text"
+            android:gravity="left"
+            android:background="@drawable/bubble_text_right"
+            android:text="Hello tout le monde comment ca va bien tu peux écrire autant que tu veux tu sais"
+            android:layout_weight="0.9"
+            />
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:gravity="right"
+            android:src="@drawable/amirrezaw"
+            />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

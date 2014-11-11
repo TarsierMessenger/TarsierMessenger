@@ -73,6 +73,11 @@
             android:label="Discussions"
             android:theme="@style/CustomActionBarTheme" >
         </activity>
+
+        <activity
+            android:name=".ConversationActivity"
+            android:label="@string/title_activity_conversation" >
+        </activity>
     </application>
 
 </manifest>
