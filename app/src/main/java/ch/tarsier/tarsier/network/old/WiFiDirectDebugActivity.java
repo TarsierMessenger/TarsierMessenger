@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.network.old;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ch.tarsier.tarsier.R;
+
 /**
  * @author amirezza
  */
@@ -25,7 +27,7 @@ public class WiFiDirectDebugActivity
     extends Activity
     implements WifiP2pManager.ConnectionInfoListener,
                WiFiDirectGroupList.DeviceClickListener,
-               Server.MessageTarget,
+        Server.MessageTarget,
                Handler.Callback {
 
     public static final String TAG = "WiFiDirectDebugActivity";

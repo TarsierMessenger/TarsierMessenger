@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import ch.tarsier.tarsier.R;
 
 /**
  * Activity to upload a profile picture, either from the Gallery or

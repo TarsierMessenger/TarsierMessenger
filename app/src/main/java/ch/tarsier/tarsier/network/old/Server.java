@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.network.old;
 
 import android.os.Handler;
 import android.util.Log;
@@ -6,12 +6,13 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import ch.tarsier.tarsier.network.old.MyConnection;
+import ch.tarsier.tarsier.network.old.WiFiDirectDebugActivity;
 
 /**
  * Created by amirreza on 10/26/14.

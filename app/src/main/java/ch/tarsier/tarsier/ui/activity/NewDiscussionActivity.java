@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
 
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.validation.ChatRoomNameValidator;
 
 /**

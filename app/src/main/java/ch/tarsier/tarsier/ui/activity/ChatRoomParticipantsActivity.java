@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.ui.activity;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.storage.User;
 
 /**
