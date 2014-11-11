@@ -7,7 +7,7 @@ public class Message {
 
     private int mChatId;
     private String mText;
-    private int mAuthorId;
+    private int mPeerId;
     private long mDateTime;
     private boolean mIsSentByUser;
 
@@ -22,7 +22,7 @@ public class Message {
     public Message(int chatID, String text, int peerId, long dateTime) {
         mChatId = chatID;
         mText = text;
-        mAuthorId = peerId;
+        mPeerId = peerId;
         mIsSentByUser = false;
         mDateTime = dateTime;
     }
@@ -37,7 +37,7 @@ public class Message {
     public Message(int chatID, String text, long dateTime) {
         mChatId = chatID;
         mText = text;
-        mAuthorId = StorageAccess.getInstance().getMyId();
+        mPeerId = StorageAccess.getInstance().getMyId();
         mIsSentByUser = true;
         mDateTime = dateTime;
     }
@@ -47,7 +47,7 @@ public class Message {
     }
 
     public int getAuthor() {
-        return mAuthorId;
+        return mPeerId;
     }
 
     public int getChatID() {
