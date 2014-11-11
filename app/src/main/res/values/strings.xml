@@ -47,7 +47,7 @@
     <string name="action_discussions">Discussions</string>
     <string name="title_activity_chat_room_participants">Chat Room Participants</string>
     <string name="action_chat_room_participants">Chat Room Participants</string>
-    <string name="chatroom_participant_image_desc">Participant's profile picture</string>
+    <string name="chatroom_participant_image_desc">Participant\'s profile picture</string>
 
     <string name="preferences_file_key">settings</string>
     <string name="preferences_file_key_password">password</string>
