@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 import ch.tarsier.tarsier.util.DateUtil;
 import ch.tarsier.tarsier.ui.view.EndlessListView;
@@ -87,8 +88,12 @@ public class ConversationActivity extends Activity implements EndlessListener {
         protected List<MessageViewModel> doInBackground(Void... params) {
             long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
 
-            List<Message> newMessages = StorageAccess.getInstance().
-                    getMessages(mDiscussionId, NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE, lastMessageTimestamp);
+            StorageAccess storage = Tarsier.app().getStorage();
+            List<Message> newMessages = storage.getMessages(
+                mDiscussionId,
+                NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE,
+                lastMessageTimestamp
+            );
 
             //Encapsulate messages into messageViewModels
             ArrayList<MessageViewModel> newMessageViewModels = new ArrayList<MessageViewModel>();
@@ -120,7 +125,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
         mListView.addNewData(messageViewModel);
 
         //Add the message to the database
-        StorageAccess.getInstance().addMessage(sentMessage);
+        Tarsier.app().getStorage().addMessage(sentMessage);
     }
 
     @Override
