@@ -3,6 +3,7 @@ package ch.tarsier.tarsier.storage;
 
 import android.graphics.Bitmap;
 
+import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.storage.Message;
 import ch.tarsier.tarsier.storage.Peer;
 import ch.tarsier.tarsier.storage.StorageAccess;
@@ -21,7 +22,7 @@ public class MessageViewModel {
         mText = message.getText();
         mTimeSent = message.getDateTime();
         int peerId = message.getPeerId();
-        Peer peer = StorageAccess.getInstance().getPeer(peerId);
+        Peer peer = Tarsier.app().getStorage().getPeer(peerId);
         mPeerPicture = peer.getPicture();
         mPeerName = peer.getName();
         isSentByUser = message.isSentByUser();

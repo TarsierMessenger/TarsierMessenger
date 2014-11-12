@@ -14,9 +14,6 @@ import ch.tarsier.tarsier.Tarsier;
 
 /**
  * Created by McMoudi
- *
- * @xawill : Solution to global context :
- * http://stackoverflow.com/questions/14057273/android-singleton-with-global-context
  */
 public class StorageAccess {
 
@@ -25,31 +22,15 @@ public class StorageAccess {
     private SQLiteDatabase mWritableDB;
     private boolean mIsReady;
 
-    private static StorageAccess instance = null;
+    public StorageAccess(Context context) {
+        this(new ChatsDBHelper(context));
+    }
 
-    private StorageAccess() {
-        mCDBHelper = new ChatsDBHelper(Tarsier.app());
+    public StorageAccess(ChatsDBHelper chatsDBHelper) {
+        mCDBHelper = chatsDBHelper;
         mIsReady = false;
+
         new DatabaseAccess().execute();
-    }
-
-    /**
-     * Gives access to THE StorageAccess singleton
-     *
-     * @return the StorageAccess singleton
-     */
-    public static StorageAccess getInstance() {
-        if (instance == null) {
-            instance = getSync();
-        }
-        return instance;
-    }
-
-    private static synchronized StorageAccess getSync() {
-        if (instance == null) {
-            instance = new StorageAccess();
-        }
-        return instance;
     }
 
     public ArrayList<Chat> getChats(boolean wantChatrooms) {

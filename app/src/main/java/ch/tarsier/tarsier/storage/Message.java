@@ -1,5 +1,7 @@
 package ch.tarsier.tarsier.storage;
 
+import ch.tarsier.tarsier.Tarsier;
+
 /**
  * Created by McMoudi on 24/10/14.
  */
@@ -37,7 +39,7 @@ public class Message {
     public Message(int chatID, String text, long dateTime) {
         mChatId = chatID;
         mText = text;
-        mPeerId = StorageAccess.getInstance().getMyId();
+        mPeerId = Tarsier.app().getStorage().getMyId();
         mIsSentByUser = true;
         mDateTime = dateTime;
     }
