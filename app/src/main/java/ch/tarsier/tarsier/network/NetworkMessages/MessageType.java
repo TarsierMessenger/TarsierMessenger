@@ -10,7 +10,6 @@ public class MessageType {
     final public static int MESSAGE_TYPE_PRIVATE    = 2;
     final public static int MESSAGE_TYPE_PUBLIC     = 3;
 
-    final public static int MESSAGE_TYPE_MY_HANDLE = 5;
 
 
     final public static int MESSAGE_TYPE_DISCONNECT = 10;

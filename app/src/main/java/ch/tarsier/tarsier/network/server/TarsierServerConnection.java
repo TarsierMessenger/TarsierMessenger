@@ -67,10 +67,17 @@ public class TarsierServerConnection implements Runnable {
 
     }
 
+    //This sends all public messages.
     public void broadcast(byte [] message) {
         for (Peer peer : getPeers()){
-            sendMessage(peer, message);
+            ConnectionHandler connection = mConnectionMap.get(peer.getPublicKey());
+
+            TarsierWireProtos.TarsierPublicMessage.Builder publicMessage = TarsierWireProtos.TarsierPublicMessage.newBuilder();
+            publicMessage.setSenderPublicKey(ByteString.copyFrom(localPeer.getPublicKey()));
+            publicMessage.setPlainText(ByteString.copyFrom(message));
+            connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PUBLIC, publicMessage.build().toByteArray()));
         }
+        Log.d(TAG, "A public message is sent to all peers.");
     }
 
     public void broadcastUpdatedPeerList (){
@@ -83,16 +90,28 @@ public class TarsierServerConnection implements Runnable {
             peerList.addPeer(tarsierPeer.build());
         }
 
-        broadcast(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PEER_LIST, peerList.build().toByteArray()));
+        for (Peer peer : getPeers()){
+            ConnectionHandler connection = mConnectionMap.get(peer.getPublicKey());
+            connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PEER_LIST, peerList.build().toByteArray()));
+        }
+
+        Log.d(TAG, "Updated peerList is broadcast.");
     }
 
     public void sendMessage(Peer peer, byte[] message) {
         sendMessage(peer.getPublicKey(), message);
     }
 
-    public void sendMessage(byte[] publicKey, byte[] message){
+    private void sendMessage(byte[] publicKey, byte[] message){
         ConnectionHandler connection = mConnectionMap.get(publicKey);
         if (connection != null){
+            TarsierWireProtos.TarsierPrivateMessage.Builder privateMessage = TarsierWireProtos.TarsierPrivateMessage.newBuilder();
+            privateMessage.setReceiverPublicKey(ByteString.copyFrom(publicKey));
+            privateMessage.setSenderPublicKey(ByteString.copyFrom(localPeer.getPublicKey()));
+            //TODO: is the msg already encrypted? what is setIV ?
+            privateMessage.setCipherText(ByteString.copyFrom(message));
+            connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE, privateMessage.build().toByteArray()));
+            Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey).getPeerName());
             connection.write(message);
         } else{
             Log.e(TAG, "Sadly there is no peer for that public key");
@@ -168,12 +187,13 @@ class ConnectionHandler implements Runnable {
                                 if (serverConnection.isLocalPeer(privateMessage.getReceiverPublicKey().toByteArray())){
                                     handler.obtainMessage(MessageType.messageTypeFromData(buffer), serializedProtoBuffer);
                                 } else {
-                                    serverConnection.sendMessage(privateMessage.getReceiverPublicKey().toByteArray(), typeAndMessage);
+                                    serverConnection.sendMessage(serverConnection.peerWithPublicKey(privateMessage.getReceiverPublicKey().toByteArray()), serializedProtoBuffer);
                                 }
                                 break;
                             case MessageType.MESSAGE_TYPE_PUBLIC:
-                                serverConnection.broadcast(typeAndMessage);
+                                serverConnection.broadcast(serializedProtoBuffer);
                                 handler.obtainMessage(MessageType.messageTypeFromData(buffer), serializedProtoBuffer).sendToTarget();
+                                Log.d(TAG, "A public message is received.");
                                 break;
                         }
                     }
@@ -187,7 +207,6 @@ class ConnectionHandler implements Runnable {
                 serverConnection.peerDisconnected(peer);
                 serverConnection.broadcastUpdatedPeerList();
             }
-
             e.printStackTrace();
         }
     }
