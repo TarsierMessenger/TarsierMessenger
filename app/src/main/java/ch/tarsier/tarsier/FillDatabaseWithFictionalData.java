@@ -1,5 +1,7 @@
 package ch.tarsier.tarsier;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -42,8 +44,8 @@ public class FillDatabaseWithFictionalData {
     private static final int CHAT_ID_9 = 9;
     private static final int CHAT_ID_10 = 10;
 
-    public static void populate() {
-        StorageAccess storageAccess = StorageAccess.getInstance();
+    public static void populate(Context context) {
+        StorageAccess storageAccess = new StorageAccess(context);
         long time = new Date().getTime();
         Random random = new Random();
         // 86400000 milliseconds = 24 hours
