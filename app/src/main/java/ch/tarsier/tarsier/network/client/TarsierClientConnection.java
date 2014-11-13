@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Set;
 
 import ch.tarsier.tarsier.network.ByteUtils;
+import ch.tarsier.tarsier.network.ConversationStorageDelegate;
+import ch.tarsier.tarsier.network.ConversationViewDelegate;
+import ch.tarsier.tarsier.network.MessagingInterface;
 import ch.tarsier.tarsier.network.Peer;
 import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.networkMessages.MessageType;
@@ -26,7 +29,7 @@ import ch.tarsier.tarsier.network.networkMessages.TarsierWireProtos;
 /**
  * Created by amirreza on 10/26/14.
  */
-public class TarsierClientConnection implements Runnable {
+public class TarsierClientConnection implements Runnable, MessagingInterface {
     private static final String TAG = "TarsierClientConnection";
     private static final int CURRENT_MAX_MESSAGE_SIZE =  2048;
     private static final int TIMEOUT_SOCKET_LIMIT = 5000;
@@ -40,25 +43,16 @@ public class TarsierClientConnection implements Runnable {
     private OutputStream out;
     private InetAddress mAddress;
 
+    private ConversationViewDelegate conversationViewDelegate;
+    private ConversationStorageDelegate conversationStorageDelegate;
+
     public TarsierClientConnection(Handler handler,InetAddress groupOwnerAddress) {
         this.handler   = handler;
         this.mAddress = groupOwnerAddress;
         Log.d(TAG, "Client is created successfully.");
     }
 
-
-    public ArrayList<Peer> getPeers(){
-        Set<byte[]> peerKeySet = mPeersMap.keySet();
-        ArrayList<Peer> membersList = new ArrayList<Peer>();
-        for (byte[] key : peerKeySet) {
-            Peer peer = mPeersMap.get(key);
-            membersList.add(peer);
-        }
-
-        return membersList;
-    }
-
-    public void broadcast(byte [] message) {
+    private void broadcast(byte [] message) {
         TarsierWireProtos.TarsierPublicMessage.Builder publicMessage = TarsierWireProtos.TarsierPublicMessage.newBuilder();
         publicMessage.setSenderPublicKey(ByteString.copyFrom(localPeer.getPublicKey()));
         publicMessage.setPlainText(ByteString.copyFrom(message));
@@ -67,7 +61,7 @@ public class TarsierClientConnection implements Runnable {
     }
 
 
-    public void sendMessage(Peer peer, byte[] message) {
+    private void sendMessage(Peer peer, byte[] message) {
         sendMessage(peer.getPublicKey(), message);
     }
 
@@ -81,11 +75,11 @@ public class TarsierClientConnection implements Runnable {
         Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey).getPeerName());
     }
 
-    public Peer peerWithPublicKey(byte[] publicKey){
+    private Peer peerWithPublicKey(byte[] publicKey){
         return mPeersMap.get(publicKey);
     }
 
-    public boolean isLocalPeer (byte[] publicKey) {
+    private boolean isLocalPeer (byte[] publicKey) {
         return Arrays.equals(localPeer.getPublicKey(), publicKey);
     }
 
@@ -187,6 +181,38 @@ public class TarsierClientConnection implements Runnable {
 
         write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_HELLO, helloMessage.build().toByteArray()));
         Log.d(TAG, "Hello message sent successfully");
+    }
+
+    @Override
+    public List<Peer> getMembersList() {
+        Set<byte[]> peerKeySet = mPeersMap.keySet();
+        ArrayList<Peer> membersList = new ArrayList<Peer>();
+        for (byte[] key : peerKeySet) {
+            Peer peer = mPeersMap.get(key);
+            membersList.add(peer);
+        }
+
+        return membersList;
+    }
+
+    @Override
+    public void broadcastMessage(String message) {
+        broadcast(message.getBytes());
+    }
+
+    @Override
+    public void sendMessage(Peer peer, String message) {
+        sendMessage(peer,message.getBytes());
+    }
+
+    @Override
+    public void setConversationViewDelegate(ConversationViewDelegate delegate) {
+        conversationViewDelegate = delegate;
+    }
+
+    @Override
+    public void setConversationStorageDelegate(ConversationStorageDelegate delegate) {
+        conversationStorageDelegate = delegate;
     }
 }
 

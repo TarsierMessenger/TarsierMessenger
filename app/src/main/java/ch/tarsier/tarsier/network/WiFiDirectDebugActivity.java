@@ -18,11 +18,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.network.client.TarsierClientConnection;
 import ch.tarsier.tarsier.network.client.TarsierMessagingClient;
+import ch.tarsier.tarsier.network.networkMessages.MessageType;
+import ch.tarsier.tarsier.network.networkMessages.TarsierWireProtos;
+import ch.tarsier.tarsier.network.server.TarsierServerConnection;
 
 // Important note: This is currently an activity, it will later be a ran as a service so that it
 // can run in the background too.
@@ -32,7 +39,7 @@ public class WiFiDirectDebugActivity
     extends Activity
     implements WifiP2pManager.ConnectionInfoListener,
                WiFiDirectGroupList.DeviceClickListener,
-               Server.MessageTarget,
+               MessageHandler,
                Handler.Callback {
 
     public static final String TAG = "WiFiDirectDebugActivity";
@@ -47,7 +54,7 @@ public class WiFiDirectDebugActivity
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private WiFiDirectBroadcastReceiver mReceiver;
-    private Thread handler = null;
+    private Runnable handler = null;
 
     private WiFiDirectGroupList groupList;
     private final ArrayList<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
@@ -222,9 +229,8 @@ public class WiFiDirectDebugActivity
                 Log.d(TAG, "Connected as group owner");
                 try {
 
-                 handler = new Server(
-                         ((Server.MessageTarget) this).getHandler());
-                 handler.start();
+                 handler = new TarsierServerConnection(((MessageHandler)this).getHandler());
+                 handler.run();
 
                 } catch (IOException e) {
                     Log.d(TAG,
@@ -233,21 +239,20 @@ public class WiFiDirectDebugActivity
                 }
             } else {
                 Log.d(TAG, "Connected as peer");
-                handler = new Client(
-                        ((Server.MessageTarget) this).getHandler(),
+                handler = new TarsierClientConnection(
+                        ((MessageHandler) this).getHandler(),
                         p2pInfo.groupOwnerAddress);
-                handler.start();
+                handler.run();
             }
         }
 
         chatRoom = new ChatRoom();
-        chatRoom.setMessengerDelegate();
+        chatRoom.setMessengerDelegate((MessagingInterface)handler);
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, chatRoom).commit();
 
     }
 
-    @Override
     public Handler getHandler() {
         return mHandler;
     }
@@ -256,16 +261,29 @@ public class WiFiDirectDebugActivity
     public boolean handleMessage(Message message) {
 
         switch (message.what) {
-            case MESSAGE_READ:
+            case MessageType.MESSAGE_TYPE_HELLO:
 
-                Log.d(TAG, readMessage);
-                (chatRoom).pushMessage("Peer: " + readMessage);
                 break;
-            case MY_HANDLE:
+            case MessageType.MESSAGE_TYPE_PEER_LIST:
+
+                break;
+            case MessageType.MESSAGE_TYPE_PRIVATE:
+
+                break;
+            case MessageType.MESSAGE_TYPE_PUBLIC:
+                TarsierWireProtos.TarsierPublicMessage publicMessage;
+                try {
+                    publicMessage = TarsierWireProtos.TarsierPublicMessage.parseFrom((byte[])message.obj);
+                    (chatRoom).pushMessage("Buddy: " + publicMessage.getPlainText());
+                } catch (InvalidProtocolBufferException e) {
+                    e.printStackTrace();
+                }
+
+            break;
+            case (MY_HANDLE):
                 Object obj = message.obj;
-                (chatRoom).setMyConnection((TarsierMessagingClient.MyConnection) obj);
+                (chatRoom).setMessengerDelegate((MessagingInterface) obj);
         }
         return true;
     }
-
 }

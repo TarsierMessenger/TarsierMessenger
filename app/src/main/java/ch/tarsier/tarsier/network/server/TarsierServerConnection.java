@@ -5,6 +5,10 @@ import android.util.Log;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+
+import ch.tarsier.tarsier.network.ConversationStorageDelegate;
+import ch.tarsier.tarsier.network.ConversationViewDelegate;
+import ch.tarsier.tarsier.network.MessagingInterface;
 import ch.tarsier.tarsier.network.Peer;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,19 +18,24 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
+import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.networkMessages.TarsierWireProtos;
 import ch.tarsier.tarsier.network.networkMessages.MessageType;
 import ch.tarsier.tarsier.network.ByteUtils;
 
-public class TarsierServerConnection implements Runnable {
+public class TarsierServerConnection implements Runnable, MessagingInterface {
     private static final String TAG = "TarsierServerConnection";
     private LinkedHashMap<byte[], ConnectionHandler> mConnectionMap  = new LinkedHashMap<byte[], ConnectionHandler>();
     private LinkedHashMap<byte[], Peer> mPeersMap                    = new LinkedHashMap<byte[], Peer>();
     private Peer localPeer = new Peer("My name", "MyPublicKey".getBytes());//TODO: Fetch from storage;
     private ServerSocket server;
     private Handler handler;
+
+    private ConversationViewDelegate conversationViewDelegate;
+    private ConversationStorageDelegate conversationStorageDelegate;
 
     public TarsierServerConnection(Handler handler) throws IOException {
         this.server    = new ServerSocket(MessageType.SERVER_SOCKET);
@@ -45,31 +54,22 @@ public class TarsierServerConnection implements Runnable {
         }
     }
 
-    public ArrayList<Peer> getPeers(){
-        Set<byte[]> peerKeySet = mPeersMap.keySet();
-        ArrayList<Peer> membersList = new ArrayList<Peer>();
-        for (byte[] key : peerKeySet) {
-            Peer peer = mPeersMap.get(key);
-            membersList.add(peer);
-        }
 
-        return membersList;
-    }
 
-    public void addPeer(TarsierWireProtos.Peer peer, ConnectionHandler handler){
+    protected void addPeer(TarsierWireProtos.Peer peer, ConnectionHandler handler){
         mConnectionMap.put(peer.getPublicKey().toByteArray(), handler);
         mPeersMap.put(peer.getPublicKey().toByteArray(), new Peer(peer.getName(), peer.getPublicKey().toByteArray()));
     }
 
-    public void peerDisconnected(TarsierWireProtos.Peer peer){
+    protected void peerDisconnected(TarsierWireProtos.Peer peer){
         mConnectionMap.remove(peer.getPublicKey().toByteArray());
         mPeersMap.remove(peer.getPublicKey().toByteArray());
 
     }
 
     //This sends all public messages.
-    public void broadcast(byte [] message) {
-        for (Peer peer : getPeers()){
+    protected void broadcast(byte [] message) {
+        for (Peer peer : getMembersList()){
             ConnectionHandler connection = mConnectionMap.get(peer.getPublicKey());
 
             TarsierWireProtos.TarsierPublicMessage.Builder publicMessage = TarsierWireProtos.TarsierPublicMessage.newBuilder();
@@ -80,17 +80,17 @@ public class TarsierServerConnection implements Runnable {
         Log.d(TAG, "A public message is sent to all peers.");
     }
 
-    public void broadcastUpdatedPeerList (){
+    protected void broadcastUpdatedPeerList (){
         TarsierWireProtos.PeerUpdatedList.Builder peerList = TarsierWireProtos.PeerUpdatedList.newBuilder();
 
-        for (Peer aPeer : getPeers()){
+        for (Peer aPeer : getMembersList()){
             TarsierWireProtos.Peer.Builder tarsierPeer = TarsierWireProtos.Peer.newBuilder();
             tarsierPeer.setPublicKey(ByteString.copyFrom(aPeer.getPublicKey()));
             tarsierPeer.setName(aPeer.getPeerName());
             peerList.addPeer(tarsierPeer.build());
         }
 
-        for (Peer peer : getPeers()){
+        for (Peer peer : getMembersList()){
             ConnectionHandler connection = mConnectionMap.get(peer.getPublicKey());
             connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PEER_LIST, peerList.build().toByteArray()));
         }
@@ -98,11 +98,11 @@ public class TarsierServerConnection implements Runnable {
         Log.d(TAG, "Updated peerList is broadcast.");
     }
 
-    public void sendMessage(Peer peer, byte[] message) {
+    protected void sendMessage(Peer peer, byte[] message) {
         sendMessage(peer.getPublicKey(), message);
     }
 
-    private void sendMessage(byte[] publicKey, byte[] message){
+    protected void sendMessage(byte[] publicKey, byte[] message){
         ConnectionHandler connection = mConnectionMap.get(publicKey);
         if (connection != null){
             TarsierWireProtos.TarsierPrivateMessage.Builder privateMessage = TarsierWireProtos.TarsierPrivateMessage.newBuilder();
@@ -118,12 +118,44 @@ public class TarsierServerConnection implements Runnable {
         }
     }
 
-    public Peer peerWithPublicKey(byte[] publicKey){
+    protected Peer peerWithPublicKey(byte[] publicKey){
         return mPeersMap.get(publicKey);
     }
 
-    public boolean isLocalPeer (byte[] publicKey) {
+    protected boolean isLocalPeer (byte[] publicKey) {
         return Arrays.equals(localPeer.getPublicKey(), publicKey);
+    }
+
+    @Override
+    public List<Peer> getMembersList() {
+        Set<byte[]> peerKeySet = mPeersMap.keySet();
+        ArrayList<Peer> membersList = new ArrayList<Peer>();
+        for (byte[] key : peerKeySet) {
+            Peer peer = mPeersMap.get(key);
+            membersList.add(peer);
+        }
+
+        return membersList;
+    }
+
+    @Override
+    public void broadcastMessage(String message) {
+        broadcast(message.getBytes());
+    }
+
+    @Override
+    public void sendMessage(Peer peer, String message) {
+        sendMessage(peer,message.getBytes());
+    }
+
+    @Override
+    public void setConversationViewDelegate(ConversationViewDelegate delegate) {
+        conversationViewDelegate = delegate;
+    }
+
+    @Override
+    public void setConversationStorageDelegate(ConversationStorageDelegate delegate) {
+        conversationStorageDelegate = delegate;
     }
 }
 
@@ -153,7 +185,9 @@ class ConnectionHandler implements Runnable {
                     mOutputStream = mSocket.getOutputStream();
                     int bytes;
                     byte[] buffer = new byte[CURRENT_MAX_MESSAGE_SIZE];
-
+                    handler.obtainMessage(WiFiDirectDebugActivity.MY_HANDLE, this)
+                            .sendToTarget();
+                    Log.d(TAG, "The client is handled to the handler.");
                     while (true) {
                         bytes = mInputStream.read(buffer);
                         if (bytes == -1) {

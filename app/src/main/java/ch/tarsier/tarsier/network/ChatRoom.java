@@ -19,7 +19,7 @@ import ch.tarsier.tarsier.R;
 /**
  * Created by amirreza on 10/27/14.
  */
-    public class ChatRoom extends Fragment {
+    public class ChatRoom extends Fragment implements ConversationViewDelegate{
         private MessagingInterface mMessengerDelegate;
 
         private View view;
@@ -46,7 +46,7 @@ import ch.tarsier.tarsier.R;
                         @Override
                         public void onClick(View arg0) {
                             if (mMessengerDelegate != null) {
-                                mMessengerDelegate.broadcastMessage(chatLine.getText().toString().getBytes());
+                                mMessengerDelegate.broadcastMessage(chatLine.getText().toString());
                                 pushMessage("Me: " + chatLine.getText().toString());
                                 chatLine.setText("");
                             }
@@ -54,9 +54,16 @@ import ch.tarsier.tarsier.R;
                     });
             return view;
         }
-        public interface MessageTarget {
-            public Handler getHandler();
-        }
+
+    @Override
+    public void connected() {
+
+    }
+
+    @Override
+    public void receivedNewPeersList(List<Peer> peers) {
+
+    }
 
         public void pushMessage(String readMessage) {
             adapter.add(readMessage);

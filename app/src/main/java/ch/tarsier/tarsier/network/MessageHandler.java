@@ -1,8 +1,11 @@
 package ch.tarsier.tarsier.network;
 
+import android.os.Handler;
+
 /**
  * Created by amirreza on 11/8/14.
  */
 public interface MessageHandler {
-    public void handleMessage(byte[] message);
+    public Handler getHandler();
+
 }

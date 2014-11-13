@@ -17,6 +17,7 @@ import com.google.protobuf.ByteString;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.tarsier.tarsier.network.ByteUtils;
 import ch.tarsier.tarsier.network.ConversationStorageDelegate;
@@ -112,8 +113,8 @@ public class TarsierMessagingServer extends BroadcastReceiver implements  Messag
 
 
     @Override
-    public ArrayList<Peer> getMembersList() {
-        return mServerConnection.getPeers();
+    public List<Peer> getMembersList() {
+        return mServerConnection.getMembersList();
     }
 
     @Override
