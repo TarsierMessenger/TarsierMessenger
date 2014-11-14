@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier;
+package ch.tarsier.tarsier.storage;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.storage.Chat;
 import ch.tarsier.tarsier.storage.Message;
 import ch.tarsier.tarsier.storage.Peer;
