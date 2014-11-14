@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Random;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.Tarsier;
 
 /**
  * @author gluthier
@@ -26,7 +27,7 @@ public class FillDatabaseWithFictionalData {
     private static final int CHAT_ID_10 = 10;
 
     public static void populate(Context context) {
-        StorageAccess storageAccess = new StorageAccess(context);
+        StorageAccess storageAccess = Tarsier.app().getStorage();
         long time = new Date().getTime();
         Random random = new Random();
         // 86400000 milliseconds = 24 hours
