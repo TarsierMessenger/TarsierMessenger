@@ -18,14 +18,14 @@ import ch.tarsier.tarsier.validation.ChatRoomNameValidator;
 /**
  * @author gluthier
  */
-public class NewDiscussionActivity extends Activity {
+public class NewChatRoomActivity extends Activity {
 
     private EditText mChatRoomName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_discussion);
+        setContentView(R.layout.activity_new_chatroom);
 
         mChatRoomName = (EditText) findViewById(R.id.chat_room_name);
 
@@ -36,7 +36,7 @@ public class NewDiscussionActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.new_discussion, menu);
+        getMenuInflater().inflate(R.menu.new_chatroom, menu);
         return true;
     }
 
@@ -46,7 +46,7 @@ public class NewDiscussionActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.create_room:
+            case R.id.create_chatroom:
                 createRoom();
                 return true;
             default:

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".DiscussionsActivity" >
 
-    <item android:id="@+id/create_new_discussion"
+    <item android:id="@+id/create_new_chat"
         android:title="@string/create_new_discussion"
         android:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_new" />

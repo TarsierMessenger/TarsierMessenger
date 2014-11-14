@@ -1,10 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ch.tarsier.tarsier.ui.activity.NewDiscussionActivity" >
+    tools:context="ch.tarsier.tarsier.ui.activity.NewChatRoomActivity" >
 
-    <item android:id="@+id/create_room"
+    <item android:id="@+id/create_chatroom"
         android:icon="@drawable/check_profile"
-        android:title="@string/create_room"
+        android:title="@string/create_chatroom"
         android:showAsAction="always"
         />
 

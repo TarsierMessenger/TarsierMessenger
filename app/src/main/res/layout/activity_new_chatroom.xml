@@ -6,12 +6,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="ch.tarsier.tarsier.ui.activity.NewDiscussionActivity" >
+    tools:context="ch.tarsier.tarsier.ui.activity.NewChatRoomActivity" >
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/chat_room_name"
+        android:hint="@string/chatroom_name"
         android:id="@+id/chat_room_name"
         />
 

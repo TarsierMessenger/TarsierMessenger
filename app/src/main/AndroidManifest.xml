@@ -57,8 +57,8 @@
             android:label="@string/title_activity_wifidirectdebug" >
         </activity>
         <activity
-            android:name=".ui.activity.NewDiscussionActivity"
-            android:label="@string/title_activity_new_discussion" >
+            android:name=".ui.activity.NewChatRoomActivity"
+            android:label="@string/title_activity_new_chatrooom" >
         </activity>
         <activity
             android:name=".ui.activity.ChatRoomParticipantsActivity"
@@ -69,8 +69,8 @@
             android:label="@string/title_activity_preferences" >
         </activity>
 
-        <activity android:name=".ui.activity.DiscussionsActivity"
-            android:label="Discussions"
+        <activity android:name=".ui.activity.ChatListActivity"
+            android:label="@string/title_activity_chat_list"
             android:theme="@style/CustomActionBarTheme" >
         </activity>
 

@@ -3,7 +3,7 @@ package ch.tarsier.tarsier.test;
 import android.test.ActivityInstrumentationTestCase2;
 import ch.tarsier.tarsier.R;
 
-import ch.tarsier.tarsier.ui.activity.DiscussionsActivity;
+import ch.tarsier.tarsier.ui.activity.ChatListActivity;
 
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
@@ -11,12 +11,12 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
-public class DiscussionsActivityTest extends ActivityInstrumentationTestCase2<DiscussionsActivity> {
+public class ChatListActivityTest extends ActivityInstrumentationTestCase2<ChatListActivity> {
 
-    public DiscussionsActivityTest() {
-        super(DiscussionsActivity.class);
+    public ChatListActivityTest() {
+        super(ChatListActivity.class);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class DiscussionsActivityTest extends ActivityInstrumentationTestCase2<Di
     }
 
     public void testListIsClickable() {
-        onView(withId(R.id.list_discussions)).check(matches(isClickable()));
+        onView(withId(R.id.chat_list)).check(matches(isClickable()));
     }
 
 }

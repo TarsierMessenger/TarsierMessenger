@@ -205,7 +205,7 @@ public class HomeActivity extends Activity {
     }
 
     private void displayDiscussionsActivity() {
-        Intent discussionsActivity= new Intent(this, DiscussionsActivity.class);
+        Intent discussionsActivity= new Intent(this, ChatListActivity.class);
         startActivity(discussionsActivity);
     }
 
