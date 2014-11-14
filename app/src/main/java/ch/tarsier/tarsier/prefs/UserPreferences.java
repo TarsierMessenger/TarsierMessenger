@@ -21,6 +21,10 @@ public class UserPreferences extends AbstractPreferences {
         return Tarsier.app().getString(R.string.personnal_file_key);
     }
 
+    public long getId() {
+        return getLong(R.string.personnal_file_key_myid, 0L);
+    }
+
     public String getUsername() {
         return getString(R.string.personnal_file_key_myusername);
     }
@@ -35,6 +39,18 @@ public class UserPreferences extends AbstractPreferences {
 
     public void setStatusMessage(String statusMessage) {
         setString(R.string.personnal_file_key_mymood, statusMessage);
+    }
+
+    public String getBackground() {
+        return getString(R.string.preferences_file_key_background);
+    }
+
+    public String getSound() {
+        return getString(R.string.preferences_file_key_sound);
+    }
+
+    public String getVibration() {
+        return getString(R.string.preferences_file_key_vibration);
     }
 
     public String getPicturePath() {

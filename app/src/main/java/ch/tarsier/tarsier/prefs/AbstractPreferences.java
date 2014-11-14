@@ -37,4 +37,9 @@ public abstract class AbstractPreferences {
         editor.apply();
     }
 
+    protected long getLong(int key, long defaultValue) {
+        String keyString = mApp.getString(key);
+        return mShared.getLong(keyString, defaultValue);
+    }
+
 }
