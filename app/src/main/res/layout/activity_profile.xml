@@ -10,8 +10,8 @@
     android:id="@+id/rel_layout">
 
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/add_picture"
+            android:layout_height="@dimen/add_picture"
             android:id="@+id/add_picture_button"
             android:src="@drawable/add_picture_profile"
             android:contentDescription="@string/add_profile_picture_desc"
