@@ -69,7 +69,7 @@
             android:label="@string/title_activity_preferences" >
         </activity>
 
-        <activity android:name=".ui.activity.DiscussionsActivity"
+        <activity android:name=".ui.activity.ChatListActivity"
             android:label="Discussions"
             android:theme="@style/CustomActionBarTheme" >
         </activity>

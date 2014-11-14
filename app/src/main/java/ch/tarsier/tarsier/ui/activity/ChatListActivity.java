@@ -14,15 +14,15 @@ import ch.tarsier.tarsier.ui.adapter.DiscussionsAdapter;
 import ch.tarsier.tarsier.R;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
-public class DiscussionsActivity extends Activity {
+public class ChatListActivity extends Activity {
     public final static String ID_DISCUSSION_MESSAGE = "ch.tarsier.tarsier.ID_DISCUSSION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discussions);
+        setContentView(R.layout.activity_chat_list);
 
         DiscussionSummary[] discussionsArray = {
             new DiscussionSummary(7, "placeholder", "1", "SwEng", "A fond, mais je bosse dur, aussi!",
@@ -41,8 +41,8 @@ public class DiscussionsActivity extends Activity {
                     "Wednesday", "8", DiscussionSummary.TypeConversation.PRIVATE_CHAT)
         };
 
-        final ListView discussionsList = (ListView) findViewById(R.id.list_discussions);
-        DiscussionsAdapter adapter = new DiscussionsAdapter(this, R.layout.row_discussion, discussionsArray);
+        final ListView discussionsList = (ListView) findViewById(R.id.chat_list);
+        DiscussionsAdapter adapter = new DiscussionsAdapter(this, R.layout.row_chat_list, discussionsArray);
 
         discussionsList.setAdapter(adapter);
 
@@ -67,7 +67,7 @@ public class DiscussionsActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.discussions, menu);
+        getMenuInflater().inflate(R.menu.chat_list, menu);
         return true;
     }
 
@@ -77,7 +77,7 @@ public class DiscussionsActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.create_new_discussion:
+            case R.id.create_new_chat:
                 openNewDiscussion();
                 return true;
             case R.id.action_settings:
