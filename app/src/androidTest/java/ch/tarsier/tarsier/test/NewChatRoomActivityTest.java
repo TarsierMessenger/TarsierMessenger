@@ -63,7 +63,7 @@ public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<Ne
                 .perform(click());
 
         onView(withId(R.id.chat_room_name))
-                .check(matches(hasError(R.string.error_chatroom_name_length)));
+                .check(matches(hasError(R.string.error_chat_room_name_length)));
     }
 
     public void testChatRoomNameRejectedIfTooLong() {
@@ -77,6 +77,6 @@ public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<Ne
                 .perform(click());
 
         onView(withId(R.id.chat_room_name))
-                .check(matches(hasError(R.string.error_chatroom_name_length)));
+                .check(matches(hasError(R.string.error_chat_room_name_length)));
     }
 }
