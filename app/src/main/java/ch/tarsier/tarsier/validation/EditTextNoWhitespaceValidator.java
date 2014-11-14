@@ -13,6 +13,6 @@ public class EditTextNoWhitespaceValidator extends EditTextValidator {
 
     @Override
     protected boolean isValid(EditText editText) {
-        return (editText.getText().length() == 0 || editText.getText().toString().trim().length() != 0);
+        return editText.getText().length() == 0 || editText.getText().toString().trim().length() != 0;
     }
 }

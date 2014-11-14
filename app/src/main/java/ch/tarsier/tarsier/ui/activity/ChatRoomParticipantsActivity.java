@@ -17,7 +17,7 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.storage.User;
 
 /**
- * @author Romain Ruetschi
+ * @author romac
  */
 public class ChatRoomParticipantsActivity extends ListActivity {
 
@@ -68,6 +68,9 @@ public class ChatRoomParticipantsActivity extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * @author romac
+     */
     class ChatRoomParticipantArrayAdapter extends ArrayAdapter<User> {
         private final static int LAYOUT = R.layout.chatroom_participant;
 

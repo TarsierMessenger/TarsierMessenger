@@ -4,9 +4,6 @@ package ch.tarsier.tarsier.storage;
 import android.graphics.Bitmap;
 
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.storage.Message;
-import ch.tarsier.tarsier.storage.Peer;
-import ch.tarsier.tarsier.storage.StorageAccess;
 
 /**
  * @author xawill

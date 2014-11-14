@@ -160,7 +160,7 @@ public class HomeActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-         refreshFields();
+        refreshFields();
     }
 
     private void refreshFields() {

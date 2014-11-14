@@ -4,20 +4,17 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.app.ActionBar;
 import ch.tarsier.tarsier.R;
 
+/**
+ * @author McMoudi
+ */
 public class PreferencesActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
-
-
-
-
-
     }
 
 
@@ -36,12 +33,13 @@ public class PreferencesActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
+
             default:
-            return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item);
         }
     }
 
-    private void restoreState(){
+    private void restoreState() {
 
     }
 

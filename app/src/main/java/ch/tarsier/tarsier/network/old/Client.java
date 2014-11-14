@@ -9,16 +9,16 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
- * Created by amirreza on 10/26/14.
+ * @author amirreza
  */
 public class Client extends Thread{
 
     private static final String TAG = "Client";
-    private Handler handler;
-    private MyConnection chat;
+    private Handler mHandler;
+    private MyConnection mChat;
     private InetAddress mAddress;
     public Client(Handler handler, InetAddress groupOwnerAddress) {
-        this.handler = handler;
+        this.mHandler = handler;
         this.mAddress = groupOwnerAddress;
     }
     @Override
@@ -28,9 +28,9 @@ public class Client extends Thread{
             socket.bind(null);
             socket.connect(new InetSocketAddress(mAddress.getHostAddress(),
                     WiFiDirectDebugActivity.SERVER_PORT), 5000);
-            Log.d(TAG, "Launching the I/O handler");
-            chat = new MyConnection(socket, handler);
-            new Thread(chat).start();
+            Log.d(TAG, "Launching the I/O mHandler");
+            mChat = new MyConnection(socket, mHandler);
+            new Thread(mChat).start();
         } catch (IOException e) {
             e.printStackTrace();
             try {
@@ -38,11 +38,10 @@ public class Client extends Thread{
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            return;
         }
     }
     public MyConnection getChat() {
-        return chat;
+        return mChat;
     }
 
 }

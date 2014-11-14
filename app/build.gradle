@@ -58,6 +58,7 @@ task checkstyle(type: Checkstyle) {
     source 'src'
     include '**/*.java'
     exclude '**/network/old/**'
+    exclude '**/build/**'
     // exclude '**/packageName/**', '**/utils/MyFile.java'
     classpath = files()
 }
