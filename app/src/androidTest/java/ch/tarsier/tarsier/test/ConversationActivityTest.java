@@ -20,8 +20,9 @@ import static org.hamcrest.Matchers.not;
  * Created by Marin on 12.11.2014.
  */
 public class ConversationActivityTest extends ActivityInstrumentationTestCase2<ConversationActivity> {
-    public ConversationActivityTest(Class<ConversationActivity> activityClass) {
-        super(activityClass);
+
+    public ConversationActivityTest() {
+        super(ConversationActivity.class);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class ConversationActivityTest extends ActivityInstrumentationTestCase2<C
 
     /* test the sendImageButton if is clickable when something is to be sent or not*/
     public void testSendMessageButtonClickable() {
-        String messageSent="This is a new message to be sent.";
+        String messageSent = "This is a new message to be sent.";
         onView(withId(R.id.sendImageButton)).check(matches(not(isClickable())));
         onView(withId(R.id.message_to_send)).perform(typeText(messageSent));
         onView(withId(R.id.sendImageButton)).check(matches(isClickable()));
@@ -48,5 +49,4 @@ public class ConversationActivityTest extends ActivityInstrumentationTestCase2<C
 
     }
     */
-
 }
