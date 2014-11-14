@@ -21,9 +21,9 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 /**
  * @author gluthier
  */
-public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<NewChatRoomActivity> {
+public class NewChatRoomActivityTest extends ActivityInstrumentationTestCase2<NewChatRoomActivity> {
 
-    public NewChatroomActivityTest() {
+    public NewChatRoomActivityTest() {
         super(NewChatRoomActivity.class);
     }
 
