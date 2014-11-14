@@ -8,6 +8,9 @@ import ch.tarsier.tarsier.Tarsier;
 
 /**
  * @author romac
+ *
+ * @todo Add method to set the profile picture
+ *       rather than doing it in AddProfilePictureActivity.
  */
 public class UserPreferences extends AbstractPreferences {
 
@@ -22,8 +25,16 @@ public class UserPreferences extends AbstractPreferences {
         return getString(R.string.personnal_file_key_myusername);
     }
 
+    public void setUsername(String username) {
+        setString(R.string.personnal_file_key_myusername, username);
+    }
+
     public String getStatusMessage() {
         return getString(R.string.personnal_file_key_mymood);
+    }
+
+    public void setStatusMessage(String statusMessage) {
+        setString(R.string.personnal_file_key_mymood, statusMessage);
     }
 
     public String getPicturePath() {
