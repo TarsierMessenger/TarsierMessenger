@@ -83,8 +83,7 @@ public class ProfileActivity extends Activity {
 
     public void onClickSave(MenuItem item) {
         if (validateFields()) {
-            storage.setMyUsername(mUsername.getText().toString());
-            storage.setMyMood(mStatusMessage.getText().toString());
+            saveProfileInfos();
 
             finish();
         }
@@ -115,6 +114,11 @@ public class ProfileActivity extends Activity {
         }
 
         mProfilePicture.setImageBitmap(profilePicture);
+    }
+
+    private void saveProfileInfos() {
+        storage.setMyUsername(mUsername.getText().toString());
+        storage.setMyMood(mStatusMessage.getText().toString());
     }
 
     /**
