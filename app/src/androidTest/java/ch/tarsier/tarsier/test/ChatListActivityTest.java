@@ -28,5 +28,4 @@ public class ChatListActivityTest extends ActivityInstrumentationTestCase2<ChatL
     public void testListIsClickable() {
         onView(withId(R.id.chat_list)).check(matches(isClickable()));
     }
-
 }

@@ -22,7 +22,6 @@ import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
-import static ch.tarsier.tarsier.Tarsier.*;
 
 /**
  * This is the Home screen of Tarsier. It allows to enter a Username
@@ -70,13 +69,9 @@ public class HomeActivity extends Activity {
         if (validateUsername()) {
             // TODO: continue
             saveProfileInfos();
-
-
         } else {
             // TODO: show toast with information on invalidity
         }
-        //debug
-//        Toast.makeText(this, "enabled", Toast.LENGTH_SHORT).show();
     }
 
     /**
