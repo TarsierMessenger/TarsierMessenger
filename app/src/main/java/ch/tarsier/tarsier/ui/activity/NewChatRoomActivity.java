@@ -18,7 +18,7 @@ import ch.tarsier.tarsier.validation.ChatRoomNameValidator;
 /**
  * @author gluthier
  */
-public class NewChatroomActivity extends Activity {
+public class NewChatRoomActivity extends Activity {
 
     private EditText mChatRoomName;
 
