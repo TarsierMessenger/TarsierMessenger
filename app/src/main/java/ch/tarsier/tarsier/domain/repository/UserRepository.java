@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.domain.repository;
 
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.User;
+import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.storage.StorageAccess;
 
 /**
@@ -9,21 +10,21 @@ import ch.tarsier.tarsier.storage.StorageAccess;
  */
 public class UserRepository {
 
-    private final StorageAccess mStorage;
+    private final UserPreferences mUserPreferences;
 
     private User mUser;
 
     public UserRepository() {
-        mStorage = Tarsier.app().getStorage();
+        mUserPreferences = Tarsier.app().getUserPreferences();
     }
 
     public User getUser() {
         if (mUser == null) {
             mUser = new User();
 
-            mUser.setName(mStorage.getMyUsername());
-            mUser.setStatusMessage(mStorage.getMyMood());
-            mUser.setPicturePath(mStorage.getMyPicturePath());
+            mUser.setName(mUserPreferences.getUsername());
+            mUser.setStatusMessage(mUserPreferences.getStatusMessage());
+            mUser.setPicturePath(mUserPreferences.getPicturePath());
             mUser.setOnline(true);
         }
 
