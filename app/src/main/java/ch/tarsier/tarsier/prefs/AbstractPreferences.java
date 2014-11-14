@@ -22,16 +22,16 @@ public abstract class AbstractPreferences {
         mShared = mApp.getSharedPreferences(getPreferencesFile(), Context.MODE_PRIVATE);
     }
 
-    public String getString(int key) {
+    protected String getString(int key) {
         String keyString = mApp.getString(key);
         return mShared.getString(keyString, "");
     }
 
-    public String getString(int key, String defValue) {
-        return mShared.getString(Tarsier.app().getString(key), defValue);
+    protected String getString(int key, String defaultValue) {
+        return mShared.getString(Tarsier.app().getString(key), defaultValue);
     }
 
-    public void setString(int key, String data) {
+    protected void setString(int key, String data) {
         SharedPreferences.Editor editor = mShared.edit();
         editor.putString(mApp.getString(key), data);
         editor.apply();
