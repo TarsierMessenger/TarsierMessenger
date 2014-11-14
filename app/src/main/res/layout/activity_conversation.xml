@@ -18,14 +18,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/list" >
 
-        <TextView
+        <EditText
             android:id="@+id/message_to_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/send_message_hint" />
 
         <ImageButton
-            android:id="@+id/send"
+            android:id="@+id/sendImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/message_to_send"
