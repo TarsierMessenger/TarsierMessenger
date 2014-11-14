@@ -2,7 +2,7 @@ package ch.tarsier.tarsier.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import ch.tarsier.tarsier.ui.activity.NewDiscussionActivity;
+import ch.tarsier.tarsier.ui.activity.NewChatRoomActivity;
 import ch.tarsier.tarsier.R;
 
 import static ch.tarsier.tarsier.test.matchers.HasErrorMatcher.hasError;
@@ -21,10 +21,10 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 /**
  * @author gluthier
  */
-public class NewDiscussionActivityTest extends ActivityInstrumentationTestCase2<NewDiscussionActivity> {
+public class NewChatRoomActivityTest extends ActivityInstrumentationTestCase2<NewChatRoomActivity> {
 
-    public NewDiscussionActivityTest() {
-        super(NewDiscussionActivity.class);
+    public NewChatRoomActivityTest() {
+        super(NewChatRoomActivity.class);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class NewDiscussionActivityTest extends ActivityInstrumentationTestCase2<
     }
 
     public void testCreateRoomButtonShouldBeClickable() {
-        onView(withId(R.id.create_room))
+        onView(withId(R.id.create_chat_room))
                 .check(matches(isClickable()));
     }
 
@@ -59,7 +59,7 @@ public class NewDiscussionActivityTest extends ActivityInstrumentationTestCase2<
         onView(withId(R.id.chat_room_name))
                 .perform(click(), clearText(), closeSoftKeyboard());
 
-        onView(withId(R.id.create_room))
+        onView(withId(R.id.create_chat_room))
                 .perform(click());
 
         onView(withId(R.id.chat_room_name))
@@ -73,7 +73,7 @@ public class NewDiscussionActivityTest extends ActivityInstrumentationTestCase2<
                 .perform(click(), clearText())
                 .perform(typeText(text), closeSoftKeyboard());
 
-        onView(withId(R.id.create_room))
+        onView(withId(R.id.create_chat_room))
                 .perform(click());
 
         onView(withId(R.id.chat_room_name))
