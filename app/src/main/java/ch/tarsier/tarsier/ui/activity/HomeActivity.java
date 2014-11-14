@@ -17,7 +17,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.network.old.WiFiDirectDebugActivity;
+import ch.tarsier.tarsier.storage.StorageAccess;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
@@ -28,9 +30,11 @@ import ch.tarsier.tarsier.validation.UsernameValidator;
  */
 public class HomeActivity extends Activity {
 
-    private EditText username;
-    private EditText statusMessage;
+    private EditText mUsername;
+    private EditText mStatusMessage;
     private ImageView mProfilePicture;
+
+    private StorageAccess storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +42,16 @@ public class HomeActivity extends Activity {
         setContentView(R.layout.activity_home);
         enableStartButton(false);
 
-        username = (EditText) findViewById(R.id.username);
-        statusMessage = (EditText) findViewById(R.id.status_message);
+        storage = Tarsier.app().getStorage();
 
-        username.addTextChangedListener(new EditTextWatcher());
-        statusMessage.addTextChangedListener(new EditTextWatcher());
-
+        mUsername = (EditText) findViewById(R.id.username);
+        mStatusMessage = (EditText) findViewById(R.id.status_message);
         mProfilePicture = (ImageView) findViewById(R.id.picture);
 
+        mUsername.addTextChangedListener(new EditTextWatcher());
+        mStatusMessage.addTextChangedListener(new EditTextWatcher());
+
+        refreshFields();
     }
 
     /**
@@ -61,9 +67,11 @@ public class HomeActivity extends Activity {
     public void onClickLetsChat(View view) {
         //create intent with username and launch the list of rooms
         if (validateUsername()) {
-            //continue
+            // TODO: continue
+            saveProfileInfos();
+
         } else {
-            //show toast with information on invalidity
+            // TODO: show toast with information on invalidity
         }
         //debug
         Toast.makeText(this, "enabled", Toast.LENGTH_SHORT).show();
@@ -76,7 +84,7 @@ public class HomeActivity extends Activity {
      * @return Whether it is valid or not
      */
     private boolean validateUsername() {
-        return new UsernameValidator().validate(username);
+        return new UsernameValidator().validate(mUsername);
     }
 
     /**
@@ -86,7 +94,7 @@ public class HomeActivity extends Activity {
      * @return Whether it is valid or not
      */
     private boolean validateStatusMessage() {
-        return new StatusMessageValidator().validate(statusMessage);
+        return new StatusMessageValidator().validate(mStatusMessage);
     }
 
     /**
@@ -122,16 +130,6 @@ public class HomeActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.action_profile) {
-            displayProfileActivity();
-        } else if (id == R.id.action_wifidirectdebug) {
-            displayWifiDirectDebugActivity();
-        } else if (id == R.id.action_discussions) {
-            displayDiscussionsActivity();
-        }
-
         switch (id) {
             case R.id.action_settings:
                 return true;
@@ -148,6 +146,10 @@ public class HomeActivity extends Activity {
                 displayChatRoomParticipants();
                 return true;
 
+            case R.id.action_discussions:
+                displayDiscussionsActivity();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -157,15 +159,35 @@ public class HomeActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        //check existence of picture profile
-        String filePath= Environment.getExternalStorageDirectory()
-                              +"/"+AddProfilePictureActivity.TEMP_PHOTO_FILE;
+
+         refreshFields();
+    }
+
+    private void refreshFields() {
+        String username = storage.getMyUsername();
+        mUsername.setText(username);
+
+        String statusMessage = storage.getMyMood();
+        mStatusMessage.setText(statusMessage);
+
+        // check existence of picture profile
+        String filePath = Environment.getExternalStorageDirectory() + "/"
+                + AddProfilePictureActivity.TEMP_PHOTO_FILE;
+
         Bitmap profilePicture = BitmapFactory.decodeFile(filePath);
-        if (profilePicture != null) {
-            mProfilePicture.setImageBitmap(profilePicture);
-        } else {
-            mProfilePicture.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.add_picture_home));
+
+        if (profilePicture == null) {
+            profilePicture = BitmapFactory.decodeResource(getResources(), R.drawable.add_picture_home);
         }
+
+        mProfilePicture.setImageBitmap(profilePicture);
+
+        validateFields();
+    }
+
+    private void saveProfileInfos() {
+        storage.setMyUsername(mUsername.getText().toString());
+        storage.setMyMood(mStatusMessage.getText().toString());
     }
 
     /**
