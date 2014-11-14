@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.storage.StorageAccess;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
@@ -22,8 +24,10 @@ import ch.tarsier.tarsier.validation.UsernameValidator;
  */
 public class ProfileActivity extends Activity {
 
-    private EditText username;
-    private EditText statusMessage;
+    private StorageAccess storage;
+
+    private EditText mUsername;
+    private EditText mStatusMessage;
     private ImageView mProfilePicture;
 
     @Override
@@ -31,9 +35,13 @@ public class ProfileActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        username = (EditText) findViewById(R.id.username);
-        statusMessage = (EditText) findViewById(R.id.status_message);
+        storage = Tarsier.app().getStorage();
+
+        mUsername = (EditText) findViewById(R.id.username);
+        mStatusMessage = (EditText) findViewById(R.id.status_message);
         mProfilePicture = (ImageView) findViewById(R.id.add_picture_button);
+
+        refreshFields();
     }
 
     @Override
@@ -75,24 +83,38 @@ public class ProfileActivity extends Activity {
 
     public void onClickSave(MenuItem item) {
         if (validateFields()) {
-            Toast.makeText(this, "Valid", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Invalid!", Toast.LENGTH_SHORT).show();
+            storage.setMyUsername(mUsername.getText().toString());
+            storage.setMyMood(mStatusMessage.getText().toString());
+
+            finish();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //check existence of picture profile
-        String filePath= Environment.getExternalStorageDirectory()
-                +"/"+AddProfilePictureActivity.TEMP_PHOTO_FILE;
+
+        refreshFields();
+    }
+
+    private void refreshFields() {
+        String username = storage.getMyUsername();
+        mUsername.setText(username);
+
+        String statusMessage = storage.getMyMood();
+        mStatusMessage.setText(statusMessage);
+
+        // check existence of picture profile
+        String filePath = Environment.getExternalStorageDirectory() + "/"
+                + AddProfilePictureActivity.TEMP_PHOTO_FILE;
+
         Bitmap profilePicture = BitmapFactory.decodeFile(filePath);
-        if (profilePicture != null) {
-            mProfilePicture.setImageBitmap(profilePicture);
-        } else {
-            mProfilePicture.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.add_picture_home));
+
+        if (profilePicture == null) {
+            profilePicture = BitmapFactory.decodeResource(getResources(), R.drawable.add_picture_home);
         }
+
+        mProfilePicture.setImageBitmap(profilePicture);
     }
 
     /**
@@ -111,7 +133,7 @@ public class ProfileActivity extends Activity {
      * @return Whether it is valid or not
      */
     private boolean validateUsername() {
-        return new UsernameValidator().validate(username);
+        return new UsernameValidator().validate(mUsername);
     }
 
     /**
@@ -121,6 +143,6 @@ public class ProfileActivity extends Activity {
      * @return Whether it is valid or not
      */
     private boolean validateStatusMessage() {
-        return new StatusMessageValidator().validate(statusMessage);
+        return new StatusMessageValidator().validate(mStatusMessage);
     }
 }
