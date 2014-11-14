@@ -1,7 +1,5 @@
 package ch.tarsier.tarsier.domain.model;
 
-import android.net.Uri;
-
 import ch.tarsier.tarsier.Tarsier;
 
 /**
@@ -20,7 +18,8 @@ public class Peer {
     private boolean mOnline;
 
     public Peer() {
-
+        // FIXME: Only until we properly retrieve the peer's picture.
+        mPicturePath = Tarsier.app().getStorage().getMyPicturePath();
     }
 
     // TODO: Remove when ChatRoomParticipantsActivity won't need it anymore.
@@ -62,8 +61,7 @@ public class Peer {
     }
 
     public String getPicturePath() {
-        // FIXME: Only until we properly retrieve the peer's picture.
-        return Tarsier.app().getStorage().getMyPicturePath();
+        return mPicturePath;
     }
 
     public void setPicturePath(String picturePath) {
