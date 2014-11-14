@@ -32,7 +32,8 @@
     <string name="personnal_file_key_myid">uid</string>
     <string name="personnal_file_key_myusername">username</string>
     <string name="personnal_file_key_mymood">mood</string>
-    <string name="title_activity_new_discussion">New Discussion</string>
+    <string name="title_activity_new_chat_rooom">New Chat Room</string>
+    <string name="title_activity_chat_list">Chats</string>
     <string name="chat_room_name">Chat room name</string>
     <string name="join_on_invitation">Join on invitation only</string>
     <string name="information_invitation_close">Users will be able to join the chat room only on your approval.</string>

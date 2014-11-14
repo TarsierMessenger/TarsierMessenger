@@ -58,7 +58,7 @@
         </activity>
         <activity
             android:name=".ui.activity.NewChatRoomActivity"
-            android:label="@string/title_activity_new_discussion" >
+            android:label="@string/title_activity_new_chat_rooom" >
         </activity>
         <activity
             android:name=".ui.activity.ChatRoomParticipantsActivity"
@@ -70,7 +70,7 @@
         </activity>
 
         <activity android:name=".ui.activity.ChatListActivity"
-            android:label="Discussions"
+            android:label="@string/title_activity_chat_list"
             android:theme="@style/CustomActionBarTheme" >
         </activity>
 
