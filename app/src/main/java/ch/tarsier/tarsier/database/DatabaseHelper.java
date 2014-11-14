@@ -5,9 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by McMoudi on 24/10/14.
+ * @author McMoudi
  */
-public class ChatsDBHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "tarsier.db";
@@ -19,28 +19,28 @@ public class ChatsDBHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE = "CREATE TABLE ";
 
 
-    private static final String SQL_CREATE_CHATROOMS = CREATE_TABLE + ChatsContract.Discussion.TABLE_NAME + " (" +
-        ChatsContract.Discussion._ID + " INTEGER PRIMARY KEY," +
-        ChatsContract.Discussion.COLUMN_NAME_CHAT_ID + TEXT_TYPE + COMMA_SEP +
-        ChatsContract.Discussion.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
-        ChatsContract.Discussion.COLUMN_NAME_HOST + TEXT_TYPE + " )";
+    private static final String SQL_CREATE_CHATROOMS = CREATE_TABLE + Columns.Discussion.TABLE_NAME + " (" +
+        Columns.Discussion._ID + " INTEGER PRIMARY KEY," +
+        Columns.Discussion.COLUMN_NAME_CHAT_ID + TEXT_TYPE + COMMA_SEP +
+        Columns.Discussion.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
+        Columns.Discussion.COLUMN_NAME_HOST + TEXT_TYPE + " )";
 
 
-    private static final String SQL_CREATE_MESSAGES = CREATE_TABLE + ChatsContract.Message.TABLE_NAME + " (" +
-        ChatsContract.Message._ID + " INTEGER PRIMARY KEY," +
-        ChatsContract.Message.COLUMN_NAME_MSG + TEXT_TYPE + COMMA_SEP +
-        ChatsContract.Message.COLUMN_NAME_DATETIME + DATETIME_TYPE + COMMA_SEP +
-        ChatsContract.Message.COLUMN_NAME_SENDER_ID + TEXT_TYPE + COMMA_SEP +
-        ChatsContract.Message.COLUMN_NAME_CHAT_ID + " )";
+    private static final String SQL_CREATE_MESSAGES = CREATE_TABLE + Columns.Message.TABLE_NAME + " (" +
+        Columns.Message._ID + " INTEGER PRIMARY KEY," +
+        Columns.Message.COLUMN_NAME_MSG + TEXT_TYPE + COMMA_SEP +
+        Columns.Message.COLUMN_NAME_DATETIME + DATETIME_TYPE + COMMA_SEP +
+        Columns.Message.COLUMN_NAME_SENDER_ID + TEXT_TYPE + COMMA_SEP +
+        Columns.Message.COLUMN_NAME_CHAT_ID + " )";
 
 
     private static final String SQL_DELETE_CHATROOMS =
-        "DROP TABLE IF EXISTS " + ChatsContract.Discussion.TABLE_NAME;
+        "DROP TABLE IF EXISTS " + Columns.Discussion.TABLE_NAME;
     private static final String SQL_DELETE_MESSAGES =
-        "DROP TABLE IF EXISTS " + ChatsContract.Message.TABLE_NAME;
+        "DROP TABLE IF EXISTS " + Columns.Message.TABLE_NAME;
 
 
-    public ChatsDBHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
     }

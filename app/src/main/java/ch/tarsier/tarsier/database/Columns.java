@@ -3,13 +3,15 @@ package ch.tarsier.tarsier.database;
 import android.provider.BaseColumns;
 
 /**
- * Created by McMoudi on 23/10/14.
+ * @author McMoudi
+ * @author romac
  */
-public final class ChatsContract {
+public final class Columns {
+
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
 
-    public ChatsContract() {
+    public Columns() {
 
     }
 

@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.database.ChatsContract;
-import ch.tarsier.tarsier.database.ChatsDBHelper;
+import ch.tarsier.tarsier.database.Columns;
+import ch.tarsier.tarsier.database.DatabaseHelper;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
@@ -25,17 +25,17 @@ import ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity;
  */
 public class StorageAccess {
 
-    private ChatsDBHelper mCDBHelper;
+    private DatabaseHelper mCDBHelper;
     private SQLiteDatabase mReadableDB;
     private SQLiteDatabase mWritableDB;
     private boolean mIsReady;
 
     public StorageAccess(Context context) {
-        this(new ChatsDBHelper(context));
+        this(new DatabaseHelper(context));
     }
 
-    public StorageAccess(ChatsDBHelper chatsDBHelper) {
-        mCDBHelper = chatsDBHelper;
+    public StorageAccess(DatabaseHelper databaseHelper) {
+        mCDBHelper = databaseHelper;
         mIsReady = false;
 
         new DatabaseAccess().execute();
@@ -46,16 +46,16 @@ public class StorageAccess {
 
         ArrayList<Chat> chatRooms = new ArrayList<Chat>();
         String[] projection = {
-            ChatsContract.Discussion._ID,
-            ChatsContract.Discussion.COLUMN_NAME_TITLE,
-            ChatsContract.Discussion.COLUMN_NAME_HOST
+            Columns.Discussion._ID,
+            Columns.Discussion.COLUMN_NAME_TITLE,
+            Columns.Discussion.COLUMN_NAME_HOST
         };
         String table;
         String sortOrder;
 
-        table = ChatsContract.Discussion.TABLE_NAME;
+        table = Columns.Discussion.TABLE_NAME;
 
-        sortOrder = ChatsContract.Discussion.COLUMN_NAME_TITLE + "DESC";
+        sortOrder = Columns.Discussion.COLUMN_NAME_TITLE + "DESC";
 
         Cursor c = mReadableDB.query(table, projection, null, null, null, null, sortOrder);
 
@@ -63,12 +63,12 @@ public class StorageAccess {
         c.moveToFirst();
         do {
             if (wantChatrooms) {
-                chatRooms.add(new Chat(c.getInt(c.getColumnIndex(ChatsContract.Discussion._ID)),
-                        c.getString(c.getColumnIndex(ChatsContract.Discussion.COLUMN_NAME_TITLE)),
-                        c.getString(c.getColumnIndex(ChatsContract.Discussion.COLUMN_NAME_HOST))));
+                chatRooms.add(new Chat(c.getInt(c.getColumnIndex(Columns.Discussion._ID)),
+                        c.getString(c.getColumnIndex(Columns.Discussion.COLUMN_NAME_TITLE)),
+                        c.getString(c.getColumnIndex(Columns.Discussion.COLUMN_NAME_HOST))));
             } else {
-                chatRooms.add(new Chat(c.getInt(c.getColumnIndex(ChatsContract.Discussion._ID)),
-                        c.getString(c.getColumnIndex(ChatsContract.Discussion.COLUMN_NAME_HOST))));
+                chatRooms.add(new Chat(c.getInt(c.getColumnIndex(Columns.Discussion._ID)),
+                        c.getString(c.getColumnIndex(Columns.Discussion.COLUMN_NAME_HOST))));
             }
         } while (c.moveToNext());
 
@@ -78,19 +78,19 @@ public class StorageAccess {
 
     private Cursor getMsg(int id) {
         isReady();
-        String sortOrder = ChatsContract.Message.COLUMN_NAME_DATETIME + "ASC";
+        String sortOrder = Columns.Message.COLUMN_NAME_DATETIME + "ASC";
 
         String[] projection = {
-            ChatsContract.Message._ID,
-            ChatsContract.Message.COLUMN_NAME_MSG,
-            ChatsContract.Message.COLUMN_NAME_DATETIME,
-            ChatsContract.Message.COLUMN_NAME_SENDER_ID
+            Columns.Message._ID,
+            Columns.Message.COLUMN_NAME_MSG,
+            Columns.Message.COLUMN_NAME_DATETIME,
+            Columns.Message.COLUMN_NAME_SENDER_ID
         };
 
         //got to do a SQL "WHERE", as projectionArgs, to select the messages with the id @id
-        String selection = ChatsContract.Message.COLUMN_NAME_CHAT_ID + " = '" + id + "'";
+        String selection = Columns.Message.COLUMN_NAME_CHAT_ID + " = '" + id + "'";
 
-        return mReadableDB.query(ChatsContract.Message.TABLE_NAME, projection, selection,
+        return mReadableDB.query(Columns.Message.TABLE_NAME, projection, selection,
                 null, null, null, sortOrder);
     }
 
@@ -114,12 +114,12 @@ public class StorageAccess {
 
         int i = 0;
         do {
-            int senderId = c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER_ID));
+            int senderId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
             messages.add(new Message(
-                    c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHAT_ID)),
-                    c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)),
+                    c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID)),
+                    c.getString(c.getColumnIndex(Columns.Message.COLUMN_NAME_MSG)),
                     senderId,
-                    c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME))));
+                    c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME))));
             i++;
         } while (c.moveToPrevious() && (messagesToFetch == -1 || i < messagesToFetch));
 
@@ -138,17 +138,17 @@ public class StorageAccess {
         Cursor c = getMsg(chatID);
 
         c.moveToLast();
-        while (c.moveToPrevious() && (timestamp < c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME))));
+        while (c.moveToPrevious() && (timestamp < c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME))));
 
         int i = 0;
         if (c.getPosition() >= 0) {
             do {
-                int senderId = c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER_ID));
+                int senderId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
                 messages.add(new Message(
-                        c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHAT_ID)),
-                        c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)),
+                        c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID)),
+                        c.getString(c.getColumnIndex(Columns.Message.COLUMN_NAME_MSG)),
                         senderId,
-                        c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME))));
+                        c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME))));
                 i++;
             } while (c.moveToPrevious() && (messagesToFetch == -1 || i < messagesToFetch));
         }
@@ -161,24 +161,24 @@ public class StorageAccess {
         Cursor c = getMsg(chatID);
         c.moveToLast();
 
-        int senderID = c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_SENDER_ID));
+        int senderID = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
 
-        return new Message(c.getInt(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_CHAT_ID)),
-                c.getString(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_MSG)),
+        return new Message(c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID)),
+                c.getString(c.getColumnIndex(Columns.Message.COLUMN_NAME_MSG)),
                 senderID,
-                c.getLong(c.getColumnIndex(ChatsContract.Message.COLUMN_NAME_DATETIME)));
+                c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME)));
     }
 
     public void addMessage(Message msg) {
         isReady();
         ContentValues values = new ContentValues();
 
-        values.put(ChatsContract.Message.COLUMN_NAME_CHAT_ID, msg.getChatID());
-        values.put(ChatsContract.Message.COLUMN_NAME_MSG, msg.getText());
-        values.put(ChatsContract.Message.COLUMN_NAME_SENDER_ID, msg.getAuthor());
-        values.put(ChatsContract.Message.COLUMN_NAME_DATETIME, msg.getDateTime());
+        values.put(Columns.Message.COLUMN_NAME_CHAT_ID, msg.getChatID());
+        values.put(Columns.Message.COLUMN_NAME_MSG, msg.getText());
+        values.put(Columns.Message.COLUMN_NAME_SENDER_ID, msg.getAuthor());
+        values.put(Columns.Message.COLUMN_NAME_DATETIME, msg.getDateTime());
 
-        mWritableDB.insert(ChatsContract.Message.TABLE_NAME, null, values);
+        mWritableDB.insert(Columns.Message.TABLE_NAME, null, values);
 
     }
 
@@ -186,11 +186,11 @@ public class StorageAccess {
         isReady();
         ContentValues values = new ContentValues();
 
-        values.put(ChatsContract.Discussion.COLUMN_NAME_TITLE, chat.getTitle());
-        values.put(ChatsContract.Discussion.COLUMN_NAME_HOST, chat.getHost());
-        values.put(ChatsContract.Discussion.COLUMN_NAME_TYPE, chat.isPrivate());
+        values.put(Columns.Discussion.COLUMN_NAME_TITLE, chat.getTitle());
+        values.put(Columns.Discussion.COLUMN_NAME_HOST, chat.getHost());
+        values.put(Columns.Discussion.COLUMN_NAME_TYPE, chat.isPrivate());
 
-        mWritableDB.insert(ChatsContract.Discussion.TABLE_NAME, null, values);
+        mWritableDB.insert(Columns.Discussion.TABLE_NAME, null, values);
     }
 
     public Peer getPeer(long peerId) {
