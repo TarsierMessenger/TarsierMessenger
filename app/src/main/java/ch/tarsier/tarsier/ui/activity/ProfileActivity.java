@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
@@ -20,7 +18,7 @@ import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
 /**
- * @author Romain Ruetschi (romac)
+ * @author romac
  */
 public class ProfileActivity extends Activity {
 
@@ -104,8 +102,7 @@ public class ProfileActivity extends Activity {
         mStatusMessage.setText(statusMessage);
 
         // check existence of picture profile
-        String filePath = Environment.getExternalStorageDirectory() + "/"
-                + AddProfilePictureActivity.TEMP_PHOTO_FILE;
+        String filePath = Tarsier.app().getUserPreferences().getPicturePath();
 
         Bitmap profilePicture = BitmapFactory.decodeFile(filePath);
 

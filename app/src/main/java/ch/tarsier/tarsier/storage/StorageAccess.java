@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 
 import java.util.ArrayList;
 
@@ -18,10 +17,9 @@ import ch.tarsier.tarsier.database.DatabaseHelper;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity;
 
 /**
- * Created by McMoudi
+ * @author McMoudi
  */
 public class StorageAccess {
 
@@ -244,8 +242,7 @@ public class StorageAccess {
     }
 
     public String getMyPicturePath() {
-        return Environment.getExternalStorageDirectory() + "/"
-             + AddProfilePictureActivity.TEMP_PHOTO_FILE;
+        return Tarsier.app().getUserPreferences().getPicturePath();
     }
 
     public Uri getMyPictureUri() {

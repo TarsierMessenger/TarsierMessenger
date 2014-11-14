@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -171,8 +170,7 @@ public class HomeActivity extends Activity {
         mStatusMessage.setText(statusMessage);
 
         // check existence of picture profile
-        String filePath = Environment.getExternalStorageDirectory() + "/"
-                + AddProfilePictureActivity.TEMP_PHOTO_FILE;
+        String filePath = Tarsier.app().getUserPreferences().getPicturePath();
 
         Bitmap profilePicture = BitmapFactory.decodeFile(filePath);
 

@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.Tarsier;
 
 /**
  * Activity to upload a profile picture, either from the Gallery or
@@ -43,7 +44,6 @@ public class AddProfilePictureActivity extends Activity {
     private static final int PIC_CROP              = 0x03;
     private static final int SIZE_OUTPUT = 200;
     private static final int PNG_QUALITY = 100;
-    public static final String TEMP_PHOTO_FILE = "profile_picture_temp.png";
 
     private ImageView mImageView;
 
@@ -115,7 +115,8 @@ public class AddProfilePictureActivity extends Activity {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
              // File tmp = null;
-            File file = new File(Environment.getExternalStorageDirectory(), TEMP_PHOTO_FILE);
+            File file = new File(Tarsier.app().getUserPreferences().getPicturePath());
+
             boolean fileExists = false;
             try {
                 fileExists = file.createNewFile();
