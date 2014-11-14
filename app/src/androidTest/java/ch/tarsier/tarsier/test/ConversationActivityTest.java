@@ -19,8 +19,9 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
  * Created by Marin on 12.11.2014.
  */
 public class ConversationActivityTest extends ActivityInstrumentationTestCase2<ConversationActivity> {
-    public ConversationActivityTest(Class<ConversationActivity> activityClass) {
-        super(activityClass);
+
+    public ConversationActivityTest() {
+        super(ConversationActivity.class);
     }
 
     @Override
