@@ -1,30 +1,72 @@
 package ch.tarsier.tarsier.domain.model;
 
-import android.graphics.Bitmap;
+import android.net.Uri;
+
+import ch.tarsier.tarsier.Tarsier;
 
 /**
  * @author xawill
  */
 public class Peer {
-    private int mPeerId;
-    private String mName;
-    private Bitmap mPicture;
 
-    public Peer(String name, Bitmap picture) {
-        //TODO uniquely generate mPeerID
-        this.mName = name;
-        this.mPicture = picture;
+    private long mId;
+
+    private String mName;
+
+    private String mStatusMessage;
+
+    private String mPicturePath;
+
+    private boolean mOnline;
+
+    public Peer() {
+
+    }
+
+    // TODO: Remove when ChatRoomParticipantsActivity won't need it anymore.
+    public Peer(String name, String statusMessage) {
+        mName = name;
+        mStatusMessage = statusMessage;
+    }
+
+    public long getId() {
+        return mId;
+    }
+
+    public void setId(long id) {
+        mId = id;
     }
 
     public String getName() {
         return mName;
     }
 
-    public int getPeerId() {
-        return mPeerId;
+    public void setName(String name) {
+        this.mName = name;
     }
 
-    public Bitmap getPicture() {
-        return mPicture;
+    public String getStatusMessage() {
+        return mStatusMessage;
+    }
+
+    public void setStatusMessage(String statusMessage) {
+        this.mStatusMessage = statusMessage;
+    }
+
+    public void setOnline(boolean online) {
+        mOnline = online;
+    }
+
+    public boolean isOnline() {
+        return mOnline;
+    }
+
+    public String getPicturePath() {
+        // FIXME: Only until we properly retrieve the peer's picture.
+        return Tarsier.app().getStorage().getMyPicturePath();
+    }
+
+    public void setPicturePath(String picturePath) {
+        mPicturePath = picturePath;
     }
 }

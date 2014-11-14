@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 
 import java.util.ArrayList;
 
@@ -14,6 +16,7 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity;
 
 /**
  * Created by McMoudi
@@ -188,7 +191,7 @@ public class StorageAccess {
         mWritableDB.insert(ChatsContract.Discussion.TABLE_NAME, null, values);
     }
 
-    public Peer getPeer(int peerId) {
+    public Peer getPeer(long peerId) {
         // TODO implement
         return null;
     }
@@ -236,6 +239,15 @@ public class StorageAccess {
 
     public void setMyMood(String mood) {
         setMyPersonalSharedPref(R.string.personnal_file_key_mymood, mood);
+    }
+
+    public String getMyPicturePath() {
+        return Environment.getExternalStorageDirectory() + "/"
+             + AddProfilePictureActivity.TEMP_PHOTO_FILE;
+    }
+
+    public Uri getMyPictureUri() {
+        return Uri.parse(getMyPicturePath());
     }
 
     private String getMyPreferences(int key) {

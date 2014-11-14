@@ -9,7 +9,7 @@ public class Message {
 
     private int mChatId;
     private String mText;
-    private int mPeerId;
+    private long mPeerId;
     private long mDateTime;
     private boolean mIsSentByUser;
 
@@ -21,7 +21,7 @@ public class Message {
      * @param peerId the id of the peer which sent the message
      * @param dateTime the timestamp at which the message has been sent
      */
-    public Message(int chatID, String text, int peerId, long dateTime) {
+    public Message(int chatID, String text, long peerId, long dateTime) {
         mChatId = chatID;
         mText = text;
         mPeerId = peerId;
@@ -48,7 +48,7 @@ public class Message {
         return mText;
     }
 
-    public int getAuthor() {
+    public long getAuthor() {
         return mPeerId;
     }
 
@@ -56,7 +56,7 @@ public class Message {
         return mChatId;
     }
 
-    public int getPeerId() {
+    public long getPeerId() {
         return mPeerId;
     }
 

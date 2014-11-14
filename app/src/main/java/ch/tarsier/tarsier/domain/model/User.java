@@ -1,58 +1,30 @@
 package ch.tarsier.tarsier.domain.model;
 
-import android.net.Uri;
-
-import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.storage.StorageAccess;
 
 /**
  * @author Romain Ruetschi
  */
-public class User {
+public final class User extends Peer {
 
-    private String mName;
-    private String mStatusMessage;
-    private Uri mPictureUri;
-    private boolean mOnline;
+    private static User instance = null;
 
-    public User(String name, String statusMessage /*, Uri pictureUri, boolean online */) {
-        String path = "android.resource://ch.tarsier.tarsier/" + R.drawable.ic_launcher;
-        boolean online = Math.random() < 0.5;
+    public static User getInstance() {
+        if (instance == null) {
+            instance = new User();
+        }
 
-        this.mName = name;
-        this.mStatusMessage = statusMessage;
-        this.mPictureUri = Uri.parse(path);
-        this.mOnline = online;
+        return instance;
     }
 
-    public String getName() {
-        return mName;
+    private User() {
+        StorageAccess storage = Tarsier.app().getStorage();
+
+        this.setName(storage.getMyUsername());
+        this.setStatusMessage(storage.getMyMood());
+        this.setPicturePath(storage.getMyPicturePath());
+        this.setOnline(true);
     }
 
-    public void setName(String name) {
-        this.mName = name;
-    }
-
-    public String getStatusMessage() {
-        return mStatusMessage;
-    }
-
-    public void setStatusMessage(String statusMessage) {
-        this.mStatusMessage = statusMessage;
-    }
-
-    public void setOnline(boolean online) {
-        mOnline = online;
-    }
-
-    public boolean isOnline() {
-        return mOnline;
-    }
-
-    public Uri getPictureUri() {
-        return mPictureUri;
-    }
-
-    public void setPictureUri(Uri pictureUri) {
-        mPictureUri = pictureUri;
-    }
 }
