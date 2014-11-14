@@ -14,7 +14,7 @@ import ch.tarsier.tarsier.ui.adapter.DiscussionsAdapter;
 import ch.tarsier.tarsier.R;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
 public class DiscussionsActivity extends Activity {
     public final static String ID_DISCUSSION_MESSAGE = "ch.tarsier.tarsier.ID_DISCUSSION";

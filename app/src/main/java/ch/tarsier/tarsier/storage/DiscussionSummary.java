@@ -1,7 +1,7 @@
 package ch.tarsier.tarsier.storage;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
 public class DiscussionSummary {
     private int mId;

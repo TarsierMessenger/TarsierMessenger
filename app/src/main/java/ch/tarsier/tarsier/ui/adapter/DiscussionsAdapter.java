@@ -13,7 +13,7 @@ import ch.tarsier.tarsier.storage.DiscussionSummary;
 import ch.tarsier.tarsier.R;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
 public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
 

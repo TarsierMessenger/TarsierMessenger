@@ -11,7 +11,7 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
 
 /**
- * Created by gluthier
+ * @author gluthier
  */
 public class DiscussionsActivityTest extends ActivityInstrumentationTestCase2<DiscussionsActivity> {
 
