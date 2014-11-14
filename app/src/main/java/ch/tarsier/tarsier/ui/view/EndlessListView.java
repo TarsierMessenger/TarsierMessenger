@@ -8,7 +8,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
-import ch.tarsier.tarsier.storage.MessageViewModel;
+import ch.tarsier.tarsier.domain.model.MessageViewModel;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 
 /**

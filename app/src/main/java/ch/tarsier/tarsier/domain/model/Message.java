@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.storage;
+package ch.tarsier.tarsier.domain.model;
 
 import ch.tarsier.tarsier.Tarsier;
 

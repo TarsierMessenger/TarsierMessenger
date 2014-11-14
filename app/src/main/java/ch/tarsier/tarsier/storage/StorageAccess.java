@@ -11,6 +11,9 @@ import java.util.ArrayList;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.domain.model.Message;
+import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
  * Created by McMoudi

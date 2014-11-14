@@ -1,12 +1,11 @@
-package ch.tarsier.tarsier.storage;
+package ch.tarsier.tarsier.domain.model;
 
 
 import android.graphics.Bitmap;
 
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.storage.Message;
-import ch.tarsier.tarsier.storage.Peer;
-import ch.tarsier.tarsier.storage.StorageAccess;
+import ch.tarsier.tarsier.domain.model.Message;
+import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
  * @author xawill

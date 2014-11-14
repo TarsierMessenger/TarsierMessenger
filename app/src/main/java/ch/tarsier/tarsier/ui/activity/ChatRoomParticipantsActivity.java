@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.storage.User;
+import ch.tarsier.tarsier.domain.model.User;
 
 /**
  * @author Romain Ruetschi
