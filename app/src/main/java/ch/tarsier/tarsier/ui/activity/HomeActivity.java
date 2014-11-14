@@ -18,7 +18,7 @@ import android.widget.Toast;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.network.old.WiFiDirectDebugActivity;
-import ch.tarsier.tarsier.storage.StorageAccess;
+import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
@@ -33,7 +33,7 @@ public class HomeActivity extends Activity {
     private EditText mStatusMessage;
     private ImageView mProfilePicture;
 
-    private StorageAccess storage;
+    private UserPreferences mUserPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class HomeActivity extends Activity {
         setContentView(R.layout.activity_home);
         enableStartButton(false);
 
-        storage = Tarsier.app().getStorage();
+        mUserPreferences = Tarsier.app().getUserPreferences();
 
         mUsername = (EditText) findViewById(R.id.username);
         mStatusMessage = (EditText) findViewById(R.id.status_message);
@@ -163,14 +163,14 @@ public class HomeActivity extends Activity {
     }
 
     private void refreshFields() {
-        String username = storage.getMyUsername();
+        String username = mUserPreferences.getUsername();
         mUsername.setText(username);
 
-        String statusMessage = storage.getMyMood();
+        String statusMessage = mUserPreferences.getStatusMessage();
         mStatusMessage.setText(statusMessage);
 
         // check existence of picture profile
-        String filePath = Tarsier.app().getUserPreferences().getPicturePath();
+        String filePath = mUserPreferences.getPicturePath();
 
         Bitmap profilePicture = BitmapFactory.decodeFile(filePath);
 
@@ -184,8 +184,8 @@ public class HomeActivity extends Activity {
     }
 
     private void saveProfileInfos() {
-        storage.setMyUsername(mUsername.getText().toString());
-        storage.setMyMood(mStatusMessage.getText().toString());
+        mUserPreferences.setUsername(mUsername.getText().toString());
+        mUserPreferences.setStatusMessage(mStatusMessage.getText().toString());
     }
 
     /**
