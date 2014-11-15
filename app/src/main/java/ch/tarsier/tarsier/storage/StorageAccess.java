@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -41,6 +40,7 @@ public class StorageAccess {
         new DatabaseAccess().execute();
     }
 
+    /*
     public ArrayList<Chat> getChats(boolean wantChatrooms) {
         isReady();
 
@@ -75,6 +75,7 @@ public class StorageAccess {
 
         return chatRooms;
     }
+    */
 
     private Cursor getMsg(int id) {
         isReady();
@@ -134,6 +135,7 @@ public class StorageAccess {
         );
     }
 
+    /*
     public void addPeer(Peer peer) {
         isReady();
         ContentValues values = new ContentValues();
@@ -144,6 +146,7 @@ public class StorageAccess {
 
         mWritableDB.insert(Columns.Peer.TABLE_NAME, null, values);
     }
+    */
 
 
     //FIXME fix this ID thingy, once we got an ID to rule them all
@@ -153,6 +156,7 @@ public class StorageAccess {
      * @param messagesToFetch number of messages retrieved, starting from latest, 0 means all
      * @return an ArrayList of Message
      */
+    /*
     public ArrayList<Message> getMessages(int chatID, int messagesToFetch) {
         if (messagesToFetch < -1) {
             //FIXME @xawill : Should not throw an exception. Just ignore the call (do nothing, return null)
@@ -180,6 +184,7 @@ public class StorageAccess {
 
         return messages;
     }
+    */
 
     /**
      * //TODO
@@ -215,6 +220,7 @@ public class StorageAccess {
     }
 
 
+    /*
     public Message getLastMessage(int chatID) {
         Cursor c = getMsg(chatID);
         c.moveToLast();
@@ -228,6 +234,7 @@ public class StorageAccess {
                 peerId,
                 c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME)));
     }
+    */
 
     public void addMessage(Message msg) {
         isReady();
@@ -242,6 +249,7 @@ public class StorageAccess {
 
     }
 
+    /*
     public void addChatroom(Chat chat) {
         isReady();
         ContentValues values = new ContentValues();
@@ -252,6 +260,7 @@ public class StorageAccess {
 
         mWritableDB.insert(Columns.Discussion.TABLE_NAME, null, values);
     }
+    */
 
     private void isReady() {
         while (!mIsReady) {
@@ -265,6 +274,7 @@ public class StorageAccess {
         return sharedPref.getString(Tarsier.app().getString(key), "");
     }
 
+    /*
     public int getMyId() {
         return Integer.parseInt(getMyPersonalSharedPref(R.string.personnal_file_key_myid));
     }
@@ -276,6 +286,7 @@ public class StorageAccess {
     public String getMyMood() {
         return getMyPersonalSharedPref(R.string.personnal_file_key_mymood);
     }
+    */
 
     private void setMyPersonalSharedPref(int key, String data) {
         SharedPreferences sharedPref = Tarsier.app().getSharedPreferences(
@@ -286,6 +297,7 @@ public class StorageAccess {
         editor.apply();
     }
 
+    /*
     public void setMyId(String id) {
         setMyPersonalSharedPref(R.string.personnal_file_key_myid, id);
     }
@@ -297,6 +309,7 @@ public class StorageAccess {
     public void setMyMood(String mood) {
         setMyPersonalSharedPref(R.string.personnal_file_key_mymood, mood);
     }
+    */
 
     public String getMyPicturePath() {
         return Tarsier.app().getUserPreferences().getPicturePath();
