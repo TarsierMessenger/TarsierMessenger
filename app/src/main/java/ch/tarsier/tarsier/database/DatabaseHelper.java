@@ -13,19 +13,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "tarsier.db";
 
+    private static final String ID_TYPE = "INTEGER";
     private static final String TEXT_TYPE = " TEXT";
-    private static final String BLOB_TYPE = " BLOB";
+    private static final String PUBLIC_KEY_TYPE = " BLOB";
+    private static final String BOOLEAN_TYPE = "INTEGER"; // SQLite doesn't have a boolean type
     private static final String DATETIME_TYPE = "INTEGER";
     private static final String COMMA_SEP = ",";
-    private static final String ID_TYPE = "INTEGER";
+
     private static final String CREATE_TABLE = "CREATE TABLE ";
 
-
-    private static final String SQL_CREATE_CHATROOMS =
-              CREATE_TABLE + Columns.Discussion.TABLE_NAME
-            + " (" + Columns.Discussion._ID + Columns.Discussion.COLUMN_NAME_CHAT_ID
-            + " INTEGER PRIMARY KEY," + TEXT_TYPE + COMMA_SEP + Columns.Discussion.COLUMN_NAME_TITLE
-            + TEXT_TYPE + COMMA_SEP + Columns.Discussion.COLUMN_NAME_HOST + TEXT_TYPE + " )";
+    private static final String SQL_CREATE_CHAT =
+              CREATE_TABLE + " " + Columns.Chat.TABLE_NAME + " (" + "\n"
+            + Columns.Chat._ID + " " + ID_TYPE + " PRIMARY KEY" + COMMA_SEP + "\n"
+            + Columns.Chat.COLUMN_NAME_TITLE + " " + TEXT_TYPE + COMMA_SEP + "\n"
+            + Columns.Chat.COLUMN_NAME_HOST_ID + ID_TYPE + COMMA_SEP + "\n"
+            + Columns.Chat.COLUMN_NAME_IS_PRIVATE + BOOLEAN_TYPE + "\n"
+            + " )";
 
     private static final String SQL_CREATE_MESSAGES =
               CREATE_TABLE + Columns.Message.TABLE_NAME
@@ -37,11 +40,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_PEER =
               CREATE_TABLE + Columns.Peer.TABLE_NAME
             + Columns.Peer._ID + " (" + " INTEGER PRIMARY KEY, " + Columns.Peer.COLUMN_NAME_USERNAME
-            + TEXT_TYPE + COMMA_SEP + Columns.Peer.COLUMN_NAME_PUBLIC_KEY + BLOB_TYPE + COMMA_SEP
+            + TEXT_TYPE + COMMA_SEP + Columns.Peer.COLUMN_NAME_PUBLIC_KEY + PUBLIC_KEY_TYPE + COMMA_SEP
             + Columns.Peer.COLUMN_NAME_PICTURE_PATH + TEXT_TYPE + " )";
 
-    private static final String SQL_DELETE_CHATROOMS =
-        "DROP TABLE IF EXISTS " + Columns.Discussion.TABLE_NAME;
+    private static final String SQL_DELETE_CHAT =
+        "DROP TABLE IF EXISTS " + Columns.Chat.TABLE_NAME;
 
     private static final String SQL_DELETE_MESSAGES =
         "DROP TABLE IF EXISTS " + Columns.Message.TABLE_NAME;
@@ -56,9 +59,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_CHATROOMS);
-        db.execSQL(SQL_CREATE_MESSAGES);
-        db.execSQL(SQL_CREATE_PEER);
+        // db.execSQL(SQL_CREATE_MESSAGES);
+        // db.execSQL(SQL_CREATE_PEER);
+
+        db.execSQL(SQL_DELETE_CHAT);
+        db.execSQL(SQL_CREATE_CHAT);
     }
 
     @Override
