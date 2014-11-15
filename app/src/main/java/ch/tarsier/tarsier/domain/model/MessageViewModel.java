@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.domain.model.Message;
-import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
  * @author xawill
@@ -21,8 +19,8 @@ public class MessageViewModel {
     public MessageViewModel(Message message) {
         mText = message.getText();
         mTimeSent = message.getDateTime();
-        PeerId peerId = message.getPeerId();
-        Peer peer = Tarsier.app().getStorage().getPeer(peerId.getBytes());
+        long peerId = message.getPeerId();
+        Peer peer = Tarsier.app().getStorage().getPeer(peerId);
         mPeerPicture = BitmapFactory.decodeFile(peer.getPicturePath());
         mPeerName = peer.getName();
         isSentByUser = message.isSentByUser();

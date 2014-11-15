@@ -1,15 +1,15 @@
-package ch.tarsier.tarsier.domain.model;
+package ch.tarsier.tarsier.domain.model.value;
 
 import java.util.Arrays;
 
 /**
  * @author romac
  */
-public class PeerId {
+public class PublicKey {
 
     private byte[] mBytes;
 
-    public PeerId(byte[] bytes) {
+    public PublicKey(byte[] bytes) {
         mBytes = bytes;
     }
 
@@ -28,7 +28,7 @@ public class PeerId {
             return false;
         }
 
-        return Arrays.equals(mBytes, ((PeerId) that).getBytes());
+        return Arrays.equals(mBytes, ((PublicKey) that).getBytes());
     }
 
     @Override

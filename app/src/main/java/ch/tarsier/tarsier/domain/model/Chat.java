@@ -1,57 +1,48 @@
 package ch.tarsier.tarsier.domain.model;
 
 /**
- * Created by McMoudi on 24/10/14.
+ * @author McMoudi
+ * @author romac
  */
 public class Chat {
 
-    private int mId;
+    private long mId;
     private String mTitle;
-    private String mHost;
+    private Peer mHost;
     private boolean mPrivate;
 
-    /**
-     * Construct a group chat
-     *
-     * @param id the chat ID
-     * @param title the name of the room
-     * @param host the host's ID
-     */
-    public Chat(int id, String title, String host) {
-        mId = id;
-        mTitle = title;
-        mHost = host;
-        mPrivate = false;
-    }
-
-    /**
-     * Construct a private chat
-     *
-     * @param id the chat ID
-     * @param peer the peer's ID
-     */
-    public Chat(int id, String peer) {
-        mId = id;
-        mHost = peer;
-        mPrivate = true;
-    }
-
-    public int getId() {
+    public long getId() {
         return mId;
     }
 
+    public void setId(long id) {
+        mId = id;
+    }
+
     /**
-     * @return the other peer in a private chat or the name of the chatroom in a chatroom.
+     * @return the other peer in a private chat or the name of the chat room in a chat room.
      */
     public String getTitle() {
-        return mPrivate ? mHost : mTitle;
+        return isPrivate() ? getHost().getName() : mTitle;
+    }
+
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
     public boolean isPrivate() {
         return mPrivate;
     }
 
-    public String getHost() {
+    public void setPrivate(boolean isPrivate) {
+        mPrivate = isPrivate;
+    }
+
+    public Peer getHost() {
         return mHost;
+    }
+
+    public void setHost(Peer host) {
+        mHost = host;
     }
 }
