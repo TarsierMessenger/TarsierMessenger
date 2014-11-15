@@ -2,6 +2,9 @@ package ch.tarsier.tarsier;
 
 import android.app.Application;
 
+import ch.tarsier.tarsier.database.Database;
+import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.storage.StorageAccess;
 
@@ -14,6 +17,10 @@ public class Tarsier extends Application {
 
     private StorageAccess mStorage;
     private UserPreferences mUserPreferences;
+    private Database mDatabase;
+
+    private PeerRepository mPeerRepository;
+    private ChatRepository mChatRepository;
 
     public static Tarsier app() {
         return app;
@@ -22,7 +29,9 @@ public class Tarsier extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         app = this;
+        mDatabase = new Database(getApplicationContext());
     }
 
     public StorageAccess getStorage() {
@@ -41,4 +50,23 @@ public class Tarsier extends Application {
         return mUserPreferences;
     }
 
+    public Database getDatabase() {
+        return mDatabase;
+    }
+
+    public PeerRepository getPeerRepository() {
+        if (mPeerRepository == null) {
+            mPeerRepository = new PeerRepository(getDatabase());
+        }
+
+        return mPeerRepository;
+    }
+
+    public ChatRepository getChatRepository() {
+        if (mChatRepository == null) {
+            mChatRepository = new ChatRepository(getDatabase());
+        }
+
+        return mChatRepository;
+    }
 }
