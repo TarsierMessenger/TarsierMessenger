@@ -21,8 +21,8 @@ public class MessageViewModel {
     public MessageViewModel(Message message) {
         mText = message.getText();
         mTimeSent = message.getDateTime();
-        long peerId = message.getPeerId();
-        Peer peer = Tarsier.app().getStorage().getPeer(peerId);
+        PeerId peerId = message.getPeerId();
+        Peer peer = Tarsier.app().getStorage().getPeer(peerId.getBytes());
         mPeerPicture = BitmapFactory.decodeFile(peer.getPicturePath());
         mPeerName = peer.getName();
         isSentByUser = message.isSentByUser();

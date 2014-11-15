@@ -29,6 +29,11 @@ public class Peer {
         mStatusMessage = statusMessage;
     }
 
+    public Peer(String name, PeerId id) {
+        mName = name;
+        mId = id;
+    }
+
     public PeerId getId() {
         return mId;
     }

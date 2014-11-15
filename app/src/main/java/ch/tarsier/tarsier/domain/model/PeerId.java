@@ -13,7 +13,7 @@ public class PeerId {
         mBytes = bytes;
     }
 
-    byte[] getBytes() {
+    public byte[] getBytes() {
         return mBytes;
     }
 

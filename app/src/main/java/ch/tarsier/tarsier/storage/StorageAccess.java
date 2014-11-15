@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -17,6 +18,7 @@ import ch.tarsier.tarsier.database.DatabaseHelper;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.PeerId;
 
 /**
  * @author McMoudi
@@ -57,7 +59,7 @@ public class StorageAccess {
 
         Cursor c = mReadableDB.query(table, projection, null, null, null, null, sortOrder);
 
-        //The cursor is full of my data,c.getString(c.getColumnIndex(ChatsContract.Discussion.COLUMN_NAME_TITLE)),  I now need to extract it in a more conventional form
+        //The cursor is full of my data,c.getString(c.getColumnIndex(Columns.Discussion.COLUMN_NAME_TITLE)),  I now need to extract it in a more conventional form
         c.moveToFirst();
         do {
             if (wantChatrooms) {
@@ -78,7 +80,7 @@ public class StorageAccess {
         isReady();
         String sortOrder = Columns.Message.COLUMN_NAME_DATETIME + "ASC";
 
-        String[] projection = {
+        String[] projection = new String[] {
             Columns.Message._ID,
             Columns.Message.COLUMN_NAME_MSG,
             Columns.Message.COLUMN_NAME_DATETIME,
@@ -91,6 +93,58 @@ public class StorageAccess {
         return mReadableDB.query(Columns.Message.TABLE_NAME, projection, selection,
                 null, null, null, sortOrder);
     }
+
+    private Cursor getPeerCursor(byte[] id) {
+        isReady();
+
+        String sortOrder = Columns.Message.COLUMN_NAME_DATETIME + "ASC";
+
+        String[] projection = new String[] {
+                Columns.Peer._ID,
+                Columns.Peer.COLUMN_NAME_USERNAME,
+                Columns.Peer.COLUMN_NAME_PUBLIC_KEY,
+                Columns.Peer.COLUMN_NAME_PICTURE_PATH
+        };
+
+        // got to do a SQL "WHERE", as projectionArgs, to select the messages with the id @id
+        // FIXME: The following won't work - romac
+        String selection = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = '" + id + "'";
+
+        return mReadableDB.query(Columns.Peer.TABLE_NAME, projection, selection,
+                null, null, null, sortOrder);
+    }
+
+    /**
+     * Retrieves a peer from its public key
+     *
+     * @param peerId the peer's public key
+     * @return a Peer
+     */
+    public Peer getPeer(byte[] peerId) {
+        Cursor c = getPeerCursor(peerId);
+        c.moveToFirst();
+
+        // Bitmap picture = getPeerPicture(c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_PICTURE_PATH)));
+        byte[] publicKey = c.getBlob(c.getColumnIndex(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
+        PeerId peerIdObj = new PeerId(publicKey);
+
+        return new Peer(
+            c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_USERNAME)),
+            peerIdObj
+        );
+    }
+
+    public void addPeer(Peer peer) {
+        isReady();
+        ContentValues values = new ContentValues();
+
+        values.put(Columns.Peer.COLUMN_NAME_USERNAME, peer.getName());
+        values.put(Columns.Peer.COLUMN_NAME_PUBLIC_KEY, peer.getPublicKey());
+        // values.put(Columns.Peer.COLUMN_NAME_PICTURE_PATH, addPeerPicture(peer.getPicture()));
+
+        mWritableDB.insert(Columns.Peer.TABLE_NAME, null, values);
+    }
+
 
     //FIXME fix this ID thingy, once we got an ID to rule them all
 
@@ -112,11 +166,14 @@ public class StorageAccess {
 
         int i = 0;
         do {
-            int senderId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
+            PeerId peerId = new PeerId(c.getBlob(
+                c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID))
+            );
+
             messages.add(new Message(
                     c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID)),
                     c.getString(c.getColumnIndex(Columns.Message.COLUMN_NAME_MSG)),
-                    senderId,
+                    peerId,
                     c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME))));
             i++;
         } while (c.moveToPrevious() && (messagesToFetch == -1 || i < messagesToFetch));
@@ -141,11 +198,14 @@ public class StorageAccess {
         int i = 0;
         if (c.getPosition() >= 0) {
             do {
-                int senderId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
+                PeerId peerId = new PeerId(c.getBlob(
+                        c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID))
+                );
+
                 messages.add(new Message(
                         c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID)),
                         c.getString(c.getColumnIndex(Columns.Message.COLUMN_NAME_MSG)),
-                        senderId,
+                        peerId,
                         c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME))));
                 i++;
             } while (c.moveToPrevious() && (messagesToFetch == -1 || i < messagesToFetch));
@@ -159,11 +219,13 @@ public class StorageAccess {
         Cursor c = getMsg(chatID);
         c.moveToLast();
 
-        int senderID = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
+        PeerId peerId = new PeerId(c.getBlob(
+                c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID))
+        );
 
         return new Message(c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID)),
                 c.getString(c.getColumnIndex(Columns.Message.COLUMN_NAME_MSG)),
-                senderID,
+                peerId,
                 c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME)));
     }
 
@@ -173,7 +235,7 @@ public class StorageAccess {
 
         values.put(Columns.Message.COLUMN_NAME_CHAT_ID, msg.getChatID());
         values.put(Columns.Message.COLUMN_NAME_MSG, msg.getText());
-        values.put(Columns.Message.COLUMN_NAME_SENDER_ID, msg.getAuthor());
+        values.put(Columns.Message.COLUMN_NAME_SENDER_ID, msg.getPeerId().getBytes());
         values.put(Columns.Message.COLUMN_NAME_DATETIME, msg.getDateTime());
 
         mWritableDB.insert(Columns.Message.TABLE_NAME, null, values);
@@ -189,11 +251,6 @@ public class StorageAccess {
         values.put(Columns.Discussion.COLUMN_NAME_TYPE, chat.isPrivate());
 
         mWritableDB.insert(Columns.Discussion.TABLE_NAME, null, values);
-    }
-
-    public Peer getPeer(long peerId) {
-        // TODO implement
-        return null;
     }
 
     private void isReady() {
