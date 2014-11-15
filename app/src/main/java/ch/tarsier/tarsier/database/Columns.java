@@ -39,4 +39,14 @@ public final class Columns {
         public static final String COLUMN_NAME_CHAT_ID = "chatId";
 
     }
+
+    /**
+     * The peer table fields
+     */
+    public static abstract class Peer implements BaseColumns {
+        public static final String TABLE_NAME = "peer";
+        public static final String COLUMN_NAME_USERNAME = "username";
+        public static final String COLUMN_NAME_PUBLIC_KEY = "publicKey";
+        public static final String COLUMN_NAME_PICTURE_PATH = "picturePath";
+    }
 }
