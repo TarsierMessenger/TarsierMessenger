@@ -17,7 +17,8 @@ import ch.tarsier.tarsier.database.DatabaseHelper;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.domain.model.PeerId;
+import ch.tarsier.tarsier.domain.model.value.PeerId;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
 
 /**
  * @author McMoudi
@@ -126,12 +127,12 @@ public class StorageAccess {
         c.moveToFirst();
 
         // Bitmap picture = getPeerPicture(c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_PICTURE_PATH)));
-        byte[] publicKey = c.getBlob(c.getColumnIndex(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
-        PeerId peerIdObj = new PeerId(publicKey);
+        byte[] bytes = c.getBlob(c.getColumnIndex(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
+        PublicKey publicKey = new PublicKey(bytes);
 
         return new Peer(
-            c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_USERNAME)),
-            peerIdObj
+                c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_USERNAME)),
+                publicKey
         );
     }
 

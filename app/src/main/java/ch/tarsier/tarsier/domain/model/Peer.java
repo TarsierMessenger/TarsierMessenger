@@ -1,6 +1,7 @@
 package ch.tarsier.tarsier.domain.model;
 
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
 
 /**
  * @author xawill
@@ -8,7 +9,9 @@ import ch.tarsier.tarsier.Tarsier;
  */
 public class Peer {
 
-    private PeerId mId;
+    private long mId;
+
+    private PublicKey mPublicKey;
 
     private String mName;
 
@@ -29,21 +32,30 @@ public class Peer {
         mStatusMessage = statusMessage;
     }
 
-    public Peer(String name, PeerId id) {
+    public Peer(String name, long id) {
         mName = name;
         mId = id;
     }
 
-    public PeerId getId() {
+    public Peer(String name, PublicKey publicKey) {
+        mName = name;
+        mPublicKey = publicKey;
+    }
+
+    public long getId() {
         return mId;
     }
 
-    public void setId(PeerId id) {
+    public void setId(long id) {
         mId = id;
     }
 
-    public byte[] getPublicKey() {
-        return mId.getBytes();
+    public PublicKey getPublicKey() {
+        return mPublicKey;
+    }
+
+    public void setPublicKey(PublicKey publicKey) {
+        mPublicKey = publicKey;
     }
 
     public String getName() {

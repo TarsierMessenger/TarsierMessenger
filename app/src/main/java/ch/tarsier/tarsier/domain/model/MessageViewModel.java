@@ -5,8 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.domain.model.Message;
-import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.value.PeerId;
 
 /**
  * @author xawill

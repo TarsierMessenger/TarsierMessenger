@@ -1,6 +1,6 @@
 package ch.tarsier.tarsier.domain.model;
 
-import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.domain.model.value.PeerId;
 
 /**
  * @author McMoudi

@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.domain.model;
+package ch.tarsier.tarsier.domain.model.value;
 
 import java.util.Arrays;
 
