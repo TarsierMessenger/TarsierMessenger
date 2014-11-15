@@ -14,10 +14,8 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.DatabaseHelper;
-import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.domain.model.value.PeerId;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 
 /**
@@ -96,7 +94,7 @@ public class StorageAccess {
                 null, null, null, sortOrder);
     }
 
-    private Cursor getPeerCursor(byte[] id) {
+    private Cursor getPeerCursor(long id) {
         isReady();
 
         String sortOrder = Columns.Message.COLUMN_NAME_DATETIME + "ASC";
@@ -109,7 +107,6 @@ public class StorageAccess {
         };
 
         // got to do a SQL "WHERE", as projectionArgs, to select the messages with the id @id
-        // FIXME: The following won't work - romac
         String selection = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = '" + id + "'";
 
         return mReadableDB.query(Columns.Peer.TABLE_NAME, projection, selection,
@@ -122,7 +119,7 @@ public class StorageAccess {
      * @param peerId the peer's public key
      * @return a Peer
      */
-    public Peer getPeer(byte[] peerId) {
+    public Peer getPeer(long peerId) {
         Cursor c = getPeerCursor(peerId);
         c.moveToFirst();
 
@@ -204,9 +201,7 @@ public class StorageAccess {
         int i = 0;
         if (c.getPosition() >= 0) {
             do {
-                PeerId peerId = new PeerId(c.getBlob(
-                        c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID))
-                );
+                long peerId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
 
                 messages.add(new Message(
                         c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID)),
@@ -243,7 +238,7 @@ public class StorageAccess {
 
         values.put(Columns.Message.COLUMN_NAME_CHAT_ID, msg.getChatID());
         values.put(Columns.Message.COLUMN_NAME_MSG, msg.getText());
-        values.put(Columns.Message.COLUMN_NAME_SENDER_ID, msg.getPeerId().getBytes());
+        values.put(Columns.Message.COLUMN_NAME_SENDER_ID, msg.getPeerId());
         values.put(Columns.Message.COLUMN_NAME_DATETIME, msg.getDateTime());
 
         mWritableDB.insert(Columns.Message.TABLE_NAME, null, values);
