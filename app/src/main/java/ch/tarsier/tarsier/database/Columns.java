@@ -18,13 +18,12 @@ public final class Columns {
     /**
      * The discussion table fields
      */
-    public static abstract class Discussion implements BaseColumns {
+    public static abstract class Chat implements BaseColumns {
+        public static final String TABLE_NAME = "chat";
 
-        public static final String TABLE_NAME = "discussion";
-        public static final String COLUMN_NAME_CHAT_ID = "chatId";
         public static final String COLUMN_NAME_TITLE = "title";
-        public static final String COLUMN_NAME_HOST = "host";
-        public static final String COLUMN_NAME_TYPE = "type";
+        public static final String COLUMN_NAME_HOST_ID = "hostId";
+        public static final String COLUMN_NAME_IS_PRIVATE = "isPrivate";
 
     }
 
@@ -33,6 +32,7 @@ public final class Columns {
      */
     public static abstract class Message implements BaseColumns {
         public static final String TABLE_NAME = "message";
+
         public static final String COLUMN_NAME_MSG = "msg";
         public static final String COLUMN_NAME_DATETIME = "datetime";
         public static final String COLUMN_NAME_SENDER_ID = "senderId";
@@ -45,8 +45,9 @@ public final class Columns {
      */
     public static abstract class Peer implements BaseColumns {
         public static final String TABLE_NAME = "peer";
-        public static final String COLUMN_NAME_USERNAME = "username";
+
         public static final String COLUMN_NAME_PUBLIC_KEY = "publicKey";
+        public static final String COLUMN_NAME_USERNAME = "username";
         public static final String COLUMN_NAME_PICTURE_PATH = "picturePath";
     }
 }
