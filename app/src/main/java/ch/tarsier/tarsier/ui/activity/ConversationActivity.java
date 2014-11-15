@@ -18,9 +18,9 @@ import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 import ch.tarsier.tarsier.util.DateUtil;
 import ch.tarsier.tarsier.ui.view.EndlessListView;
 import ch.tarsier.tarsier.ui.view.EndlessListener;
-import ch.tarsier.tarsier.storage.MessageViewModel;
+import ch.tarsier.tarsier.domain.model.MessageViewModel;
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.storage.Message;
+import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.storage.StorageAccess;
 
 /**

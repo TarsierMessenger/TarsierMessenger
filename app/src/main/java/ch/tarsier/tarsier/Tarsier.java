@@ -2,6 +2,7 @@ package ch.tarsier.tarsier;
 
 import android.app.Application;
 
+import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.storage.StorageAccess;
 
 /**
@@ -11,11 +12,12 @@ public class Tarsier extends Application {
 
     private static Tarsier app;
 
+    private StorageAccess mStorage;
+    private UserPreferences mUserPreferences;
+
     public static Tarsier app() {
         return app;
     }
-
-    private StorageAccess mStorage;
 
     @Override
     public void onCreate() {
@@ -30,4 +32,13 @@ public class Tarsier extends Application {
 
         return mStorage;
     }
+
+    public UserPreferences getUserPreferences() {
+        if (mUserPreferences == null) {
+            mUserPreferences = new UserPreferences();
+        }
+
+        return mUserPreferences;
+    }
+
 }

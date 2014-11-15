@@ -3,6 +3,7 @@ package ch.tarsier.tarsier.ui.activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,7 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.storage.User;
+import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.User;
 
 /**
  * @author Romain Ruetschi
@@ -30,23 +32,23 @@ public class ChatRoomParticipantsActivity extends ListActivity {
         Intent sender = getIntent();
         Bundle extras = sender.getExtras();
 
-        User[] participants = null;
+        Peer[] peers;
 
         if (extras != null && extras.containsKey(EXTRAS_PARTICIPANTS_KEY)) {
-            participants = (User[]) extras.get(EXTRAS_PARTICIPANTS_KEY);
+            peers = (User[]) extras.get(EXTRAS_PARTICIPANTS_KEY);
         } else {
             // Just some test data in case we got nothing from the parent,
             // as it is the case when accessing this view from the menu.
-            participants = new User[] {
-                new User("Amirezza Bahreini", "At Sat', come join me !"),
-                new User("Frederic Jacobs", "Tarsier will beat ISIS !"),
-                new User("Gabriel Luthier", "There's no place like 127.0.0.1"),
-                new User("Radu Banabic", "Happy coding !"),
-                new User("Romain Ruetschi", "Let me rewrite this in Haskell, please.")
+            peers = new Peer[] {
+                new Peer("Amirezza Bahreini", "At Sat', come join me !"),
+                new Peer("Frederic Jacobs", "Tarsier will beat ISIS !"),
+                new Peer("Gabriel Luthier", "There's no place like 127.0.0.1"),
+                new Peer("Radu Banabic", "Happy coding !"),
+                new Peer("Romain Ruetschi", "Let me rewrite this in Haskell, please.")
             };
         }
 
-        setListAdapter(new ChatRoomParticipantArrayAdapter(this, participants));
+        setListAdapter(new ChatRoomParticipantArrayAdapter(this, peers));
     }
 
     @Override
@@ -68,14 +70,14 @@ public class ChatRoomParticipantsActivity extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class ChatRoomParticipantArrayAdapter extends ArrayAdapter<User> {
+    class ChatRoomParticipantArrayAdapter extends ArrayAdapter<Peer> {
         private final static int LAYOUT = R.layout.chatroom_participant;
 
         private final Context mContext;
         private final LayoutInflater mInflater;
-        private final User[] mValues;
+        private final Peer[] mValues;
 
-        ChatRoomParticipantArrayAdapter(Context context, User[] values) {
+        ChatRoomParticipantArrayAdapter(Context context, Peer[] values) {
             super(context, LAYOUT, values);
 
             mContext = context;
@@ -100,11 +102,11 @@ public class ChatRoomParticipantsActivity extends ListActivity {
             ImageView imageView = (ImageView) convertView.getTag(R.id.icon);
             TextView badgeView = (TextView) convertView.getTag(R.id.badge);
 
-            User p = getItem(position);
+            Peer p = getItem(position);
 
             nameView.setText(p.getName());
             statusView.setText(p.getStatusMessage());
-            imageView.setImageURI(p.getPictureUri());
+            imageView.setImageURI(Uri.parse(p.getPicturePath()));
             imageView.setImageResource(R.drawable.ic_launcher);
             badgeView.setVisibility((p.isOnline()) ? View.VISIBLE : View.INVISIBLE);
 

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.tarsier.tarsier.util.DateUtil;
-import ch.tarsier.tarsier.storage.MessageViewModel;
+import ch.tarsier.tarsier.domain.model.MessageViewModel;
 import ch.tarsier.tarsier.R;
 
 /**

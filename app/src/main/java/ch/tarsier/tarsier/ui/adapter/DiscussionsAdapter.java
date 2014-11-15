@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ch.tarsier.tarsier.storage.DiscussionSummary;
+import ch.tarsier.tarsier.domain.model.DiscussionSummary;
 import ch.tarsier.tarsier.R;
 
 /**

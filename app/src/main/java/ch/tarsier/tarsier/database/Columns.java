@@ -1,15 +1,17 @@
-package ch.tarsier.tarsier.storage;
+package ch.tarsier.tarsier.database;
 
 import android.provider.BaseColumns;
 
 /**
- * Created by McMoudi on 23/10/14.
+ * @author McMoudi
+ * @author romac
  */
-public final class ChatsContract {
+public final class Columns {
+
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
 
-    public ChatsContract() {
+    public Columns() {
 
     }
 
@@ -36,5 +38,15 @@ public final class ChatsContract {
         public static final String COLUMN_NAME_SENDER_ID = "senderId";
         public static final String COLUMN_NAME_CHAT_ID = "chatId";
 
+    }
+
+    /**
+     * The peer table fields
+     */
+    public static abstract class Peer implements BaseColumns {
+        public static final String TABLE_NAME = "peer";
+        public static final String COLUMN_NAME_USERNAME = "username";
+        public static final String COLUMN_NAME_PUBLIC_KEY = "publicKey";
+        public static final String COLUMN_NAME_PICTURE_PATH = "picturePath";
     }
 }

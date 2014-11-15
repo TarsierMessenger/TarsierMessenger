@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.storage;
+package ch.tarsier.tarsier.domain.model;
 
 /**
  * Created by gluthier

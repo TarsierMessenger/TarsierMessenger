@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.storage;
+package ch.tarsier.tarsier.domain.model;
 
 /**
  * Created by McMoudi on 24/10/14.

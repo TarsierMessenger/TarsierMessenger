@@ -1,15 +1,15 @@
-package ch.tarsier.tarsier.storage;
+package ch.tarsier.tarsier.domain.model;
 
 import ch.tarsier.tarsier.Tarsier;
 
 /**
- * Created by McMoudi on 24/10/14.
+ * @author McMoudi
  */
 public class Message {
 
     private int mChatId;
     private String mText;
-    private int mPeerId;
+    private PeerId mPeerId;
     private long mDateTime;
     private boolean mIsSentByUser;
 
@@ -21,7 +21,7 @@ public class Message {
      * @param peerId the id of the peer which sent the message
      * @param dateTime the timestamp at which the message has been sent
      */
-    public Message(int chatID, String text, int peerId, long dateTime) {
+    public Message(int chatID, String text, PeerId peerId, long dateTime) {
         mChatId = chatID;
         mText = text;
         mPeerId = peerId;
@@ -39,7 +39,7 @@ public class Message {
     public Message(int chatID, String text, long dateTime) {
         mChatId = chatID;
         mText = text;
-        mPeerId = Tarsier.app().getStorage().getMyId();
+        // mPeerId = Tarsier.app().getUserPreferences().getId();
         mIsSentByUser = true;
         mDateTime = dateTime;
     }
@@ -48,7 +48,7 @@ public class Message {
         return mText;
     }
 
-    public int getAuthor() {
+    public PeerId getAuthor() {
         return mPeerId;
     }
 
@@ -56,7 +56,7 @@ public class Message {
         return mChatId;
     }
 
-    public int getPeerId() {
+    public PeerId getPeerId() {
         return mPeerId;
     }
 

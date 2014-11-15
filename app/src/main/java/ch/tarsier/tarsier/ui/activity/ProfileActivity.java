@@ -5,26 +5,24 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.storage.StorageAccess;
+import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
 /**
- * @author Romain Ruetschi (romac)
+ * @author romac
  */
 public class ProfileActivity extends Activity {
 
-    private StorageAccess storage;
+    private UserPreferences mUserPreferences;
 
     private EditText mUsername;
     private EditText mStatusMessage;
@@ -35,7 +33,7 @@ public class ProfileActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        storage = Tarsier.app().getStorage();
+        mUserPreferences = Tarsier.app().getUserPreferences();
 
         mUsername = (EditText) findViewById(R.id.username);
         mStatusMessage = (EditText) findViewById(R.id.status_message);
@@ -97,15 +95,14 @@ public class ProfileActivity extends Activity {
     }
 
     private void refreshFields() {
-        String username = storage.getMyUsername();
+        String username = mUserPreferences.getUsername();
         mUsername.setText(username);
 
-        String statusMessage = storage.getMyMood();
+        String statusMessage = mUserPreferences.getStatusMessage();
         mStatusMessage.setText(statusMessage);
 
         // check existence of picture profile
-        String filePath = Environment.getExternalStorageDirectory() + "/"
-                + AddProfilePictureActivity.TEMP_PHOTO_FILE;
+        String filePath = mUserPreferences.getPicturePath();
 
         Bitmap profilePicture = BitmapFactory.decodeFile(filePath);
 
@@ -117,8 +114,8 @@ public class ProfileActivity extends Activity {
     }
 
     private void saveProfileInfos() {
-        storage.setMyUsername(mUsername.getText().toString());
-        storage.setMyMood(mStatusMessage.getText().toString());
+        mUserPreferences.setUsername(mUsername.getText().toString());
+        mUserPreferences.setStatusMessage(mStatusMessage.getText().toString());
     }
 
     /**
