@@ -39,7 +39,7 @@ public class ProfileActivityTest extends
 
         onView(withId(R.id.username))
             .check(matches(hasError(R.string.error_username_length)));
-    }*/
+    }
 
     public void testUsernameRejectedIfTooLong() {
         String text = "This username is longer than 36 characters";
@@ -85,6 +85,6 @@ public class ProfileActivityTest extends
 
         onView(withId(R.id.status_message))
                 .check(matches(hasError(R.string.error_status_message_length)));
-    }
+    }*/
 
 }
