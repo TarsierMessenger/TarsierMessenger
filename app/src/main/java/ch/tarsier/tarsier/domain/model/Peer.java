@@ -4,10 +4,11 @@ import ch.tarsier.tarsier.Tarsier;
 
 /**
  * @author xawill
+ * @author romac
  */
 public class Peer {
 
-    private long mId;
+    private PeerId mId;
 
     private String mName;
 
@@ -28,11 +29,11 @@ public class Peer {
         mStatusMessage = statusMessage;
     }
 
-    public long getId() {
+    public PeerId getId() {
         return mId;
     }
 
-    public void setId(long id) {
+    public void setId(PeerId id) {
         mId = id;
     }
 
@@ -66,5 +67,9 @@ public class Peer {
 
     public void setPicturePath(String picturePath) {
         mPicturePath = picturePath;
+    }
+
+    public boolean isUser() {
+        return false;
     }
 }
