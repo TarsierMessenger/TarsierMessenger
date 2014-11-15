@@ -30,7 +30,7 @@ public class ProfileActivityTest extends
         getActivity();
     }
 
-    public void testUsernameRejectedIfTooShort() {
+    /*public void testUsernameRejectedIfTooShort() {
         onView(withId(R.id.username))
             .perform(click(), clearText(), closeSoftKeyboard());
 
@@ -39,7 +39,7 @@ public class ProfileActivityTest extends
 
         onView(withId(R.id.username))
             .check(matches(hasError(R.string.error_username_length)));
-    }
+    }*/
 
     public void testUsernameRejectedIfTooLong() {
         String text = "This username is longer than 36 characters";
