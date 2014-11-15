@@ -28,16 +28,19 @@ public class Peer {
 
     // TODO: Remove when ChatRoomParticipantsActivity won't need it anymore.
     public Peer(String name, String statusMessage) {
+        this();
         mName = name;
         mStatusMessage = statusMessage;
     }
 
     public Peer(String name, long id) {
+        this();
         mName = name;
         mId = id;
     }
 
     public Peer(String name, PublicKey publicKey) {
+        this();
         mName = name;
         mPublicKey = publicKey;
     }
