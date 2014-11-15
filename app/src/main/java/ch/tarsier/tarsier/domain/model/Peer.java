@@ -37,6 +37,10 @@ public class Peer {
         mId = id;
     }
 
+    public byte[] getPublicKey() {
+        return mId.getBytes();
+    }
+
     public String getName() {
         return mName;
     }
