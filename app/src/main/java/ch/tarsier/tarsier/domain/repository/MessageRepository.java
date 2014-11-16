@@ -104,6 +104,10 @@ public class MessageRepository extends AbstractRepository {
     }
 
     private Message buildFromCursor(Cursor c) {
+        if (c == null) {
+            //TODO throw InvalidCursorException
+        }
+
         int chatId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID));
         String text = c.getString(c.getColumnIndex(Columns.Message.COLUMN_NAME_MSG));
         long senderId = c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
