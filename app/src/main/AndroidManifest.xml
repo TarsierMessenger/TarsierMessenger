@@ -61,7 +61,7 @@
             android:label="@string/title_activity_new_chatrooom" >
         </activity>
         <activity
-            android:name=".ui.activity.ChatRoomParticipantsActivity"
+            android:name=".ui.activity.ChatroomPeersActivity"
             android:label="@string/title_activity_chat_room_participants" >
         </activity>
         <activity

@@ -26,7 +26,7 @@ public class Peer {
         mPicturePath = Tarsier.app().getStorage().getMyPicturePath();
     }
 
-    // TODO: Remove when ChatRoomParticipantsActivity won't need it anymore.
+    // TODO: Remove when ChatroomParticipantsActivity won't need it anymore.
     public Peer(String name, String statusMessage) {
         this();
         mName = name;

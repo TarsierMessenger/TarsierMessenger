@@ -20,7 +20,7 @@ public class Chat {
     }
 
     /**
-     * @return the other peer in a private chat or the name of the chat room in a chat room.
+     * @return the other peer in a private chat or the name of the chatroom in a chatroom.
      */
     public String getTitle() {
         return isPrivate() ? getHost().getName() : mTitle;
