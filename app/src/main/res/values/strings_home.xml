@@ -6,4 +6,5 @@
     <string name="add_profile_picture_desc">Add a profile picture</string>
     <string name="error_username_whitespace">Username should not be composed of whitespace only</string>
     <string name="error_status_message_whitespace">Status message should not be composed of whitespace only</string>
+    <string name="error_lets_chat_toast">The username and/or the status message are/is invalid</string>
 </resources>
