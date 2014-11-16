@@ -7,29 +7,15 @@ import android.content.IntentFilter;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
-import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.protobuf.InvalidProtocolBufferException;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.network.client.TarsierClientConnection;
-import ch.tarsier.tarsier.network.client.TarsierMessagingClient;
-import ch.tarsier.tarsier.network.networkMessages.MessageType;
-import ch.tarsier.tarsier.network.networkMessages.TarsierWireProtos;
-import ch.tarsier.tarsier.network.server.TarsierServerConnection;
+import ch.tarsier.tarsier.network.server.TarsierMessagingManager;
 
 // Important note: This is currently an activity, it will later be a ran as a service so that it
 // can run in the background too.
@@ -37,29 +23,18 @@ import ch.tarsier.tarsier.network.server.TarsierServerConnection;
 
 public class WiFiDirectDebugActivity
     extends Activity
-    implements WifiP2pManager.ConnectionInfoListener,
-               WiFiDirectGroupList.DeviceClickListener,
-               MessageHandler,
-               Handler.Callback {
+    implements WiFiDirectGroupList.DeviceClickListener{
 
     public static final String TAG = "WiFiDirectDebugActivity";
-    public static final int SERVER_PORT = 8888;
-    public static final int MESSAGE_READ = 0x401;
-    public static final int MY_HANDLE = 0x402;
     private boolean isServer = false;
 
 
-    private WifiP2pManager.PeerListListener peerListListener;
     private IntentFilter mIntentFilter;
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
-    private WiFiDirectBroadcastReceiver mReceiver;
-    private Runnable handler = null;
+    private TarsierMessagingManager mReceiver;
 
     private WiFiDirectGroupList groupList;
-    private final ArrayList<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
-    private ChatRoom chatRoom;
-    private Handler mHandler = new Handler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,76 +52,9 @@ public class WiFiDirectDebugActivity
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
 
-        //Be careful, using peerList before initializing it
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this, peerListListener);
-        createPeerListener();
-        initiatePeerDiscovery();
-
-
-        mManager.requestPeers(mChannel, peerListListener);
         groupList = new WiFiDirectGroupList();
         getFragmentManager().beginTransaction()
                 .add(R.id.container, groupList, "groups").commit();
-
-    }
-
-    private void createPeerListener() {
-
-        peerListListener = new WifiP2pManager.PeerListListener() {
-            @Override
-            public void onPeersAvailable(WifiP2pDeviceList peersList) {
-                peers.clear();
-                peers.addAll(peersList.getDeviceList());
-
-                // If an AdapterView is backed by this data, notify it
-                // of the change.  For instance, if you have a ListView of available
-                // peers, trigger an update.
-                WiFiDirectGroupList fragment = (WiFiDirectGroupList) getFragmentManager()
-                        .findFragmentByTag("groups");
-                if (fragment != null) {
-                    WiFiDirectGroupList.WiFiDevicesAdapter adapter =
-                            (WiFiDirectGroupList.WiFiDevicesAdapter) fragment.getListAdapter();
-
-                    adapter.clear();
-                    adapter.addAll(peers);
-                    adapter.notifyDataSetChanged();
-                    Log.d(TAG, "Peer list updated: "+ peers.toString());
-                    if (peers.size() == 0) {
-                        Log.d(TAG, "No devices found");
-                    }
-                }
-            }
-        };
-    }
-
-    @Override
-    protected void onRestart() {
-        Fragment frag = getFragmentManager().findFragmentByTag("groups");
-        if (frag != null) {
-            getFragmentManager().beginTransaction().remove(frag).commit();
-        }
-        super.onRestart();
-    }
-
-
-    public void initiatePeerDiscovery() {
-        mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-                Log.d(TAG, "Peer discovery initiation succeeded");
-            }
-
-            @Override
-            public void onFailure(int reasonCode) {
-                if (reasonCode == WifiP2pManager.P2P_UNSUPPORTED) {
-                    Log.d(TAG, "Peer discovery initiation failed. P2P isn't supported on this device.");
-                } else if (reasonCode == WifiP2pManager.BUSY) {
-                    Log.d(TAG, "Peer discovery initiation failed. The system is too busy to process the request.");
-                } else if (reasonCode == WifiP2pManager.ERROR) {
-                    Log.d(TAG, "Peer discovery initiation failed. The operation failed due to an internal error.");
-                }
-            }
-        });
 
 
     }
@@ -201,6 +109,28 @@ public class WiFiDirectDebugActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    protected void onRestart() {
+        Fragment frag = getFragmentManager().findFragmentByTag("groups");
+        if (frag != null) {
+            getFragmentManager().beginTransaction().remove(frag).commit();
+        }
+        super.onRestart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mReceiver = new TarsierMessagingManager(this,mManager,mChannel,getMainLooper());
+        registerReceiver(mReceiver, mIntentFilter);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(mReceiver);
+    }
+
     @Override
     protected void onStop() {
         if (mManager != null && mChannel != null) {
@@ -217,73 +147,4 @@ public class WiFiDirectDebugActivity
         super.onStop();
     }
 
-    @Override
-    public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
-        /*
-        * The group owner accepts connections using a server socket and then spawns a
-        * client socket for every client.
-        */
-
-        if(handler == null) {
-            if (p2pInfo.isGroupOwner) {
-                Log.d(TAG, "Connected as group owner");
-                try {
-
-                 handler = new TarsierServerConnection(((MessageHandler)this).getHandler());
-                 handler.run();
-
-                } catch (IOException e) {
-                    Log.d(TAG,
-                            "Failed to create a server thread - " + e.getMessage());
-                    return;
-                }
-            } else {
-                Log.d(TAG, "Connected as peer");
-                handler = new TarsierClientConnection(
-                        ((MessageHandler) this).getHandler(),
-                        p2pInfo.groupOwnerAddress);
-                handler.run();
-            }
-        }
-
-        chatRoom = new ChatRoom();
-        chatRoom.setMessengerDelegate((MessagingInterface)handler);
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container, chatRoom).commit();
-
-    }
-
-    public Handler getHandler() {
-        return mHandler;
-    }
-
-    @Override
-    public boolean handleMessage(Message message) {
-
-        switch (message.what) {
-            case MessageType.MESSAGE_TYPE_HELLO:
-
-                break;
-            case MessageType.MESSAGE_TYPE_PEER_LIST:
-
-                break;
-            case MessageType.MESSAGE_TYPE_PRIVATE:
-
-                break;
-            case MessageType.MESSAGE_TYPE_PUBLIC:
-                TarsierWireProtos.TarsierPublicMessage publicMessage;
-                try {
-                    publicMessage = TarsierWireProtos.TarsierPublicMessage.parseFrom((byte[])message.obj);
-                    (chatRoom).pushMessage("Buddy: " + publicMessage.getPlainText());
-                } catch (InvalidProtocolBufferException e) {
-                    e.printStackTrace();
-                }
-
-            break;
-            case (MY_HANDLE):
-                Object obj = message.obj;
-                (chatRoom).setMessengerDelegate((MessagingInterface) obj);
-        }
-        return true;
-    }
 }
