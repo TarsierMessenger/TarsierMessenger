@@ -51,6 +51,15 @@ public class HomeActivity extends Activity {
         mUsername.addTextChangedListener(new EditTextWatcher());
         mStatusMessage.addTextChangedListener(new EditTextWatcher());
 
+        // TODO Have a check on the mUserPreferences to know if username and status message already set or not
+        if (!mUserPreferences.getUsername().equals("")
+            && !mUserPreferences.getStatusMessage().equals("")) {
+
+            Intent chatListIntent = new Intent(this, ChatListActivity.class);
+            startActivity(chatListIntent);
+            this.finish();
+        }
+
         refreshFields();
     }
 
@@ -67,10 +76,15 @@ public class HomeActivity extends Activity {
     public void onClickLetsChat(View view) {
         //create intent with username and launch the list of rooms
         if (validateUsername()) {
-            // TODO: continue
             saveProfileInfos();
+            //remove this activity from the stack.
+            this.finish();
+            // FIXME: should go to NearbyPeer the first time the app is used
+            Intent nearbyIntent = new Intent(this, ChatListActivity.class);
+            //Intent nearbyIntent = new Intent(this, NearbyPeersActivity.class);
+            startActivity(nearbyIntent);
         } else {
-            // TODO: show toast with information on invalidity
+            Toast.makeText(this, getString(R.string.error_lets_chat_toast), Toast.LENGTH_SHORT).show();
         }
     }
 
