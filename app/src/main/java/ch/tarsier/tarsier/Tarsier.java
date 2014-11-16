@@ -4,6 +4,7 @@ import android.app.Application;
 
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.storage.StorageAccess;
@@ -21,6 +22,7 @@ public class Tarsier extends Application {
 
     private PeerRepository mPeerRepository;
     private ChatRepository mChatRepository;
+    private MessageRepository mMessageRepository;
 
     public static Tarsier app() {
         return app;
@@ -68,5 +70,13 @@ public class Tarsier extends Application {
         }
 
         return mChatRepository;
+    }
+
+    public MessageRepository getMessageRepository() {
+        if (mMessageRepository == null) {
+            mMessageRepository = new MessageRepository(getDatabase());
+        }
+
+        return mMessageRepository;
     }
 }
