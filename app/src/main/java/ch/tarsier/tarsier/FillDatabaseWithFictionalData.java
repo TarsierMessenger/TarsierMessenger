@@ -217,23 +217,61 @@ public class FillDatabaseWithFictionalData {
         long time5 = time;
         long chat5Id = chat5.getChatId();
 
-        messagesChat5.add(new Message(chat5id, "la fête?", amirrezaId, time5));
+        messagesChat5.add(new Message(chat5Id, "la fête?", amirrezaId, time5));
         time5 -= random.nextInt(oneHour);
-        messagesChat5.add(new Message(chat5id, "oui", gabrielId, time5));
+        messagesChat5.add(new Message(chat5Id, "oui", gabrielId, time5));
         time5 -= random.nextInt(oneHour);
-        messagesChat5.add(new Message(chat5id, "La fête?", gabrielId, time5));
+        messagesChat5.add(new Message(chat5Id, "La fête?", gabrielId, time5));
         time5 -= random.nextInt(oneHour);
-        messagesChat5.add(new Message(chat5id, "oui", amirrezaId, time5));
+        messagesChat5.add(new Message(chat5Id, "oui", amirrezaId, time5));
         time5 -= random.nextInt(oneHour);
-        messagesChat5.add(new Message(chat5id, "La fête?", amirrezaId, time5));
+        messagesChat5.add(new Message(chat5Id, "La fête?", amirrezaId, time5));
         time5 -= random.nextInt(oneHour);
-        messagesChat5.add(new Message(chat5id, "oui", gabrielId, time5));
+        messagesChat5.add(new Message(chat5Id, "oui", gabrielId, time5));
         time5 -= random.nextInt(oneHour);
-        messagesChat5.add(new Message(chat5id, "La fête?", gabrielId, time5));
+        messagesChat5.add(new Message(chat5Id, "La fête?", gabrielId, time5));
         time5 -= random.nextInt(oneHour);
-        messagesChat5.add(new Message(chat5id, "oui", amirrezaId, time5));
+        messagesChat5.add(new Message(chat5Id, "oui", amirrezaId, time5));
 
         for (Message m : messagesChat5) {
+            messageRepository.insert(m);
+        }
+
+        //Generate the messages for the sixth chat
+        ArrayList<Message> messagesChat6 = new Arraylist<Message>(12);
+        long time6 = time;
+        long chat6Id = chat6.getChatId();
+
+        messagesChat6.add(new Message(chat6Id, "Yo, tu peux m'envoyer pleins de messages pour tester l'affichage de l'app stp?", xavierId, time6));
+        time6 -= random.nextInt(oneDay);
+        messagesChat6.add(new Message(chat6Id, "Ok!", gabrielId, time6));
+        time6 -= random.nextInt(oneMinute);
+        messagesChat6.add(new Message(chat6Id, "On va commencer avec une très long message:", gabrielId, time6));
+        time6 -= random.nextInt(oneMinute);
+        messagesChat6.add(new Message(chat6Id, "Quel est votre secret ?
+                Pour faire une bonne purée ce qui est pas mal quand on cuit les pommes de terre
+                C'est de mettre du laurier et du thym pour parfumer en amont
+                Après tu peux ajouter n'importe quel épice
+                Tu peux mettre du safran, du curcuma, du gingembre
+                Ou une gousse d'ail une fois que les patates sont pétries", gabrielId, time6));
+        time6 -= random.nextInt(oneMinute);
+        messagesChat6.add(new Message(chat6Id, "Salut c'est cool en force!", gabrielId, time6));
+        time6 -= random.nextInt(oneMinute);
+        messagesChat6.add(new Message(chat6Id, "1", gabrielId, time6));
+        time6 -= random.nextInt(oneMinute);
+        messagesChat6.add(new Message(chat6Id, "2", gabrielId, time6));
+        time6 -= random.nextInt(oneMinute);
+        messagesChat6.add(new Message(chat6Id, "3", gabrielId, time6));
+        time6 -= random.nextInt(oneMinute);
+        messagesChat6.add(new Message(chat6Id, "4", gabrielId, time6));
+        time6 -= random.nextInt(oneMinute);
+        messagesChat6.add(new Message(chat6Id, "5", gabrielId, time6));
+        time6 -= random.nextInt(oneMinute);
+        messagesChat6.add(new Message(chat6Id, "Dis moi si tu veux plus de trucs...", gabrielId, time6));
+        time6 -= random.nextInt(oneMinute);
+        messagesChat6.add(new Message(chat6Id, "J'ai pas trop d'inspirations^^", gabrielId, time6));
+
+        for (Message m : messagesChat6) {
             messageRepository.insert(m);
         }
 
