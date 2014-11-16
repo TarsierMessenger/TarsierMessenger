@@ -1,6 +1,5 @@
 package ch.tarsier.tarsier.test;
 
-import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;
 
 import ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity;
@@ -12,7 +11,6 @@ public class AddProfilePictureActivityTest extends ActivityInstrumentationTestCa
 
     private static final int BITMAP_RECT_HEIGHT = 640;
     private static final int BITMAP_RECT_WIDTH = 480;
-
 
     public AddProfilePictureActivityTest() {
         super(AddProfilePictureActivity.class);

@@ -94,6 +94,7 @@ public class AddProfilePictureActivity extends Activity {
         } catch (ActivityNotFoundException anfe) {
             // in case the intent is not supported by the device, do nothing. the image
             // is still to be stored and cropped. Toast should appear
+            Toast.makeText(this, getString(R.string.error_toast_no_crop),Toast.LENGTH_SHORT).show();;
         }
     }
 
@@ -280,8 +281,7 @@ public class AddProfilePictureActivity extends Activity {
         } catch (ActivityNotFoundException anfe) {
             // in case the intent is not supported by the device
             // do nothing. the image is still to be cropped in the center
-//            anfe.printStackTrace();
-//            throw new AddProfilePictureException();
+            Toast.makeText(this, getString(R.string.error_toast_no_crop),Toast.LENGTH_SHORT).show();;
         }
     }
 

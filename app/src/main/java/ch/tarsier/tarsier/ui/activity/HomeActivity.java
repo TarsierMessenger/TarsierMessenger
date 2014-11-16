@@ -44,21 +44,21 @@ public class HomeActivity extends Activity {
 
         mUserPreferences = Tarsier.app().getUserPreferences();
 
-        mUsername = (EditText) findViewById(R.id.username);
-        mStatusMessage = (EditText) findViewById(R.id.status_message);
+        mUsername = (EditText) findViewById(R.id.username_home);
+        mStatusMessage = (EditText) findViewById(R.id.status_message_home);
         mProfilePicture = (ImageView) findViewById(R.id.picture);
 
         mUsername.addTextChangedListener(new EditTextWatcher());
         mStatusMessage.addTextChangedListener(new EditTextWatcher());
 
         // TODO Have a check on the mUserPreferences to know if username and status message already set or not
-        if (!mUserPreferences.getUsername().equals("")
-            && !mUserPreferences.getStatusMessage().equals("")) {
-
-            Intent chatListIntent = new Intent(this, ChatListActivity.class);
-            startActivity(chatListIntent);
-            this.finish();
-        }
+//        if (!mUserPreferences.getUsername().equals("")
+//            && !mUserPreferences.getStatusMessage().equals("")) {
+//
+//            Intent chatListIntent = new Intent(this, ChatListActivity.class);
+//            startActivity(chatListIntent);
+//            this.finish();
+//        }
 
         refreshFields();
     }
@@ -159,6 +159,7 @@ public class HomeActivity extends Activity {
 
             case R.id.action_chats_list:
                 displayChatsListActivity();
+
                 return true;
 
             default:
@@ -212,16 +213,12 @@ public class HomeActivity extends Activity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-            enableStartButton(chatButtonCanBeEnabled());
+
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
-
-        }
-
-        private boolean chatButtonCanBeEnabled() {
-            return validateFields();
+            enableStartButton(validateFields());
         }
     }
 

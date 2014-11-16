@@ -26,6 +26,13 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
         super(HomeActivity.class);
     }
 
+    private static final String STATUS_TOO_LONG = "A very long status message that should not pass "
+                                                   + "as it clearly has more than 50 characters";
+    private static final String WHITE_SPACE = "  \n ";
+    private static final String USERNAME_TOO_LONG = "This is longer that the accepted value of 36 characters";
+    private static final String USERNAME_OK = "Benpac";
+    private static final String STATUS_OK = "My status message is ok";
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -33,42 +40,29 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
     }
 
     public void testStartButtonClickability() {
-<<<<<<< HEAD
-        onView(withId(R.id.lets_chat)).perform(click());
-        //nothing should happen
-        onView(withId(R.id.username)).perform(clearText(), typeText("benpac"));
-        onView(withId(R.id.lets_chat)).perform(click());
-        //nothing should happen
-        onView(withId(R.id.status_message)).perform(clearText(), typeText("my status"), closeSoftKeyboard());
-=======
         emptyUsernameAndStatus();
 
         onView(withId(R.id.lets_chat)).check(matches(not(isClickable())));
 
-        onView(withId(R.id.username)).perform(typeText("benpac"));
+        onView(withId(R.id.username_home)).perform(typeText(USERNAME_OK), closeSoftKeyboard());
         onView(withId(R.id.lets_chat)).check(matches(not(isClickable())));
 
-        onView(withId(R.id.status_message)).perform(typeText("my status"), closeSoftKeyboard());
->>>>>>> add cropping of rectangle if crop intent not present on device.
+        onView(withId(R.id.status_message_home)).perform(typeText(STATUS_OK), closeSoftKeyboard());
         onView(withId(R.id.lets_chat)).check(matches(isClickable()));
 
-        onView(withId(R.id.username)).perform(clearText(), closeSoftKeyboard());
-<<<<<<< HEAD
-        onView(withId(R.id.lets_chat)).perform(click());
-        // nothing should happen
-        onView(withId(R.id.username)).perform(clearText(), typeText("Benpac"), closeSoftKeyboard());
-=======
+        onView(withId(R.id.username_home)).perform(clearText(), closeSoftKeyboard());
         onView(withId(R.id.lets_chat)).check(matches(not(isClickable())));
 
-        onView(withId(R.id.username)).perform(typeText("Benpac"), closeSoftKeyboard());
->>>>>>> add cropping of rectangle if crop intent not present on device.
+        onView(withId(R.id.username_home)).perform(typeText(USERNAME_OK), closeSoftKeyboard());
         onView(withId(R.id.lets_chat)).check(matches(isClickable()));
 
-        onView(withId(R.id.status_message)).perform(clearText(), typeText("more than 50 characters string stringslalalalalalalala"), closeSoftKeyboard());
+        onView(withId(R.id.status_message_home)).perform(clearText(),
+                                                    typeText(STATUS_TOO_LONG),
+                                                    closeSoftKeyboard());
         onView(withId(R.id.lets_chat)).check(matches(not(isClickable())));
 
-        onView(withId(R.id.status_message)).perform(clearText(), typeText("my status"), closeSoftKeyboard());
-        onView(withId(R.id.username)).perform(clearText(), typeText("more than 36 characters string strings"), closeSoftKeyboard());
+        onView(withId(R.id.status_message_home)).perform(clearText(), typeText(STATUS_OK), closeSoftKeyboard());
+        onView(withId(R.id.username_home)).perform(clearText(), typeText(USERNAME_TOO_LONG), closeSoftKeyboard());
         onView(withId(R.id.lets_chat)).check(matches(not(isClickable())));
     }
 
@@ -85,63 +79,42 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
     }
 
     public void testUsernameTooShort() {
-<<<<<<< HEAD
-        onView(withId(R.id.username)).perform(clearText());
-=======
+
         emptyUsernameAndStatus();
->>>>>>> add cropping of rectangle if crop intent not present on device.
-        onView(withId(R.id.username)).perform(typeText("benpac"), closeSoftKeyboard());
-        onView(withId(R.id.username)).perform(clearText());
-        onView(withId(R.id.username)).check(matches(hasError(R.string.error_username_length)));
-        onView(withId(R.id.username)).perform(clearText(), typeText("  "), closeSoftKeyboard());
-        onView(withId(R.id.username)).check(matches(hasError(R.string.error_username_whitespace)));
+        onView(withId(R.id.username_home)).perform(typeText(USERNAME_OK), closeSoftKeyboard());
+        onView(withId(R.id.username_home)).perform(clearText());
+        onView(withId(R.id.username_home)).check(matches(hasError(R.string.error_username_length)));
+        onView(withId(R.id.username_home)).perform(clearText(), typeText(WHITE_SPACE), closeSoftKeyboard());
+        onView(withId(R.id.username_home)).check(matches(hasError(R.string.error_username_whitespace)));
     }
 
     public void testUsernameTooLong() {
-<<<<<<< HEAD
-        onView(withId(R.id.username)).perform(
-                clearText(),
-                typeText("This is longer that the accepted value of 36 characters"),
-=======
         emptyUsernameAndStatus();
-        onView(withId(R.id.username)).perform(typeText("Benpac benpac benpac this is longer that the accepted value of 36 caracters"),
->>>>>>> add cropping of rectangle if crop intent not present on device.
+        onView(withId(R.id.username_home)).perform(
+                typeText(USERNAME_TOO_LONG),
                 closeSoftKeyboard());
-        onView(withId(R.id.username)).check(matches(hasError(R.string.error_username_length)));
+        onView(withId(R.id.username_home)).check(matches(hasError(R.string.error_username_length)));
     }
 
     public void testStatusTooShort() {
-<<<<<<< HEAD
-        onView(withId(R.id.status_message)).perform(clearText(), typeText("benpac"), closeSoftKeyboard());
-=======
         emptyUsernameAndStatus();
-        onView(withId(R.id.status_message)).perform(typeText("benpac"), closeSoftKeyboard());
->>>>>>> add cropping of rectangle if crop intent not present on device.
-        onView(withId(R.id.status_message)).perform(clearText());
-        onView(withId(R.id.status_message)).check(matches(hasError(R.string.error_status_message_length)));
-        onView(withId(R.id.status_message)).perform(clearText(), typeText("  "), closeSoftKeyboard());
-        onView(withId(R.id.status_message)).check(matches(hasError(R.string.error_status_message_whitespace)));
+        onView(withId(R.id.status_message_home)).perform(typeText(USERNAME_OK), closeSoftKeyboard());
+        onView(withId(R.id.status_message_home)).perform(clearText());
+        onView(withId(R.id.status_message_home)).check(matches(hasError(R.string.error_status_message_length)));
+        onView(withId(R.id.status_message_home)).perform(clearText(), typeText(WHITE_SPACE), closeSoftKeyboard());
+        onView(withId(R.id.status_message_home)).check(matches(hasError(R.string.error_status_message_whitespace)));
     }
 
     public void testStatusTooLong() {
-<<<<<<< HEAD
-        onView(withId(R.id.status_message)).perform(
+        onView(withId(R.id.status_message_home)).perform(
                 clearText(),
-                typeText("A very long status message that should not pass "
-                       + "as it clearly has more than 50 characters"),
+                typeText(STATUS_TOO_LONG),
                 closeSoftKeyboard());
-=======
-        emptyUsernameAndStatus();
-        onView(withId(R.id.status_message)).perform(typeText("A very long status message that should not pass "
-                                                            + "as it clearly has more than 50 caracters"), closeSoftKeyboard());
->>>>>>> add cropping of rectangle if crop intent not present on device.
-        onView(withId(R.id.status_message)).check(matches(hasError(R.string.error_status_message_length)));
+        onView(withId(R.id.status_message_home)).check(matches(hasError(R.string.error_status_message_length)));
     }
 
     private void emptyUsernameAndStatus() {
-        onView(withId(R.id.status_message)).perform(clearText());
-        onView(withId(R.id.username)).perform(clearText());
+        onView(withId(R.id.status_message_home)).perform(clearText());
+        onView(withId(R.id.username_home)).perform(clearText());
     }
-
-
 }
