@@ -5,8 +5,6 @@ import android.test.AndroidTestCase;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-
 
 import ch.tarsier.tarsier.util.DateUtil;
 
@@ -58,4 +56,3 @@ public class DateUtilTest extends AndroidTestCase {
         assertEquals("15:03",sentHour);
     }
 }
-
