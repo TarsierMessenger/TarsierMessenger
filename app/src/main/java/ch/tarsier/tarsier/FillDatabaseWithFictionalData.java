@@ -359,8 +359,62 @@ public class FillDatabaseWithFictionalData {
             messageRepository.insert(m);
         }
 
+        //Generate the messages for the tenth chat
+        ArrayList<Message> messagesChat10 = new ArrayList<Message>(24);
+        long time10 = time - oneDay;
+        long chat10Id = chat10.getChatId();
 
-         */
+        messagesChat10.add(new Message(chat10Id, "Quel est le meilleur bar?", gabrielId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "sat", amirrezaId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "sat", benjaminId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "sat", fredericId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "sat", marinId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "sat", romainId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "sat", xavierId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "sat", yanId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "Où est-ce qu'on sert de bonnes bières?", gabrielId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", amirrezaId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", benjaminId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", fredericId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", marinId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", romainId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", xavierId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", yanId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "Où est-ce qu'on va ce soir?", gabrielId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", amirrezaId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", benjaminId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", fredericId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", marinId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", romainId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", xavierId, time10));
+        time10 += random.nextInt(oneMinute);
+        messagesChat10.add(new Message(chat10Id, "à sat", yanId, time10));
 
+        for (Message m : messagesChat10) {
+            messageRepository.insert(m);
+        }
+        */
     }
 }
