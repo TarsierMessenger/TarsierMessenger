@@ -5,10 +5,6 @@ package ch.tarsier.tarsier.exception;
  */
 public class InvalidModelException extends Exception {
 
-    public InvalidModelException() {
-        super();
-    }
-
     public InvalidModelException(String detailMessage) {
         super(detailMessage);
     }

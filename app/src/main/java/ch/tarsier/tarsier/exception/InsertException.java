@@ -5,10 +5,6 @@ package ch.tarsier.tarsier.exception;
  */
 public class InsertException extends Exception {
 
-    public InsertException() {
-        super();
-    }
-
     public InsertException(String detailMessage) {
         super(detailMessage);
     }

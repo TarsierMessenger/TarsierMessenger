@@ -5,10 +5,6 @@ package ch.tarsier.tarsier.exception;
  */
 public class NoSuchModelException extends Exception {
 
-    public NoSuchModelException() {
-        super();
-    }
-
     public NoSuchModelException(String detailMessage) {
         super(detailMessage);
     }
