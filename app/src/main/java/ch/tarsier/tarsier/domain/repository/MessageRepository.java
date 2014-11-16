@@ -37,12 +37,12 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public Message findById(long id) throws NoSuchModelException, InvalidCursorException {
-        String selection = COLUMN_ID + " = " + id;
+        String whereClause = COLUMN_ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
                 COLUMNS,
-                selection,
+                whereClause,
                 null, null, null, null
         );
 
@@ -55,12 +55,12 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public void insert(Message message) throws InsertException {
-        ContentValues contentValues = getContentValuesForMessage(message);
+        ContentValues values = getValuesForMessage(message);
 
         long rowId = getWritableDatabase().insert(
                 TABLE_NAME,
                 null,
-                contentValues
+                values
         );
 
         if (rowId == -1) {
@@ -75,14 +75,14 @@ public class MessageRepository extends AbstractRepository {
             throw new InvalidModelException("Message's id invalid");
         }
 
-        ContentValues contentValues = getContentValuesForMessage(message);
+        ContentValues values = getValuesForMessage(message);
 
-        String selection = COLUMN_ID + " = " + message.getId();
+        String whereClause = COLUMN_ID + " = " + message.getId();
 
         long rowUpdated = getWritableDatabase().update(
                 TABLE_NAME,
-                contentValues,
-                selection,
+                values,
+                whereClause,
                 null
         );
 
@@ -96,11 +96,11 @@ public class MessageRepository extends AbstractRepository {
             throw new InvalidModelException("Message's id invalid");
         }
 
-        String selection = COLUMN_ID + " = " + message.getId();
+        String whereClause = COLUMN_ID + " = " + message.getId();
 
         long rowDeleted = getWritableDatabase().delete(
                 TABLE_NAME,
-                selection,
+                whereClause,
                 null
         );
 
@@ -131,14 +131,14 @@ public class MessageRepository extends AbstractRepository {
         return message;
     }
 
-    private ContentValues getContentValuesForMessage(Message message) {
-        ContentValues contentValues = new ContentValues();
+    private ContentValues getValuesForMessage(Message message) {
+        ContentValues values = new ContentValues();
 
-        contentValues.put(Columns.Message.COLUMN_NAME_CHAT_ID, message.getChatID());
-        contentValues.put(Columns.Message.COLUMN_NAME_MSG, message.getText());
-        contentValues.put(Columns.Message.COLUMN_NAME_SENDER_ID, message.getPeerId());
-        contentValues.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());
+        values.put(Columns.Message.COLUMN_NAME_CHAT_ID, message.getChatID());
+        values.put(Columns.Message.COLUMN_NAME_MSG, message.getText());
+        values.put(Columns.Message.COLUMN_NAME_SENDER_ID, message.getPeerId());
+        values.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());
 
-        return contentValues;
+        return values;
     }
 }
