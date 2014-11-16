@@ -7,6 +7,12 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Message;
+import ch.tarsier.tarsier.exception.DeleteException;
+import ch.tarsier.tarsier.exception.InsertException;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.exception.InvalidModelException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
+import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
  * @author gluthier
@@ -30,7 +36,7 @@ public class MessageRepository extends AbstractRepository {
         super(database);
     }
 
-    public Message findById(long id) {
+    public Message findById(long id) throws NoSuchModelException, InvalidCursorException {
         String selection = COLUMN_ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
@@ -42,13 +48,13 @@ public class MessageRepository extends AbstractRepository {
 
         if (cursor == null) {
             //TODO check that query() return null if it failed to query
-            //TODO throw NoSuchModelException
+            throw new NoSuchModelException("Cursor is null");
         }
 
         return buildFromCursor(cursor);
     }
 
-    public void insert(Message message) {
+    public void insert(Message message) throws InsertException {
         ContentValues contentValues = getContentValuesForMessage(message);
 
         long rowId = getWritableDatabase().insert(
@@ -58,15 +64,15 @@ public class MessageRepository extends AbstractRepository {
         );
 
         if (rowId == -1) {
-            //TODO throw InsertException
+            throw new InsertException("INSERT operation failed");
         }
 
         message.setId(rowId);
     }
 
-    public void update(Message message) {
+    public void update(Message message) throws InvalidModelException, UpdateException {
         if (message.getId() < 0) {
-            //TODO throw InvalidModelException
+            throw new InvalidModelException("Message's id invalid");
         }
 
         ContentValues contentValues = getContentValuesForMessage(message);
@@ -81,13 +87,13 @@ public class MessageRepository extends AbstractRepository {
         );
 
         if (rowUpdated == 0) {
-            //TODO throw UpdateException
+            throw new UpdateException("UPDATE operation failed");
         }
     }
 
-    public void delete(Message message) {
+    public void delete(Message message) throws InvalidModelException, DeleteException {
         if (message.getId() < 0) {
-            //TODO throw InvalidModelException
+            throw new InvalidModelException("Message's id invalid");
         }
 
         String selection = COLUMN_ID + " = " + message.getId();
@@ -99,13 +105,13 @@ public class MessageRepository extends AbstractRepository {
         );
 
         if (rowDeleted == 0) {
-           //TODO throw DeleteException
+           throw new DeleteException("DELETE operation failed");
         }
     }
 
-    private Message buildFromCursor(Cursor c) {
+    private Message buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
-            //TODO throw InvalidCursorException
+            throw new InvalidCursorException("Cursor is null");
         }
 
         int chatId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID));
