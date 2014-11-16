@@ -1,7 +1,10 @@
 package ch.tarsier.tarsier.domain.model;
 
+import ch.tarsier.tarsier.Tarsier;
+
 /**
  * @author McMoudi
+ * @author gluthier
  */
 public class Message {
 
@@ -10,6 +13,8 @@ public class Message {
     private long mPeerId;
     private long mDateTime;
     private boolean mIsSentByUser;
+    // mId is set when a Message is inserted into the database
+    private long mId;
 
     /**
      * Create a message sent by a peer
@@ -37,7 +42,7 @@ public class Message {
     public Message(int chatID, String text, long dateTime) {
         mChatId = chatID;
         mText = text;
-        // mPeerId = Tarsier.app().getUserPreferences().getId();
+        mPeerId = Tarsier.app().getUserPreferences().getId();
         mIsSentByUser = true;
         mDateTime = dateTime;
     }
@@ -64,5 +69,9 @@ public class Message {
 
     public boolean isSentByUser() {
         return mIsSentByUser;
+    }
+
+    public void setId(long newId) {
+        mId = newId;
     }
 }
