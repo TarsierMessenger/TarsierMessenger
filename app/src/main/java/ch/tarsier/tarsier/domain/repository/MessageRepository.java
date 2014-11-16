@@ -12,13 +12,31 @@ import ch.tarsier.tarsier.domain.model.Message;
  */
 public class MessageRepository extends AbstractRepository {
 
+    private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
+
+    private static final String[] COLUMNS = new String[] {
+            Columns.Message._ID,
+            Columns.Message.COLUMN_NAME_MSG,
+            Columns.Message.COLUMN_NAME_DATETIME,
+            Columns.Message.COLUMN_NAME_SENDER_ID,
+            Columns.Message.COLUMN_NAME_CHAT_ID
+    };
+
     public MessageRepository(Database database) {
         super(database);
     }
 
     public Message findById(long id) {
-        //TODO
-        return null;
+        String selection = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + id;
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                COLUMNS,
+                selection,
+                null, null, null, null
+        );
+
+        return buildFromCursor(cursor);
     }
 
     public void insert(Message message) {
@@ -32,7 +50,6 @@ public class MessageRepository extends AbstractRepository {
     public void delete(Message message) {
         //TODO
     }
-
 
     private Message buildFromCursor(Cursor c) {
         int chatId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID));
