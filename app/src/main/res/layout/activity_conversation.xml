@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/message_to_send"
             android:src="@drawable/send_message_icon"
-            android:onClick="sendMessage" />
+            android:onClick="onClickSend" />
     </RelativeLayout>
 
 </LinearLayout>
