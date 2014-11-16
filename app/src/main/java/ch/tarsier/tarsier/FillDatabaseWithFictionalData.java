@@ -334,6 +334,32 @@ public class FillDatabaseWithFictionalData {
             messageRepository.insert(m);
         }
 
+        //Generate the messages for the ninth chat
+        ArrayList<Message> messagesChat9 = new ArrayList<Message>(8);
+        long time9 = time - oneDay;
+        long chat9Id = chat9.getChatId();
+
+        messagesChat9.add(new Message(chat9Id, "salut", benjaminId, time9));
+        time9 += random.nextInt(oneHour);
+        messagesChat9.add(new Message(chat9Id, "salut", benjaminId, time9));
+        time9 += random.nextInt(oneHour);
+        messagesChat9.add(new Message(chat9Id, "salut", benjaminId, time9));
+        time9 += random.nextInt(oneHour);
+        messagesChat9.add(new Message(chat9Id, "salut", benjaminId, time9));
+        time9 += random.nextInt(oneMinute);
+        messagesChat9.add(new Message(chat9Id, "Sympa le vent...", benjaminId, time9));
+        time9 += random.nextInt(oneHour);
+        messagesChat9.add(new Message(chat9Id, "dsl", gabrielId, time9));
+        time9 += random.nextInt(oneMinute);
+        messagesChat9.add(new Message(chat9Id, "J'étais entrain de bosser", gabrielId, time9));
+        time9 += random.nextInt(oneMinute);
+        messagesChat9.add(new Message(chat9Id, "Alors ça!", benjaminId, time9));
+
+        for (Message m : messagesChat9) {
+            messageRepository.insert(m);
+        }
+
+
          */
 
     }
