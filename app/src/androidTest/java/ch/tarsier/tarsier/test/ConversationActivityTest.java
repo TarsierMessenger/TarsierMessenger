@@ -45,4 +45,19 @@ public class ConversationActivityTest extends ActivityInstrumentationTestCase2<C
 
     }
     */
+
+    /*
+    test if the view go to the last message after scrolling and then send a message
+
+    public void testScrollToCurrentSendMessageButton() {
+
+    }
+     */
+
+    /*
+    test if the dateSeparator is actually visible when we scroll
+    public void testDateSeparatorOnScroll() {
+
+    }
+     */
 }
