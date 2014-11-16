@@ -16,6 +16,8 @@ public class MessageRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
 
+    private static final String COLUMN_ID = "_id";
+
     private static final String[] COLUMNS = new String[] {
             Columns.Message._ID,
             Columns.Message.COLUMN_NAME_MSG,
@@ -29,7 +31,7 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public Message findById(long id) {
-        String selection = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + id;
+        String selection = COLUMN_ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -78,17 +80,18 @@ public class MessageRepository extends AbstractRepository {
         contentValues.put(Columns.Message.COLUMN_NAME_SENDER_ID, message.getPeerId());
         contentValues.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());
 
+        String selection = COLUMN_ID + " = " + message.getId();
+
         long rowId = getWritableDatabase().update(
                 TABLE_NAME,
                 contentValues,
-                null, null
+                selection,
+                null
         );
 
         if (rowId == -1) {
             //TODO throw UpdateException
         }
-
-        
     }
 
     public void delete(Message message) {
