@@ -2,6 +2,16 @@
 <resources>
     <string name="app_name">Tarsier</string>
 
+    <!--Activity Titles-->
+    <string name="title_activity_add_profile_picture">Add a profile picture</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
+    <string name="title_activity_preferences">Settings</string>
+    <string name="title_activity_chat_room_participants">Chat Room Participants</string>
+    <string name="title_activity_conversation">Conversation</string>
+    <string name="title_activity_new_chatrooom">New Chatroom</string>
+    <string name="title_activity_chat_list">Chats</string>
+
     <!--Devices lists-->
     <string name="finding_service">Finding local peers</string>
 <!--
@@ -24,16 +34,6 @@
     <string name="add_profile_picture_desc">Add a profile picture</string>
     <string name="error_username_whitespace">Username should not be composed of whitespace only</string>
     <string name="error_status_message_whitespace">Status message should not be composed of whitespace only</string>
-
-    &lt;!&ndash;Activity Titles&ndash;&gt;
-    <string name="title_activity_add_profile_picture">Add a profile picture</string>
-    <string name="title_activity_profile">Profile</string>
-    <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
-    <string name="title_activity_preferences">Settings</string>
-    <string name="title_activity_chat_room_participants">Chat Room Participants</string>
-    <string name="title_activity_conversation">Conversation</string>
-    <string name="title_activity_new_chatrooom">New Chatroom</string>
-    <string name="title_activity_chat_list">Chats</string>
 
     &lt;!&ndash;Profile&ndash;&gt;
     <string name="add_from_existing">Add from your gallery</string>
