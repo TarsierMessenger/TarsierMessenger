@@ -275,8 +275,8 @@ public class FillDatabaseWithFictionalData {
             messageRepository.insert(m);
         }
 
-        //Generate th emessages for the seventh chat
-        ArrayList<Message> messagesChat7 = new ArrayList<Message>();
+        //Generate the messages for the seventh chat
+        ArrayList<Message> messagesChat7 = new ArrayList<Message>(10);
         long time7 = time - oneDay;
         long chat7Id = chat7.getChatId();
 
@@ -305,7 +305,34 @@ public class FillDatabaseWithFictionalData {
             messageRepository.insert(m);
         }
 
+        //Generate the messages for the eighth chat
+        ArrayList<Message> messagesChat8 = new ArrayList<Message>(10);
+        long time8 = time - oneDay;
+        long chat8Id = chat8.getChatId();
 
+        messagesChat8.add(new Message(chat8Id, "git rebase", romainId, time8));
+        time8 += random.nextInt(oneMinute);
+        messagesChat8.add(new Message(chat8Id, "With the rebase command, you can take all the changes that were committed on one branch and replay them on another one.", romainId, time8));
+        time8 += random.nextInt(oneMinute);
+        messagesChat8.add(new Message(chat8Id, "ok", gabrielId, time8));
+        time8 += random.nextInt(oneMinute);
+        messagesChat8.add(new Message(chat8Id, "ok", marinId, time8));
+        time8 += random.nextInt(oneMinute);
+        messagesChat8.add(new Message(chat8Id, "ok", benjaminId, time8));
+        time8 += random.nextInt(oneHour);
+        messagesChat8.add(new Message(chat8Id, "git merge", romainId, time8));
+        time8 += random.nextInt(oneMinute);
+        messagesChat8.add(new Message(chat8Id, "The merge command performs a three-way merge between the two latest branch snapshots.", romainId, time8));
+        time8 += random.nextInt(oneMinute);
+        messagesChat8.add(new Message(chat8Id, "ok", marinId, time8));
+        time8 += random.nextInt(oneMinute);
+        messagesChat8.add(new Message(chat8Id, "ok", benjaminId, time8));
+        time8 += random.nextInt(oneMinute);
+        messagesChat8.add(new Message(chat8Id, "ok", gabrielId, time8));
+
+        for (Message m : messagesChat8) {
+            messageRepository.insert(m);
+        }
 
          */
 
