@@ -41,6 +41,7 @@ public class MessageRepository extends AbstractRepository {
         );
 
         if (cursor == null) {
+            //TODO check that query() return null if it failed to query
             //TODO throw NoSuchModelException
         }
 
@@ -48,12 +49,7 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public void insert(Message message) {
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(Columns.Message.COLUMN_NAME_CHAT_ID, message.getChatID());
-        contentValues.put(Columns.Message.COLUMN_NAME_MSG, message.getText());
-        contentValues.put(Columns.Message.COLUMN_NAME_SENDER_ID, message.getPeerId());
-        contentValues.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());
+        ContentValues contentValues = getContentValuesForMessage(message);
 
         long rowId = getWritableDatabase().insert(
                 TABLE_NAME,
@@ -73,29 +69,38 @@ public class MessageRepository extends AbstractRepository {
             //TODO throw InvalidModelException
         }
 
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(Columns.Message.COLUMN_NAME_CHAT_ID, message.getChatID());
-        contentValues.put(Columns.Message.COLUMN_NAME_MSG, message.getText());
-        contentValues.put(Columns.Message.COLUMN_NAME_SENDER_ID, message.getPeerId());
-        contentValues.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());
+        ContentValues contentValues = getContentValuesForMessage(message);
 
         String selection = COLUMN_ID + " = " + message.getId();
 
-        long rowId = getWritableDatabase().update(
+        long rowUpdated = getWritableDatabase().update(
                 TABLE_NAME,
                 contentValues,
                 selection,
                 null
         );
 
-        if (rowId == -1) {
+        if (rowUpdated == 0) {
             //TODO throw UpdateException
         }
     }
 
     public void delete(Message message) {
-        //TODO
+        if (message.getId() < 0) {
+            //TODO throw InvalidModelException
+        }
+
+        String selection = COLUMN_ID + " = " + message.getId();
+
+        long rowDeleted = getWritableDatabase().delete(
+                TABLE_NAME,
+                selection,
+                null
+        );
+
+        if (rowDeleted == 0) {
+           //TODO throw DeleteException
+        }
     }
 
     private Message buildFromCursor(Cursor c) {
@@ -114,5 +119,16 @@ public class MessageRepository extends AbstractRepository {
         }
 
         return message;
+    }
+
+    private ContentValues getContentValuesForMessage(Message message) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(Columns.Message.COLUMN_NAME_CHAT_ID, message.getChatID());
+        contentValues.put(Columns.Message.COLUMN_NAME_MSG, message.getText());
+        contentValues.put(Columns.Message.COLUMN_NAME_SENDER_ID, message.getPeerId());
+        contentValues.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());
+
+        return contentValues;
     }
 }
