@@ -69,6 +69,10 @@ public class Message {
         return mDateTime;
     }
 
+    public long getId() {
+        return mId;
+    }
+
     public boolean isSentByUser() {
         return mIsSentByUser;
     }
