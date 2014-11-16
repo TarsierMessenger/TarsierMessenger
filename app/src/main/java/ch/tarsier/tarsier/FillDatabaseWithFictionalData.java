@@ -35,6 +35,15 @@ public class FillDatabaseWithFictionalData {
         Peer xavier = new Peer("Xavier Willemin");
         Peer yann = new Peer("Yann Mahmoudi");
 
+        long amirrezaId = amirreza.getId();
+        long benjaminId = benjamin.getId();
+        long fredericId = frederic.getId();
+        long gabrielId = gabriel.getId();
+        long marinId = marin.getId();
+        long romainId = romain.getId();
+        long xavierId = xavier.getId();
+        long yannId = yann.getId();
+
         peerRepository.insert(amirreza);
         peerRepository.insert(benjamin);
         peerRepository.insert(frederic);
@@ -68,34 +77,60 @@ public class FillDatabaseWithFictionalData {
         chatRepository.insert(chat10);
 
         //Generate the messages for the first chat
-        ArrayList<Message> messagesChat1 = new ArrayList<Message>();
+        ArrayList<Message> messagesChat1 = new ArrayList<Message>(12);
         long time1 = time;
+        long chat1Id = chat1.getChatId();
 
-        messagesChat1.add(new Message(chat1.getChatId(), "Yo ça va?", gabriel.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "Yo ça va?", gabrielId, time1);
         time1 -= random.nextInt(oneMinute);
-        messagesChat1.add(new Message(chat1.getChatId(), "ça avance le projet?", gabriel.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "ça avance le projet?", gabrielId, time1);
         time1 -= random.nextInt(oneHour);
-        messagesChat1.add(new Message(chat1.getChatId(), "Oui ça avance bien, on a presque fini notre partie!", frederic.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "Oui ça avance bien, on a presque fini notre partie!", fredericId, time1);
         time1 -= random.nextInt(oneHour);
-        messagesChat1.add(new Message(chat1.getChatId(), "Excellent :)", gabriel.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "Excellent :)", gabrielId, time1);
         time1 -= random.nextInt(oneDay);
-        messagesChat1.add(new Message(chat1.getChatId(), "On va bosser à sat si jamais tu veux venir", frederic.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "On va bosser à sat si jamais tu veux venir", fredericId, time1);
         time1 -= random.nextInt(oneMinute);
-        messagesChat1.add(new Message(chat1.getChatId(), "Volontiers!", gabriel.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "Volontiers!", gabrielId, time1);
         time1 -= random.nextInt(oneMinute);
-        messagesChat1.add(new Message(chat1.getChatId(), "J'arrive tout de suite :)", gabriel.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "J'arrive tout de suite :)", gabrielId, time1);
         time1 -= random.nextInt(oneMinute);
-        messagesChat1.add(new Message(chat1.getChatId(), "On est sur les canaps au fond si jamais", frederic.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "On est sur les canaps au fond si jamais", fredericId, time1);
         time1 -= random.nextInt(oneMinute);
-        messagesChat1.add(new Message(chat1.getChatId(), "Tu peux me prendre une cuvée si vous n'avez pas encore commandé stp?", gabriel.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "Tu peux me prendre une cuvée si vous n'avez pas encore commandé stp?", gabrielId, time1);
         time1 -= random.nextInt(oneMinute);
-        messagesChat1.add(new Message(chat1.getChatId(), "On a déjà nos bière dsl", frederic.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "On a déjà nos bière dsl", fredericId, time1);
         time1 -= random.nextInt(oneMinute);
-        messagesChat1.add(new Message(chat1.getChatId(), "Mais y a pas beaucoup de monde de toute façon", frederic.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "Mais y a pas beaucoup de monde de toute façon", fredericId, time1);
         time1 -= random.nextInt(oneMinute);
-        messagesChat1.add(new Message(chat1.getChatId(), "Ok nickel^^", gabriel.getId(), time1);
+        messagesChat1.add(new Message(chat1Id, "Ok nickel^^", gabrielId, time1);
 
         for (Message m : messagesChat1) {
+            messageRepository.insert(m);
+        }
+
+        //Generate the messages for the second chat
+        ArrayList<MessagesChat2> messagesChat2 = new ArrayList<Message>();
+        long time2 = time;
+        long chat2Id = chat2.getChatId();
+
+        messagesChat2.add(new Message(Chat2Id, "yo", marinId, time2);
+        time2 -= random.nextInt(oneMinute);
+        messagesChat2.add(new Message(Chat2Id, "café?", marinId, time2);
+        time2 -= random.nextInt(oneMinute);
+        messagesChat2.add(new Message(Chat2Id, "ouais", gabrielId, time2);
+        time2 -= random.nextInt(oneMinute);
+        messagesChat2.add(new Message(Chat2Id, "j'en ai besoin^^", gabrielId, time2);
+        time2 -= random.nextInt(oneMinute);
+        messagesChat2.add(new Message(Chat2Id, "pareil :p", marinId, time2);
+        time2 -= random.nextInt(oneMinute);
+        messagesChat2.add(new Message(Chat2Id, "rdv en haut du bc?!", marinId, time2);
+        time2 -= random.nextInt(oneMinute);
+        messagesChat2.add(new Message(Chat2Id, "ok top", gabrielId, time2);
+        time2 -= random.nextInt(oneMinute);
+        messagesChat2.add(new Message(Chat2Id, "j'arrive dans 5 min", gabrielId, time2);
+
+        for (Message m : messagesChat2) {
             messageRepository.insert(m);
         }
 
