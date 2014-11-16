@@ -1,8 +1,13 @@
 package ch.tarsier.tarsier;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.domain.model.Message;
+import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.User;
 import ch.tarsier.tarsier.storage.StorageAccess;
 
 /**
@@ -11,7 +16,6 @@ import ch.tarsier.tarsier.storage.StorageAccess;
 public class FillDatabaseWithFictionalData {
 
     public static void populate() {
-        StorageAccess storageAccess = Tarsier.app().getStorage();
 
         // Variables to simulate the time
         long time = new Date().getTime();
@@ -20,7 +24,8 @@ public class FillDatabaseWithFictionalData {
         long oneDay = 86400000; /* in milliseconds */
         Random random = new Random();
 
-        /*
+        StorageAccess storageAccess = Tarsier.app().getStorage();
+/*
         ChatRepository chatRepository = storageAccess.getChatRepository();
         PeerRepository peerRepository = storageAccess.getPeerRepository();
         MessageRepository messageRepository = storageAccess.getMessageRepository();
@@ -110,7 +115,7 @@ public class FillDatabaseWithFictionalData {
         }
 
         //Generate the messages for the second chat
-        ArrayList<Messages> messagesChat2 = new ArrayList<Message>(8);
+        ArrayList<Message> messagesChat2 = new ArrayList<Message>(8);
         long time2 = time - oneDay;
         long chat2Id = chat2.getChatId();
 
@@ -135,7 +140,7 @@ public class FillDatabaseWithFictionalData {
         }
 
         //Generate the messages for the third chat
-        ArrayList<Message> messagesChat3 = new ArrayList<Message(18);
+        ArrayList<Message> messagesChat3 = new ArrayList<Message>(18);
         long time3 = time - oneDay;
         long chat3Id = chat3.getChatId();
 
@@ -194,7 +199,7 @@ public class FillDatabaseWithFictionalData {
         time4 += random.nextInt(oneHour);
         messagesChat4.add(new Message(chat4Id, "swag", gabrielId, time4));
         time4 += random.nextInt(oneHour);
-        messagesChat4.add(new Message(chat4Id, "wesh", gabrielId, time4);
+        messagesChat4.add(new Message(chat4Id, "wesh", gabrielId, time4));
         time4 += random.nextInt(oneMinute);
         messagesChat4.add(new Message(chat4Id, "ma geule", gabrielId, time4));
         time4 += random.nextInt(oneHour);
@@ -238,7 +243,7 @@ public class FillDatabaseWithFictionalData {
         }
 
         //Generate the messages for the sixth chat
-        ArrayList<Message> messagesChat6 = new Arraylist<Message>(12);
+        ArrayList<Message> messagesChat6 = new ArrayList<Message>(12);
         long time6 = time - oneDay;
         long chat6Id = chat6.getChatId();
 
@@ -248,12 +253,12 @@ public class FillDatabaseWithFictionalData {
         time6 += random.nextInt(oneMinute);
         messagesChat6.add(new Message(chat6Id, "On va commencer avec une très long message:", gabrielId, time6));
         time6 += random.nextInt(oneMinute);
-        messagesChat6.add(new Message(chat6Id, "Quel est votre secret ?
-                Pour faire une bonne purée ce qui est pas mal quand on cuit les pommes de terre
-                C'est de mettre du laurier et du thym pour parfumer en amont
-                Après tu peux ajouter n'importe quel épice
-                Tu peux mettre du safran, du curcuma, du gingembre
-                Ou une gousse d'ail une fois que les patates sont pétries", gabrielId, time6));
+        messagesChat6.add(new Message(chat6Id, "Quel est votre secret ?"
+                + "Pour faire une bonne purée ce qui est pas mal quand on cuit les pommes de terre"
+                + "C'est de mettre du laurier et du thym pour parfumer en amont"
+                + "Après tu peux ajouter n'importe quel épice"
+                + "Tu peux mettre du safran, du curcuma, du gingembre"
+                + "Ou une gousse d'ail une fois que les patates sont pétries", gabrielId, time6));
         time6 += random.nextInt(oneMinute);
         messagesChat6.add(new Message(chat6Id, "Salut c'est cool en force!", gabrielId, time6));
         time6 += random.nextInt(oneMinute);
@@ -378,7 +383,7 @@ public class FillDatabaseWithFictionalData {
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "sat", xavierId, time10));
         time10 += random.nextInt(oneMinute);
-        messagesChat10.add(new Message(chat10Id, "sat", yanId, time10));
+        messagesChat10.add(new Message(chat10Id, "sat", yannId, time10));
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "Où est-ce qu'on sert de bonnes bières?", gabrielId, time10));
         time10 += random.nextInt(oneMinute);
@@ -394,7 +399,7 @@ public class FillDatabaseWithFictionalData {
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "à sat", xavierId, time10));
         time10 += random.nextInt(oneMinute);
-        messagesChat10.add(new Message(chat10Id, "à sat", yanId, time10));
+        messagesChat10.add(new Message(chat10Id, "à sat", yannId, time10));
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "Où est-ce qu'on va ce soir?", gabrielId, time10));
         time10 += random.nextInt(oneMinute);
@@ -410,11 +415,11 @@ public class FillDatabaseWithFictionalData {
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "à sat", xavierId, time10));
         time10 += random.nextInt(oneMinute);
-        messagesChat10.add(new Message(chat10Id, "à sat", yanId, time10));
+        messagesChat10.add(new Message(chat10Id, "à sat", yannId, time10));
 
         for (Message m : messagesChat10) {
             messageRepository.insert(m);
         }
-        */
+*/
     }
 }
