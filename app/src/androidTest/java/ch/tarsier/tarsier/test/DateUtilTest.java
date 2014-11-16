@@ -2,11 +2,9 @@ package ch.tarsier.tarsier.test;
 
 import android.test.AndroidTestCase;
 
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+
 
 import ch.tarsier.tarsier.util.DateUtil;
 
@@ -19,8 +17,8 @@ public class DateUtilTest extends AndroidTestCase {
     }
     public void testGetTimestamp(){
         //Set the time to now
-        long timeStamp = DateUtil.getNowTimestamp();
-        String dateSeparator = DateUtil.computeDateSeparator(timeStamp);
+        long timestamp = DateUtil.getNowTimestamp();
+        String dateSeparator = DateUtil.computeDateSeparator(timestamp);
         assertEquals("Today", dateSeparator);
 
         // Set the time to yesterday
