@@ -25,11 +25,11 @@ public class MessageRepository extends AbstractRepository {
     private static final String COLUMN_ID = "_id";
 
     private static final String[] COLUMNS = new String[] {
-            Columns.Message._ID,
-            Columns.Message.COLUMN_NAME_MSG,
-            Columns.Message.COLUMN_NAME_DATETIME,
-            Columns.Message.COLUMN_NAME_SENDER_ID,
-            Columns.Message.COLUMN_NAME_CHAT_ID
+        Columns.Message._ID,
+        Columns.Message.COLUMN_NAME_MSG,
+        Columns.Message.COLUMN_NAME_DATETIME,
+        Columns.Message.COLUMN_NAME_SENDER_ID,
+        Columns.Message.COLUMN_NAME_CHAT_ID
     };
 
     public MessageRepository(Database database) {
@@ -105,7 +105,7 @@ public class MessageRepository extends AbstractRepository {
         );
 
         if (rowDeleted == 0) {
-           throw new DeleteException("DELETE operation failed");
+            throw new DeleteException("DELETE operation failed");
         }
     }
 
@@ -121,7 +121,7 @@ public class MessageRepository extends AbstractRepository {
 
         long userId = Tarsier.app().getUserPreferences().getId();
 
-        Message message = null;
+        Message message;
         if (senderId == userId) {
             message = new Message(chatId, text, dateTime);
         } else {
