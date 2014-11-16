@@ -1,5 +1,6 @@
 package ch.tarsier.tarsier.domain.repository;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -9,6 +10,7 @@ import ch.tarsier.tarsier.domain.model.Message;
 
 /**
  * @author gluthier
+ * @author McMoudi
  */
 public class MessageRepository extends AbstractRepository {
 
@@ -36,11 +38,32 @@ public class MessageRepository extends AbstractRepository {
                 null, null, null, null
         );
 
+        if (cursor == null) {
+            //TODO throw NoSuchModelException
+        }
+
         return buildFromCursor(cursor);
     }
 
     public void insert(Message message) {
-        //TODO
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(Columns.Message.COLUMN_NAME_CHAT_ID, message.getChatID());
+        contentValues.put(Columns.Message.COLUMN_NAME_MSG, message.getText());
+        contentValues.put(Columns.Message.COLUMN_NAME_SENDER_ID, message.getPeerId());
+        contentValues.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());
+
+        long rowId = getWritableDatabase().insert(
+                TABLE_NAME,
+                null,
+                contentValues
+        );
+
+        if (rowId == -1) {
+            //TODO throw InsertException
+        }
+
+        message.setId(rowId);
     }
 
     public void update(Message message) {
