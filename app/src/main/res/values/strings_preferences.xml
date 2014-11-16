@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="personnal_file_key">who_am_i</string>
+    <string name="personnal_file_key_myid">uid</string>
+    <string name="personnal_file_key_myusername">username</string>
+    <string name="personnal_file_key_mymood">mood</string>
+    <string name="preferences_file_key">settings</string>
+    <string name="preferences_file_key_password">password</string>
+    <string name="preferences_file_key_background">background</string>
+    <string name="preferences_file_key_sound">sound</string>
+    <string name="preferences_file_key_vibration">vibration</string>
+    <string name="preferences_file_key_enter_key">enter key</string>
+    <string name="preferences_file_key_enter_send">enter send</string>
+    <string name="preferences_file_key_delete_messages">delete messages</string>
+    <string name="preferences_file_key_mesage_limit">message limit</string>
+</resources>

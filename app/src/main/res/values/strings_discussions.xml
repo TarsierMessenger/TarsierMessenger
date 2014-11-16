@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_new_discussion">New discussion</string>
+    <string name="too_much_notifications">9+</string>
+    <string name="nb_people_online">Online:</string>
+</resources>

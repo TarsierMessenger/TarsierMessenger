@@ -1,66 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Tarsier</string>
-    <string name="create_group_str">Create a new group</string>
-    <string name="txt_hint">Type Message</string>
-    <string name="btn_send">Send Message</string>
-    <string name="finding_service">Finding local peers</string>
-    <string name="action_settings">Settings</string>
-    <string name="lets_chat">Let\'s chat!</string>
-    <string name="hint_status_message">Status message</string>
-    <string name="hint_username">Username</string>
+
+    <!--Activity Titles-->
     <string name="title_activity_add_profile_picture">Add a profile picture</string>
-    <string name="add_from_existing">Add from your gallery</string>
-    <string name="add_new_picture">Take a new picture</string>
     <string name="title_activity_profile">Profile</string>
-    <string name="save_profile">Save</string>
-    <string name="cancel_profile">Cancel</string>
-    <string name="status_message_placeholder">Enter a statusMessage message</string>
-    <string name="add_profile_picture_desc">Add a profile picture</string>
-    <string name="action_profile">Profile</string>
-    <string name="action_wifidirectdebug">Wi-Fi Direct Debug</string>
-    <string name="error_username_length">Username should be between 1 and 36 chars long</string>
-    <string name="error_status_message_length">Status message length should be between 1 and 50 chars long</string>
-    <string name="error_username_whitespace">Username should not be composed of whitespace only</string>
-    <string name="error_status_message_whitespace">Status message should not be composed of whitespace only</string>
     <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
     <string name="title_activity_preferences">Settings</string>
-    <string name="action_search">plop</string>
-    <string name="button_pswd">password</string>
-    <string name="personnal_file_key">who_am_i</string>
-    <string name="personnal_file_key_myid">uid</string>
-    <string name="personnal_file_key_myusername">username</string>
-    <string name="personnal_file_key_mymood">mood</string>
+    <string name="title_activity_chat_room_participants">Chat Room Participants</string>
+    <string name="title_activity_conversation">Conversation</string>
     <string name="title_activity_new_chatrooom">New Chatroom</string>
     <string name="title_activity_chat_list">Chats</string>
-    <string name="chatroom_name">Chatroom name</string>
-    <string name="join_on_invitation">Join on invitation only</string>
-    <string name="information_invitation_close">Users will be able to join the chatroom only on your approval.</string>
-    <string name="information_invitation_open">Users will be able to join the chatroom by themselves.</string>
-    <string name="create_chatroom">Create a new chatroom</string>
-    <string name="error_chat_room_name_length">Chatroom name should be between 1 and 36 chars long</string>
-    <string name="error_add_profile_picture">Unable to add a profile picture</string>
-    <string name="content_description_add_profile_picture">Preview of Profile picture</string>
-    <string name="too_much_notifications">9+</string>
-    <string name="nb_people_online">Online:</string>
-    <string name="create_new_discussion">New discussion</string>
-    <string name="action_discussions">Discussions</string>
-    <string name="title_activity_chat_room_participants">Chat Room Participants</string>
-    <string name="action_chat_room_participants">Chat Room Participants</string>
-    <string name="chatroom_participant_image_desc">Participant\'s profile picture</string>
-    <string name="title_activity_private_discussion">PrivateDiscussionActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="send_message_hint">Type new message</string>
 
-    <string name="preferences_file_key">settings</string>
-    <string name="preferences_file_key_password">password</string>
-    <string name="preferences_file_key_background">background</string>
-    <string name="preferences_file_key_sound">sound</string>
-    <string name="preferences_file_key_vibration">vibration</string>
-    <string name="preferences_file_key_enter_key">enter key</string>
-    <string name="preferences_file_key_enter_send">enter send</string>
-    <string name="preferences_file_key_delete_messages">delete messages</string>
-    <string name="preferences_file_key_mesage_limit">message limit</string>
-    <string name="title_activity_conversation">Conversation</string>
+    <!--Devices lists-->
+    <string name="finding_service">Finding local peers</string>
 </resources>
