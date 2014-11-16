@@ -12,14 +12,18 @@ public class FillDatabaseWithFictionalData {
 
     public static void populate() {
         StorageAccess storageAccess = Tarsier.app().getStorage();
+
+        // Variables to simulate the time
         long time = new Date().getTime();
+        int oneMinute = 60000; /* in milliseconds */
+        int oneHour = 3600000; /* in milliseconds */
+        int oneDay = 86400000; /* in milliseconds */
         Random random = new Random();
-        int n = 86400000;
-        // 86400000 milliseconds = 24 hours
 
         /*
         ChatRepository chatRepository = storageAccess.getChatRepository();
         PeerRepository peerRepository = storageAccess.getPeerRepository();
+        MessageRepository messageRepository = storageAccess.getMessageRepository();
 
         //Generate the peers
         Peer amirreza = new Peer("Amirreza Bahreini");
@@ -31,24 +35,6 @@ public class FillDatabaseWithFictionalData {
         Peer xavier = new Peer("Xavier Willemin");
         Peer yann = new Peer("Yann Mahmoudi");
 
-        final long amirrezaId = amirreza.getId();
-        final long benjaminId = benjamin.getId();
-        final long fredericId = frederic.getId();
-        final long gabrielId = gabriel.getId();
-        final long marinId = marin.getId();
-        final long romainId = romain.getId();
-        final long xavierId = xavier.getId();
-        final long yannId = yann.getId();
-
-        final String amirrezaName = amirreza.getName();
-        final String benjaminName = benjamin.getName();
-        final String fredericName = frederic.getName();
-        final String gabrielName = gabriel.getName();
-        final String marinName = marin.getName();
-        final String romainName = romain.getName();
-        final String xavierName = xavier.getName();
-        final String yannName = yann.getName();
-
         peerRepository.insert(amirreza);
         peerRepository.insert(benjamin);
         peerRepository.insert(frederic);
@@ -59,21 +45,58 @@ public class FillDatabaseWithFictionalData {
         peerRepository.insert(yann);
 
         //Generate the chats
-        ArrayList<Chat> chatList = new ArrayList<Chat>(10);
+        Chat chat1 = Chat(frederic);
+        Chat chat2 = new Chat(marin);
+        Chat chat3 = new Chat("SwEng", frederic);
+        Chat chat4 = new Chat(romain);
+        Chat chat5 = new Chat(amirreza);
+        Chat chat6 = new Chat(xavier);
+        Chat chat7 = new Chat(yann);
+        Chat chat8 = new Chat("Git helpdesk", romain);
+        Chat chat9 = new Chat(benjamin);
+        Chat chat10 = new Chat("Saaaaat", gabriel);
 
-        chatList.add(new Chat(frederic));
-        chatList.add(new Chat(marin));
-        chatList.add(new Chat("SwEng", frederic));
-        chatList.add(new Chat(romain));
-        chatList.add(new Chat(amirreza));
-        chatList.add(new Chat(xavier));
-        chatList.add(new Chat(yann));
-        chatList.add(new Chat("Git helpdesk", romain));
-        chatList.add(new Chat(benjamin));
-        chatList.add(new Chat("Saaaaat", gabriel));
+        chatRepository.insert(chat1);
+        chatRepository.insert(chat2);
+        chatRepository.insert(chat3);
+        chatRepository.insert(chat4);
+        chatRepository.insert(chat5);
+        chatRepository.insert(chat6);
+        chatRepository.insert(chat7);
+        chatRepository.insert(chat8);
+        chatRepository.insert(chat9);
+        chatRepository.insert(chat10);
 
-        for (Chat c : chatList) {
-            chatRepository.insert(c);
+        //Generate the messages for the first chat
+        ArrayList<Message> messagesChat1 = new ArrayList<Message>();
+        long time1 = time;
+
+        messagesChat1.add(new Message(chat1.getChatId(), "Yo ça va?", gabriel.getId(), time1);
+        time1 -= random.nextInt(oneMinute);
+        messagesChat1.add(new Message(chat1.getChatId(), "ça avance le projet?", gabriel.getId(), time1);
+        time1 -= random.nextInt(oneHour);
+        messagesChat1.add(new Message(chat1.getChatId(), "Oui ça avance bien, on a presque fini notre partie!", frederic.getId(), time1);
+        time1 -= random.nextInt(oneHour);
+        messagesChat1.add(new Message(chat1.getChatId(), "Excellent :)", gabriel.getId(), time1);
+        time1 -= random.nextInt(oneDay);
+        messagesChat1.add(new Message(chat1.getChatId(), "On va bosser à sat si jamais tu veux venir", frederic.getId(), time1);
+        time1 -= random.nextInt(oneMinute);
+        messagesChat1.add(new Message(chat1.getChatId(), "Volontiers!", gabriel.getId(), time1);
+        time1 -= random.nextInt(oneMinute);
+        messagesChat1.add(new Message(chat1.getChatId(), "J'arrive tout de suite :)", gabriel.getId(), time1);
+        time1 -= random.nextInt(oneMinute);
+        messagesChat1.add(new Message(chat1.getChatId(), "On est sur les canaps au fond si jamais", frederic.getId(), time1);
+        time1 -= random.nextInt(oneMinute);
+        messagesChat1.add(new Message(chat1.getChatId(), "Tu peux me prendre une cuvée si vous n'avez pas encore commandé stp?", gabriel.getId(), time1);
+        time1 -= random.nextInt(oneMinute);
+        messagesChat1.add(new Message(chat1.getChatId(), "On a déjà nos bière dsl", frederic.getId(), time1);
+        time1 -= random.nextInt(oneMinute);
+        messagesChat1.add(new Message(chat1.getChatId(), "Mais y a pas beaucoup de monde de toute façon", frederic.getId(), time1);
+        time1 -= random.nextInt(oneMinute);
+        messagesChat1.add(new Message(chat1.getChatId(), "Ok nickel^^", gabriel.getId(), time1);
+
+        for (Message m : messagesChat1) {
+            messageRepository.insert(m);
         }
 
          */
