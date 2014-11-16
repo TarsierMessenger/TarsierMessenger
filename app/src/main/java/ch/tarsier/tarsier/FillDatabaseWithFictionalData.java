@@ -275,6 +275,38 @@ public class FillDatabaseWithFictionalData {
             messageRepository.insert(m);
         }
 
+        //Generate th emessages for the seventh chat
+        ArrayList<Message> messagesChat7 = new ArrayList<Message>();
+        long time7 = time - oneDay;
+        long chat7Id = chat7.getChatId();
+
+        messagesChat7.add(new Message(chat7Id, "t'es là?", gabrielId, time7));
+        time7 += random.nextInt(oneHour);
+        messagesChat7.add(new Message(chat7Id, "oui", yannId, time7));
+        time7 += random.nextInt(oneHour);
+        messagesChat7.add(new Message(chat7Id, "t'es là?", yannId, time7));
+        time7 += random.nextInt(oneHour);
+        messagesChat7.add(new Message(chat7Id, "oui", gabrielId, time7));
+        time7 += random.nextInt(oneHour);
+        messagesChat7.add(new Message(chat7Id, "t'es là?", gabrielId, time7));
+        time7 += random.nextInt(oneHour);
+        messagesChat7.add(new Message(chat7Id, "oui", yannId, time7));
+        time7 += random.nextInt(oneHour);
+        messagesChat7.add(new Message(chat7Id, "t'es là?", yannId, time7));
+        time7 += random.nextInt(oneHour);
+        messagesChat7.add(new Message(chat7Id, "oui", gabrielId, time7));
+        time7 += random.nextInt(oneHour);
+        messagesChat7.add(new Message(chat7Id, "t'es là?", gabrielId, time7));
+        time7 += random.nextInt(oneHour);
+        messagesChat7.add(new Message(chat7Id, "oui", yannId, time7));
+        time7 += random.nextInt(oneHour);
+
+        for (Message m : messagesChat7) {
+            messageRepository.insert(m);
+        }
+
+
+
          */
 
     }
