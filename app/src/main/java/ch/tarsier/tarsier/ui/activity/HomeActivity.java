@@ -230,7 +230,7 @@ public class HomeActivity extends Activity {
     }
 
     private void displayChatRoomParticipants() {
-        Intent displayChatRoomParticipants = new Intent(this, ChatRoomParticipantsActivity.class);
+        Intent displayChatRoomParticipants = new Intent(this, ChatroomPeersActivity.class);
         startActivity(displayChatRoomParticipants);
     }
 

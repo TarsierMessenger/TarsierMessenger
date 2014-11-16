@@ -21,9 +21,9 @@ import ch.tarsier.tarsier.domain.model.User;
 /**
  * @author Romain Ruetschi
  */
-public class ChatRoomParticipantsActivity extends ListActivity {
+public class ChatroomPeersActivity extends ListActivity {
 
-    public final static String EXTRAS_PARTICIPANTS_KEY = "participants";
+    public final static String EXTRAS_PEERS_KEY = "peers";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,8 @@ public class ChatRoomParticipantsActivity extends ListActivity {
 
         Peer[] peers;
 
-        if (extras != null && extras.containsKey(EXTRAS_PARTICIPANTS_KEY)) {
-            peers = (User[]) extras.get(EXTRAS_PARTICIPANTS_KEY);
+        if (extras != null && extras.containsKey(EXTRAS_PEERS_KEY)) {
+            peers = (User[]) extras.get(EXTRAS_PEERS_KEY);
         } else {
             // Just some test data in case we got nothing from the parent,
             // as it is the case when accessing this view from the menu.
@@ -48,13 +48,13 @@ public class ChatRoomParticipantsActivity extends ListActivity {
             };
         }
 
-        setListAdapter(new ChatRoomParticipantArrayAdapter(this, peers));
+        setListAdapter(new ChatroomPeersArrayAdapter(this, peers));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.chat_room_participants, menu);
+        getMenuInflater().inflate(R.menu.chat_room_peers, menu);
         return true;
     }
 
@@ -70,14 +70,14 @@ public class ChatRoomParticipantsActivity extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class ChatRoomParticipantArrayAdapter extends ArrayAdapter<Peer> {
-        private final static int LAYOUT = R.layout.chatroom_participant;
+    class ChatroomPeersArrayAdapter extends ArrayAdapter<Peer> {
+        private final static int LAYOUT = R.layout.chatroom_peer;
 
         private final Context mContext;
         private final LayoutInflater mInflater;
         private final Peer[] mValues;
 
-        ChatRoomParticipantArrayAdapter(Context context, Peer[] values) {
+        ChatroomPeersArrayAdapter(Context context, Peer[] values) {
             super(context, LAYOUT, values);
 
             mContext = context;

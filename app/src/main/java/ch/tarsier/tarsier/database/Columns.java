@@ -16,7 +16,7 @@ public final class Columns {
     }
 
     /**
-     * The discussion table fields
+     * The chat table fields
      */
     public static abstract class Discussion implements BaseColumns {
 
