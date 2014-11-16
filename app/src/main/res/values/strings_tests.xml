@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="error_username_length">Username should be between 1 and 36 chars long</string>
-    <string name="error_status_message_length">Status message length should be between 1 and 50 chars long</string>
-    <string name="error_username_whitespace">Username should not be composed of whitespace only</string>
-    <string name="error_status_message_whitespace">Status message should not be composed of whitespace only</string>
-</resources>
