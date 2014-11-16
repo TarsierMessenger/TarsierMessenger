@@ -2,8 +2,10 @@ package ch.tarsier.tarsier.test;
 
 import android.test.AndroidTestCase;
 
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 import ch.tarsier.tarsier.util.DateUtil;
@@ -15,7 +17,8 @@ public class DateUtilTest extends AndroidTestCase {
     public DateUtilTest() {
         super();
     }
-    public void testGetTimestamp(){
+
+    public void testComputeDateSeparator(){
         //Set the time to now
         long timestamp = DateUtil.getNowTimestamp();
         String dateSeparator = DateUtil.computeDateSeparator(timestamp);
@@ -29,7 +32,7 @@ public class DateUtilTest extends AndroidTestCase {
 
         //Set time to the day before yesterday
         calendar.add(Calendar.DAY_OF_MONTH,-1);
-        SimpleDateFormat format = new SimpleDateFormat("E");
+        Format format = new SimpleDateFormat("E");
         dateSeparator = DateUtil.computeDateSeparator(calendar.getTimeInMillis());
         assertEquals(format.format(calendar.getTimeInMillis()), dateSeparator);
 
@@ -39,4 +42,20 @@ public class DateUtilTest extends AndroidTestCase {
         format = new SimpleDateFormat("dd.MM.yyyy");
         assertEquals(format.format(calendar.getTimeInMillis()), dateSeparator);
     }
+
+    public void testComputeHour(){
+        // Set the time to yesterday
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 3);
+        calendar.set(Calendar.MINUTE, 55);
+        String sentHour = DateUtil.computeHour(calendar.getTimeInMillis());
+        Format format = new SimpleDateFormat("HH:mm");
+        assertEquals("03:55" ,sentHour);
+
+        calendar.set(Calendar.HOUR_OF_DAY,15);
+        calendar.set(Calendar.MINUTE,03);
+        sentHour=DateUtil.computeHour(calendar.getTimeInMillis());
+        assertEquals("15:03",sentHour);
+    }
 }
+
