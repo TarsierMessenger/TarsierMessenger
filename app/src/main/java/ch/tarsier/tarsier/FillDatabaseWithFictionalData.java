@@ -135,7 +135,7 @@ public class FillDatabaseWithFictionalData {
         }
 
         //Generate the messages for the third chat
-        ArrayList<Message> messagesChat3 = new ArrayList<Message();
+        ArrayList<Message> messagesChat3 = new ArrayList<Message(18);
         long time3 = time;
         long chat3Id = chat3.getChatId();
 
@@ -176,6 +176,39 @@ public class FillDatabaseWithFictionalData {
         messageChat3.add(new Message(chat3Id, "Très bons choix les gars!", gabrielId, time3);
 
         for (Message m : messagesChat3) {
+            messageRepository.insert(m);
+        }
+
+        //Generate the messages for the fourth chat
+        ArrayList<Message> messagesChat4 = new ArrayList<Message>();
+        long time4 = time;
+        long chat4Id = chat4.getChatId();
+
+        messageChat4.add(new Message(chat4Id, "yoyo", gabrielId, time4);
+        time4 -= random.nextInt(oneHour);
+        messageChat4.add(new Message(chat4Id, "yéyé", gabrielId, time4);
+        time4 -= random.nextInt(oneHour);
+        messageChat4.add(new Message(chat4Id, "yaya", gabrielId, time4);
+        time4 -= random.nextInt(oneHour);
+        messageChat4.add(new Message(chat4Id, "yolo", gabrielId, time4);
+        time4 -= random.nextInt(oneHour);
+        messageChat4.add(new Message(chat4Id, "swag", gabrielId, time4);
+        time4 -= random.nextInt(oneHour);
+        messageChat4.add(new Message(chat4Id, "wesh", gabrielId, time4);
+        time4 -= random.nextInt(oneMinute);
+        messageChat4.add(new Message(chat4Id, "ma geule", gabrielId, time4);
+        time4 -= random.nextInt(oneDay);
+        messageChat4.add(new Message(chat4Id, "stop spam", romainId, time4);
+        time4 -= random.nextInt(oneMinute);
+        messageChat4.add(new Message(chat4Id, "stop spam", romainId, time4);
+        time4 -= random.nextInt(oneMinute);
+        messageChat4.add(new Message(chat4Id, "stop spam", romainId, time4);
+        time4 -= random.nextInt(oneMinute);
+        messageChat4.add(new Message(chat4Id, "stop spam", romainId, time4);
+        time4 -= random.nextInt(oneMinute);
+        messageChat4.add(new Message(chat4Id, "ok", gabrielId, time4);
+
+        for (Message m : messagesChat4) {
             messageRepository.insert(m);
         }
 
