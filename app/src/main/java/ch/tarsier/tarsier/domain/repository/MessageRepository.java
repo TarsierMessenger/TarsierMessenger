@@ -67,7 +67,28 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public void update(Message message) {
-        //TODO
+        if (message.getId() < 0) {
+            //TODO throw InvalidModelException
+        }
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(Columns.Message.COLUMN_NAME_CHAT_ID, message.getChatID());
+        contentValues.put(Columns.Message.COLUMN_NAME_MSG, message.getText());
+        contentValues.put(Columns.Message.COLUMN_NAME_SENDER_ID, message.getPeerId());
+        contentValues.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());
+
+        long rowId = getWritableDatabase().update(
+                TABLE_NAME,
+                contentValues,
+                null, null
+        );
+
+        if (rowId == -1) {
+            //TODO throw UpdateException
+        }
+
+
     }
 
     public void delete(Message message) {
