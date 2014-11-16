@@ -13,7 +13,7 @@ public class Message {
     private long mPeerId;
     private long mDateTime;
     private boolean mIsSentByUser;
-    // mId is set when a Message is inserted into the database
+    // mId is set to a value > 0 when the Message is inserted into the database
     private long mId;
 
     /**
@@ -30,6 +30,7 @@ public class Message {
         mPeerId = peerId;
         mIsSentByUser = false;
         mDateTime = dateTime;
+        mId = -1;
     }
 
     /**
@@ -45,6 +46,7 @@ public class Message {
         mPeerId = Tarsier.app().getUserPreferences().getId();
         mIsSentByUser = true;
         mDateTime = dateTime;
+        mId = -1;
     }
 
     public String getText() {
