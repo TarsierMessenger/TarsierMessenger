@@ -37,7 +37,11 @@ public class MessageRepository extends AbstractRepository {
         super(database);
     }
 
-    public Message findById(long id) throws NoSuchModelException {
+    public Message findById(long id) throws IllegalArgumentException, NoSuchModelException {
+        if (id < 1) {
+            throw new IllegalArgumentException("Message ID cannot be < 1");
+        }
+
         String whereClause = COLUMN_ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
@@ -76,14 +80,13 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public void update(Message message) throws InvalidModelException, UpdateException {
-        if (message.getId() < 0) {
+        if (message.getId() < 1) {
             throw new InvalidModelException("Message's id invalid");
         }
 
         ContentValues values = getValuesForMessage(message);
 
-        String whereClause = COLUMN_ID + " = " + message.getId()
-                           + " LIMIT 1";
+        String whereClause = COLUMN_ID + " = " + message.getId();
 
         long rowUpdated = getWritableDatabase().update(
                 TABLE_NAME,
@@ -98,12 +101,11 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public void delete(Message message) throws InvalidModelException, DeleteException {
-        if (message.getId() < 0) {
+        if (message.getId() < 1) {
             throw new InvalidModelException("Message ID is invalid");
         }
 
-        String whereClause = COLUMN_ID + " = " + message.getId()
-                           + " LIMIT 1";
+        String whereClause = COLUMN_ID + " = " + message.getId();
 
         long rowDeleted = getWritableDatabase().delete(
                 TABLE_NAME,
