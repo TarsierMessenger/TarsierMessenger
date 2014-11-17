@@ -57,7 +57,12 @@ public class Message {
         return mPeerId;
     }
 
+    // TODO: Remove, use getChatId instead.
     public int getChatID() {
+        return (int) mChatId;
+    }
+
+    public long getChatId() {
         return mChatId;
     }
 
