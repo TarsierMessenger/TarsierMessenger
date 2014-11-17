@@ -11,6 +11,15 @@ public class Chat {
     private Peer mHost;
     private boolean mPrivate;
 
+    public Chat(Peer host) {
+        mHost = host;
+    }
+
+    public Chat(String title, Peer host) {
+        mTitle = title;
+        mHost = host;
+    }
+
     public long getId() {
         return mId;
     }
