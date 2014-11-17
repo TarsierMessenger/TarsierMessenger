@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.domain.repository;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
@@ -36,7 +37,7 @@ public class MessageRepository extends AbstractRepository {
         super(database);
     }
 
-    public Message findById(long id) throws NoSuchModelException, InvalidCursorException {
+    public Message findById(long id) throws NoSuchModelException {
         String whereClause = COLUMN_ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
@@ -51,10 +52,14 @@ public class MessageRepository extends AbstractRepository {
             throw new NoSuchModelException("Cursor is null");
         }
 
-        return buildFromCursor(cursor);
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        }
     }
 
-    public void insert(Message message) throws InsertException {
+    public void insert(Message message) throws InvalidModelException, InsertException {
         ContentValues values = getValuesForMessage(message);
 
         long rowId = getWritableDatabase().insert(
@@ -77,7 +82,8 @@ public class MessageRepository extends AbstractRepository {
 
         ContentValues values = getValuesForMessage(message);
 
-        String whereClause = COLUMN_ID + " = " + message.getId();
+        String whereClause = COLUMN_ID + " = " + message.getId()
+                           + " LIMIT 1";
 
         long rowUpdated = getWritableDatabase().update(
                 TABLE_NAME,
@@ -93,10 +99,11 @@ public class MessageRepository extends AbstractRepository {
 
     public void delete(Message message) throws InvalidModelException, DeleteException {
         if (message.getId() < 0) {
-            throw new InvalidModelException("Message's id invalid");
+            throw new InvalidModelException("Message ID is invalid");
         }
 
-        String whereClause = COLUMN_ID + " = " + message.getId();
+        String whereClause = COLUMN_ID + " = " + message.getId()
+                           + " LIMIT 1";
 
         long rowDeleted = getWritableDatabase().delete(
                 TABLE_NAME,
@@ -114,27 +121,32 @@ public class MessageRepository extends AbstractRepository {
             throw new InvalidCursorException("Cursor is null");
         }
 
-        int chatId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID));
-        String text = c.getString(c.getColumnIndex(Columns.Message.COLUMN_NAME_MSG));
-        long senderId = c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
-        long dateTime = c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME));
+        try {
+            int chatId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID));
+            String text = c.getString(c.getColumnIndex(Columns.Message.COLUMN_NAME_MSG));
+            long senderId = c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
+            long dateTime = c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME));
 
-        long userId = Tarsier.app().getUserPreferences().getId();
+            long userId = Tarsier.app().getUserPreferences().getId();
 
-        Message message;
-        if (senderId == userId) {
-            message = new Message(chatId, text, dateTime);
-        } else {
-            message = new Message(chatId, text, senderId, dateTime);
+            Message message;
+            if (senderId == userId) {
+                message = new Message(chatId, text, dateTime);
+            } else {
+                message = new Message(chatId, text, senderId, dateTime);
+            }
+
+            return message;
+
+        } catch (CursorIndexOutOfBoundsException e) {
+            throw new InvalidCursorException(e);
         }
-
-        return message;
     }
 
     private ContentValues getValuesForMessage(Message message) {
         ContentValues values = new ContentValues();
 
-        values.put(Columns.Message.COLUMN_NAME_CHAT_ID, message.getChatID());
+        values.put(Columns.Message.COLUMN_NAME_CHAT_ID, message.getChatId());
         values.put(Columns.Message.COLUMN_NAME_MSG, message.getText());
         values.put(Columns.Message.COLUMN_NAME_SENDER_ID, message.getPeerId());
         values.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());

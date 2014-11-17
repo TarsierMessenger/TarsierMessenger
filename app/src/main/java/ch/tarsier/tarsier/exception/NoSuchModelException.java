@@ -8,4 +8,8 @@ public class NoSuchModelException extends Exception {
     public NoSuchModelException(String detailMessage) {
         super(detailMessage);
     }
+
+    public NoSuchModelException(InvalidCursorException e) {
+        super(e);
+    }
 }
