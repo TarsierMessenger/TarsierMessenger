@@ -10,15 +10,10 @@ import ch.tarsier.tarsier.domain.model.value.PublicKey;
 public class Peer {
 
     private long mId;
-
     private PublicKey mPublicKey;
-
-    private String mName;
-
+    private String mUserName;
     private String mStatusMessage;
-
     private String mPicturePath;
-
     private boolean mOnline;
 
     public Peer() {
@@ -29,19 +24,19 @@ public class Peer {
     // TODO: Remove when ChatroomParticipantsActivity won't need it anymore.
     public Peer(String name, String statusMessage) {
         this();
-        mName = name;
+        mUserName = name;
         mStatusMessage = statusMessage;
     }
 
     public Peer(String name, long id) {
         this();
-        mName = name;
+        mUserName = name;
         mId = id;
     }
 
     public Peer(String name, PublicKey publicKey) {
         this();
-        mName = name;
+        mUserName = name;
         mPublicKey = publicKey;
     }
 
@@ -61,12 +56,12 @@ public class Peer {
         mPublicKey = publicKey;
     }
 
-    public String getName() {
-        return mName;
+    public String getUserName() {
+        return mUserName;
     }
 
-    public void setName(String name) {
-        this.mName = name;
+    public void setUserName(String userName) {
+        this.mUserName = userName;
     }
 
     public String getStatusMessage() {
