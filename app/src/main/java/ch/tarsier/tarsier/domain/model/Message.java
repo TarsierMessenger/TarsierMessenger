@@ -36,7 +36,7 @@ public class Message {
     /**
      * Create a message sent by the user
      *
-     * @param chatID the id of the conversation in which the message has been sent
+     * @param chatID the id of the chat in which the message has been sent
      * @param text the body of the message
      * @param dateTime the timestamp at which the message has been sent
      */

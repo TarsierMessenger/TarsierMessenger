@@ -19,7 +19,7 @@ import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.User;
 
 /**
- * @author Romain Ruetschi
+ * @author romac
  */
 public class ChatroomPeersActivity extends ListActivity {
 
@@ -70,6 +70,9 @@ public class ChatroomPeersActivity extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * @author romac
+     */
     class ChatroomPeersArrayAdapter extends ArrayAdapter<Peer> {
         private final static int LAYOUT = R.layout.chatroom_peer;
 

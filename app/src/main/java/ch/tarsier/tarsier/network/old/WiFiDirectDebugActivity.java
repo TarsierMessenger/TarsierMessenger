@@ -45,7 +45,7 @@ public class WiFiDirectDebugActivity
 
     private WiFiDirectGroupList groupList;
     private final ArrayList<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
-    private ChatRoom chatRoom;
+    private Chatroom mChatroom;
     private Handler mHandler = new Handler(this);
 
     @Override
@@ -223,9 +223,9 @@ public class WiFiDirectDebugActivity
             handler.start();
         }
 
-        chatRoom = new ChatRoom();
+        mChatroom = new Chatroom();
         getFragmentManager().beginTransaction()
-                .replace(R.id.container, chatRoom).commit();
+                .replace(R.id.container, mChatroom).commit();
 
     }
 
@@ -243,11 +243,11 @@ public class WiFiDirectDebugActivity
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, message.arg1);
                 Log.d(TAG, readMessage);
-                (chatRoom).pushMessage("Peer: " + readMessage);
+                (mChatroom).pushMessage("Peer: " + readMessage);
                 break;
             case MY_HANDLE:
                 Object obj = message.obj;
-                (chatRoom).setMyConnection((MyConnection) obj);
+                (mChatroom).setMyConnection((MyConnection) obj);
         }
         return true;
     }

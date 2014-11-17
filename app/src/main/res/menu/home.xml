@@ -5,7 +5,7 @@
           android:title="@string/action_profile"
           android:orderInCategory="100"
           android:showAsAction="never" />
-    <item android:id="@+id/action_chat_room_participants"
+    <item android:id="@+id/action_chatroom_peers"
           android:title="@string/action_chat_room_participants"
           android:orderInCategory="100"
           android:showAsAction="never" />
@@ -13,7 +13,7 @@
           android:title="@string/action_wifidirectdebug"
           android:orderInCategory="100"
           android:showAsAction="never" />
-    <item android:id="@+id/action_discussions"
+    <item android:id="@+id/action_chats_list"
           android:title="@string/action_discussions"
           android:orderInCategory="100"
           android:showAsAction="never" />

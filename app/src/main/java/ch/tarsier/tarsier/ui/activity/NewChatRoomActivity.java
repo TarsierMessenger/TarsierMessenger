@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.validation.ChatRoomNameValidator;
+import ch.tarsier.tarsier.validation.ChatroomNameValidator;
 
 /**
  * @author gluthier
@@ -78,6 +78,6 @@ public class NewChatRoomActivity extends Activity {
     }
 
     private boolean validateChatRoomName() {
-        return new ChatRoomNameValidator().validate(mChatRoomName);
+        return new ChatroomNameValidator().validate(mChatRoomName);
     }
 }

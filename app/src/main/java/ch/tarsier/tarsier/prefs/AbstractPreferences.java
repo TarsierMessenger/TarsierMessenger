@@ -8,7 +8,7 @@ import ch.tarsier.tarsier.Tarsier;
 /**
  * @author romac
  *
- * @todo Have `getString()` take an Enum rather than an int.
+ * TODO: Have `getString()` take an Enum rather than an int.
  */
 public abstract class AbstractPreferences {
 

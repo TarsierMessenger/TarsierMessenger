@@ -21,9 +21,9 @@ public class UsernameValidator extends CompositeValidator<EditText> {
                 Tarsier.app().getResources().getString(R.string.error_username_length)
             )
         );
-        addValidator( new EditTextNoWhitespaceValidator(
+        addValidator(new EditTextNoWhitespaceValidator(
                 Tarsier.app().getResources().getString(R.string.error_username_whitespace)
-        ) );
+        ));
     }
 
 }
