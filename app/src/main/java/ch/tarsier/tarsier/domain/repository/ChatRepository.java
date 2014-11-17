@@ -39,7 +39,11 @@ public class ChatRepository extends AbstractRepository {
         mPeerRepository = Tarsier.app().getPeerRepository();
     }
 
-    public Chat findById(long id) throws NoSuchModelException {
+    public Chat findById(long id) throws IllegalArgumentException, NoSuchModelException {
+        if (id < 1) {
+            throw new IllegalArgumentException("Chat ID cannot be < 1");
+        }
+
         String selection = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
@@ -83,8 +87,7 @@ public class ChatRepository extends AbstractRepository {
 
         ContentValues values = getValuesForChat(chat);
 
-        String whereClause = Columns.Chat._ID + " = " + chat.getId()
-                           + " LIMIT 1";
+        String whereClause = Columns.Chat._ID + " = " + chat.getId();
 
         long rowUpdated = getWritableDatabase().update(
                 TABLE_NAME,
@@ -103,8 +106,7 @@ public class ChatRepository extends AbstractRepository {
             throw new InvalidModelException("Chat ID is invalid");
         }
 
-        String whereClause = Columns.Chat._ID + " = " + chat.getId()
-                           + " LIMIT 1";
+        String whereClause = Columns.Chat._ID + " = " + chat.getId();
 
         long rowDeleted = getWritableDatabase().delete(
                 TABLE_NAME,
