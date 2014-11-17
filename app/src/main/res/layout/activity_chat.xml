@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ch.tarsier.tarsier.ui.activity.ConversationActivity"
+    tools:context="ch.tarsier.tarsier.ui.activity.ChatActivity"
     android:orientation="vertical" >
 
     <EndlessListView

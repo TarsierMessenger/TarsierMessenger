@@ -75,7 +75,7 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.ConversationActivity"
+            android:name=".ui.activity.ChatActivity"
             android:label="@string/title_activity_conversation" >
         </activity>
     </application>
