@@ -2,7 +2,6 @@ package ch.tarsier.tarsier.domain.repository;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Peer;
@@ -37,12 +36,12 @@ public class PeerRepository extends AbstractRepository {
                 null, null, null, null
         );
 
-        //Emtpy cursor
+        //Empty cursor
         if (cursor.getCount() <= 0) {
             //TODO : throw NoSuchModelException
         }
 
-        return fromCursor(cursor);
+        return buildFromCursor(cursor);
     }
 
     public Peer findByPublicKey(PublicKey publicKey) {
@@ -55,12 +54,12 @@ public class PeerRepository extends AbstractRepository {
                 null, null, null, null
         );
 
-        //Emtpy cursor
+        //Empty cursor
         if (cursor.getCount() <= 0) {
             //TODO : throw NoSuchModelException
         }
 
-        return fromCursor(cursor);
+        return buildFromCursor(cursor);
     }
 
     public void insert(Peer peer) {
@@ -119,7 +118,7 @@ public class PeerRepository extends AbstractRepository {
         }
     }
 
-    private Peer fromCursor(Cursor c) {
+    private Peer buildFromCursor(Cursor c) {
         if (c == null) {
             //TODO : throw InvalidCursorException
         }

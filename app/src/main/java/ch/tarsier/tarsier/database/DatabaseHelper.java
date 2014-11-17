@@ -1,8 +1,11 @@
 package ch.tarsier.tarsier.database;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import ch.tarsier.tarsier.Tarsier;
 
 /**
  * @author McMoudi
@@ -61,11 +64,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // db.execSQL(SQL_CREATE_MESSAGES);
-        // db.execSQL(SQL_CREATE_PEER);
-
-        db.execSQL(SQL_DELETE_CHAT);
         db.execSQL(SQL_CREATE_CHAT);
+        db.execSQL(SQL_CREATE_MESSAGES);
+        db.execSQL(SQL_CREATE_PEER);
+
+        boolean isDebuggable =  (0 != (Tarsier.app().getApplicationInfo().flags
+                & ApplicationInfo.FLAG_DEBUGGABLE));
+
+        if (isDebuggable) {
+            System.out.println("===================================");
+            System.out.println("SQLiteDatabase onCreate generates :");
+            System.out.println(SQL_CREATE_CHAT);
+            System.out.println(SQL_CREATE_MESSAGES);
+            System.out.println(SQL_CREATE_PEER);
+            System.out.println("===================================");
+        }
     }
 
     @Override
@@ -73,6 +86,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // seems to me there ain't anything to do down here, as we shan't modify our architecture (for now?)
         // this method might be the one which should be used for new chats, not sure
     }
-
-
 }
