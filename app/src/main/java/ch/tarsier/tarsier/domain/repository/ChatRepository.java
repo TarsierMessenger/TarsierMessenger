@@ -67,7 +67,7 @@ public class ChatRepository extends AbstractRepository {
         );
 
         if (rowId == -1) {
-            throw new InsertException("INSERT INTO Chat failed.");
+            throw new InsertException("INSERT operation failed.");
         }
 
         chat.setId(rowId);
@@ -80,7 +80,8 @@ public class ChatRepository extends AbstractRepository {
 
         ContentValues values = getValuesForChat(chat);
 
-        String whereClause = Columns.Chat._ID + " = " + chat.getId();
+        String whereClause = Columns.Chat._ID + " = " + chat.getId()
+                           + " LIMIT 1";
 
         long rowUpdated = getWritableDatabase().update(
                 TABLE_NAME,
