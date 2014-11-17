@@ -4,9 +4,14 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 
+import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
+import java.util.List;
+
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
+import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
@@ -48,6 +53,32 @@ public class MessageRepository extends AbstractRepository {
                 TABLE_NAME,
                 COLUMNS,
                 whereClause,
+                null, null, null, null,
+                "1"
+        );
+
+        if (cursor == null || cursor.getCount() == 0) {
+            throw new NoSuchModelException("No Message with id " + id + " found.");
+        }
+
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        }
+    }
+
+    public List<Message> findByChat(Chat chat) throws IllegalArgumentException, NoSuchModelException {
+        if (chat.getId() < 1) {
+            throw new IllegalArgumentException("Chat must have a valid ID");
+        }
+
+        String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                COLUMNS,
+                whereClause,
                 null, null, null, null
         );
 
@@ -57,7 +88,7 @@ public class MessageRepository extends AbstractRepository {
         }
 
         try {
-            return buildFromCursor(cursor);
+            return buildListFromCursor(cursor);
         } catch (InvalidCursorException e) {
             throw new NoSuchModelException(e);
         }
@@ -143,6 +174,16 @@ public class MessageRepository extends AbstractRepository {
         } catch (CursorIndexOutOfBoundsException e) {
             throw new InvalidCursorException(e);
         }
+    }
+
+    private List<Message> buildListFromCursor(Cursor c) throws InvalidCursorException {
+        List<Message> result = new ArrayList<Message>();
+
+        do {
+            result.add(buildFromCursor(c));
+        } while(c.moveToNext());
+
+        return result;
     }
 
     private ContentValues getValuesForMessage(Message message) {
