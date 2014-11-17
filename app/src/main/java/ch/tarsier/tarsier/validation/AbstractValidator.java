@@ -1,7 +1,7 @@
 package ch.tarsier.tarsier.validation;
 
 /**
- * @author Romain Ruetschi
+ * @author romac
  * @param <T> The type of the elements to validate.
  */
 public abstract class AbstractValidator<T> implements Validator<T> {

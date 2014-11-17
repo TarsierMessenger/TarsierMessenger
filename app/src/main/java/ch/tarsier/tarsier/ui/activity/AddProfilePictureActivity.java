@@ -33,8 +33,8 @@ import ch.tarsier.tarsier.Tarsier;
  * Activity to upload a profile picture, either from the Gallery or
  * by taking a new picture.
  *
- * @author Benjamin Paccaud
- * @author Romain Ruetschi
+ * @author benpac
+ * @author romac
  *
  */
 public class AddProfilePictureActivity extends Activity {

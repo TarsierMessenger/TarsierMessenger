@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Romain Ruetschi
+ * @author romac
  * @param <T> The type of the elements to validate.
  */
 public class CompositeValidator<T> extends AbstractValidator<T> {

@@ -6,7 +6,7 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 
 /**
- * @author Romain Ruetschi
+ * @author romac
  */
 public class StatusMessageValidator extends CompositeValidator<EditText> {
 

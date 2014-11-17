@@ -12,7 +12,7 @@ import ch.tarsier.tarsier.Tarsier;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * @author Romain Ruetschi
+ * @author romac
  */
 public class HasErrorMatcher extends TypeSafeMatcher<View> {
 
