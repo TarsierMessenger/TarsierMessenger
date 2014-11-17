@@ -6,6 +6,12 @@ import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
+import ch.tarsier.tarsier.exception.DeleteException;
+import ch.tarsier.tarsier.exception.InsertException;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.exception.InvalidModelException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
+import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
  * @author xawill
@@ -26,7 +32,7 @@ public class PeerRepository extends AbstractRepository {
         super(database);
     }
 
-    public Peer findById(long id) {
+    public Peer findById(long id) throws NoSuchModelException, InvalidCursorException {
         String selection = Columns.Peer._ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
@@ -38,13 +44,13 @@ public class PeerRepository extends AbstractRepository {
 
         //Empty cursor
         if (cursor.getCount() <= 0) {
-            //TODO : throw NoSuchModelException
+            throw new NoSuchModelException("Cursor is empty");
         }
 
         return buildFromCursor(cursor);
     }
 
-    public Peer findByPublicKey(PublicKey publicKey) {
+    public Peer findByPublicKey(PublicKey publicKey) throws NoSuchModelException, InvalidCursorException {
         String selection = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = " + publicKey;
 
         Cursor cursor = getReadableDatabase().query(
@@ -56,13 +62,13 @@ public class PeerRepository extends AbstractRepository {
 
         //Empty cursor
         if (cursor.getCount() <= 0) {
-            //TODO : throw NoSuchModelException
+            throw new NoSuchModelException("Cursor is empty");
         }
 
         return buildFromCursor(cursor);
     }
 
-    public void insert(Peer peer) {
+    public void insert(Peer peer) throws InsertException {
         ContentValues values = getPeerValues(peer);
 
         long rowId = getWritableDatabase().insert(
@@ -71,17 +77,16 @@ public class PeerRepository extends AbstractRepository {
             values
         );
 
-        //TODO : Uncomment when InsertException is created
-        /*if (rowId == -1) {
+        if (rowId == -1) {
             throw new InsertException("INSERT operation failed");
-        }*/
+        }
 
         peer.setId(rowId);
     }
 
-    public void update(Peer peer) {
+    public void update(Peer peer) throws InvalidModelException, UpdateException {
         if (peer.getId() < 0) {
-            //TODO : throw InvalidModelException
+            throw new InvalidModelException("Invalid peer ID");
         }
 
         ContentValues values = getPeerValues(peer);
@@ -96,13 +101,13 @@ public class PeerRepository extends AbstractRepository {
         );
 
         if (updatedRows == 0) {
-            //TODO : throw UpdateException
+            throw new UpdateException("UPDATE operation failed");
         }
     }
 
-    public void delete(Peer peer) {
+    public void delete(Peer peer) throws InvalidModelException, DeleteException {
         if (peer.getId() < 0) {
-            //TODO : throw InvalidModelException
+            throw new InvalidModelException("Invalid peer ID");
         }
 
         String selection = Columns.Peer._ID + " = " + peer.getId();
@@ -114,13 +119,13 @@ public class PeerRepository extends AbstractRepository {
         );
 
         if (deletedRows == 0) {
-            //TODO : throw UpdateException
+            throw new DeleteException("DELETE operation failed");
         }
     }
 
-    private Peer buildFromCursor(Cursor c) {
+    private Peer buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
-            //TODO : throw InvalidCursorException
+            throw new InvalidCursorException("Cursor is null");
         }
 
         long id = c.getLong(c.getColumnIndex(Columns.Peer._ID));
