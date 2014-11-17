@@ -41,7 +41,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
               CREATE_TABLE + Columns.Peer.TABLE_NAME
             + Columns.Peer._ID + " (" + " INTEGER PRIMARY KEY, " + Columns.Peer.COLUMN_NAME_USERNAME
             + TEXT_TYPE + COMMA_SEP + Columns.Peer.COLUMN_NAME_PUBLIC_KEY + PUBLIC_KEY_TYPE + COMMA_SEP
-            + Columns.Peer.COLUMN_NAME_PICTURE_PATH + TEXT_TYPE + " )";
+            + Columns.Peer.COLUMN_NAME_STATUS_MESSAGE + TEXT_TYPE + COMMA_SEP
+            + Columns.Peer.COLUMN_NAME_PICTURE_PATH + TEXT_TYPE + COMMA_SEP
+            + Columns.Peer.COLUMN_NAME_IS_ONLINE + BOOLEAN_TYPE + " )";
 
     private static final String SQL_DELETE_CHAT =
         "DROP TABLE IF EXISTS " + Columns.Chat.TABLE_NAME;
