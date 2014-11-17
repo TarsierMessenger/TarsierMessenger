@@ -104,7 +104,7 @@ public class ChatroomPeersActivity extends ListActivity {
 
             Peer p = getItem(position);
 
-            nameView.setText(p.getName());
+            nameView.setText(p.getUserName());
             statusView.setText(p.getStatusMessage());
             imageView.setImageURI(Uri.parse(p.getPicturePath()));
             imageView.setImageResource(R.drawable.ic_launcher);

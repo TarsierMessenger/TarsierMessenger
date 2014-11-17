@@ -22,7 +22,7 @@ public class MessageViewModel {
         long peerId = message.getPeerId();
         Peer peer = Tarsier.app().getStorage().getPeer(peerId);
         mPeerPicture = BitmapFactory.decodeFile(peer.getPicturePath());
-        mPeerName = peer.getName();
+        mPeerName = peer.getUserName();
         isSentByUser = message.isSentByUser();
     }
 

@@ -48,6 +48,8 @@ public final class Columns {
 
         public static final String COLUMN_NAME_PUBLIC_KEY = "publicKey";
         public static final String COLUMN_NAME_USERNAME = "username";
+        public static final String COLUMN_NAME_STATUS_MESSAGE = "statusMessage";
         public static final String COLUMN_NAME_PICTURE_PATH = "picturePath";
+        public static final String COLUMN_NAME_IS_ONLINE = "online";
     }
 }
