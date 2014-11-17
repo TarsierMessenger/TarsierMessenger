@@ -27,7 +27,6 @@ public class PeerRepository extends AbstractRepository {
         super(database);
     }
 
-    //TODO : throws NoSuchModelException
     public Peer findById(long id) {
         String selection = Columns.Peer._ID + " = " + id;
 
@@ -38,10 +37,14 @@ public class PeerRepository extends AbstractRepository {
                 null, null, null, null
         );
 
+        //Emtpy cursor
+        if (cursor.getCount() <= 0) {
+            //TODO : throw NoSuchModelException
+        }
+
         return fromCursor(cursor);
     }
 
-    //TODO : throws NoSuchModelException
     public Peer findByPublicKey(PublicKey publicKey) {
         String selection = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = " + publicKey;
 
@@ -51,6 +54,11 @@ public class PeerRepository extends AbstractRepository {
                 selection,
                 null, null, null, null
         );
+
+        //Emtpy cursor
+        if (cursor.getCount() <= 0) {
+            //TODO : throw NoSuchModelException
+        }
 
         return fromCursor(cursor);
     }
@@ -73,14 +81,49 @@ public class PeerRepository extends AbstractRepository {
     }
 
     public void update(Peer peer) {
-        // TODO: Implement Peer.update()
+        if (peer.getId() < 0) {
+            //TODO : throw InvalidModelException
+        }
+
+        ContentValues values = getPeerValues(peer);
+
+        String selection = Columns.Peer._ID + " = " + peer.getId();
+
+        long updatedRows = getWritableDatabase().update(
+            TABLE_NAME,
+            values,
+            selection,
+            null
+        );
+
+        if (updatedRows == 0) {
+            //TODO : throw UpdateException
+        }
     }
 
     public void delete(Peer peer) {
-        // TODO: Implement Peer.delete()
+        if (peer.getId() < 0) {
+            //TODO : throw InvalidModelException
+        }
+
+        String selection = Columns.Peer._ID + " = " + peer.getId();
+
+        long deletedRows = getWritableDatabase().delete(
+                TABLE_NAME,
+                selection,
+                null
+        );
+
+        if (deletedRows == 0) {
+            //TODO : throw UpdateException
+        }
     }
 
     private Peer fromCursor(Cursor c) {
+        if (c == null) {
+            //TODO : throw InvalidCursorException
+        }
+
         long id = c.getLong(c.getColumnIndex(Columns.Peer._ID));
         byte[] publicKeyBytes = c.getBlob(c.getColumnIndex(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
         PublicKey publicKey = new PublicKey(publicKeyBytes);
