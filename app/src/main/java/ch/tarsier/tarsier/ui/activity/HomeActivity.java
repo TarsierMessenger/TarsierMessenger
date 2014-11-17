@@ -141,12 +141,12 @@ public class HomeActivity extends Activity {
                 displayWifiDirectDebugActivity();
                 return true;
 
-            case R.id.action_chat_room_participants:
-                displayChatRoomParticipants();
+            case R.id.action_chatroom_peers:
+                displayChatroomPeers();
                 return true;
 
-            case R.id.action_discussions:
-                displayDiscussionsActivity();
+            case R.id.action_chats_list:
+                displayChatsListActivity();
                 return true;
 
             default:
@@ -159,7 +159,7 @@ public class HomeActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-         refreshFields();
+        refreshFields();
     }
 
     private void refreshFields() {
@@ -224,14 +224,14 @@ public class HomeActivity extends Activity {
         startActivity(displayWifiDirectDebugIntent);
     }
 
-    private void displayDiscussionsActivity() {
-        Intent discussionsActivity= new Intent(this, ChatListActivity.class);
-        startActivity(discussionsActivity);
+    private void displayChatsListActivity() {
+        Intent chatsListActivity = new Intent(this, ChatListActivity.class);
+        startActivity(chatsListActivity);
     }
 
-    private void displayChatRoomParticipants() {
-        Intent displayChatRoomParticipants = new Intent(this, ChatroomPeersActivity.class);
-        startActivity(displayChatRoomParticipants);
+    private void displayChatroomPeers() {
+        Intent displayChatRoomPeers = new Intent(this, ChatroomPeersActivity.class);
+        startActivity(displayChatRoomPeers);
     }
 
 }
