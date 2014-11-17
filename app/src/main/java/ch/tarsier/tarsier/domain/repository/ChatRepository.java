@@ -119,12 +119,13 @@ public class ChatRepository extends AbstractRepository {
         }
     }
 
-    private Chat buildFromCursor(Cursor c) throws InvalidCursorException {
+    private Chat buildFromCursor(Cursor c) throws NoSuchModelException, InvalidCursorException {
         try {
             long id = c.getLong(c.getColumnIndex(Columns.Chat._ID));
             String title = c.getString(c.getColumnIndex(Columns.Chat.COLUMN_NAME_TITLE));
             long hostId = c.getLong(c.getColumnIndex(Columns.Chat.COLUMN_NAME_HOST_ID));
-            boolean isPrivate = c.getInt(c.getColumnIndex(Columns.Chat.COLUMN_NAME_IS_PRIVATE)) != 0;
+            boolean isPrivate = c.getInt(c.getColumnIndex(Columns.Chat.COLUMN_NAME_IS_PRIVATE))
+                    != 0;
 
             Peer host = mPeerRepository.findById(hostId);
 
