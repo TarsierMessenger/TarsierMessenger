@@ -8,7 +8,11 @@ import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.User;
-import ch.tarsier.tarsier.storage.StorageAccess;
+import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.domain.repository.MessageRepository;
+import ch.tarsier.tarsier.domain.repository.PeerRepository;
+import ch.tarsier.tarsier.exception.InsertException;
+import ch.tarsier.tarsier.exception.InvalidModelException;
 
 /**
  * @author gluthier
@@ -17,24 +21,24 @@ public class FillDatabaseWithFictionalData {
 
     public static void populate() {
 
+        ChatRepository chatRepository = Tarsier.app().getChatRepository();
+        PeerRepository peerRepository = Tarsier.app().getPeerRepository();
+        MessageRepository messageRepository = Tarsier.app().getMessageRepository();
+
         // Variables to simulate the time
-        long time = new Date().getTime();
-        long oneMinute = 60000; /* in milliseconds */
-        long oneHour = 3600000; /* in milliseconds */
-        long oneDay = 86400000; /* in milliseconds */
+        int time = (int) new Date().getTime();
+        int oneMinute = 60000; /* in milliseconds */
+        int oneHour = 3600000; /* in milliseconds */
+        int oneDay = 86400000; /* in milliseconds */
         Random random = new Random();
 
-        StorageAccess storageAccess = Tarsier.app().getStorage();
-/*
-        ChatRepository chatRepository = storageAccess.getChatRepository();
-        PeerRepository peerRepository = storageAccess.getPeerRepository();
-        MessageRepository messageRepository = storageAccess.getMessageRepository();
+        //Generate the user
+        User gabriel = new User("Gabriel Luthier");
 
         //Generate the peers
         Peer amirreza = new Peer("Amirreza Bahreini");
         Peer benjamin = new Peer("Benjamin Paccaud");
         Peer frederic = new Peer("Frederic Jacobs");
-        User gabriel = new User("Gabriel Luthier");
         Peer marin = new Peer("Marin-Jerry Nicolini");
         Peer romain = new Peer("Romain Ruetschi");
         Peer xavier = new Peer("Xavier Willemin");
@@ -49,17 +53,21 @@ public class FillDatabaseWithFictionalData {
         long xavierId = xavier.getId();
         long yannId = yann.getId();
 
-        peerRepository.insert(amirreza);
-        peerRepository.insert(benjamin);
-        peerRepository.insert(frederic);
-        peerRepository.insert(gabriel);
-        peerRepository.insert(marin);
-        peerRepository.insert(romain);
-        peerRepository.insert(xavier);
-        peerRepository.insert(yann);
+        try {
+            peerRepository.insert(amirreza);
+            peerRepository.insert(benjamin);
+            peerRepository.insert(frederic);
+            peerRepository.insert(gabriel);
+            peerRepository.insert(marin);
+            peerRepository.insert(romain);
+            peerRepository.insert(xavier);
+            peerRepository.insert(yann);
+        } catch (InsertException e) {
+            e.printStackTrace();
+        }
 
         //Generate the chats
-        Chat chat1 = Chat(frederic);
+        Chat chat1 = new Chat(frederic);
         Chat chat2 = new Chat(marin);
         Chat chat3 = new Chat("SwEng", frederic);
         Chat chat4 = new Chat(romain);
@@ -70,21 +78,27 @@ public class FillDatabaseWithFictionalData {
         Chat chat9 = new Chat(benjamin);
         Chat chat10 = new Chat("Saaaaat", gabriel);
 
-        chatRepository.insert(chat1);
-        chatRepository.insert(chat2);
-        chatRepository.insert(chat3);
-        chatRepository.insert(chat4);
-        chatRepository.insert(chat5);
-        chatRepository.insert(chat6);
-        chatRepository.insert(chat7);
-        chatRepository.insert(chat8);
-        chatRepository.insert(chat9);
-        chatRepository.insert(chat10);
+        try {
+            chatRepository.insert(chat1);
+            chatRepository.insert(chat2);
+            chatRepository.insert(chat3);
+            chatRepository.insert(chat4);
+            chatRepository.insert(chat5);
+            chatRepository.insert(chat6);
+            chatRepository.insert(chat7);
+            chatRepository.insert(chat8);
+            chatRepository.insert(chat9);
+            chatRepository.insert(chat10);
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
+        }
 
         //Generate the messages for the first chat
         ArrayList<Message> messagesChat1 = new ArrayList<Message>(12);
-        long time1 = time - oneDay;
-        long chat1Id = chat1.getChatId();
+        int time1 = time - oneDay;
+        long chat1Id = chat1.getId();
 
         messagesChat1.add(new Message(chat1Id, "Yo ça va?", gabrielId, time1));
         time1 += random.nextInt(oneMinute);
@@ -110,14 +124,20 @@ public class FillDatabaseWithFictionalData {
         time1 += random.nextInt(oneMinute);
         messagesChat1.add(new Message(chat1Id, "Ok nickel^^", gabrielId, time1));
 
-        for (Message m : messagesChat1) {
-            messageRepository.insert(m);
+        try {
+            for (Message m : messagesChat1) {
+                messageRepository.insert(m);
+            }
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
         }
 
         //Generate the messages for the second chat
         ArrayList<Message> messagesChat2 = new ArrayList<Message>(8);
         long time2 = time - oneDay;
-        long chat2Id = chat2.getChatId();
+        long chat2Id = chat2.getId();
 
         messagesChat2.add(new Message(chat2Id, "yo", marinId, time2));
         time2 += random.nextInt(oneMinute);
@@ -135,14 +155,20 @@ public class FillDatabaseWithFictionalData {
         time2 += random.nextInt(oneMinute);
         messagesChat2.add(new Message(chat2Id, "j'arrive dans 5 min", gabrielId, time2));
 
-        for (Message m : messagesChat2) {
-            messageRepository.insert(m);
+        try {
+            for (Message m : messagesChat2) {
+                messageRepository.insert(m);
+            }
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
         }
 
         //Generate the messages for the third chat
         ArrayList<Message> messagesChat3 = new ArrayList<Message>(18);
         long time3 = time - oneDay;
-        long chat3Id = chat3.getChatId();
+        long chat3Id = chat3.getId();
 
         messagesChat3.add(new Message(chat3Id, "Salut les gars, ça vous dit d'aller prendre une bière à sat?", amirrezaId, time3));
         time3 += random.nextInt(oneHour);
@@ -180,14 +206,21 @@ public class FillDatabaseWithFictionalData {
         time3 += random.nextInt(oneMinute);
         messagesChat3.add(new Message(chat3Id, "Très bons choix les gars!", gabrielId, time3));
 
-        for (Message m : messagesChat3) {
-            messageRepository.insert(m);
+        try {
+            for (Message m : messagesChat3) {
+                messageRepository.insert(m);
+            }
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
         }
+
 
         //Generate the messages for the fourth chat
         ArrayList<Message> messagesChat4 = new ArrayList<Message>(12);
         long time4 = time - oneDay;
-        long chat4Id = chat4.getChatId();
+        long chat4Id = chat4.getId();
 
         messagesChat4.add(new Message(chat4Id, "yoyo", gabrielId, time4));
         time4 += random.nextInt(oneHour);
@@ -213,14 +246,20 @@ public class FillDatabaseWithFictionalData {
         time4 += random.nextInt(oneMinute);
         messagesChat4.add(new Message(chat4Id, "ok", gabrielId, time4));
 
-        for (Message m : messagesChat4) {
-            messageRepository.insert(m);
+        try {
+            for (Message m : messagesChat4) {
+                messageRepository.insert(m);
+            }
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
         }
 
         //Generate the messages for the fifth chat
         ArrayList<Message> messagesChat5 = new ArrayList<Message>(8);
         long time5 = time - oneDay;
-        long chat5Id = chat5.getChatId();
+        long chat5Id = chat5.getId();
 
         messagesChat5.add(new Message(chat5Id, "la fête?", amirrezaId, time5));
         time5 += random.nextInt(oneHour);
@@ -238,14 +277,20 @@ public class FillDatabaseWithFictionalData {
         time5 += random.nextInt(oneHour);
         messagesChat5.add(new Message(chat5Id, "oui", amirrezaId, time5));
 
-        for (Message m : messagesChat5) {
-            messageRepository.insert(m);
+        try {
+            for (Message m : messagesChat5) {
+                messageRepository.insert(m);
+            }
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
         }
 
         //Generate the messages for the sixth chat
         ArrayList<Message> messagesChat6 = new ArrayList<Message>(12);
         long time6 = time - oneDay;
-        long chat6Id = chat6.getChatId();
+        long chat6Id = chat6.getId();
 
         messagesChat6.add(new Message(chat6Id, "Yo, tu peux m'envoyer pleins de messages pour tester l'affichage de l'app stp?", xavierId, time6));
         time6 += random.nextInt(oneHour);
@@ -276,14 +321,20 @@ public class FillDatabaseWithFictionalData {
         time6 += random.nextInt(oneMinute);
         messagesChat6.add(new Message(chat6Id, "J'ai pas trop d'inspirations^^", gabrielId, time6));
 
-        for (Message m : messagesChat6) {
-            messageRepository.insert(m);
+        try {
+            for (Message m : messagesChat6) {
+                messageRepository.insert(m);
+            }
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
         }
 
         //Generate the messages for the seventh chat
         ArrayList<Message> messagesChat7 = new ArrayList<Message>(10);
         long time7 = time - oneDay;
-        long chat7Id = chat7.getChatId();
+        long chat7Id = chat7.getId();
 
         messagesChat7.add(new Message(chat7Id, "t'es là?", gabrielId, time7));
         time7 += random.nextInt(oneHour);
@@ -304,16 +355,21 @@ public class FillDatabaseWithFictionalData {
         messagesChat7.add(new Message(chat7Id, "t'es là?", gabrielId, time7));
         time7 += random.nextInt(oneHour);
         messagesChat7.add(new Message(chat7Id, "oui", yannId, time7));
-        time7 += random.nextInt(oneHour);
 
-        for (Message m : messagesChat7) {
-            messageRepository.insert(m);
+        try {
+            for (Message m : messagesChat7) {
+                messageRepository.insert(m);
+            }
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
         }
 
         //Generate the messages for the eighth chat
         ArrayList<Message> messagesChat8 = new ArrayList<Message>(10);
         long time8 = time - oneDay;
-        long chat8Id = chat8.getChatId();
+        long chat8Id = chat8.getId();
 
         messagesChat8.add(new Message(chat8Id, "git rebase", romainId, time8));
         time8 += random.nextInt(oneMinute);
@@ -335,14 +391,20 @@ public class FillDatabaseWithFictionalData {
         time8 += random.nextInt(oneMinute);
         messagesChat8.add(new Message(chat8Id, "ok", gabrielId, time8));
 
-        for (Message m : messagesChat8) {
-            messageRepository.insert(m);
+        try {
+            for (Message m : messagesChat8) {
+                messageRepository.insert(m);
+            }
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
         }
 
         //Generate the messages for the ninth chat
         ArrayList<Message> messagesChat9 = new ArrayList<Message>(8);
         long time9 = time - oneDay;
-        long chat9Id = chat9.getChatId();
+        long chat9Id = chat9.getId();
 
         messagesChat9.add(new Message(chat9Id, "salut", benjaminId, time9));
         time9 += random.nextInt(oneHour);
@@ -360,14 +422,20 @@ public class FillDatabaseWithFictionalData {
         time9 += random.nextInt(oneMinute);
         messagesChat9.add(new Message(chat9Id, "Alors ça!", benjaminId, time9));
 
-        for (Message m : messagesChat9) {
-            messageRepository.insert(m);
+        try {
+            for (Message m : messagesChat9) {
+                messageRepository.insert(m);
+            }
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
         }
 
         //Generate the messages for the tenth chat
         ArrayList<Message> messagesChat10 = new ArrayList<Message>(24);
         long time10 = time - oneDay;
-        long chat10Id = chat10.getChatId();
+        long chat10Id = chat10.getId();
 
         messagesChat10.add(new Message(chat10Id, "Quel est le meilleur bar?", gabrielId, time10));
         time10 += random.nextInt(oneMinute);
@@ -417,9 +485,14 @@ public class FillDatabaseWithFictionalData {
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "à sat", yannId, time10));
 
-        for (Message m : messagesChat10) {
-            messageRepository.insert(m);
+        try {
+            for (Message m : messagesChat10) {
+                messageRepository.insert(m);
+            }
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
         }
-*/
     }
 }

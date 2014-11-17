@@ -28,6 +28,11 @@ public class Peer {
         mStatusMessage = statusMessage;
     }
 
+    public Peer(String name) {
+        this();
+        mUserName = name;
+    }
+
     public Peer(String name, long id) {
         this();
         mUserName = name;

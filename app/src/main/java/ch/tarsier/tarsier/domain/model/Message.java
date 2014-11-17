@@ -8,7 +8,7 @@ import ch.tarsier.tarsier.Tarsier;
  */
 public class Message {
 
-    private int mChatId;
+    private long mChatId;
     private String mText;
     private long mPeerId;
     private long mDateTime;
@@ -19,13 +19,13 @@ public class Message {
     /**
      * Create a message sent by a peer
      *
-     * @param chatID the id of the chat in which the message has been sent
+     * @param chatId the id of the chat in which the message has been sent
      * @param text the body of the message
      * @param peerId the id of the peer which sent the message
      * @param dateTime the timestamp at which the message has been sent
      */
-    public Message(int chatID, String text, long peerId, long dateTime) {
-        mChatId = chatID;
+    public Message(long chatId, String text, long peerId, long dateTime) {
+        mChatId = chatId;
         mText = text;
         mPeerId = peerId;
         mIsSentByUser = false;
@@ -36,12 +36,12 @@ public class Message {
     /**
      * Create a message sent by the user
      *
-     * @param chatID the id of the chat in which the message has been sent
+     * @param chatId the id of the chat in which the message has been sent
      * @param text the body of the message
      * @param dateTime the timestamp at which the message has been sent
      */
-    public Message(int chatID, String text, long dateTime) {
-        mChatId = chatID;
+    public Message(long chatId, String text, long dateTime) {
+        mChatId = chatId;
         mText = text;
         mPeerId = Tarsier.app().getUserPreferences().getId();
         mIsSentByUser = true;
@@ -55,11 +55,6 @@ public class Message {
 
     public long getAuthor() {
         return mPeerId;
-    }
-
-    // TODO: Remove, use getChatId instead.
-    public int getChatID() {
-        return (int) mChatId;
     }
 
     public long getChatId() {
