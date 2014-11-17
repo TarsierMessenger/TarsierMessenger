@@ -12,16 +12,16 @@ public class KeyPair {
      * @param publicKey  The public  key
      * @param privateKey The private key
      */
-    KeyPair(byte[] publicKey, byte[] privateKey){
+    KeyPair(byte[] publicKey, byte[] privateKey) {
         mPublicKey  = publicKey;
         mPrivateKey = privateKey;
     }
 
-    public byte[] getPublicKey(){
+    public byte[] getPublicKey() {
         return this.mPublicKey;
     }
 
-    public byte[] getPrivateKey(){
+    public byte[] getPrivateKey() {
         return this.mPrivateKey;
     }
 }
