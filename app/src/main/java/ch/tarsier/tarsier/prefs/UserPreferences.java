@@ -9,7 +9,7 @@ import ch.tarsier.tarsier.Tarsier;
 /**
  * @author romac
  *
- * @todo Add method to set the profile picture
+ * TODO: Add method to set the profile picture
  *       rather than doing it in AddProfilePictureActivity.
  */
 public class UserPreferences extends AbstractPreferences {
