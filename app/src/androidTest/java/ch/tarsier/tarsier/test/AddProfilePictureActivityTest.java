@@ -4,9 +4,6 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity;
 
-import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
-
 /**
  * @author Benjamin Paccaud
  */
