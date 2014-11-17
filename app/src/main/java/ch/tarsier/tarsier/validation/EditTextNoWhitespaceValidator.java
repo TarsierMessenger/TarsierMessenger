@@ -3,7 +3,7 @@ package ch.tarsier.tarsier.validation;
 import android.widget.EditText;
 
 /**
- * Created by benjamin on 09/11/14.
+ * @author benpac
  */
 public class EditTextNoWhitespaceValidator extends EditTextValidator {
 
@@ -13,6 +13,6 @@ public class EditTextNoWhitespaceValidator extends EditTextValidator {
 
     @Override
     protected boolean isValid(EditText editText) {
-        return (editText.getText().length() == 0 || editText.getText().toString().trim().length() != 0);
+        return editText.getText().length() == 0 || editText.getText().toString().trim().length() != 0;
     }
 }
