@@ -54,8 +54,20 @@ public class ChatRepository extends AbstractRepository {
         return fromCursor(cursor);
     }
 
-    public void insert(Chat Chat) {
-        // TODO: Implement Chat.insert()
+    public void insert(Chat chat) throws InsertException {
+        ContentValues values = getValuesForChat(chat);
+
+        long rowId = getWritableDatabase().insert(
+                TABLE_NAME,
+                null,
+                values
+        );
+
+        if (rowId == -1) {
+            throw new InsertException("INSERT INTO Chat failed.");
+        }
+
+        chat.setId(rowId);
     }
 
     public void update(Chat Chat) {
@@ -66,21 +78,35 @@ public class ChatRepository extends AbstractRepository {
         // TODO: Implement Chat.delete()
     }
 
-    private Chat fromCursor(Cursor c) {
-        long id = c.getLong(c.getColumnIndex(Columns.Chat._ID));
-        String title = c.getString(c.getColumnIndex(Columns.Chat.COLUMN_NAME_TITLE));
-        long hostId = c.getLong(c.getColumnIndex(Columns.Chat.COLUMN_NAME_HOST_ID));
-        boolean isPrivate = c.getInt(c.getColumnIndex(Columns.Chat.COLUMN_NAME_IS_PRIVATE)) != 0;
+    private Chat fromCursor(Cursor c) throws InvalidCursorException {
+        try {
+            long id = c.getLong(c.getColumnIndex(Columns.Chat._ID));
+            String title = c.getString(c.getColumnIndex(Columns.Chat.COLUMN_NAME_TITLE));
+            long hostId = c.getLong(c.getColumnIndex(Columns.Chat.COLUMN_NAME_HOST_ID));
+            boolean isPrivate = c.getInt(c.getColumnIndex(Columns.Chat.COLUMN_NAME_IS_PRIVATE)) != 0;
 
-        Peer host = mPeerRepository.findById(hostId);
+            Peer host = mPeerRepository.findById(hostId);
 
-        Chat chat = new Chat();
-        chat.setId(id);
-        chat.setTitle(title);
-        chat.setHost(host);
-        chat.setPrivate(isPrivate);
+            Chat chat = new Chat();
+            chat.setId(id);
+            chat.setTitle(title);
+            chat.setHost(host);
+            chat.setPrivate(isPrivate);
 
-        return chat;
+            return chat;
+        } catch (CursorIndexOutOfBoundsException e) {
+            throw new InvalidCursorException(e);
+        }
+    }
+
+    private ContentValues getValuesForChat(Chat chat) {
+        ContentValues values = new ContentValues();
+
+        values.put(Columns.Chat.COLUMN_NAME_TITLE, chat.getTitle());
+        values.put(Columns.Chat.COLUMN_NAME_HOST_ID, chat.getHost().getId());
+        values.put(Columns.Chat.COLUMN_NAME_IS_PRIVATE, chat.isPrivate());
+
+        return values;
     }
 
 
