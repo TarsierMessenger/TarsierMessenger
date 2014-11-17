@@ -12,7 +12,9 @@ import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
+import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
  * @author romac
@@ -70,8 +72,25 @@ public class ChatRepository extends AbstractRepository {
         chat.setId(rowId);
     }
 
-    public void update(Chat Chat) {
-        // TODO: Implement Chat.update()
+    public void update(Chat chat) throws InvalidModelException, UpdateException {
+        if (chat.getId() <= 0) {
+            throw new InvalidModelException("Chat ID is invalid");
+        }
+
+        ContentValues values = getValuesForChat(chat);
+
+        String whereClause = Columns.Chat._ID + " = " + chat.getId();
+
+        long rowUpdated = getWritableDatabase().update(
+                TABLE_NAME,
+                values,
+                whereClause,
+                null
+        );
+
+        if (rowUpdated == 0) {
+            throw new UpdateException("UPDATE operation failed");
+        }
     }
 
     public void delete(Chat Chat) {
