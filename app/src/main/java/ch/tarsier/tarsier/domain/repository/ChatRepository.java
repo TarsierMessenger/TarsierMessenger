@@ -8,7 +8,6 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Chat;
-import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
@@ -40,7 +39,7 @@ public class ChatRepository extends AbstractRepository {
         mPeerRepository = Tarsier.app().getPeerRepository();
     }
 
-    public Chat findById(long id) throws NoSuchModelException, InvalidCursorException {
+    public Chat findById(long id) throws NoSuchModelException {
         String selection = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
@@ -54,10 +53,14 @@ public class ChatRepository extends AbstractRepository {
             throw new NoSuchModelException("No Chat with id " + id + " found.");
         }
 
-        return fromCursor(cursor);
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        }
     }
 
-    public void insert(Chat chat) throws InsertException {
+    public void insert(Chat chat) throws InvalidModelException, InsertException {
         ContentValues values = getValuesForChat(chat);
 
         long rowId = getWritableDatabase().insert(
@@ -114,7 +117,7 @@ public class ChatRepository extends AbstractRepository {
         }
     }
 
-    private Chat fromCursor(Cursor c) throws InvalidCursorException {
+    private Chat buildFromCursor(Cursor c) throws InvalidCursorException {
         try {
             long id = c.getLong(c.getColumnIndex(Columns.Chat._ID));
             String title = c.getString(c.getColumnIndex(Columns.Chat.COLUMN_NAME_TITLE));
