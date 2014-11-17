@@ -8,12 +8,12 @@ import ch.tarsier.tarsier.Tarsier;
 /**
  * @author gluthier
  */
-public class ChatRoomNameValidator extends CompositeValidator<EditText> {
+public class ChatroomNameValidator extends CompositeValidator<EditText> {
     
     private static final int MIN_CHAT_ROOM_NAME_LENGTH = 1;
     private static final int MAX_CHAT_ROOM_NAME_LENGTH = 36;
     
-    public ChatRoomNameValidator() {
+    public ChatroomNameValidator() {
         addValidator(
             new EditTextLengthValidator(
                 MIN_CHAT_ROOM_NAME_LENGTH,
