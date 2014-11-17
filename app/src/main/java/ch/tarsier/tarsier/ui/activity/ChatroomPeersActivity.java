@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.User;
 
@@ -23,6 +24,7 @@ import ch.tarsier.tarsier.domain.model.User;
  */
 public class ChatroomPeersActivity extends ListActivity {
 
+    public static final String EXTRAS_CHAT_KEY = "chat";
     public final static String EXTRAS_PEERS_KEY = "peers";
 
     @Override
@@ -32,15 +34,24 @@ public class ChatroomPeersActivity extends ListActivity {
         Intent sender = getIntent();
         Bundle extras = sender.getExtras();
 
+        Chat chat;
         Peer[] peers;
 
-        if (extras != null && extras.containsKey(EXTRAS_PEERS_KEY)) {
+        if (extras != null && hasRightExtras(extras)) {
+            chat = (Chat) extras.get(EXTRAS_CHAT_KEY);
             peers = (User[]) extras.get(EXTRAS_PEERS_KEY);
         } else {
             // Just some test data in case we got nothing from the parent,
             // as it is the case when accessing this view from the menu.
+            Peer host = new Peer("Amirezza Bahreini", "At Sat', come join me !");
+
+            chat = new Chat();
+            chat.setHost(host);
+            chat.setTitle("Tarsier rocks!");
+            chat.setPrivate(false);
+
             peers = new Peer[] {
-                new Peer("Amirezza Bahreini", "At Sat', come join me !"),
+                host,
                 new Peer("Frederic Jacobs", "Tarsier will beat ISIS !"),
                 new Peer("Gabriel Luthier", "There's no place like 127.0.0.1"),
                 new Peer("Radu Banabic", "Happy coding !"),
@@ -48,7 +59,12 @@ public class ChatroomPeersActivity extends ListActivity {
             };
         }
 
-        setListAdapter(new ChatroomPeersArrayAdapter(this, peers));
+        setListAdapter(new ChatroomPeersArrayAdapter(this, chat, peers));
+    }
+
+    private boolean hasRightExtras(Bundle extras) {
+        return extras.containsKey(EXTRAS_CHAT_KEY)
+            && extras.containsKey(EXTRAS_PEERS_KEY);
     }
 
     @Override
@@ -78,14 +94,16 @@ public class ChatroomPeersActivity extends ListActivity {
 
         private final Context mContext;
         private final LayoutInflater mInflater;
-        private final Peer[] mValues;
+        private final Peer[] mPeers;
+        private final Chat mChat;
 
-        ChatroomPeersArrayAdapter(Context context, Peer[] values) {
-            super(context, LAYOUT, values);
+        ChatroomPeersArrayAdapter(Context context, Chat chat, Peer[] peers) {
+            super(context, LAYOUT, peers);
 
             mContext = context;
             mInflater = getLayoutInflater();
-            mValues = values;
+            mPeers = peers;
+            mChat = chat;
         }
 
         @Override
@@ -112,6 +130,9 @@ public class ChatroomPeersActivity extends ListActivity {
             imageView.setImageURI(Uri.parse(p.getPicturePath()));
             imageView.setImageResource(R.drawable.ic_launcher);
             badgeView.setVisibility((p.isOnline()) ? View.VISIBLE : View.INVISIBLE);
+
+            // TODO: Show group owner badge instead of online badge.
+            badgeView.setVisibility((mChat.isHost(p)) ? View.VISIBLE : View.INVISIBLE);
 
             return rowView;
         }

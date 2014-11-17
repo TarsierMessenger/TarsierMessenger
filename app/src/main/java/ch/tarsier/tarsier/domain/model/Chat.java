@@ -45,4 +45,13 @@ public class Chat {
     public void setHost(Peer host) {
         mHost = host;
     }
+
+    public boolean isHost(Peer peer) {
+        if (peer != null && getHost() != null) {
+            // TODO: Replace with Peer.equals() once we have it.
+            return getHost().getId() == peer.getId();
+        } else {
+            return false;
+        }
+    }
 }
