@@ -1,7 +1,5 @@
 package ch.tarsier.tarsier.exception;
 
-import android.database.CursorIndexOutOfBoundsException;
-
 /**
  * @author gluthier
  */
