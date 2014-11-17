@@ -10,6 +10,7 @@ import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
@@ -93,8 +94,23 @@ public class ChatRepository extends AbstractRepository {
         }
     }
 
-    public void delete(Chat Chat) {
-        // TODO: Implement Chat.delete()
+    public void delete(Chat chat) throws InvalidModelException, DeleteException {
+        if (chat.getId() < 0) {
+            throw new InvalidModelException("Chat ID is invalid");
+        }
+
+        String whereClause = Columns.Chat._ID + " = " + chat.getId()
+                           + " LIMIT 1";
+
+        long rowDeleted = getWritableDatabase().delete(
+                TABLE_NAME,
+                whereClause,
+                null
+        );
+
+        if (rowDeleted == 0) {
+            throw new DeleteException("DELETE operation failed");
+        }
     }
 
     private Chat fromCursor(Cursor c) throws InvalidCursorException {
