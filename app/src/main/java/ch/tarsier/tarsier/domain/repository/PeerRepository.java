@@ -1,10 +1,10 @@
 package ch.tarsier.tarsier.domain.repository;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
-import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 
@@ -27,6 +27,7 @@ public class PeerRepository extends AbstractRepository {
         super(database);
     }
 
+    //TODO : throws NoSuchModelException
     public Peer findById(long id) {
         String selection = Columns.Peer._ID + " = " + id;
 
@@ -40,6 +41,7 @@ public class PeerRepository extends AbstractRepository {
         return fromCursor(cursor);
     }
 
+    //TODO : throws NoSuchModelException
     public Peer findByPublicKey(PublicKey publicKey) {
         String selection = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = " + publicKey;
 
@@ -54,7 +56,20 @@ public class PeerRepository extends AbstractRepository {
     }
 
     public void insert(Peer peer) {
-        // TODO: Implement Peer.insert()
+        ContentValues values = getPeerValues(peer);
+
+        long rowId = getWritableDatabase().insert(
+            TABLE_NAME,
+            null,
+            values
+        );
+
+        //TODO : Uncomment when InsertException is created
+        /*if (rowId == -1) {
+            throw new InsertException("INSERT operation failed");
+        }*/
+
+        peer.setId(rowId);
     }
 
     public void update(Peer peer) {
@@ -70,7 +85,7 @@ public class PeerRepository extends AbstractRepository {
         byte[] publicKeyBytes = c.getBlob(c.getColumnIndex(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
         PublicKey publicKey = new PublicKey(publicKeyBytes);
         String userName = c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_USERNAME));
-        String statusMessage = c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_STATUS_MESSAGE));;
+        String statusMessage = c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_STATUS_MESSAGE));
         String picturePath = c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_PICTURE_PATH));
         boolean online = c.getInt(c.getColumnIndex(Columns.Peer.COLUMN_NAME_IS_ONLINE)) != 0;
 
@@ -83,5 +98,17 @@ public class PeerRepository extends AbstractRepository {
         peer.setOnline(online);
 
         return peer;
+    }
+
+    private ContentValues getPeerValues(Peer peer) {
+        ContentValues values = new ContentValues();
+
+        values.put(Columns.Peer.COLUMN_NAME_PUBLIC_KEY, peer.getPublicKey().getBytes());
+        values.put(Columns.Peer.COLUMN_NAME_USERNAME, peer.getUserName());
+        values.put(Columns.Peer.COLUMN_NAME_STATUS_MESSAGE, peer.getStatusMessage());
+        values.put(Columns.Peer.COLUMN_NAME_PICTURE_PATH, peer.getPicturePath());
+        values.put(Columns.Peer.COLUMN_NAME_IS_ONLINE, peer.isOnline());
+
+        return values;
     }
 }
