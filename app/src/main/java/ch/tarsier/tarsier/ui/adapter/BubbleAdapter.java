@@ -19,7 +19,7 @@ import ch.tarsier.tarsier.R;
 /**
  * @author marinnicolini and xawill (extreme programming)
  *
- * Custom class to display the bubbles in the ConversationActivity ListView
+ * Custom class to display the bubbles in the ChatActivity ListView
  *
  * Inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
  * and https://github.com/survivingwithandroid/Surviving-with-android/tree/master/EndlessAdapter

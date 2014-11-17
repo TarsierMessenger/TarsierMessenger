@@ -2,7 +2,8 @@ package ch.tarsier.tarsier.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.ui.activity.ConversationActivity;
+import ch.tarsier.tarsier.ui.activity.ChatActivity;
+
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.clearText;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.closeSoftKeyboard;
@@ -13,12 +14,12 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 import static org.hamcrest.Matchers.not;
 
 /**
- * Created by Marin on 12.11.2014.
+ * @author marinnicolini
  */
-public class ConversationActivityTest extends ActivityInstrumentationTestCase2<ConversationActivity> {
+public class ChatActivityTest extends ActivityInstrumentationTestCase2<ChatActivity> {
 
-    public ConversationActivityTest() {
-        super(ConversationActivity.class);
+    public ChatActivityTest() {
+        super(ChatActivity.class);
     }
 
     @Override

@@ -31,27 +31,27 @@ import ch.tarsier.tarsier.validation.EditTextMessageValidator;
 /**
  * @author marinnicolini and xawill (extreme programming)
  *
- * This activity is responsible to display the messages of the current discussion.
- * This discussion can either be a private one, or a chat room (multiple participants).
+ * This activity is responsible to display the messages of the current chat.
+ * This chat can either be a private one, or a chatroom (multiple peers).
  *
  * Bubble's layout is inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
  */
-public class ConversationActivity extends Activity implements EndlessListener {
+public class ChatActivity extends Activity implements EndlessListener {
     private static final int NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE = 10;
 
     // TODO: Store those IDs in their own class, so that they can be shared between classes
     //       while reducing the coupling a little.
-    private static final String EXTRA_DISCUSSION_ID = "discussionId";
+    private static final String EXTRA_CHAT_ID = "chatId";
 
     private static Point windowSize;
-    private int mDiscussionId;
+    private int mChatId;
     private BubbleAdapter mListViewAdapter;
     private EndlessListView mListView;
     private EditText mMessageToBeSend;
 
     public void sendMessage(View view) {
         String messageText = ((TextView) findViewById(R.id.message_to_send)).getText().toString();
-        Message sentMessage = new Message(mDiscussionId, messageText, DateUtil.getNowTimestamp());
+        Message sentMessage = new Message(mChatId, messageText, DateUtil.getNowTimestamp());
 
 
         //Add the message to the ListView
@@ -79,7 +79,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_conversation);
+        setContentView(R.layout.activity_chat);
         enableSendMessageImageButton(false);
 
         /*Display display = getWindowManager().getDefaultDisplay();
@@ -87,9 +87,9 @@ public class ConversationActivity extends Activity implements EndlessListener {
         display.getSize(this.windowSize);*/
 
         Intent startingIntent = getIntent();
-        mDiscussionId = startingIntent.getIntExtra(EXTRA_DISCUSSION_ID, -1);
+        mChatId = startingIntent.getIntExtra(EXTRA_CHAT_ID, -1);
 
-        if (mDiscussionId == -1) {
+        if (mChatId == -1) {
             // FIXME: Handle this
         }
 
@@ -133,7 +133,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
 
             StorageAccess storage = Tarsier.app().getStorage();
             List<Message> newMessages = storage.getMessages(
-                mDiscussionId,
+                    mChatId,
                 NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE,
                 lastMessageTimestamp
             );
@@ -165,7 +165,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
      * Toggle the clickable property of the lets_chat Button
      * @param enable true makes the Button clickable.
      */
-    private void enableSendMessageImageButton(boolean enable){
+    private void enableSendMessageImageButton(boolean enable) {
         ImageButton send = (ImageButton) findViewById(R.id.sendImageButton);
         send.setClickable(enable);
     }
@@ -202,7 +202,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
         return validateSendMessage();
     }
 
-    private boolean validateSendMessage(){
+    private boolean validateSendMessage() {
         return new EditTextMessageValidator("No message to send!").validate(mMessageToBeSend);
     }
 
