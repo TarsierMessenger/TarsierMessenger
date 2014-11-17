@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
