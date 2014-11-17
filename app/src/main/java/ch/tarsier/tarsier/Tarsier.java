@@ -52,8 +52,16 @@ public class Tarsier extends Application {
         return mUserPreferences;
     }
 
+    public void setUserPreferences(UserPreferences userPreferences) {
+        mUserPreferences = userPreferences;
+    }
+
     public Database getDatabase() {
         return mDatabase;
+    }
+
+    public void setDatabase(Database database) {
+        mDatabase = database;
     }
 
     public PeerRepository getPeerRepository() {
@@ -64,6 +72,10 @@ public class Tarsier extends Application {
         return mPeerRepository;
     }
 
+    public void setPeerRepository(PeerRepository peerRepository) {
+        mPeerRepository = peerRepository;
+    }
+
     public ChatRepository getChatRepository() {
         if (mChatRepository == null) {
             mChatRepository = new ChatRepository(getDatabase());
@@ -72,11 +84,19 @@ public class Tarsier extends Application {
         return mChatRepository;
     }
 
+    public void setChatRepository(ChatRepository chatRepository) {
+        mChatRepository = chatRepository;
+    }
+
     public MessageRepository getMessageRepository() {
         if (mMessageRepository == null) {
             mMessageRepository = new MessageRepository(getDatabase());
         }
 
         return mMessageRepository;
+    }
+
+    public void setMessageRepository(MessageRepository messageRepository) {
+        mMessageRepository = messageRepository;
     }
 }
