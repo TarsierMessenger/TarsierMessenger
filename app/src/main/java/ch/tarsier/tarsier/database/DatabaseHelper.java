@@ -68,8 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_MESSAGES);
         db.execSQL(SQL_CREATE_PEER);
 
-        boolean isDebuggable =  (0 != (Tarsier.app().getApplicationInfo().flags
-                & ApplicationInfo.FLAG_DEBUGGABLE));
+        boolean isDebuggable = 0 != (Tarsier.app().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE);
 
         if (isDebuggable) {
             System.out.println("===================================");
