@@ -83,36 +83,46 @@ public class FillDatabaseWithFictionalData {
         //Generate the chats
         Chat chat1 = new Chat();
         chat1.setHost(frederic);
+        chat1.setPrivate(true);
 
         Chat chat2 = new Chat();
         chat2.setHost(marin);
+        chat1.setPrivate(true);
 
         Chat chat3 = new Chat();
         chat3.setHost(frederic);
         chat3.setTitle("SwEng");
+        chat1.setPrivate(false);
 
         Chat chat4 = new Chat();
         chat4.setHost(romain);
+        chat1.setPrivate(true);
 
         Chat chat5 = new Chat();
         chat5.setHost(amirreza);
+        chat1.setPrivate(true);
 
         Chat chat6 = new Chat();
         chat6.setHost(xavier);
+        chat1.setPrivate(true);
 
         Chat chat7 = new Chat();
         chat7.setHost(yann);
+        chat1.setPrivate(true);
 
         Chat chat8 = new Chat();
         chat8.setHost(romain);
         chat8.setTitle("Git helpdesk");
+        chat1.setPrivate(false);
 
         Chat chat9 = new Chat();
         chat9.setHost(benjamin);
+        chat1.setPrivate(true);
 
         Chat chat10 = new Chat();
         chat10.setHost(gabriel);
         chat10.setTitle("Saaaaat");
+        chat1.setPrivate(false);
 
         try {
             chatRepository.insert(chat1);
