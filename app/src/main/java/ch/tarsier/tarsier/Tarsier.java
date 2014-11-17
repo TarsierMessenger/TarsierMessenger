@@ -10,7 +10,7 @@ import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.storage.StorageAccess;
 
 /**
- * @author Romain Ruetschi
+ * @author romac
  */
 public class Tarsier extends Application {
 
