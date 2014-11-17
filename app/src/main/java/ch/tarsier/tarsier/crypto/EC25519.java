@@ -10,18 +10,20 @@ import java.security.SecureRandom;
  */
 
 public class EC25519 {
-    private static int ECC_KEY_LENGTH = 32;
+    private static final int ECC_KEY_LENGTH = 32;
+
+    private static final int ECC_SIGNATURE_RANDOM_BYTES_NUM = 64;
 
     static {
         System.loadLibrary("curve25519");
         try {
-            random = SecureRandom.getInstance("SHA1PRNG");
+            mRandom = SecureRandom.getInstance("SHA1PRNG");
         } catch (NoSuchAlgorithmException e) {
             throw new AssertionError(e);
         }
     }
 
-    private static final SecureRandom random;
+    private static SecureRandom mRandom;
 
     private static native byte[] calculateAgreement(byte[] ourPrivate, byte[] theirPublic);
     private static native byte[] generatePublicKey(byte[] privateKey);
@@ -44,7 +46,7 @@ public class EC25519 {
 
     private static byte[] generatePrivateKey() {
         byte[] privateKey = new byte[ECC_KEY_LENGTH];
-        random.nextBytes(privateKey);
+        mRandom.nextBytes(privateKey);
 
         return generatePrivateKey(privateKey);
     }
@@ -66,8 +68,8 @@ public class EC25519 {
      * @param theirPublic Their public key
      * @return Curve25519 Shared secret
      */
-    public static byte[] calculateCurve25519KeyAgreement(byte[] ourPrivate, byte[] theirPublic){
-        if (ourPrivate.length != ECC_KEY_LENGTH || theirPublic.length != ECC_KEY_LENGTH){
+    public static byte[] calculateCurve25519KeyAgreement(byte[] ourPrivate, byte[] theirPublic) {
+        if (ourPrivate.length != ECC_KEY_LENGTH || theirPublic.length != ECC_KEY_LENGTH) {
             throw new InvalidParameterException();
         }
         return calculateAgreement(ourPrivate, theirPublic);
@@ -81,16 +83,18 @@ public class EC25519 {
      * @return Signed message
      * @throws InvalidParameterException
      */
-    public static byte[] calculateEd25519Signature(byte[] privateKey, byte[] message) throws InvalidParameterException{
-        if (privateKey.length != ECC_KEY_LENGTH){
+    public static byte[] calculateEd25519Signature(byte[] privateKey, byte[] message) throws InvalidParameterException {
+        if (privateKey.length != ECC_KEY_LENGTH) {
             throw new InvalidParameterException();
         }
-        byte[] randomBytes = getRandom(64);
+        byte[] randomBytes = getRandom(ECC_SIGNATURE_RANDOM_BYTES_NUM);
         return calculateSignature(randomBytes, privateKey, message);
     }
 
-    public static boolean verifyEd25519Signature(byte[] publicKey, byte[] message, byte[] signature) throws InvalidParameterException{
-        if (publicKey.length != ECC_KEY_LENGTH){
+    public static boolean verifyEd25519Signature(byte[] publicKey, byte[] message, byte[] signature)
+        throws InvalidParameterException {
+
+        if (publicKey.length != ECC_KEY_LENGTH) {
             throw new InvalidParameterException();
         }
         return verifySignature(publicKey, message, signature);
