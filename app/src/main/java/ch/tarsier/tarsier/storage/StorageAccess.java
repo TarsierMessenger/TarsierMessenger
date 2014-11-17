@@ -236,7 +236,7 @@ public class StorageAccess {
         isReady();
         ContentValues values = new ContentValues();
 
-        values.put(Columns.Message.COLUMN_NAME_CHAT_ID, msg.getChatID());
+        values.put(Columns.Message.COLUMN_NAME_CHAT_ID, msg.getId());
         values.put(Columns.Message.COLUMN_NAME_MSG, msg.getText());
         values.put(Columns.Message.COLUMN_NAME_SENDER_ID, msg.getPeerId());
         values.put(Columns.Message.COLUMN_NAME_DATETIME, msg.getDateTime());

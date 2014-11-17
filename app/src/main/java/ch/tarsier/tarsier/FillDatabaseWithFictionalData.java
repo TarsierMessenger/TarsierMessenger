@@ -33,16 +33,30 @@ public class FillDatabaseWithFictionalData {
         Random random = new Random();
 
         //Generate the user
-        User gabriel = new User("Gabriel Luthier");
+        User gabriel = new User();
+        gabriel.setUserName("Gabriel Luthier");
 
         //Generate the peers
-        Peer amirreza = new Peer("Amirreza Bahreini");
-        Peer benjamin = new Peer("Benjamin Paccaud");
-        Peer frederic = new Peer("Frederic Jacobs");
-        Peer marin = new Peer("Marin-Jerry Nicolini");
-        Peer romain = new Peer("Romain Ruetschi");
-        Peer xavier = new Peer("Xavier Willemin");
-        Peer yann = new Peer("Yann Mahmoudi");
+        Peer amirreza = new Peer();
+        amirreza.setUserName("Amirreza Bahreini");
+
+        Peer benjamin = new Peer();
+        benjamin.setUserName("Benjamin Paccaud");
+
+        Peer frederic = new Peer();
+        frederic.setUserName("Frederic Jacobs");
+
+        Peer marin = new Peer();
+        marin.setUserName("Marin-Jerry Nicolini");
+
+        Peer romain = new Peer();
+        romain.setUserName("Romain Ruetschi");
+
+        Peer xavier = new Peer();
+        xavier.setUserName("Xavier Willemin");
+
+        Peer yann = new Peer();
+        yann.setUserName("Yann Mahmoudi");
 
         long amirrezaId = amirreza.getId();
         long benjaminId = benjamin.getId();
@@ -67,16 +81,38 @@ public class FillDatabaseWithFictionalData {
         }
 
         //Generate the chats
-        Chat chat1 = new Chat(frederic);
-        Chat chat2 = new Chat(marin);
-        Chat chat3 = new Chat("SwEng", frederic);
-        Chat chat4 = new Chat(romain);
-        Chat chat5 = new Chat(amirreza);
-        Chat chat6 = new Chat(xavier);
-        Chat chat7 = new Chat(yann);
-        Chat chat8 = new Chat("Git helpdesk", romain);
-        Chat chat9 = new Chat(benjamin);
-        Chat chat10 = new Chat("Saaaaat", gabriel);
+        Chat chat1 = new Chat();
+        chat1.setHost(frederic);
+
+        Chat chat2 = new Chat();
+        chat2.setHost(marin);
+
+        Chat chat3 = new Chat();
+        chat3.setHost(frederic);
+        chat3.setTitle("SwEng");
+
+        Chat chat4 = new Chat();
+        chat4.setHost(romain);
+
+        Chat chat5 = new Chat();
+        chat5.setHost(amirreza);
+
+        Chat chat6 = new Chat();
+        chat6.setHost(xavier);
+
+        Chat chat7 = new Chat();
+        chat7.setHost(yann);
+
+        Chat chat8 = new Chat();
+        chat8.setHost(romain);
+        chat8.setTitle("Git helpdesk");
+
+        Chat chat9 = new Chat();
+        chat9.setHost(benjamin);
+
+        Chat chat10 = new Chat();
+        chat10.setHost(gabriel);
+        chat10.setTitle("Saaaaat");
 
         try {
             chatRepository.insert(chat1);
