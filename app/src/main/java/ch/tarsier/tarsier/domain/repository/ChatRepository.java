@@ -1,12 +1,18 @@
 package ch.tarsier.tarsier.domain.repository;
 
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.exception.InsertException;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
 
 /**
  * @author romac
@@ -31,7 +37,7 @@ public class ChatRepository extends AbstractRepository {
         mPeerRepository = Tarsier.app().getPeerRepository();
     }
 
-    public Chat findById(long id) {
+    public Chat findById(long id) throws NoSuchModelException, InvalidCursorException {
         String selection = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
@@ -40,6 +46,10 @@ public class ChatRepository extends AbstractRepository {
                 selection,
                 null, null, null, null
         );
+
+        if (cursor == null || cursor.getCount() == 0) {
+            throw new NoSuchModelException("No Chat with id " + id + " found.");
+        }
 
         return fromCursor(cursor);
     }
