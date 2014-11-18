@@ -52,8 +52,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile files('libs/espresso-contrib-1.1-bundled.jar')
     compile files('../libs/espresso-contrib-1.1-bundled.jar')
-    compile files('libs/sqlcipher.jar')
-    compile files('libs/sqlcipher-javadoc.jar')
 }
 
 check.dependsOn 'checkstyle'
