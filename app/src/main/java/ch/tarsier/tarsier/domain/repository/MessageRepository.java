@@ -130,8 +130,8 @@ public class MessageRepository extends AbstractRepository {
         long cTime = 0;
         do {
             cTime = cursor.getLong(cursor.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME));
-        }
-        while (cursor.moveToNext() && since < cTime); //don't forget the descending order. since should be > cTime, amIRight?
+        } while (cursor.moveToNext() && since < cTime);
+        //don't forget the descending order. since should be > cTime, amIRight?
 
         List<Message> msgs = null;
         try {
