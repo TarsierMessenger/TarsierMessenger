@@ -1,13 +1,12 @@
 package ch.tarsier.tarsier.test;
 
-import android.test.ActivityInstrumentationTestCase2;
-
-import ch.tarsier.tarsier.ui.activity.HomeActivity;
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.prefs.UserPreferences;
+import ch.tarsier.tarsier.ui.activity.HomeActivity;
 
 import static ch.tarsier.tarsier.test.matchers.HasErrorMatcher.hasError;
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
-import static com.google.android.apps.common.testing.ui.espresso.Espresso.pressBack;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.clearText;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.closeSoftKeyboard;
@@ -16,11 +15,13 @@ import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewA
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isClickable;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.not;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Benjamin Paccaud
  */
-public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActivity> {
+public class HomeActivityTest extends TarsierTestCase<HomeActivity> {
 
     public HomeActivityTest() {
         super(HomeActivity.class);
@@ -32,10 +33,18 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
     private static final String USERNAME_TOO_LONG = "This is longer that the accepted value of 36 characters";
     private static final String USERNAME_OK = "Benpac";
     private static final String STATUS_OK = "My status message is ok";
+    private static final String EMPTY_STRING = "";
+
+    private UserPreferences mUserPrefMock;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        mUserPrefMock = mock(UserPreferences.class);
+        when(mUserPrefMock.getStatusMessage()).thenReturn(EMPTY_STRING);
+        when(mUserPrefMock.getUsername()).thenReturn(EMPTY_STRING);
+        Tarsier.app().setUserPreferences(mUserPrefMock);
+        //GET activity AFTER mocking components...
         getActivity();
     }
 
@@ -70,12 +79,12 @@ public class HomeActivityTest extends ActivityInstrumentationTestCase2<HomeActiv
         onView(withId(R.id.picture)).check(matches(isClickable()));
         onView(withId(R.id.picture)).perform(click());
 
-        // we are on AddProfilePictureActivity
-        onView(withId(R.id.add_from_existing)).check(matches(isClickable()));
-        onView(withId(R.id.add_new_picture)).check(matches(isClickable()));
-
-        // back to Home
-        pressBack();
+//        // we are on AddProfilePictureActivity
+//        onView(withId(R.id.add_from_existing)).check(matches(isClickable()));
+//        onView(withId(R.id.add_new_picture)).check(matches(isClickable()));
+//
+//        // back to Home
+//        pressBack();
     }
 
     public void testUsernameTooShort() {
