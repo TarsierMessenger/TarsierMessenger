@@ -25,7 +25,7 @@ import ch.tarsier.tarsier.validation.ChatroomNameValidator;
 /**
  * @author gluthier
  */
-public class NewChatroomActivity extends Activity {
+public class NewChatRoomActivity extends Activity {
 
     private final static String ID_NEW_CHATROOM_MESSAGE = "ch.tarsier.tarsier.ui.activity.ID_NEW_CHATROOM";
 

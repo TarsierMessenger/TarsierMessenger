@@ -84,7 +84,7 @@ public class ChatListActivity extends Activity {
     }
 
     private void openNewChatroom() {
-        Intent newChatroomIntent = new Intent(this, NewChatroomActivity.class);
+        Intent newChatroomIntent = new Intent(this, NewChatRoomActivity.class);
         startActivity(newChatroomIntent);
     }
 
