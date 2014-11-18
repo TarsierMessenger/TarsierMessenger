@@ -6,12 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CheckBox;
 
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
@@ -19,7 +15,6 @@ import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
-import ch.tarsier.tarsier.domain.repository.UserRepository;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
