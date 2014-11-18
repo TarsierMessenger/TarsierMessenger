@@ -7,7 +7,7 @@
 
     <style name="GreenActionBar"
            parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@drawable/tarsier_green_base</item>
+        <item name="android:background">@color/tarsier_principal</item>
     </style>
     <style name="boldText">
         <item name="android:textStyle">bold|italic</item>

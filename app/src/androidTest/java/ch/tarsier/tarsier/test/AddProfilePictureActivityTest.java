@@ -9,6 +9,9 @@ import ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity;
  */
 public class AddProfilePictureActivityTest extends ActivityInstrumentationTestCase2<AddProfilePictureActivity> {
 
+    private static final int BITMAP_RECT_HEIGHT = 640;
+    private static final int BITMAP_RECT_WIDTH = 480;
+
     public AddProfilePictureActivityTest() {
         super(AddProfilePictureActivity.class);
     }

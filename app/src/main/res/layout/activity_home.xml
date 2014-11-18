@@ -34,7 +34,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_username"
-                android:id="@+id/username"
+                android:id="@+id/username_home"
                 android:layout_toEndOf="@id/picture"
                 android:layout_centerInParent="true"
                 />
@@ -45,7 +45,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_status_message"
-            android:id="@+id/status_message"
+            android:id="@+id/status_message_home"
             android:layout_marginBottom="@dimen/view_spacing"
             android:layout_below="@id/relative_layout_picture_username"
             />
@@ -53,13 +53,14 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/button_padding"
             android:id="@+id/lets_chat"
             android:text="@string/lets_chat"
-            android:textColor="@android:color/white"
+            android:textColor="@color/tarsier_font_complementary"
             android:textSize="@dimen/lets_chat_size"
-            android:background="@drawable/tarsier_green_base"
+            android:background="@color/tarsier_principal"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/status_message"
+            android:layout_below="@id/status_message_home"
             android:onClick="onClickLetsChat"
             />
 

@@ -92,9 +92,9 @@ public class AddProfilePictureActivity extends Activity {
         try {
             startActivityForResult(pickImageIntent, PICK_IMAGE);
         } catch (ActivityNotFoundException anfe) {
-            // in case the intent is not supported by the device
-            anfe.printStackTrace();
-            Toast.makeText(this, getString(R.string.error_add_profile_picture), Toast.LENGTH_LONG).show();
+            // in case the intent is not supported by the device, do nothing. the image
+            // is still to be stored and cropped. Toast should appear
+            Toast.makeText(this, getString(R.string.error_toast_no_crop),Toast.LENGTH_SHORT).show();;
         }
     }
 
@@ -187,7 +187,7 @@ public class AddProfilePictureActivity extends Activity {
         }
         try {
             Bitmap imageBitmap = getImageFrom(getTempUri());
-            imageBitmap = addRoundMask(imageBitmap);
+            imageBitmap = addRoundMask(squareBitmap(imageBitmap));
             savePicture(imageBitmap);
             mImageView.setImageBitmap(imageBitmap);
         } catch (FileNotFoundException e) {
@@ -219,30 +219,48 @@ public class AddProfilePictureActivity extends Activity {
      * @return the original image with the round mask applied
      */
     private Bitmap addRoundMask(Bitmap original) {
-        Bitmap output = Bitmap.createBitmap(original.getWidth(),
-                                            original.getHeight(),
+        int imageWidth  = original.getWidth();
+        int imageHeight = original.getHeight();
+        int size = (imageHeight < imageWidth) ? imageHeight : imageWidth;
+
+        Bitmap output = Bitmap.createBitmap(size, size,
                                             Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
         final int color = 0xff424242;
         final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, original.getWidth(), original.getHeight());
+        final Rect rectDest = new Rect(0, 0, size, size);
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);
-        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-        canvas.drawCircle(original.getWidth() / 2, original.getHeight() / 2,
-                original.getWidth() / 2, paint);
+        canvas.drawCircle(size / 2, size / 2, size / 2, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(original, rect, rect, paint);
+        canvas.drawBitmap(original, rectDest, rectDest, paint);
 
         return output;
     }
 
     /**
+     * Perform a "squarification" of a rectangular Bitmap. Takes the biggest centered square possible
+     * in the rectangle
+     * @param rectangle  The original bitmap, usually a rectangle
+     * @return A square Bitmap
+     */
+    private Bitmap squareBitmap(Bitmap rectangle) {
+        int imageWidth  = rectangle.getWidth();
+        int imageHeight = rectangle.getHeight();
+        int size = (imageHeight < imageWidth) ? imageHeight : imageWidth;
+        Bitmap square = Bitmap.createBitmap(rectangle,
+                imageWidth / 2 - size /2,
+                imageHeight / 2 - size / 2,
+                size, size);
+        return square;
+    }
+
+    /**
      * Launch the crop operation after the picture has been taken.
-     * Crop the image to a square. Take the image save in the tmp file.
+     * Take the image saved in the tmp file.
      *
      * inspired from : http://code.tutsplus.com/tutorials/capture-and-crop-an-image-with-the-device-camera--mobile-11458
      * @throws AddProfilePictureException
@@ -256,13 +274,14 @@ public class AddProfilePictureActivity extends Activity {
         cropIntent.putExtra("aspectY", 1);
         cropIntent.putExtra("outputX", SIZE_OUTPUT);
         cropIntent.putExtra("outputY", SIZE_OUTPUT);
-        cropIntent.putExtra("return-data", true);
+        cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
+        cropIntent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
         try {
             startActivityForResult(cropIntent, PIC_CROP);
         } catch (ActivityNotFoundException anfe) {
             // in case the intent is not supported by the device
-            anfe.printStackTrace();
-            throw new AddProfilePictureException();
+            // do nothing. the image is still to be cropped in the center
+            Toast.makeText(this, getString(R.string.error_toast_no_crop),Toast.LENGTH_SHORT).show();;
         }
     }
 

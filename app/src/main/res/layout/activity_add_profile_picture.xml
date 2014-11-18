@@ -18,22 +18,24 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/button_padding"
             android:id="@+id/add_from_existing"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/view_spacing"
             android:text="@string/add_from_existing"
-            android:textColor="@android:color/white"
-            android:background="@drawable/tarsier_green_base"
+            android:textColor="@color/tarsier_font_complementary"
+            android:background="@color/tarsier_principal"
             android:onClick="onClickAddExisting"/>
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/button_padding"
             android:id="@+id/add_new_picture"
             android:text="@string/add_new_picture"
-            android:textColor="@android:color/white"
+            android:textColor="@color/tarsier_font_complementary"
             android:layout_below="@id/add_from_existing"
-            android:background="@drawable/tarsier_green_base"
+            android:background="@color/tarsier_principal"
             android:onClick="onClickNewPicture"
             />
 
