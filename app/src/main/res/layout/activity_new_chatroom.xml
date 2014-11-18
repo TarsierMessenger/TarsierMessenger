@@ -15,23 +15,4 @@
         android:id="@+id/chat_room_name"
         />
 
-    <CheckBox
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/join_on_invitation"
-        android:id="@+id/join_on_invitation"
-        android:layout_below="@+id/chat_room_name"
-        android:onClick="onInvitationOnlyCheckboxClicked"
-        android:layout_marginTop="15dp"
-        android:checked="true"
-        />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/information_invitation"
-        android:text="@string/information_invitation_close"
-        android:layout_below="@id/join_on_invitation"
-        />
-
 </RelativeLayout>
