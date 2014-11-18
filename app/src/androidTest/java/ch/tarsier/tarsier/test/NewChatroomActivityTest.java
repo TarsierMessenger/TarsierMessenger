@@ -2,7 +2,7 @@ package ch.tarsier.tarsier.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import ch.tarsier.tarsier.ui.activity.NewChatRoomActivity;
+import ch.tarsier.tarsier.ui.activity.NewChatroomActivity;
 import ch.tarsier.tarsier.R;
 
 import static ch.tarsier.tarsier.test.matchers.HasErrorMatcher.hasError;
@@ -21,10 +21,10 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 /**
  * @author gluthier
  */
-public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<NewChatRoomActivity> {
+public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<NewChatroomActivity> {
 
     public NewChatroomActivityTest() {
-        super(NewChatRoomActivity.class);
+        super(NewChatroomActivity.class);
     }
 
     @Override

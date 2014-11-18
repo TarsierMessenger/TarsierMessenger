@@ -17,7 +17,7 @@ import ch.tarsier.tarsier.R;
  * @author gluthier
  */
 public class ChatListActivity extends Activity {
-    public final static String ID_DISCUSSION_MESSAGE = "ch.tarsier.tarsier.ID_DISCUSSION";
+    private final static String ID_DISCUSSION_MESSAGE = "ch.tarsier.tarsier.ID_DISCUSSION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

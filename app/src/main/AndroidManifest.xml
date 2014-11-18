@@ -57,8 +57,9 @@
             android:label="@string/title_activity_wifidirectdebug" >
         </activity>
         <activity
-            android:name=".ui.activity.NewChatRoomActivity"
-            android:label="@string/title_activity_new_chatrooom" >
+            android:name=".ui.activity.NewChatroomActivity"
+            android:label="@string/title_activity_new_chatrooom"
+            android:parentActivityName=".ui.activity.ChatListActivity" >
         </activity>
         <activity
             android:name=".ui.activity.ChatroomPeersActivity"

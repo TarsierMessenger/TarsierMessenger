@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,21 +14,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.domain.repository.PeerRepository;
+import ch.tarsier.tarsier.domain.repository.UserRepository;
+import ch.tarsier.tarsier.exception.InsertException;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.exception.InvalidModelException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
+import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.validation.ChatroomNameValidator;
 
 /**
  * @author gluthier
  */
-public class NewChatRoomActivity extends Activity {
+public class NewChatroomActivity extends Activity {
 
-    private EditText mChatRoomName;
+    private final static String ID_NEW_CHATROOM_MESSAGE = "ch.tarsier.tarsier.ui.activity.ID_NEW_CHATROOM";
+
+    private EditText mChatroomName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_chatroom);
 
-        mChatRoomName = (EditText) findViewById(R.id.chat_room_name);
+        mChatroomName = (EditText) findViewById(R.id.chatroom_name);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
@@ -35,49 +49,55 @@ public class NewChatRoomActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.new_chatroom, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.create_chatroom:
-                createRoom();
+            case R.id.create_new_chatroom:
+                try {
+                    createNewChatroom();
+                } catch (InvalidCursorException e) {
+                    e.printStackTrace();
+                } catch (NoSuchModelException e) {
+                    e.printStackTrace();
+                } catch (InvalidModelException e) {
+                    e.printStackTrace();
+                } catch (InsertException e) {
+                    e.printStackTrace();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void onInvitationOnlyCheckboxClicked(View view) {
-        TextView informationInvitation = (TextView) this.findViewById(R.id.information_invitation);
+    private void createNewChatroom()
+            throws InvalidCursorException, NoSuchModelException, InvalidModelException, InsertException {
 
-        if (((CheckBox) view).isChecked()) {
-            informationInvitation.setText(R.string.information_invitation_close);
-        } else {
-            informationInvitation.setText(R.string.information_invitation_open);
-        }
-    }
-
-    private void createRoom() {
         if (validateChatRoomName()) {
-            Toast.makeText(this, "Valid", Toast.LENGTH_SHORT).show();
-            /*
-            TODO create AddNewDiscussionActivity class OR link to the good class
-            Intent newRoomIntent = new Intent(this, AddNewDiscussionActivity.class);
-            startActivity(newRoomIntent);
-            */
-        } else {
-            Toast.makeText(this, "Invalid", Toast.LENGTH_SHORT).show();
+            ChatRepository chatRepository = Tarsier.app().getChatRepository();
+            PeerRepository peerRepository = Tarsier.app().getPeerRepository();
+            UserPreferences userPreferences= Tarsier.app().getUserPreferences();
+
+            Peer user = peerRepository.findById(userPreferences.getId());
+
+            Chat newChatroom = new Chat();
+            newChatroom.setPrivate(false);
+            newChatroom.setTitle(mChatroomName.getText().toString());
+            newChatroom.setHost(user);
+
+            chatRepository.insert(newChatroom);
+
+            Intent newChatroomIntent = new Intent(this, ConversationActivity.class);
+            newChatroomIntent.putExtra(ID_NEW_CHATROOM_MESSAGE, newChatroom.getId());
+            startActivity(newChatroomIntent);
         }
     }
 
     private boolean validateChatRoomName() {
-        return new ChatroomNameValidator().validate(mChatRoomName);
+        return new ChatroomNameValidator().validate(mChatroomName);
     }
 }

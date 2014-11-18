@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="information_invitation_close">Users will be able to join the chatroom only on your approval.</string>
-    <string name="information_invitation_open">Users will be able to join the chatroom by themselves.</string>
     <string name="chatroom_name">Chatroom name</string>
-    <string name="join_on_invitation">Join on invitation only</string>
-    <string name="create_chatroom">Create a new chatroom</string>
+    <string name="create_new_chatroom">Create a new chatroom</string>
     <string name="error_chat_room_name_length">Chatroom name should be between 1 and 36 chars long</string>
 </resources>
