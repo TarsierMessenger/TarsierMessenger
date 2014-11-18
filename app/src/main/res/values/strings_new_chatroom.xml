@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="chatroom_name">Chatroom name</string>
-    <string name="create_new_chatroom">Create a new chatroom</string>
+    <string name="new_chatroom">Create a new chatroom</string>
     <string name="error_chat_room_name_length">Chatroom name should be between 1 and 36 chars long</string>
 </resources>
