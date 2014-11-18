@@ -51,7 +51,7 @@ public class NewChatRoomActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.create_new_chatroom:
+            case R.id.new_chatroom:
                 try {
                     createNewChatroom();
                 } catch (InvalidCursorException e) {
