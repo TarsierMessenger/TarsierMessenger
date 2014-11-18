@@ -21,9 +21,9 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 /**
  * @author gluthier
  */
-public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<NewChatRoomActivity> {
+public class NewChatRoomActivityTest extends ActivityInstrumentationTestCase2<NewChatRoomActivity> {
 
-    public NewChatroomActivityTest() {
+    public NewChatRoomActivityTest() {
         super(NewChatRoomActivity.class);
     }
 
@@ -34,49 +34,32 @@ public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<Ne
     }
 
     public void testCreateRoomButtonShouldBeClickable() {
-        onView(withId(R.id.create_chatroom))
+        onView(withId(R.id.create_new_chatroom))
                 .check(matches(isClickable()));
     }
 
-    public void testCheckBoxShouldBeCheckedByDefault() {
-        onView(withId(R.id.join_on_invitation))
-                .check(matches(isChecked()));
-    }
-
-    public void testCheckBoxInformationMatchesCheckBoxState() {
-        // Should be checked by default (see previous test)
-        onView(withId(R.id.information_invitation))
-                .check(matches(withText(R.string.information_invitation_close)));
-
-        onView(withId(R.id.join_on_invitation))
-                .perform(click());
-
-        onView(withId(R.id.information_invitation))
-                .check(matches(withText(R.string.information_invitation_open)));
-    }
-
     public void testChatRoomNameRejectedIfTooShort() {
-        onView(withId(R.id.chat_room_name))
+        onView(withId(R.id.chatroom_name))
                 .perform(click(), clearText(), closeSoftKeyboard());
 
-        onView(withId(R.id.create_chatroom))
+        onView(withId(R.id.new_chatroom))
                 .perform(click());
 
-        onView(withId(R.id.chat_room_name))
+        onView(withId(R.id.chatroom_name))
                 .check(matches(hasError(R.string.error_chat_room_name_length)));
     }
 
     public void testChatRoomNameRejectedIfTooLong() {
         String text = "This chat room name is longer than 36 characters";
 
-        onView(withId(R.id.chat_room_name))
+        onView(withId(R.id.chatroom_name))
                 .perform(click(), clearText())
                 .perform(typeText(text), closeSoftKeyboard());
 
-        onView(withId(R.id.create_chatroom))
+        onView(withId(R.id.new_chatroom))
                 .perform(click());
 
-        onView(withId(R.id.chat_room_name))
+        onView(withId(R.id.chatroom_name))
                 .check(matches(hasError(R.string.error_chat_room_name_length)));
     }
 }
