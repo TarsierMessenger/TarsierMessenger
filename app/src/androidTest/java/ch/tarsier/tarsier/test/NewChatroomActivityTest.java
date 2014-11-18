@@ -38,23 +38,6 @@ public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<Ne
                 .check(matches(isClickable()));
     }
 
-    public void testCheckBoxShouldBeCheckedByDefault() {
-        onView(withId(R.id.join_on_invitation))
-                .check(matches(isChecked()));
-    }
-
-    public void testCheckBoxInformationMatchesCheckBoxState() {
-        // Should be checked by default (see previous test)
-        onView(withId(R.id.information_invitation))
-                .check(matches(withText(R.string.information_invitation_close)));
-
-        onView(withId(R.id.join_on_invitation))
-                .perform(click());
-
-        onView(withId(R.id.information_invitation))
-                .check(matches(withText(R.string.information_invitation_open)));
-    }
-
     public void testChatRoomNameRejectedIfTooShort() {
         onView(withId(R.id.chat_room_name))
                 .perform(click(), clearText(), closeSoftKeyboard());
