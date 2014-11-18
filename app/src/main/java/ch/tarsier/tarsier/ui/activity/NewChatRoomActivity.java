@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import android.widget.EditText;
-import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
