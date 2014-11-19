@@ -37,6 +37,7 @@ import ch.tarsier.tarsier.validation.EditTextMessageValidator;
  * Bubble's layout is inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
  */
 public class ChatActivity extends Activity implements EndlessListener {
+
     private static final int NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE = 10;
 
     // TODO: Store those IDs in their own class, so that they can be shared between classes
@@ -49,7 +50,7 @@ public class ChatActivity extends Activity implements EndlessListener {
     private EndlessListView mListView;
     private EditText mMessageToBeSend;
 
-    public void sendMessage(View view) {
+    public void onClickSendMessage(View view) {
         String messageText = ((TextView) findViewById(R.id.message_to_send)).getText().toString();
         Message sentMessage = new Message(mChatId, messageText, DateUtil.getNowTimestamp());
 
@@ -75,6 +76,8 @@ public class ChatActivity extends Activity implements EndlessListener {
         inflater.inflate(R.menu.private_discussion, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,13 +116,6 @@ public class ChatActivity extends Activity implements EndlessListener {
          */
     }
 
-    /**
-     * Send the message to the storage
-     * @param view
-     */
-    public void onClickSend(View view) {
-        // TODO
-    }
 
 
     /**

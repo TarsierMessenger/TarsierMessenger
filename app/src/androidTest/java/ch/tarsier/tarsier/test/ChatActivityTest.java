@@ -1,8 +1,12 @@
 package ch.tarsier.tarsier.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+
+import junit.framework.Assert;
+
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.ui.activity.ChatActivity;
+import ch.tarsier.tarsier.ui.view.EndlessListView;
 
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.clearText;
@@ -29,6 +33,8 @@ public class ChatActivityTest extends ActivityInstrumentationTestCase2<ChatActiv
         getActivity();
     }
 
+
+
     /* test the sendImageButton if is clickable when something is to be sent or not*/
     public void testSendMessageButtonClickable() {
         String messageSent = "This is a new message to be sent.";
@@ -39,13 +45,14 @@ public class ChatActivityTest extends ActivityInstrumentationTestCase2<ChatActiv
         onView(withId(R.id.sendImageButton)).check(matches(not(isClickable())));
     }
 
-    /*
-    test if the scrolling fetch the last messages
+
+    /**
+     test if the scrolling fetch the last messages
 
     public void testScrollToFetchMessages() {
 
     }
-    */
+
 
     /*
     test if the view go to the last message after scrolling and then send a message
