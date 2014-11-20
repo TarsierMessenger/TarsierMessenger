@@ -3,7 +3,7 @@ package ch.tarsier.tarsier.domain.model;
 /**
  * @author gluthier
  */
-public class DiscussionSummary {
+public class ChatSummary {
     private int mId;
     private String mAvatar;
     private String mNotifications;
@@ -13,9 +13,9 @@ public class DiscussionSummary {
     private String mNbOnline;
     private TypeConversation mType;
 
-    public DiscussionSummary(int id, String avatar, String notifications, String name,
-                             String lastMessage, String humanTime, String nbOnline,
-                             TypeConversation type) {
+    public ChatSummary(int id, String avatar, String notifications, String name,
+                       String lastMessage, String humanTime, String nbOnline,
+                       TypeConversation type) {
         mId = id;
         mAvatar = avatar;
         mNotifications = notifications;

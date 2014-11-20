@@ -9,19 +9,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ch.tarsier.tarsier.domain.model.DiscussionSummary;
+import ch.tarsier.tarsier.domain.model.ChatSummary;
 import ch.tarsier.tarsier.R;
 
 /**
  * @author gluthier
  */
-public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
+public class ChatListAdapter extends ArrayAdapter<ChatSummary> {
 
-    private DiscussionSummary[] mDiscussions;
+    private ChatSummary[] mDiscussions;
     private int mLayoutResourceId;
     private Context mContext;
 
-    public DiscussionsAdapter(Context context, int layoutResourceId, DiscussionSummary[] discussions) {
+    public ChatListAdapter(Context context, int layoutResourceId, ChatSummary[] discussions) {
         super(context, layoutResourceId, discussions);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
@@ -31,13 +31,13 @@ public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        DiscussionSummaryHolder holder = null;
+        ChatSummaryHolder holder = null;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             row = inflater.inflate(mLayoutResourceId, parent, false);
 
-            holder = new DiscussionSummaryHolder();
+            holder = new ChatSummaryHolder();
             //TODO check if row.getId() is the good id
             holder.mId = row.getId();
             holder.mAvatar = (ImageView) row.findViewById(R.id.avatar);
@@ -49,28 +49,28 @@ public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
 
             row.setTag(holder);
         } else {
-            holder = (DiscussionSummaryHolder) row.getTag();
+            holder = (ChatSummaryHolder) row.getTag();
         }
 
-        DiscussionSummary discussionSummary = mDiscussions[position];
-        holder.mId = discussionSummary.getId();
+        ChatSummary chatSummary = mDiscussions[position];
+        holder.mId = chatSummary.getId();
         //TODO:
         //holder.mAvatar.setImageResource(discussionSummary.getAvatar());
-        holder.mName.setText(discussionSummary.getName());
-        holder.mLastMessage.setText(discussionSummary.getLastMessage());
-        holder.mHhumanTime.setText(discussionSummary.getHumanTime());
+        holder.mName.setText(chatSummary.getName());
+        holder.mLastMessage.setText(chatSummary.getLastMessage());
+        holder.mHhumanTime.setText(chatSummary.getHumanTime());
 
-        if (Integer.parseInt(discussionSummary.getNotifications()) > 9) {
+        if (Integer.parseInt(chatSummary.getNotifications()) > 9) {
             holder.mNotification.setText(R.string.too_much_notifications);
-        } else if (Integer.parseInt(discussionSummary.getNotifications()) > 0) {
-            holder.mNotification.setText(discussionSummary.getNotifications());
+        } else if (Integer.parseInt(chatSummary.getNotifications()) > 0) {
+            holder.mNotification.setText(chatSummary.getNotifications());
         } else {
             holder.mNotification.setVisibility(View.GONE);
         }
 
         //TODO fetch in the db the kind of discussion
-        if (Integer.parseInt(discussionSummary.getNbOnline()) > 1) {
-            holder.mNbOnline.setText(getContext().getString(R.string.nb_people_online) + " " + discussionSummary.getNbOnline());
+        if (Integer.parseInt(chatSummary.getNbOnline()) > 1) {
+            holder.mNbOnline.setText(getContext().getString(R.string.nb_people_online) + " " + chatSummary.getNbOnline());
         } else {
             holder.mNbOnline.setVisibility(View.GONE);
         }
@@ -81,7 +81,7 @@ public class DiscussionsAdapter extends ArrayAdapter<DiscussionSummary> {
     /**
      * DiscussionSummaryHolder is the class containing the discussion's information
      */
-    private class DiscussionSummaryHolder {
+    private class ChatSummaryHolder {
         private int mId;
         private ImageView mAvatar;
         private TextView mNotification;
