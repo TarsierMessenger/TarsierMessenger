@@ -13,10 +13,8 @@ import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
-import ch.tarsier.tarsier.domain.model.ChatSummary;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Message;
-import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
@@ -72,14 +70,14 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         Chat chat = mChatList.get(position);
 
         MessageRepository messageRepository = Tarsier.app().getMessageRepository();
-        Message lastMessage = null;
+        Message lastMessage = null;/*
         try {
             lastMessage = messageRepository.getLastMessageOf(chat);
         } catch (NoSuchModelException e) {
             e.printStackTrace();
         } catch (InvalidCursorException e) {
             e.printStackTrace();
-        }
+        }*/
 
         holder.mId = chat.getId();
         holder.mAvatarSrc.setImageResource(chat.getAvatarRessourceId());

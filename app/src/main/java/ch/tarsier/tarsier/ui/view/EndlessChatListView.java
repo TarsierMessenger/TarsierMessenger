@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
-import ch.tarsier.tarsier.domain.model.ChatSummary;
+import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 
 /**
@@ -72,10 +72,13 @@ public class EndlessChatListView extends ListView implements AbsListView.OnScrol
         this.addFooterView(mFooter);
     }
 
-    public void addNewData(List<ChatSummary> data) {
+    public void addNewData(List<Chat> data) {
         this.removeFooterView(mFooter);
-        mChatListAdapter.addall(data);
+        mChatListAdapter.addAll(data);
         mChatListAdapter.notifyDataSetChanged();
         mIsLoading = false;
+    }
+
+    public void setOnClickListener(OnItemClickListener onItemClickListener) {
     }
 }

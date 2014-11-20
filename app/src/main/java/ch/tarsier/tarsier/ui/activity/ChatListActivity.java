@@ -14,7 +14,6 @@ import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
-import ch.tarsier.tarsier.domain.model.ChatSummary;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
@@ -48,32 +47,16 @@ public class ChatListActivity extends Activity implements EndlessListener {
         mEndlessChatListView.setOnClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO check if getApplicationContext() is right
-                Intent chatIdIntent = new Intent(getApplicationContext(), ConversationActivity.class);
-                // FIXME discussion.getId() is just a filler for now, you can expect to get the id of the Chat clicked
-                chatIdIntent.putExtra(ID_CHAT_MESSAGE, discussion.getId());
-                startActivity(chatIdIntent);
-            }
-        });
+                long chatId = mChatListAdapter.getItemId(i);
 
-/*
-        final ListView discussionsList = (ListView) findViewById(R.id.chat_list);
-        ChatListAdapter adapter = new ChatListAdapter(this, R.layout.row_chat_list, discussionsArray);
 
-        discussionsList.setAdapter(adapter);
-
-        discussionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ChatSummary discussion = (ChatSummary) discussionsList.getItemAtPosition(i);
-                // TODO check if getApplicationContext() is right
                 Intent chatIdIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                // FIXME discussion.getId() is just a filler for now, you can expect to get the id of the Chat clicked
-                chatIdIntent.putExtra(ID_CHAT_MESSAGE, discussion.getId());
+                chatIdIntent.putExtra(ID_CHAT_MESSAGE, chatId);
+
                 startActivity(chatIdIntent);
             }
         });
-*/
+
         // FIXME: Handle potential NullPointerException
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
@@ -109,8 +92,8 @@ public class ChatListActivity extends Activity implements EndlessListener {
         startActivity(openSettingsIntent);
     }
 
-    private List<ChatSummary> createItems(int mult) {
-        List<ChatSummary> chatSummaryList = new ArrayList<ChatSummary>();
+    private List<Chat> createItems(int mult) {
+        List<Chat> chatSummaryList = new ArrayList<Chat>();
 
         for (int i = 0; i < NUMBER_OF_CHATS_TO_FETCH_AT_ONCE; ++i) {
             //chatSummaryList.add();
@@ -126,31 +109,31 @@ public class ChatListActivity extends Activity implements EndlessListener {
         chatLoader.execute();
     }
 
-    private class ChatLoader extends AsyncTask<Void, Void, List<ChatSummary>> {
+    private class ChatLoader extends AsyncTask<Void, Void, List<Chat>> {
 
         @Override
-        protected List<ChatSummary> doInBackground(Void... voids) {
+        protected List<Chat> doInBackground(Void... voids) {
             ChatRepository chatRepository = Tarsier.app().getChatRepository();
-
+/*
             List<Chat> chatList = chatRepository.getChats(
                 NUMBER_OF_CHATS_TO_FETCH_AT_ONCE,
                 1
             );
 
             //Encapsulate chats
-            ArrayList<ChatSummary> chatSummaryArrayList = new ArrayList<ChatSummary>();
+            ArrayList<Chat> chatArrayList = new ArrayList<Chat>();
             for (Chat chat : chatList) {
-                chatSummaryArrayList.add(new ChatSummary(chat));
+                chatArrayList.add(chat);
             }
 
-
+*/
             return null;
         }
 
         @Override
-        protected void onPostExecute(List<ChatSummary> chatSummaryList) {
-            super.onPostExecute(chatSummaryList);
-            mEndlessChatListView.addNewData(chatSummaryList);
+        protected void onPostExecute(List<Chat> chatList) {
+            super.onPostExecute(chatList);
+            mEndlessChatListView.addNewData(chatList);
         }
     }
 }
