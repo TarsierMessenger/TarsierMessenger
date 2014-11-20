@@ -7,6 +7,11 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import java.util.List;
+
+import ch.tarsier.tarsier.domain.model.ChatSummary;
+import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
+
 /**
  * @author gluthier
  * cf http://www.survivingwithandroid.com/2013/10/android-listview-endless-adapter.html
@@ -15,7 +20,8 @@ public class EndlessChatListView extends ListView implements AbsListView.OnScrol
 
     private View mFooter;
     private boolean mIsLoading;
-    private EndlessListener mListener;
+    private EndlessListener mEndlessListener;
+    private ChatListAdapter mChatListAdapter;
 
     public EndlessChatListView(Context context) {
         super(context);
@@ -52,7 +58,7 @@ public class EndlessChatListView extends ListView implements AbsListView.OnScrol
         if (l >= totalItemCount && !mIsLoading) {
             this.addFooterView(mFooter);
             mIsLoading = true;
-            mListener.loadData();
+            mEndlessListener.loadData();
         }
     }
 
@@ -62,10 +68,10 @@ public class EndlessChatListView extends ListView implements AbsListView.OnScrol
         this.addFooterView(mFooter);
     }
 
-    public void addNewData(List<String> data) {
+    public void addNewData(List<ChatSummary> data) {
         this.removeFooterView(mFooter);
-        mAdapter.addall(data);
-        mAdapter.notifyDataSetChanged();
+        mChatListAdapter.addall(data);
+        mChatListAdapter.notifyDataSetChanged();
         mIsLoading = false;
     }
 }

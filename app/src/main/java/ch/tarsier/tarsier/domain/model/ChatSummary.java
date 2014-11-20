@@ -4,38 +4,26 @@ package ch.tarsier.tarsier.domain.model;
  * @author gluthier
  */
 public class ChatSummary {
-    private int mId;
+    private long mId;
     private String mAvatar;
-    private String mNotifications;
     private String mName;
     private String mLastMessage;
     private String mHumanTime;
-    private String mNbOnline;
-    private TypeConversation mType;
 
-    public ChatSummary(int id, String avatar, String notifications, String name,
-                       String lastMessage, String humanTime, String nbOnline,
-                       TypeConversation type) {
+    public ChatSummary(long id, String avatar, String name, String lastMessage, String humanTime) {
         mId = id;
         mAvatar = avatar;
-        mNotifications = notifications;
         mName = name;
         mLastMessage = lastMessage;
         mHumanTime = humanTime;
-        mNbOnline = nbOnline;
-        mType = type;
     }
 
-    public int getId() {
+    public long getId() {
         return mId;
     }
 
     public String getAvatar() {
         return mAvatar;
-    }
-
-    public String getNotifications() {
-        return mNotifications;
     }
 
     public String getName() {
@@ -49,20 +37,4 @@ public class ChatSummary {
     public String getHumanTime() {
         return mHumanTime;
     }
-
-    public String getNbOnline() {
-        return mNbOnline;
-    }
-
-    public TypeConversation getType() {
-        return mType;
-    }
-
-    /**
-     * TypeConversation contain the type of the discussion
-     */
-    public static enum TypeConversation {
-        PUBLIC_ROOM, PRIVATE_CHAT
-    }
-
 }

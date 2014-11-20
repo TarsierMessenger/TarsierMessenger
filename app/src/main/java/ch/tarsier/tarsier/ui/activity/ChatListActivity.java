@@ -12,19 +12,25 @@ import android.widget.ListView;
 import ch.tarsier.tarsier.domain.model.ChatSummary;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.ui.view.EndlessChatListView;
 
 /**
  * @author gluthier
  */
 public class ChatListActivity extends Activity {
     private final static String ID_CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.ID_CHAT";
+    private EndlessChatListView mEndlessChatListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
+        mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
 
+
+
+/*
         final ListView discussionsList = (ListView) findViewById(R.id.chat_list);
         ChatListAdapter adapter = new ChatListAdapter(this, R.layout.row_chat_list, discussionsArray);
 
@@ -41,7 +47,7 @@ public class ChatListActivity extends Activity {
                 startActivity(chatIdIntent);
             }
         });
-
+*/
         // FIXME: Handle potential NullPointerException
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
