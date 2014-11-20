@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,17 +10,26 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.ChatSummary;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.ui.view.EndlessChatListView;
+import ch.tarsier.tarsier.ui.view.EndlessListener;
 
 /**
  * @author gluthier
  */
-public class ChatListActivity extends Activity {
+public class ChatListActivity extends Activity implements EndlessListener {
+
     private final static String ID_CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.ID_CHAT";
+    private final static  int ITEM_PER_REQUEST = 15;
+
     private EndlessChatListView mEndlessChatListView;
+    private int mult = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +37,23 @@ public class ChatListActivity extends Activity {
         setContentView(R.layout.activity_chat_list);
 
         mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
+        ChatListAdapter chatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list, createItems(mult));
 
+        mEndlessChatListView.setLoadingView(R.layout.loading_layout);
+        mEndlessChatListView.setAdapter(chatListAdapter);
+        mEndlessChatListView.setListener(this);
 
+        mEndlessChatListView.setOnClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                /*
+                // TODO check if getApplicationContext() is right
+                Intent chatIdIntent = new Intent(getApplicationContext(), ConversationActivity.class);
+                // FIXME discussion.getId() is just a filler for now, you can expect to get the id of the Chat clicked
+                chatIdIntent.putExtra(ID_CHAT_MESSAGE, discussion.getId());
+                startActivity(chatIdIntent);*/
+            }
+        });
 
 /*
         final ListView discussionsList = (ListView) findViewById(R.id.chat_list);
@@ -77,8 +102,38 @@ public class ChatListActivity extends Activity {
         Intent newChatroomIntent = new Intent(this, NewChatRoomActivity.class);
         startActivity(newChatroomIntent);
     }
+
     private void openSettings() {
         Intent openSettingsIntent = new Intent(this, PreferencesActivity.class);
         startActivity(openSettingsIntent);
+    }
+
+    private List<ChatSummary> createItems(int mult) {
+        List<ChatSummary> chatSummaryList = new ArrayList<ChatSummary>();
+
+        for (int i = 0; i < ITEM_PER_REQUEST; ++i) {
+            //chatSummaryList.add();
+        }
+
+        return chatSummaryList;
+    }
+
+    @Override
+    public void loadData() {
+
+    }
+
+    private class ChatItemsLoader extends AsyncTask<Void, Void, List<ChatSummary>> {
+
+        @Override
+        protected List<ChatSummary> doInBackground(Void... voids) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<ChatSummary> chatSummaryList) {
+            super.onPostExecute(chatSummaryList);
+            mEndlessChatListView.addNewData(chatSummaryList);
+        }
     }
 }

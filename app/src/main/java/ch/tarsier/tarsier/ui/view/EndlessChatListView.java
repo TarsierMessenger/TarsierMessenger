@@ -38,6 +38,10 @@ public class EndlessChatListView extends ListView implements AbsListView.OnScrol
         this.setOnScrollListener(this);
     }
 
+    public void setListener(EndlessListener listener) {
+        mEndlessListener = listener;
+    }
+
     @Override
     public void onScrollStateChanged(AbsListView absListView, int i) {
 
