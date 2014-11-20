@@ -1,7 +1,12 @@
 package ch.tarsier.tarsier.domain.model;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.io.Serializable;
+=======
+import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.domain.repository.MessageRepository;
+>>>>>>> 7320ede... modify model for adapter
 =======
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
@@ -18,10 +23,13 @@ public class Chat implements Serializable {
     private Peer mHost;
     private boolean mPrivate;
     private int mAvatarRessourceId;
+<<<<<<< HEAD
 
     public Chat() {
         mId = -1;
     }
+=======
+>>>>>>> 7320ede... modify model for adapter
 
     public long getId() {
         return mId;
@@ -59,6 +67,7 @@ public class Chat implements Serializable {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     public boolean isHost(Peer peer) {
         if (peer != null && getHost() != null) {
             // TODO: Replace with Peer.equals() once we have it.
@@ -67,12 +76,17 @@ public class Chat implements Serializable {
             return false;
         }
 =======
+=======
+>>>>>>> 7320ede... modify model for adapter
     public int getAvatarRessourceId() {
         return mAvatarRessourceId;
     }
 
     public void setAvatarRessourceId(int id) {
         mAvatarRessourceId = id;
+<<<<<<< HEAD
+>>>>>>> 7320ede... modify model for adapter
+=======
 >>>>>>> 7320ede... modify model for adapter
     }
 }

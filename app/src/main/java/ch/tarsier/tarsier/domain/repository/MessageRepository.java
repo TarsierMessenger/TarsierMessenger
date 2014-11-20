@@ -198,7 +198,10 @@ public class MessageRepository extends AbstractRepository {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 7320ede... modify model for adapter
     public Message getLastMessageOf(Chat chat)
             throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
 
