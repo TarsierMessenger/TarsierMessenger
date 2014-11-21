@@ -2,8 +2,6 @@ package ch.tarsier.tarsier.test;
 
 import android.test.AndroidTestCase;
 
-import junit.framework.Assert;
-
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
@@ -13,17 +11,26 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
  */
 public class MessageRepositoryTest extends AndroidTestCase {
 
-    MessageRepository messageRepository = Tarsier.app().getMessageRepository();
+    MessageRepository mMessageRepository;
 
-    public void testIllegalIdForFindById() {
-        long[] illegalIds = {0, -1};
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        mMessageRepository = Tarsier.app().getMessageRepository();
+    }
+
+    public void testIllegalIdsForFindById() {
+        long[] illegalIds = {0, -1, -9001};
 
         for (long id : illegalIds) {
             try {
-                messageRepository.findById(id);
-                fail("Expecting NoSuchModelException but none was thrown.");
-            } catch (NoSuchModelException e) {
+                mMessageRepository.findById(id);
+                fail("Expecting IllegalArgumentException but none was thrown.");
+            } catch (IllegalArgumentException e) {
                 assertEquals("Message ID cannot be < 1", e.getMessage());
+            }catch (NoSuchModelException e) {
+                fail("Expecting IllegalArgumentException, not NoSuchModelException.");
             }
         }
     }
