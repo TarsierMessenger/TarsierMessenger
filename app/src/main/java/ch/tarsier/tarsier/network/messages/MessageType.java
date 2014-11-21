@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.network.networkMessages;
+package ch.tarsier.tarsier.network.messages;
 
 /**
  * Created by Freddy on 11/8/14.

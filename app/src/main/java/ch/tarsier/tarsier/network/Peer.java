@@ -3,7 +3,7 @@ package ch.tarsier.tarsier.network;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import ch.tarsier.tarsier.network.networkMessages.TarsierWireProtos;
+import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
 /**
  * Created by fred on 09/11/14.
