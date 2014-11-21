@@ -28,7 +28,7 @@ public class ChatActivityTest extends ActivityInstrumentationTestCase2<ChatActiv
         getActivity();
     }
 
-    /* test the sendImageButton if is clickable when something is to be sent or not*/
+    /* test the sendImageButton if is clickable when something is to be sent or not
     public void testSendMessageButtonClickable() {
         String messageSent = "This is a new message to be sent.";
         onView(withId(R.id.sendImageButton)).check(matches(not(isClickable())));
@@ -36,7 +36,7 @@ public class ChatActivityTest extends ActivityInstrumentationTestCase2<ChatActiv
         onView(withId(R.id.sendImageButton)).check(matches(isClickable()));
         onView(withId(R.id.message_to_send)).perform(clearText(), closeSoftKeyboard());
         onView(withId(R.id.sendImageButton)).check(matches(not(isClickable())));
-    }
+    }*/
 
     /*
     test if the scrolling fetch the last messages
