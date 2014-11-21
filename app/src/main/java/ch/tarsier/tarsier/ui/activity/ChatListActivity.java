@@ -1,13 +1,13 @@
 package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import ch.tarsier.tarsier.domain.model.DiscussionSummary;
 import ch.tarsier.tarsier.ui.adapter.DiscussionsAdapter;
@@ -17,7 +17,7 @@ import ch.tarsier.tarsier.R;
  * @author gluthier
  */
 public class ChatListActivity extends Activity {
-    public final static String ID_DISCUSSION_MESSAGE = "ch.tarsier.tarsier.ID_DISCUSSION";
+    private final static String ID_CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.ID_CHAT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +50,11 @@ public class ChatListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DiscussionSummary discussion = (DiscussionSummary) discussionsList.getItemAtPosition(i);
-                Toast.makeText(getApplicationContext(), Integer.toString(discussion.getId()), Toast.LENGTH_SHORT).show();
-                // TODO: check if getApplicationContext() is right
-                /*Intent discussionIdIntent = new Intent(getApplicationContext(), ???.class);
-                discussionIdIntent.putExtra(ID_DISCUSSION_MESSAGE, discussion.getId());
-
-                startActivity(discussionIdIntent);*/
+                // TODO check if getApplicationContext() is right
+                Intent chatIdIntent = new Intent(getApplicationContext(), ConversationActivity.class);
+                // FIXME discussion.getId() is just a filler for now, you can expect to get the id of the Chat clicked
+                chatIdIntent.putExtra(ID_CHAT_MESSAGE, discussion.getId());
+                startActivity(chatIdIntent);
             }
         });
 
@@ -66,19 +65,15 @@ public class ChatListActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.chat_list, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.create_new_chat:
-                openNewDiscussion();
+                createNewChatroom();
                 return true;
             case R.id.action_settings:
                 openSettings();
@@ -88,12 +83,12 @@ public class ChatListActivity extends Activity {
         }
     }
 
-    private void openNewDiscussion() {
-        //TODO
-        Toast.makeText(this, "create new discussion", Toast.LENGTH_SHORT).show();
+    private void createNewChatroom() {
+        Intent newChatroomIntent = new Intent(this, NewChatRoomActivity.class);
+        startActivity(newChatroomIntent);
     }
     private void openSettings() {
-        //TODO
-        Toast.makeText(this, "open settings", Toast.LENGTH_SHORT).show();
+        Intent openSettingsIntent = new Intent(this, PreferencesActivity.class);
+        startActivity(openSettingsIntent);
     }
 }

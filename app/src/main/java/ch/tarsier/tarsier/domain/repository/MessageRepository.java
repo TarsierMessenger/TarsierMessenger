@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -29,13 +30,17 @@ public class MessageRepository extends AbstractRepository {
 
     private static final String COLUMN_ID = "_id";
 
-    private static final String[] COLUMNS = new String[] {
-        Columns.Message._ID,
-        Columns.Message.COLUMN_NAME_MSG,
-        Columns.Message.COLUMN_NAME_DATETIME,
-        Columns.Message.COLUMN_NAME_SENDER_ID,
-        Columns.Message.COLUMN_NAME_CHAT_ID
+    private static final String[] COLUMNS = new String[]{
+            Columns.Message._ID,
+            Columns.Message.COLUMN_NAME_MSG,
+            Columns.Message.COLUMN_NAME_DATETIME,
+            Columns.Message.COLUMN_NAME_SENDER_ID,
+            Columns.Message.COLUMN_NAME_CHAT_ID
     };
+
+    private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + "ASC";
+    private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + "DESC";
+
 
     public MessageRepository(Database database) {
         super(database);
@@ -68,6 +73,11 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public List<Message> findByChat(Chat chat) throws IllegalArgumentException, NoSuchModelException {
+        final int all = -1;
+        return findByChat(chat, all);
+    }
+
+    public List<Message> findByChat(Chat chat, int number) throws IllegalArgumentException, NoSuchModelException {
         if (chat.getId() < 1) {
             throw new IllegalArgumentException("Chat must have a valid ID");
         }
@@ -81,17 +91,59 @@ public class MessageRepository extends AbstractRepository {
                 null, null, null, null
         );
 
-        if (cursor == null) {
+        if (!cursor.moveToFirst()) {
             //TODO check that query() return null if it failed to query
+            //moveToFirst should do the trick, returns false if the cursor is empty, hence failed to query
             throw new NoSuchModelException("Cursor is null");
         }
 
         try {
-            return buildListFromCursor(cursor);
+            return buildListFromCursor(cursor, number);
         } catch (InvalidCursorException e) {
             throw new NoSuchModelException(e);
         }
     }
+
+    /**
+     * @param chat   the chat from which the messages shall be retrieved
+     * @param since  retrieve message older than this timestamp
+     * @param number number of messages to retrieve
+     * @return a list of message
+     */
+    public List<Message> findByChat(Chat chat, long since, int number) throws IllegalArgumentException, NoSuchModelException {
+        if (chat.getId() < 1) {
+            throw new IllegalArgumentException("Chat must have a valid ID");
+        }
+
+        String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                COLUMNS,
+                whereClause,
+                null, null, null,
+                DATETIME_DESCEND);
+
+        if (!cursor.moveToFirst()) {
+            throw new NoSuchModelException("cursor is empty, cannot move to first");
+        }
+        long cTime = 0;
+        do {
+            cTime = cursor.getLong(cursor.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME));
+        } while (cursor.moveToNext() && since < cTime);
+        //don't forget the descending order. since should be > cTime, amIRight?
+
+        List<Message> msgs = null;
+        try {
+            msgs = buildListFromCursor(cursor, number);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        }
+
+        Collections.reverse(msgs);
+        return msgs;
+    }
+
 
     public void insert(Message message) throws InvalidModelException, InsertException {
         ContentValues values = getValuesForMessage(message);
@@ -175,12 +227,19 @@ public class MessageRepository extends AbstractRepository {
         }
     }
 
-    private List<Message> buildListFromCursor(Cursor c) throws InvalidCursorException {
+    /**
+     * @param c      the cursor containing our messages
+     * @param number the number of messages to retrieve, -1 for all
+     * @return a list of messages
+     * @throws InvalidCursorException
+     */
+    private List<Message> buildListFromCursor(Cursor c, int number) throws InvalidCursorException {
         List<Message> result = new ArrayList<Message>();
-
+        int i = 0;
         do {
             result.add(buildFromCursor(c));
-        } while(c.moveToNext());
+            i++;
+        } while (c.moveToNext() && (number == -1 || i < number));
 
         return result;
     }

@@ -51,14 +51,14 @@ public class HomeActivity extends Activity {
         mUsername.addTextChangedListener(new EditTextWatcher());
         mStatusMessage.addTextChangedListener(new EditTextWatcher());
 
-        // TODO Have a check on the mUserPreferences to know if username and status message already set or not
-//        if (!mUserPreferences.getUsername().equals("")
-//            && !mUserPreferences.getStatusMessage().equals("")) {
-//
-//            Intent chatListIntent = new Intent(this, ChatListActivity.class);
-//            startActivity(chatListIntent);
-//            this.finish();
-//        }
+
+        if (!mUserPreferences.getUsername().equals("")
+            && !mUserPreferences.getStatusMessage().equals("")) {
+
+            Intent chatListIntent = new Intent(this, ChatListActivity.class);
+            startActivity(chatListIntent);
+            this.finish();
+        }
 
         refreshFields();
     }
@@ -75,7 +75,8 @@ public class HomeActivity extends Activity {
 
     public void onClickLetsChat(View view) {
         //create intent with username and launch the list of rooms
-        if (validateUsername()) {
+        if (validateFields()) {
+            // FIXME: should create key the first time the user connects
             saveProfileInfos();
             //remove this activity from the stack.
             this.finish();
