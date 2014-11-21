@@ -85,10 +85,6 @@ public class ChatActivity extends Activity implements EndlessListener {
         setContentView(R.layout.activity_chat);
         enableSendMessageImageButton(false);
 
-        /*Display display = getWindowManager().getDefaultDisplay();
-        this.windowSize = new Point();
-        display.getSize(this.windowSize);*/
-
         Intent startingIntent = getIntent();
         mChatId = startingIntent.getIntExtra(EXTRA_CHAT_ID, -1);
 
@@ -99,13 +95,13 @@ public class ChatActivity extends Activity implements EndlessListener {
         mListView = (EndlessListView) findViewById(R.id.list);
         mListView.setLoadingView(R.layout.loading_layout);
 
+        mListViewAdapter = new BubbleAdapter(this, R.layout.message_row);
+        mListView.setBubbleAdapter(mListViewAdapter);
+        mListView.setEndlessListener(this);
+
         DatabaseLoader dbl = new DatabaseLoader();
         List<MessageViewModel> firstMessages = dbl.doInBackground();
         dbl.onPostExecute(firstMessages);
-
-        mListViewAdapter = new BubbleAdapter(this, R.layout.message_row, firstMessages);
-        mListView.setBubbleAdapter(mListViewAdapter);
-        mListView.setEndlessListener(this);
 
         mMessageToBeSend = (EditText) findViewById(R.id.message_to_send);
 

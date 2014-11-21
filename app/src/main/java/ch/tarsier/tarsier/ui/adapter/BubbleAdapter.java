@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.util.DateUtil;
@@ -29,12 +30,12 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
     private List<MessageViewModel> mMessageViewModels;
     private int mLayoutId;
 
-    public BubbleAdapter(Context context, int layoutId, List<MessageViewModel> messageViewModel) {
-        super(context, layoutId, messageViewModel);
+    public BubbleAdapter(Context context, int layoutId) {
+        super(context, layoutId);
 
         this.mContext = context;
         this.mLayoutId = layoutId;
-        this.mMessageViewModels = messageViewModel;
+        this.mMessageViewModels = new ArrayList<MessageViewModel>();
     }
 
     @Override
