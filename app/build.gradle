@@ -54,6 +54,15 @@ dependencies {
     compile files('../libs/espresso-contrib-1.1-bundled.jar')
     compile files('libs/sqlcipher.jar')
     compile files('libs/sqlcipher-javadoc.jar')
+
+    androidTestCompile files('libs/com.springsource.org.objenesis-1.0.0.jar')
+    compile files('../libs/com.springsource.org.objenesis-1.0.0.jar')
+    androidTestCompile files('libs/mockito-core-1.9.5.jar')
+    compile files('../libs/mockito-core-1.9.5.jar')
+    androidTestCompile files('libs/dexmaker-1.0.jar')
+    compile files('../libs/dexmaker-1.0.jar')
+    androidTestCompile files('libs/dexmaker-mockito-1.0.jar')
+    compile files('../libs/dexmaker-mockito-1.0.jar')
 }
 
 check.dependsOn 'checkstyle'
@@ -68,3 +77,4 @@ task checkstyle(type: Checkstyle) {
     // exclude '**/packageName/**', '**/utils/MyFile.java'
     classpath = files()
 }
+

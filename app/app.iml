@@ -81,8 +81,16 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="sqlcipher" level="project" />
     <orderEntry type="library" exported="" name="sqlcipher-javadoc" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="com.springsource.org.objenesis-1.0.0" level="project" />
+    <orderEntry type="library" exported="" name="1_com.springsource.org.objenesis-1.0.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="espresso-contrib-1.1-bundled" level="project" />
     <orderEntry type="library" exported="" name="1_espresso-contrib-1.1-bundled" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="dexmaker-1.0" level="project" />
+    <orderEntry type="library" exported="" name="1_dexmaker-1.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="dexmaker-mockito-1.0" level="project" />
+    <orderEntry type="library" exported="" name="1_dexmaker-mockito-1.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="mockito-core-1.9.5" level="project" />
+    <orderEntry type="library" exported="" name="1_mockito-core-1.9.5" level="project" />
   </component>
 </module>
 
