@@ -18,6 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.exception.InsertException;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.exception.InvalidModelException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 import ch.tarsier.tarsier.util.DateUtil;
 import ch.tarsier.tarsier.ui.view.EndlessListView;
@@ -25,7 +29,6 @@ import ch.tarsier.tarsier.ui.view.EndlessListener;
 import ch.tarsier.tarsier.domain.model.MessageViewModel;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Message;
-import ch.tarsier.tarsier.storage.StorageAccess;
 import ch.tarsier.tarsier.validation.EditTextMessageValidator;
 
 /**
@@ -56,11 +59,24 @@ public class ChatActivity extends Activity implements EndlessListener {
 
 
         //Add the message to the ListView
-        MessageViewModel messageViewModel = new MessageViewModel(sentMessage);
-        mListView.addNewData(messageViewModel);
+        MessageViewModel messageViewModel = null;
+        try {
+            messageViewModel = new MessageViewModel(sentMessage);
 
-        //Add the message to the database
-        Tarsier.app().getStorage().addMessage(sentMessage);
+            mListView.addNewData(messageViewModel);
+
+            //Add the message to the database
+            Tarsier.app().getMessageRepository().insert(sentMessage);
+        } catch (InvalidCursorException e) {
+            //TODO : handle the exceptions correctly
+            e.printStackTrace();
+        } catch (NoSuchModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -123,17 +139,27 @@ public class ChatActivity extends Activity implements EndlessListener {
         protected List<MessageViewModel> doInBackground(Void... params) {
             long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
 
-            StorageAccess storage = Tarsier.app().getStorage();
-            List<Message> newMessages = storage.getMessages(
-                    mChatId,
-                NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE,
-                lastMessageTimestamp
-            );
+            List<Message> newMessages = null;
+            try {
+                newMessages = Tarsier.app().getMessageRepository().findByChat(
+                        Tarsier.app().getChatRepository().findById(mChatId),
+                        lastMessageTimestamp,
+                        NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE);
+            } catch (NoSuchModelException e) {
+                e.printStackTrace();
+            }
 
             //Encapsulate messages into messageViewModels
             ArrayList<MessageViewModel> newMessageViewModels = new ArrayList<MessageViewModel>();
             for (Message message: newMessages) {
-                newMessageViewModels.add(new MessageViewModel(message));
+                try {
+                    newMessageViewModels.add(new MessageViewModel(message));
+                } catch (InvalidCursorException e) {
+                    //TODO : handle the exceptions correctly
+                    e.printStackTrace();
+                } catch (NoSuchModelException e) {
+                    e.printStackTrace();
+                }
             }
 
             return newMessageViewModels;
