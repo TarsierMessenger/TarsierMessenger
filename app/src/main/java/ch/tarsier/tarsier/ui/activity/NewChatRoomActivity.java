@@ -86,7 +86,7 @@ public class NewChatRoomActivity extends Activity {
 
             chatRepository.insert(newChatroom);
 
-            Intent newChatroomIntent = new Intent(this, ConversationActivity.class);
+            Intent newChatroomIntent = new Intent(this, ChatActivity.class);
             newChatroomIntent.putExtra(ID_NEW_CHATROOM_MESSAGE, newChatroom.getId());
             startActivity(newChatroomIntent);
         }

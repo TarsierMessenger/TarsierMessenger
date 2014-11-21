@@ -51,7 +51,7 @@ public class ChatListActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 DiscussionSummary discussion = (DiscussionSummary) discussionsList.getItemAtPosition(i);
                 // TODO check if getApplicationContext() is right
-                Intent chatIdIntent = new Intent(getApplicationContext(), ConversationActivity.class);
+                Intent chatIdIntent = new Intent(getApplicationContext(), ChatActivity.class);
                 // FIXME discussion.getId() is just a filler for now, you can expect to get the id of the Chat clicked
                 chatIdIntent.putExtra(ID_CHAT_MESSAGE, discussion.getId());
                 startActivity(chatIdIntent);
