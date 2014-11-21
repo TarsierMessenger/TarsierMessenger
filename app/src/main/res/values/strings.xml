@@ -14,4 +14,13 @@
 
     <!--Devices lists-->
     <string name="finding_service">Finding local peers</string>
+
+    <!-- Network -->
+    <string name="action_search">plop</string>
+    <string name= "button_pswd">password</string>
+    <string name="personnal_file_key">who_am_i</string>
+    <string name="personnal_file_key_myid">uid</string>
+    <string name="personnal_file_key_myusername">username</string>
+    <string name="personnal_file_key_mymood">mood</string>
+    <string name="create_group_string">Create Group</string>
 </resources>
