@@ -1,6 +1,7 @@
 package ch.tarsier.tarsier.ui.view;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
@@ -23,6 +24,18 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
 
     public EndlessListView(Context context) {
         super(context);
+        this.setOnScrollListener(this);
+        mAllMessagesLoaded = false;
+    }
+
+    public EndlessListView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.setOnScrollListener(this);
+        mAllMessagesLoaded = false;
+    }
+
+    public EndlessListView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
         this.setOnScrollListener(this);
         mAllMessagesLoaded = false;
     }
@@ -61,14 +74,11 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-            if (!mAllMessagesLoaded) {
+        if (firstVisibleItem + visibleItemCount >= totalItemCount && !isLoading
+                && !mAllMessagesLoaded && mEndlessListener != null) {
                 this.addHeaderView(mHeader);
-                isLoading = true;
-                mEndlessListener.loadData();
-            } else {
-                //All messages fetched => we are at the top of the list.
-            }
+            isLoading = true;
+            mEndlessListener.loadData();
         }
     }
 
