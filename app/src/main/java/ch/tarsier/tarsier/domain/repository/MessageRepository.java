@@ -3,6 +3,7 @@ package ch.tarsier.tarsier.domain.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,6 +53,9 @@ public class MessageRepository extends AbstractRepository {
         }
 
         String whereClause = COLUMN_ID + " = " + id;
+
+        SQLiteDatabase readableDatabase = getReadableDatabase();
+        readableDatabase.isOpen();
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -146,6 +150,10 @@ public class MessageRepository extends AbstractRepository {
 
 
     public void insert(Message message) throws InvalidModelException, InsertException {
+        if (message == null) {
+            throw new InvalidModelException("Message should not be null.");
+        }
+
         ContentValues values = getValuesForMessage(message);
 
         long rowId = getWritableDatabase().insert(
