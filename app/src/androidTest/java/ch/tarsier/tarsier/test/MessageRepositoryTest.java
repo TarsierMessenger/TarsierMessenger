@@ -61,6 +61,5 @@ public class MessageRepositoryTest extends AndroidTestCase {
         } catch (InsertException e) {
             fail("Expecting InvalidModelException to be thrown first.");
         }
-
     }
 }

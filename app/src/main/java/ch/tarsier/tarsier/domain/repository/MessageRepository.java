@@ -54,9 +54,6 @@ public class MessageRepository extends AbstractRepository {
 
         String whereClause = COLUMN_ID + " = " + id;
 
-        SQLiteDatabase readableDatabase = getReadableDatabase();
-        readableDatabase.isOpen();
-
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
                 COLUMNS,

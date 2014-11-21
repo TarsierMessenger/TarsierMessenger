@@ -44,6 +44,10 @@ public class Tarsier extends Application {
         return mStorage;
     }
 
+    public void setStorage(StorageAccess storage) {
+        mStorage = storage;
+    }
+
     public UserPreferences getUserPreferences() {
         if (mUserPreferences == null) {
             mUserPreferences = new UserPreferences();
@@ -98,5 +102,15 @@ public class Tarsier extends Application {
 
     public void setMessageRepository(MessageRepository messageRepository) {
         mMessageRepository = messageRepository;
+    }
+
+    public void reset() {
+        setStorage(null);
+        setUserPreferences(null);
+        setDatabase(null);
+
+        setPeerRepository(null);
+        setChatRepository(null);
+        setMessageRepository(null);
     }
 }
