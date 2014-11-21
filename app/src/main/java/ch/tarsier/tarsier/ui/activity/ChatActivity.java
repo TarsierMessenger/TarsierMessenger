@@ -73,7 +73,7 @@ public class ChatActivity extends Activity implements EndlessListener {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.private_discussion, menu);
+        inflater.inflate(R.menu.chat, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -170,8 +170,8 @@ public class ChatActivity extends Activity implements EndlessListener {
 
 
     /**
-     * Verify that we can enable the Button that initiate the session.
-     * by checking the EditText s of the Activity
+     * Verify that we can enable the Button that can send the message to the listView and to the
+     * Storage by checking the EditText of the Activity
      */
     private final class EditTextWatcher implements TextWatcher {
 
@@ -190,7 +190,6 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         }
     }
-
 
 
 
