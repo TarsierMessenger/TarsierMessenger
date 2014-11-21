@@ -34,8 +34,8 @@ import ch.tarsier.tarsier.network.Peer;
 import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.WiFiDirectGroupList;
 import ch.tarsier.tarsier.network.client.TarsierClientConnection;
-import ch.tarsier.tarsier.network.networkMessages.MessageType;
-import ch.tarsier.tarsier.network.networkMessages.TarsierWireProtos;
+import ch.tarsier.tarsier.network.messages.MessageType;
+import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
 /**
  * Created by fred on 09/11/14.

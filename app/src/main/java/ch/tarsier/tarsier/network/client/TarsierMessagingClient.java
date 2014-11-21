@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
-import ch.tarsier.tarsier.network.networkMessages.MessageType;
+import ch.tarsier.tarsier.network.messages.MessageType;
 
 /**
  * Created by fred on 09/11/14.

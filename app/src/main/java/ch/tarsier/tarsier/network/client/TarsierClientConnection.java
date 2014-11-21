@@ -22,8 +22,8 @@ import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.ConversationStorageDelegate;
 import ch.tarsier.tarsier.network.ConversationViewDelegate;
 import ch.tarsier.tarsier.network.Peer;
-import ch.tarsier.tarsier.network.networkMessages.MessageType;
-import ch.tarsier.tarsier.network.networkMessages.TarsierWireProtos;
+import ch.tarsier.tarsier.network.messages.MessageType;
+import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 import ch.tarsier.tarsier.network.server.TarsierMessagingManager;
 
 /**

@@ -21,8 +21,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
-import ch.tarsier.tarsier.network.networkMessages.TarsierWireProtos;
-import ch.tarsier.tarsier.network.networkMessages.MessageType;
+import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
+import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.ByteUtils;
 
 public class TarsierServerConnection implements Runnable, ConnectionInterface {
