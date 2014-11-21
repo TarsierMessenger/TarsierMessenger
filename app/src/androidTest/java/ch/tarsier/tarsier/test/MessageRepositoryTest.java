@@ -8,6 +8,7 @@ import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
+import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
  * @author gluthier
@@ -20,6 +21,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
+        Tarsier.app().reset();
         mMessageRepository = Tarsier.app().getMessageRepository();
     }
 
@@ -60,6 +62,36 @@ public class MessageRepositoryTest extends AndroidTestCase {
             assertEquals("Message should not be null.", e.getMessage());
         } catch (InsertException e) {
             fail("Expecting InvalidModelException to be thrown first.");
+        }
+    }
+
+    public void testInsertDummyMessage() {
+        try {
+            mMessageRepository.insert(new Message(1, "hello", 1, 0));
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown.");
+        } catch (InsertException e) {
+            fail("InsertException should not be thrown.");
+        }
+    }
+
+    public void testUpdateNullMessage() {
+        try {
+            mMessageRepository.update(null);
+        } catch (InvalidModelException e) {
+            assertEquals("Message should not be null.", e.getMessage());
+        } catch (UpdateException e) {
+            fail("Expecting InvalidModelException to be thrown first.");
+        }
+    }
+
+    public void testUpdateDummyMessage() {
+        try {
+            mMessageRepository.update(new Message(1, "hello", 1, 0));
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown.");
+        } catch (UpdateException e) {
+            fail("UpdateException should not be thrown.");
         }
     }
 }
