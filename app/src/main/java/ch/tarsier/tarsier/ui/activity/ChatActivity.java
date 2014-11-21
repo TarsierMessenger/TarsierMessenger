@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,40 +26,70 @@ import ch.tarsier.tarsier.domain.model.MessageViewModel;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.storage.StorageAccess;
+import ch.tarsier.tarsier.validation.EditTextMessageValidator;
 
 /**
  * @author marinnicolini and xawill (extreme programming)
  *
- * This activity is responsible to display the messages of the current discussion.
- * This discussion can either be a private one, or a chat room (multiple participants).
+ * This activity is responsible to display the messages of the current chat.
+ * This chat can either be a private one, or a chatroom (multiple peers).
  *
  * Bubble's layout is inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
  */
-public class ConversationActivity extends Activity implements EndlessListener {
+public class ChatActivity extends Activity implements EndlessListener {
     private static final int NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE = 10;
 
     // TODO: Store those IDs in their own class, so that they can be shared between classes
     //       while reducing the coupling a little.
-    private static final String EXTRA_DISCUSSION_ID = "discussionId";
+    private static final String EXTRA_CHAT_ID = "chatId";
 
     private static Point windowSize;
-    private int mDiscussionId;
+    private int mChatId;
     private BubbleAdapter mListViewAdapter;
     private EndlessListView mListView;
+    private EditText mMessageToBeSend;
+
+    public void sendMessage(View view) {
+        String messageText = ((TextView) findViewById(R.id.message_to_send)).getText().toString();
+        Message sentMessage = new Message(mChatId, messageText, DateUtil.getNowTimestamp());
+
+
+        //Add the message to the ListView
+        MessageViewModel messageViewModel = new MessageViewModel(sentMessage);
+        mListView.addNewData(messageViewModel);
+
+        //Add the message to the database
+        Tarsier.app().getStorage().addMessage(sentMessage);
+    }
+
+    @Override
+    public void loadData() {
+        DatabaseLoader dbl = new DatabaseLoader();
+        dbl.execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.private_discussion, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_conversation);
+        setContentView(R.layout.activity_chat);
+        enableSendMessageImageButton(false);
 
         /*Display display = getWindowManager().getDefaultDisplay();
         this.windowSize = new Point();
         display.getSize(this.windowSize);*/
 
         Intent startingIntent = getIntent();
-        mDiscussionId = startingIntent.getIntExtra(EXTRA_DISCUSSION_ID, -1);
+        mChatId = startingIntent.getIntExtra(EXTRA_CHAT_ID, -1);
 
-        if (mDiscussionId == -1) {
+        if (mChatId == -1) {
             // FIXME: Handle this
         }
 
@@ -69,15 +103,24 @@ public class ConversationActivity extends Activity implements EndlessListener {
         mListViewAdapter = new BubbleAdapter(this, R.layout.message_row, firstMessages);
         mListView.setBubbleAdapter(mListViewAdapter);
         mListView.setEndlessListener(this);
+
+        mMessageToBeSend = (EditText) findViewById(R.id.message_to_send);
+
+        mMessageToBeSend.addTextChangedListener(new EditTextWatcher());
+
+        /** Todo if we have time... Possibility to retrieve one message not yet sent but already
+         *  Todo typed
+         */
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.private_discussion, menu);
-        return super.onCreateOptionsMenu(menu);
+    /**
+     * Send the message to the storage
+     * @param view
+     */
+    public void onClickSend(View view) {
+        // TODO
     }
+
 
     /**
      * Async Task for the loading of the messages from the database on another thread.
@@ -90,7 +133,7 @@ public class ConversationActivity extends Activity implements EndlessListener {
 
             StorageAccess storage = Tarsier.app().getStorage();
             List<Message> newMessages = storage.getMessages(
-                mDiscussionId,
+                    mChatId,
                 NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE,
                 lastMessageTimestamp
             );
@@ -116,21 +159,51 @@ public class ConversationActivity extends Activity implements EndlessListener {
         }
     }
 
-    public void sendMessage(View view) {
-        String messageText = ((TextView) findViewById(R.id.message_to_send)).getText().toString();
-        Message sentMessage = new Message(mDiscussionId, messageText, DateUtil.getNowTimestamp());
 
-        //Add the message to the ListView
-        MessageViewModel messageViewModel = new MessageViewModel(sentMessage);
-        mListView.addNewData(messageViewModel);
 
-        //Add the message to the database
-        Tarsier.app().getStorage().addMessage(sentMessage);
+    /**
+     * Toggle the clickable property of the lets_chat Button
+     * @param enable true makes the Button clickable.
+     */
+    private void enableSendMessageImageButton(boolean enable) {
+        ImageButton send = (ImageButton) findViewById(R.id.sendImageButton);
+        send.setClickable(enable);
     }
 
-    @Override
-    public void loadData() {
-        DatabaseLoader dbl = new DatabaseLoader();
-        dbl.execute();
+
+
+
+    /**
+     * Verify that we can enable the Button that initiate the session.
+     * by checking the EditText s of the Activity
+     */
+    private final class EditTextWatcher implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+            enableSendMessageImageButton(sendMessageImageButtonCanBeEnabled());
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
     }
+
+
+
+
+    private boolean sendMessageImageButtonCanBeEnabled() {
+        return validateSendMessage();
+    }
+
+    private boolean validateSendMessage() {
+        return new EditTextMessageValidator("No message to send!").validate(mMessageToBeSend);
+    }
+
 }
