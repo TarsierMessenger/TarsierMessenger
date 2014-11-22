@@ -5,13 +5,17 @@ import java.util.List;
 import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
- * Created by amirreza on 11/16/14.
+ * @author amirezza
  */
 public interface ConnectionInterface {
-    public List<Peer> getMembersList();
-    public void broadcastMessage(byte[] publicKey, byte[] message);
-    public void sendMessage(Peer peer, byte[] message);
 
-    public void setConversationViewDelegate(ConversationViewDelegate delegate);
-    public void setConversationStorageDelegate(ConversationStorageDelegate delegate);
+    List<Peer> getMembersList();
+
+    void broadcastMessage(byte[] publicKey, byte[] message);
+
+    void sendMessage(Peer peer, byte[] message);
+
+    void setConversationViewDelegate(ConversationViewDelegate delegate);
+
+    void setConversationStorageDelegate(ConversationStorageDelegate delegate);
 }

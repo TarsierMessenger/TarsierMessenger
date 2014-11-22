@@ -9,25 +9,22 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import ch.tarsier.tarsier.R;
 
 /**
- * Created by amirreza on 10/26/14.
+ * @author amirezza
  */
 public class MyArrayAdapter extends ArrayAdapter<WifiP2pDevice> {
 
-    public final String TAG = "MyArrayAdapter";
+    public static final String TAG = "MyArrayAdapter";
 
 
     public MyArrayAdapter(Context context, List<WifiP2pDevice> list) {
 
-
         super(context, 0, list);
-        Log.d(TAG,"Adapter created" );
+        Log.d(TAG, "Adapter created");
 
 
     }
@@ -40,7 +37,8 @@ public class MyArrayAdapter extends ArrayAdapter<WifiP2pDevice> {
         Log.d(TAG, "getView called : " + buddyDevice.deviceName);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_buddy, parent, false);
+            convertView = LayoutInflater.from(getContext())
+                    .inflate(R.layout.item_buddy, parent, false);
         }
         // Lookup view for data population
         TextView mName = (TextView) convertView.findViewById(R.id.name);

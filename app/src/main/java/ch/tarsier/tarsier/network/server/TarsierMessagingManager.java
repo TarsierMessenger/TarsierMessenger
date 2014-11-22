@@ -1,5 +1,7 @@
 package ch.tarsier.tarsier.network.server;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,16 +17,12 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.network.ByteUtils;
 import ch.tarsier.tarsier.network.ChatRoom;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.ConversationStorageDelegate;
@@ -38,27 +36,37 @@ import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
 /**
- * Created by fred on 09/11/14.
+ * @author FredericJacobs
  */
 public class TarsierMessagingManager extends BroadcastReceiver implements MessagingInterface,
         ConnectionInfoListener,
         Handler.Callback,
         MessageHandler {
+
     private static final String NetworkLayerTAG = "TarsierMessagingManager";
+
     private static final String WiFiDirectTag = "WiFiDirect";
 
     private WifiP2pManager mManager;
+
     private WifiP2pManager.Channel mChannel;
+
     private ConnectionInterface mConnection;
+
     private WifiP2pManager.PeerListListener peerListListener;
+
     private final ArrayList<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
+
     private Handler mHandler = new Handler(this);
+
     private Runnable handler;
+
     private ChatRoom chatRoom;
+
     private Activity mActivity;
 
-    public TarsierMessagingManager(final Activity activity, WifiP2pManager wifiManager, WifiP2pManager.Channel channel, Looper looper) {
-
+    public TarsierMessagingManager(final Activity activity, WifiP2pManager wifiManager,
+            WifiP2pManager.Channel channel, Looper looper) {
 
         handler = null;
         mActivity = activity;
@@ -187,11 +195,14 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
             @Override
             public void onFailure(int reasonCode) {
                 if (reasonCode == WifiP2pManager.P2P_UNSUPPORTED) {
-                    Log.d(WiFiDirectTag, "Peer discovery initiation failed. P2P isn't supported on this device.");
+                    Log.d(WiFiDirectTag,
+                            "Peer discovery initiation failed. P2P isn't supported on this device.");
                 } else if (reasonCode == WifiP2pManager.BUSY) {
-                    Log.d(WiFiDirectTag, "Peer discovery initiation failed. The system is too busy to process the request.");
+                    Log.d(WiFiDirectTag,
+                            "Peer discovery initiation failed. The system is too busy to process the request.");
                 } else if (reasonCode == WifiP2pManager.ERROR) {
-                    Log.d(WiFiDirectTag, "Peer discovery initiation failed. The operation failed due to an internal error.");
+                    Log.d(WiFiDirectTag,
+                            "Peer discovery initiation failed. The operation failed due to an internal error.");
                 }
             }
         });
@@ -241,13 +252,18 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
                 Log.d(NetworkLayerTAG, "MESSAGE_TYPE_PUBLIC received.");
                 TarsierWireProtos.TarsierPublicMessage publicMessage;
                 try {
-                    publicMessage = TarsierWireProtos.TarsierPublicMessage.parseFrom((byte[]) message.obj);
-                    chatRoom.pushMessage("Buddy: " + new String(publicMessage.getPlainText().toByteArray()));
+                    publicMessage = TarsierWireProtos.TarsierPublicMessage
+                            .parseFrom((byte[]) message.obj);
+                    chatRoom.pushMessage(
+                            "Buddy: " + new String(publicMessage.getPlainText().toByteArray()));
                 } catch (InvalidProtocolBufferException e) {
                     e.printStackTrace();
                 }
 
                 break;
+
+            default:
+                Log.d(NetworkLayerTAG, "Unknown message type");
         }
         return true;
     }

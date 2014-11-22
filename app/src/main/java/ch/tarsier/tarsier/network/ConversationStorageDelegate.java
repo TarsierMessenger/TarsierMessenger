@@ -5,8 +5,9 @@ import com.google.common.base.Optional;
 import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
- * Created by fred on 09/11/14.
+ * @author FredericJacobs
  */
 public interface ConversationStorageDelegate {
-    public void storeMessage(String message, Peer peer, Optional<String> discussion);
+
+    void storeMessage(String message, Peer peer, Optional<String> discussion);
 }

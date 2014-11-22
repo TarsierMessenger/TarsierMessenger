@@ -25,6 +25,10 @@ import ch.tarsier.tarsier.network.ConversationViewDelegate;
 import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
+/**
+ * @author FredericJacobs
+ * @author amirezza
+ */
 public class TarsierServerConnection implements Runnable, ConnectionInterface {
 
     private static final String TAG = "TarsierServerConnection";
@@ -188,7 +192,8 @@ public class TarsierServerConnection implements Runnable, ConnectionInterface {
 
         private static final int CURRENT_MAX_MESSAGE_SIZE = 2048;
 
-        public ConnectionHandler(TarsierServerConnection connection, Socket socket, Handler handler) {
+        public ConnectionHandler(TarsierServerConnection connection, Socket socket,
+                Handler handler) {
             Log.d(TAG, "ConnectionHandler is created");
             this.serverConnection = connection;
             this.mSocket = socket;
@@ -246,14 +251,19 @@ public class TarsierServerConnection implements Runnable, ConnectionInterface {
                                             .parseFrom(serializedProtoBuffer);
                                     if (serverConnection.isLocalPeer(
                                             privateMessage.getReceiverPublicKey().toByteArray())) {
-                                        handler.obtainMessage(MessageType.messageTypeFromData(buffer),
+                                        handler.obtainMessage(
+                                                MessageType.messageTypeFromData(buffer),
                                                 serializedProtoBuffer).sendToTarget();
-                                        handler.obtainMessage(MessageType.messageTypeFromData(buffer),
+                                        handler.obtainMessage(
+                                                MessageType.messageTypeFromData(buffer),
                                                 serializedProtoBuffer).sendToTarget();
                                     } else {
-                                        serverConnection.sendMessage(serverConnection.peerWithPublicKey(
-                                                        privateMessage.getReceiverPublicKey().toByteArray()),
-                                                serializedProtoBuffer);
+                                        serverConnection
+                                                .sendMessage(serverConnection.peerWithPublicKey(
+                                                                privateMessage
+                                                                        .getReceiverPublicKey()
+                                                                        .toByteArray()),
+                                                        serializedProtoBuffer);
                                     }
                                     break;
                                 case MessageType.MESSAGE_TYPE_PUBLIC:

@@ -20,18 +20,25 @@ import ch.tarsier.tarsier.network.server.TarsierMessagingManager;
 // Important note: This is currently an activity, it will later be a ran as a service so that it
 // can run in the background too.
 
-
+/**
+ * @author FredericJacobs
+ * @author amirezza
+ */
 public class WiFiDirectDebugActivity
-    extends Activity
-    implements WiFiDirectGroupList.DeviceClickListener{
+        extends Activity
+        implements WiFiDirectGroupList.DeviceClickListener {
 
     public static final String TAG = "WiFiDirectDebugActivity";
+
     private boolean isServer = false;
 
 
     private IntentFilter mIntentFilter;
+
     private WifiP2pManager mManager;
+
     private WifiP2pManager.Channel mChannel;
+
     private TarsierMessagingManager mReceiver;
 
     private WiFiDirectGroupList groupList;
@@ -48,7 +55,6 @@ public class WiFiDirectDebugActivity
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
 
@@ -64,9 +70,9 @@ public class WiFiDirectDebugActivity
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = device.deviceAddress;
         config.wps.setup = WpsInfo.PBC;
-        if(isServer){
+        if (isServer) {
             config.groupOwnerIntent = 0;
-        }else{
+        } else {
             config.groupOwnerIntent = 15;
         }
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
@@ -74,6 +80,7 @@ public class WiFiDirectDebugActivity
             public void onSuccess() {
                 Log.d(TAG, "Connecting to peer");
             }
+
             @Override
             public void onFailure(int errorCode) {
                 Log.d(TAG, "Failed connecting to service");
@@ -81,10 +88,10 @@ public class WiFiDirectDebugActivity
         });
     }
 
-    public void onCreateGroup(View view){
+    public void onCreateGroup(View view) {
         Log.d(TAG, "Create Group clicked");
         isServer = true;
-        mManager.createGroup(mChannel,new WifiP2pManager.ActionListener() {
+        mManager.createGroup(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 Log.d(TAG, "Group successfully created.");
@@ -92,7 +99,8 @@ public class WiFiDirectDebugActivity
 
             @Override
             public void onFailure(int errorCode) {
-                Toast.makeText(getApplicationContext(), "Tarsier failed to initiate a new group", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Tarsier failed to initiate a new group",
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -122,9 +130,10 @@ public class WiFiDirectDebugActivity
     @Override
     public void onResume() {
         super.onResume();
-        mReceiver = new TarsierMessagingManager(this,mManager,mChannel,getMainLooper());
+        mReceiver = new TarsierMessagingManager(this, mManager, mChannel, getMainLooper());
         registerReceiver(mReceiver, mIntentFilter);
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -139,6 +148,7 @@ public class WiFiDirectDebugActivity
                 public void onFailure(int reasonCode) {
                     Log.d(TAG, "Disconnect failed. Reason :" + reasonCode);
                 }
+
                 @Override
                 public void onSuccess() {
                 }
