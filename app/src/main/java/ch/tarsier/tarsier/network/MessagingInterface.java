@@ -4,6 +4,8 @@ import java.util.EventListener;
 import java.util.List;
 import java.util.Observer;
 
+import ch.tarsier.tarsier.domain.model.Peer;
+
 public interface MessagingInterface {
     static final int SERVER_PORT = 8888;
 

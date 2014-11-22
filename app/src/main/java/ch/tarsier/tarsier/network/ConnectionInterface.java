@@ -2,6 +2,8 @@ package ch.tarsier.tarsier.network;
 
 import java.util.List;
 
+import ch.tarsier.tarsier.domain.model.Peer;
+
 /**
  * Created by amirreza on 11/16/14.
  */

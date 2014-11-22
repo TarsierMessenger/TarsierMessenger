@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.network.ByteUtils;
 import ch.tarsier.tarsier.network.ChatRoom;
 import ch.tarsier.tarsier.network.ConnectionInterface;
@@ -30,7 +31,6 @@ import ch.tarsier.tarsier.network.ConversationStorageDelegate;
 import ch.tarsier.tarsier.network.ConversationViewDelegate;
 import ch.tarsier.tarsier.network.MessageHandler;
 import ch.tarsier.tarsier.network.MessagingInterface;
-import ch.tarsier.tarsier.network.Peer;
 import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.WiFiDirectGroupList;
 import ch.tarsier.tarsier.network.client.TarsierClientConnection;

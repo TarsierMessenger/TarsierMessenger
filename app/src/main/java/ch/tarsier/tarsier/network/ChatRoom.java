@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
  * Created by amirreza on 10/27/14.

@@ -36,4 +36,8 @@ public class PublicKey {
         return Arrays.hashCode(mBytes);
     }
 
+    public String toString() {
+        return new String(getBytes());
+    }
+
 }

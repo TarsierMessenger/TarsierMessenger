@@ -17,11 +17,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
+import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.network.ByteUtils;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.ConversationStorageDelegate;
 import ch.tarsier.tarsier.network.ConversationViewDelegate;
-import ch.tarsier.tarsier.network.Peer;
 import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 import ch.tarsier.tarsier.network.server.TarsierMessagingManager;
@@ -39,7 +40,9 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
     private Socket mSocket;
     private Handler handler;
     private LinkedHashMap<String, Peer> mPeersMap = new LinkedHashMap<String, Peer>();
-    private Peer localPeer = new Peer("Client name", "ClientPublicKey".getBytes());//TODO: Fetch from storage;
+
+    // TODO: Fetch from storage;
+    private Peer localPeer = new Peer("Client name", new PublicKey("ClientPublicKey".getBytes()));
 
     private InputStream in;
     private OutputStream out;
@@ -138,7 +141,7 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
     @Override
     public void broadcastMessage(byte[] publicKey, byte[] message) {
         TarsierWireProtos.TarsierPublicMessage.Builder publicMessage = TarsierWireProtos.TarsierPublicMessage.newBuilder();
-        publicMessage.setSenderPublicKey(ByteString.copyFrom(localPeer.getPublicKey()));
+        publicMessage.setSenderPublicKey(ByteString.copyFrom(localPeer.getPublicKey().getBytes()));
         publicMessage.setPlainText(ByteString.copyFrom(message));
         write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PUBLIC, publicMessage.build().toByteArray()));
         Log.d(TAG, "A public message is sent.");
@@ -149,14 +152,14 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
         sendMessage(peer.getPublicKey(), message);
     }
 
-    private void sendMessage(byte[] publicKey, byte[] message) {
+    private void sendMessage(PublicKey publicKey, byte[] message) {
         TarsierWireProtos.TarsierPrivateMessage.Builder privateMessage = TarsierWireProtos.TarsierPrivateMessage.newBuilder();
-        privateMessage.setReceiverPublicKey(ByteString.copyFrom(publicKey));
-        privateMessage.setSenderPublicKey(ByteString.copyFrom(localPeer.getPublicKey()));
-        //TODO: is the msg already encrypted? what is setIV ?
+        privateMessage.setReceiverPublicKey(ByteString.copyFrom(publicKey.getBytes()));
+        privateMessage.setSenderPublicKey(ByteString.copyFrom(localPeer.getPublicKey().getBytes()));
+        // TODO: is the msg already encrypted? what is setIV ?
         privateMessage.setCipherText(ByteString.copyFrom(message));
         write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE, privateMessage.build().toByteArray()));
-        Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey).getPeerName());
+        Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey.getBytes()).getUserName());
     }
 
     @Override
@@ -186,23 +189,24 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
     }
 
     private boolean isLocalPeer(byte[] publicKey) {
-        return Arrays.equals(localPeer.getPublicKey(), publicKey);
+        return localPeer.getPublicKey().equals(new PublicKey(publicKey));
     }
 
     private void updatePeers(List<TarsierWireProtos.Peer> peers) {
         mPeersMap.clear();
         for (TarsierWireProtos.Peer peer : peers) {
-            mPeersMap.put(new String(peer.getPublicKey().toByteArray()), new Peer(peer.getName(), peer.getPublicKey().toByteArray()));
+            mPeersMap.put(new String(peer.getPublicKey().toByteArray()),
+                          new Peer(peer.getName(), new PublicKey(peer.getPublicKey().toByteArray())));
         }
-        Log.d(TAG,"Peer list updated");
+        Log.d(TAG, "Peer list updated");
     }
 
     private void sendHelloMessage() {
         TarsierWireProtos.HelloMessage.Builder helloMessage = TarsierWireProtos.HelloMessage.newBuilder();
 
         TarsierWireProtos.Peer.Builder peer = TarsierWireProtos.Peer.newBuilder();
-        peer.setName(localPeer.getPeerName());
-        peer.setPublicKey(ByteString.copyFrom(localPeer.getPublicKey()));
+        peer.setName(localPeer.getUserName());
+        peer.setPublicKey(ByteString.copyFrom(localPeer.getPublicKey().getBytes()));
 
         helloMessage.setPeer(peer.build());
 

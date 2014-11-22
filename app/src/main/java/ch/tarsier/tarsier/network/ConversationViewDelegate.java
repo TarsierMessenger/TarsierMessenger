@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ch.tarsier.tarsier.domain.model.Peer;
+
 /**
  * Created by fred on 09/11/14.
  */
