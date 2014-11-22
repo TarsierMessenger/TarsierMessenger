@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * @author xawill
+ * @author xawill and marinnicolini
  */
 public class DateUtil {
     private static Calendar calendar = Calendar.getInstance();
@@ -19,7 +19,7 @@ public class DateUtil {
         calendar.set(Calendar.HOUR, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        long todayTimestamp = getNowTimestamp();
+        long todayTimestamp = calendar.getTimeInMillis();
 
         calendar.add(Calendar.DAY_OF_MONTH, -1); //Yesterday at 00:00
         long yesterdayTimestamp = calendar.getTimeInMillis();

@@ -2,35 +2,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ch.tarsier.tarsier.ui.activity.ConversationActivity"
+    tools:context="ch.tarsier.tarsier.ui.activity.ChatActivity"
     android:orientation="vertical" >
 
-    <EndlessListView
+    <ch.tarsier.tarsier.ui.view.EndlessListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:stackFromBottom="true"
         android:layout_weight="1">
-    </EndlessListView>
+    </ch.tarsier.tarsier.ui.view.EndlessListView>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/list" >
 
-        <TextView
+        <EditText
             android:id="@+id/message_to_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/send_message_hint" />
 
         <ImageButton
-            android:id="@+id/send"
+            android:id="@+id/sendImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/message_to_send"
             android:src="@drawable/send_message_icon"
-            android:onClick="sendMessage" />
+            android:onClick="onClickSendMessage" />
     </RelativeLayout>
 
 </LinearLayout>
