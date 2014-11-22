@@ -57,6 +57,9 @@ public class ChatroomPeersActivity extends ListActivity {
                 new Peer("Radu Banabic", "Happy coding !"),
                 new Peer("Romain Ruetschi", "Let me rewrite this in Haskell, please.")
             };
+
+            peers[0].setOnline(true);
+            peers[4].setOnline(true);
         }
 
         setListAdapter(new ChatroomPeersArrayAdapter(this, chat, peers));
