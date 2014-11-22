@@ -7,7 +7,7 @@ import ch.tarsier.tarsier.domain.model.Peer;
 /**
  * @author FredericJacobs
  */
-public interface ConversationViewDelegate {
+public interface ChatViewDelegate {
 
     void connected();
 

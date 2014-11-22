@@ -7,7 +7,7 @@ import ch.tarsier.tarsier.domain.model.Peer;
 /**
  * @author FredericJacobs
  */
-public interface ConversationStorageDelegate {
+public interface ChatStorageDelegate {
 
     void storeMessage(String message, Peer peer, Optional<String> discussion);
 }

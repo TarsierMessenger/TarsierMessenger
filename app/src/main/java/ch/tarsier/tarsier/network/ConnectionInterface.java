@@ -15,7 +15,7 @@ public interface ConnectionInterface {
 
     void sendMessage(Peer peer, byte[] message);
 
-    void setConversationViewDelegate(ConversationViewDelegate delegate);
+    void setChatViewDelegate(ChatViewDelegate delegate);
 
-    void setConversationStorageDelegate(ConversationStorageDelegate delegate);
+    void setChatStorageDelegate(ChatStorageDelegate delegate);
 }

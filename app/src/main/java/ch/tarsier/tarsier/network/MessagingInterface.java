@@ -18,7 +18,7 @@ public interface MessagingInterface {
 
     void sendMessage(Peer peer, String message);
 
-    void setConversationViewDelegate(ConversationViewDelegate delegate);
+    void setConversationViewDelegate(ChatViewDelegate delegate);
 
-    void setConversationStorageDelegate(ConversationStorageDelegate delegate);
+    void setConversationStorageDelegate(ChatStorageDelegate delegate);
 }

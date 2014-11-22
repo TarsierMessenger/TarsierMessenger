@@ -23,10 +23,10 @@ import java.util.List;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.network.ChatRoom;
+import ch.tarsier.tarsier.network.ChatroomFragment;
 import ch.tarsier.tarsier.network.ConnectionInterface;
-import ch.tarsier.tarsier.network.ConversationStorageDelegate;
-import ch.tarsier.tarsier.network.ConversationViewDelegate;
+import ch.tarsier.tarsier.network.ChatStorageDelegate;
+import ch.tarsier.tarsier.network.ChatViewDelegate;
 import ch.tarsier.tarsier.network.MessageHandler;
 import ch.tarsier.tarsier.network.MessagingInterface;
 import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
@@ -61,7 +61,7 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
 
     private Runnable handler;
 
-    private ChatRoom chatRoom;
+    private ChatroomFragment mChatroomFragment;
 
     private Activity mActivity;
 
@@ -107,10 +107,10 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
             }
         }
         mConnection = (ConnectionInterface) handler;
-        chatRoom = new ChatRoom();
-        chatRoom.setMessengerDelegate(this);
+        mChatroomFragment = new ChatroomFragment();
+        mChatroomFragment.setMessengerDelegate(this);
         mActivity.getFragmentManager().beginTransaction()
-                .replace(R.id.container, chatRoom).commit();
+                .replace(R.id.container, mChatroomFragment).commit();
 
     }
 
@@ -226,13 +226,13 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
     }
 
     @Override
-    public void setConversationViewDelegate(ConversationViewDelegate delegate) {
-        mConnection.setConversationViewDelegate(delegate);
+    public void setConversationViewDelegate(ChatViewDelegate delegate) {
+        mConnection.setChatViewDelegate(delegate);
     }
 
     @Override
-    public void setConversationStorageDelegate(ConversationStorageDelegate delegate) {
-        mConnection.setConversationStorageDelegate(delegate);
+    public void setConversationStorageDelegate(ChatStorageDelegate delegate) {
+        mConnection.setChatStorageDelegate(delegate);
     }
 
     @Override
@@ -254,7 +254,7 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
                 try {
                     publicMessage = TarsierWireProtos.TarsierPublicMessage
                             .parseFrom((byte[]) message.obj);
-                    chatRoom.pushMessage(
+                    mChatroomFragment.pushMessage(
                             "Buddy: " + new String(publicMessage.getPlainText().toByteArray()));
                 } catch (InvalidProtocolBufferException e) {
                     e.printStackTrace();

@@ -20,8 +20,8 @@ import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.network.ByteUtils;
 import ch.tarsier.tarsier.network.ConnectionInterface;
-import ch.tarsier.tarsier.network.ConversationStorageDelegate;
-import ch.tarsier.tarsier.network.ConversationViewDelegate;
+import ch.tarsier.tarsier.network.ChatStorageDelegate;
+import ch.tarsier.tarsier.network.ChatViewDelegate;
 import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
@@ -45,9 +45,9 @@ public class TarsierServerConnection implements Runnable, ConnectionInterface {
 
     private Handler mHandler;
 
-    private ConversationViewDelegate mConversationViewDelegate;
+    private ChatViewDelegate mChatViewDelegate;
 
-    private ConversationStorageDelegate mConversationStorageDelegate;
+    private ChatStorageDelegate mChatStorageDelegate;
 
     public TarsierServerConnection(Handler handler) throws IOException {
         this.mServer = new ServerSocket(MessageType.SERVER_SOCKET);
@@ -126,13 +126,13 @@ public class TarsierServerConnection implements Runnable, ConnectionInterface {
     }
 
     @Override
-    public void setConversationViewDelegate(ConversationViewDelegate delegate) {
-        mConversationViewDelegate = delegate;
+    public void setChatViewDelegate(ChatViewDelegate delegate) {
+        mChatViewDelegate = delegate;
     }
 
     @Override
-    public void setConversationStorageDelegate(ConversationStorageDelegate delegate) {
-        mConversationStorageDelegate = delegate;
+    public void setChatStorageDelegate(ChatStorageDelegate delegate) {
+        mChatStorageDelegate = delegate;
     }
 
     protected void sendMessage(byte[] publicKey, byte[] message) {

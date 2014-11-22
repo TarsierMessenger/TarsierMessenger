@@ -19,19 +19,19 @@ import ch.tarsier.tarsier.domain.model.Peer;
 /**
  * @author amirezza
  */
-public class ChatRoom extends Fragment implements ConversationViewDelegate {
+public class ChatroomFragment extends Fragment implements ChatViewDelegate {
 
     private MessagingInterface mMessengerDelegate;
 
-    private View view;
+    private View mView;
 
-    private TextView chatLine;
+    private TextView mChatLine;
 
-    private ListView listView;
+    private ListView mListView;
 
-    ChatMessageAdapter adapter = null;
+    private ChatMessageAdapter mAdapter = null;
 
-    private List<String> items = new ArrayList<String>();
+    private List<String> mItems = new ArrayList<String>();
 
     public void setMessengerDelegate(MessagingInterface messagingInterface) {
         mMessengerDelegate = messagingInterface;
@@ -40,24 +40,24 @@ public class ChatRoom extends Fragment implements ConversationViewDelegate {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.chat_room, container, false);
-        chatLine = (TextView) view.findViewById(R.id.txtChatLine);
-        listView = (ListView) view.findViewById(android.R.id.list);
-        adapter = new ChatMessageAdapter(getActivity(), android.R.id.text1,
-                items);
-        listView.setAdapter(adapter);
-        view.findViewById(R.id.button1).setOnClickListener(
+        mView = inflater.inflate(R.layout.chat_room, container, false);
+        mChatLine = (TextView) mView.findViewById(R.id.txtChatLine);
+        mListView = (ListView) mView.findViewById(android.R.id.list);
+        mAdapter = new ChatMessageAdapter(getActivity(), android.R.id.text1,
+                mItems);
+        mListView.setAdapter(mAdapter);
+        mView.findViewById(R.id.button1).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View arg0) {
                         if (mMessengerDelegate != null) {
-                            mMessengerDelegate.broadcastMessage(chatLine.getText().toString());
-                            pushMessage("Me: " + chatLine.getText().toString());
-                            chatLine.setText("");
+                            mMessengerDelegate.broadcastMessage(mChatLine.getText().toString());
+                            pushMessage("Me: " + mChatLine.getText().toString());
+                            mChatLine.setText("");
                         }
                     }
                 });
-        return view;
+        return mView;
     }
 
     @Override
@@ -71,8 +71,8 @@ public class ChatRoom extends Fragment implements ConversationViewDelegate {
     }
 
     public void pushMessage(String readMessage) {
-        adapter.add(readMessage);
-        adapter.notifyDataSetChanged();
+        mAdapter.add(readMessage);
+        mAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -80,7 +80,7 @@ public class ChatRoom extends Fragment implements ConversationViewDelegate {
      */
     public class ChatMessageAdapter extends ArrayAdapter<String> {
 
-        List<String> messages = null;
+        List<String> mMessages = null;
 
         public ChatMessageAdapter(Context context, int textViewResourceId,
                 List<String> items) {
@@ -95,7 +95,7 @@ public class ChatRoom extends Fragment implements ConversationViewDelegate {
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 v = vi.inflate(android.R.layout.simple_list_item_1, null);
             }
-            String message = items.get(position);
+            String message = mItems.get(position);
             if (message != null && !message.isEmpty()) {
                 TextView nameText = (TextView) v
                         .findViewById(android.R.id.text1);
