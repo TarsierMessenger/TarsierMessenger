@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.network.old;
+package ch.tarsier.tarsier.network;
 
 import android.app.ListFragment;
 import android.content.Context;
@@ -17,19 +17,20 @@ import java.util.List;
 import ch.tarsier.tarsier.R;
 
 /**
- * Created by amirreza on 10/27/14.
+ * @author amirezza
  */
 public class WiFiDirectGroupList extends ListFragment {
 
-    WiFiDevicesAdapter listAdapter = null;
+    private WiFiDevicesAdapter mListAdapter = null;
 
     interface DeviceClickListener {
-        public void connectP2p(WifiP2pDevice device);
+
+        void connectP2p(WifiP2pDevice device);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         return inflater.inflate(R.layout.devices_list, container, false);
     }
 
@@ -38,13 +39,11 @@ public class WiFiDirectGroupList extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        listAdapter = new WiFiDevicesAdapter(this.getActivity(),
+        mListAdapter = new WiFiDevicesAdapter(this.getActivity(),
                 android.R.layout.simple_list_item_2, android.R.id.text1,
                 new ArrayList<WifiP2pDevice>());
-        setListAdapter(listAdapter);
+        setListAdapter(mListAdapter);
     }
-
-
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -56,13 +55,15 @@ public class WiFiDirectGroupList extends ListFragment {
 
 
     public class WiFiDevicesAdapter extends ArrayAdapter<WifiP2pDevice> {
+
         private List<WifiP2pDevice> items;
 
         public WiFiDevicesAdapter(Context context, int resource,
-                                  int textViewResourceId, List<WifiP2pDevice> items) {
+                int textViewResourceId, List<WifiP2pDevice> items) {
             super(context, resource, textViewResourceId, items);
             this.items = items;
         }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View v = convertView;
@@ -85,6 +86,7 @@ public class WiFiDirectGroupList extends ListFragment {
             return v;
         }
     }
+
     public static String getDeviceStatus(int statusCode) {
         switch (statusCode) {
             case WifiP2pDevice.CONNECTED:

@@ -14,4 +14,7 @@
 
     <!--Devices lists-->
     <string name="finding_service">Finding local peers</string>
+
+    <!-- Network -->
+    <string name="create_group_string">Create Group</string>
 </resources>

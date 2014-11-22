@@ -1,13 +1,19 @@
 package ch.tarsier.tarsier.domain.model;
 
+import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.data.Serializable;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
+import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
 /**
  * @author xawill
  * @author romac
+ * @author FredericJacobs
  */
-public class Peer {
+public class Peer implements Serializable {
 
     private long mId;
     private PublicKey mPublicKey;
@@ -38,6 +44,12 @@ public class Peer {
         this();
         mUserName = name;
         mPublicKey = publicKey;
+    }
+
+    public Peer (byte[] data) throws InvalidProtocolBufferException {
+        TarsierWireProtos.Peer peer = TarsierWireProtos.Peer.parseFrom(data);
+        mUserName = peer.getName();
+        mPublicKey = new PublicKey(peer.getPublicKey().toByteArray());
     }
 
     public long getId() {
@@ -90,5 +102,13 @@ public class Peer {
 
     public boolean isUser() {
         return false;
+    }
+
+    public byte[] serialize() {
+        TarsierWireProtos.Peer.Builder peerBuilder = TarsierWireProtos.Peer.newBuilder();
+        peerBuilder.setName(mUserName);
+        peerBuilder.setPublicKey(ByteString.copyFrom(mPublicKey.getBytes()));
+
+        return peerBuilder.build().toByteArray();
     }
 }
