@@ -1,5 +1,7 @@
 package ch.tarsier.tarsier.network;
 
+import com.squareup.otto.Bus;
+
 import java.util.List;
 
 import ch.tarsier.tarsier.domain.model.Peer;
@@ -10,7 +12,7 @@ import ch.tarsier.tarsier.domain.model.Peer;
  */
 public interface MessagingInterface {
 
-    static final int SERVER_PORT = 8888;
+    int SERVER_PORT = 8888;
 
     List<Peer> getMembersList();
 
@@ -18,7 +20,5 @@ public interface MessagingInterface {
 
     void sendMessage(Peer peer, String message);
 
-    void setConversationViewDelegate(ChatViewDelegate delegate);
-
-    void setConversationStorageDelegate(ChatStorageDelegate delegate);
+    void setEventBus(Bus eventBus);
 }
