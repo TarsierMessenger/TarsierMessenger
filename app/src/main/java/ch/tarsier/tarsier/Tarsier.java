@@ -1,5 +1,7 @@
 package ch.tarsier.tarsier;
 
+import com.squareup.otto.Bus;
+
 import android.app.Application;
 
 import ch.tarsier.tarsier.database.Database;
@@ -21,6 +23,8 @@ public class Tarsier extends Application {
     private PeerRepository mPeerRepository;
     private ChatRepository mChatRepository;
     private MessageRepository mMessageRepository;
+
+    private Bus mEventBus;
 
     public static Tarsier app() {
         return app;
@@ -88,6 +92,14 @@ public class Tarsier extends Application {
 
     public void setMessageRepository(MessageRepository messageRepository) {
         mMessageRepository = messageRepository;
+    }
+
+    public Bus getEventBus() {
+        return mEventBus;
+    }
+
+    public void setEventBus(Bus eventBus) {
+        mEventBus = eventBus;
     }
 
     // Reset the Tarsier.app() singleton [for testing purpose only]
