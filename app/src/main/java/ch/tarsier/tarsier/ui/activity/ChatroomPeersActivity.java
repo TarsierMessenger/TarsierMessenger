@@ -1,5 +1,7 @@
 package ch.tarsier.tarsier.ui.activity;
 
+import com.squareup.otto.Subscribe;
+
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,9 +17,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.User;
+import ch.tarsier.tarsier.event.NewMessageEvent;
+import ch.tarsier.tarsier.event.ReceivedNewPeersListEvent;
 
 /**
  * @author romac
@@ -27,47 +32,68 @@ public class ChatroomPeersActivity extends ListActivity {
     public static final String EXTRAS_CHAT_KEY = "chat";
     public final static String EXTRAS_PEERS_KEY = "peers";
 
+    private ChatroomPeersArrayAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setUpData();
+
+        Tarsier.app().getEventBus().register(this);
+    }
+
+    @Subscribe
+    public void receivedNewPeersList(ReceivedNewPeersListEvent event) {
+        mAdapter.clear();
+        mAdapter.addAll(event.getPeers());
+    }
+
+    private void setUpData() {
         Intent sender = getIntent();
         Bundle extras = sender.getExtras();
 
-        Chat chat;
-        Peer[] peers;
+        if (extras == null || !hasExtrasData(extras)) {
+            setUpWithTestData();
+            return;
+        }
 
-        if (extras != null && hasRightExtras(extras)) {
-            chat = (Chat) extras.getSerializable(EXTRAS_CHAT_KEY);
-            peers = (User[]) extras.getSerializable(EXTRAS_PEERS_KEY);
-        } else {
-            // Just some test data in case we got nothing from the parent,
-            // as it is the case when accessing this view from the menu.
-            Peer host = new Peer("Amirezza Bahreini", "At Sat', come join me !");
+        Chat chat = (Chat) extras.getSerializable(EXTRAS_CHAT_KEY);
+        Peer[] peers = (User[]) extras.getSerializable(EXTRAS_PEERS_KEY);
 
-            chat = new Chat();
-            chat.setHost(host);
-            chat.setTitle("Tarsier rocks!");
-            chat.setPrivate(false);
+        setAdapter(new ChatroomPeersArrayAdapter(this, chat, peers));
+    }
 
-            peers = new Peer[] {
+    private void setUpWithTestData() {
+        Peer host = new Peer("Amirezza Bahreini", "At Sat', come join me !");
+
+        Chat chat = new Chat();
+        chat.setHost(host);
+        chat.setTitle("Tarsier rocks!");
+        chat.setPrivate(false);
+
+        Peer[] peers = new Peer[]{
                 host,
                 new Peer("Frederic Jacobs", "Tarsier will beat ISIS !"),
                 new Peer("Gabriel Luthier", "There's no place like 127.0.0.1"),
                 new Peer("Radu Banabic", "Happy coding !"),
                 new Peer("Romain Ruetschi", "Let me rewrite this in Haskell, please.")
-            };
+        };
 
-            peers[0].setOnline(true);
-            peers[4].setOnline(true);
-        }
+        peers[0].setOnline(true);
+        peers[4].setOnline(true);
 
-        setListAdapter(new ChatroomPeersArrayAdapter(this, chat, peers));
+        setAdapter(new ChatroomPeersArrayAdapter(this, chat, peers));
     }
 
-    private boolean hasRightExtras(Bundle extras) {
+    private boolean hasExtrasData(Bundle extras) {
         return extras.containsKey(EXTRAS_CHAT_KEY)
             && extras.containsKey(EXTRAS_PEERS_KEY);
+    }
+
+    private void setAdapter(ChatroomPeersArrayAdapter adapter) {
+        mAdapter = adapter;
+        setListAdapter(adapter);
     }
 
     @Override
