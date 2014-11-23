@@ -6,7 +6,11 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.domain.model.ChatRoomSummary;
+import ch.tarsier.tarsier.ui.view.EndlessListView;
 
 public class NearbyListActivity extends Activity {
 
@@ -38,6 +42,24 @@ public class NearbyListActivity extends Activity {
         };
         actionBar.addTab(actionBar.newTab().setText("Chat rooms").setTabListener(tabListener));
         actionBar.addTab(actionBar.newTab().setText("Peers").setTabListener(tabListener));
+
+
+
+
+
+        ChatRoomSummary[] chatRoomSummary = {
+                new ChatRoomSummary(7,"SwEng","23:02",55),
+                new ChatRoomSummary(6,"Sat Rocks","Yesterday",163),
+                new ChatRoomSummary(5,"CO2","Friday",158),
+                new ChatRoomSummary(4,"Grillades Préverenges","Wednesday",18),
+                new ChatRoomSummary(3,"Hong Kong's umbrella movement","Tuesday",88954),
+                new ChatRoomSummary(2,"M2 EPFL","16.10.14",32),
+                new ChatRoomSummary(1,"TA meeting 1","14.10.14",8)
+        };
+
+        final ListView nearbyChatRoomList = (ListView) findViewById(R.id.nearby_chat_list);
+
+
     }
 
 
