@@ -75,6 +75,10 @@
             android:name="ch.tarsier.tarsier.ui.activity.ChatActivity"
             android:label="@string/title_activity_conversation" >
         </activity>
+        <activity
+            android:name=".ui.activity.NearbyListActivity"
+            android:label="@string/title_activity_nearby_list" >
+        </activity>
     </application>
 
 </manifest>

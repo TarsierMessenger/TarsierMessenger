@@ -3,6 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_profile">Profile</string>
     <string name="action_discussions">Discussions</string>
+    <string name="action_nearby_list">Nearby</string>
     <string name="action_chat_room_participants">Chat Room Participants</string>
     <string name="action_wifidirectdebug">Wi-Fi Direct Debug</string>
     <string name="action_search">plop</string>
