@@ -19,7 +19,7 @@ import ch.tarsier.tarsier.domain.model.Peer;
 /**
  * @author amirezza
  */
-public class ChatroomFragment extends Fragment implements ChatViewDelegate {
+public class ChatroomFragment extends Fragment {
 
     private MessagingInterface mMessengerDelegate;
 
@@ -58,16 +58,6 @@ public class ChatroomFragment extends Fragment implements ChatViewDelegate {
                     }
                 });
         return mView;
-    }
-
-    @Override
-    public void connected() {
-
-    }
-
-    @Override
-    public void receivedNewPeersList(List<Peer> peers) {
-
     }
 
     public void pushMessage(String readMessage) {

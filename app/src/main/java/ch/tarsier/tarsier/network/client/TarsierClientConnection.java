@@ -2,6 +2,8 @@ package ch.tarsier.tarsier.network.client;
 
 import com.google.protobuf.ByteString;
 
+import com.squareup.otto.Bus;
+
 import android.os.Handler;
 import android.util.Log;
 
@@ -20,8 +22,6 @@ import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.network.ByteUtils;
 import ch.tarsier.tarsier.network.ConnectionInterface;
-import ch.tarsier.tarsier.network.ChatStorageDelegate;
-import ch.tarsier.tarsier.network.ChatViewDelegate;
 import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
@@ -52,9 +52,7 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
 
     private InetAddress mAddress;
 
-    private ChatViewDelegate mChatViewDelegate;
-
-    private ChatStorageDelegate mChatStorageDelegate;
+    private Bus mEventBus;
 
     public TarsierClientConnection(Handler handler, InetAddress groupOwnerAddress) {
         this.handler = handler;
@@ -169,6 +167,11 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
         sendMessage(peer.getPublicKey(), message);
     }
 
+    @Override
+    public void setEventBus(Bus eventBus) {
+        mEventBus = eventBus;
+    }
+
     private void sendMessage(PublicKey publicKey, byte[] message) {
         TarsierWireProtos.TarsierPrivateMessage.Builder privateMessage
                 = TarsierWireProtos.TarsierPrivateMessage.newBuilder();
@@ -180,16 +183,6 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
                 privateMessage.build().toByteArray()));
         Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey.getBytes())
                 .getUserName());
-    }
-
-    @Override
-    public void setChatViewDelegate(ChatViewDelegate delegate) {
-        mChatViewDelegate = delegate;
-    }
-
-    @Override
-    public void setChatStorageDelegate(ChatStorageDelegate delegate) {
-        mChatStorageDelegate = delegate;
     }
 
     @Override

@@ -2,6 +2,8 @@ package ch.tarsier.tarsier.network.server;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import com.squareup.otto.Bus;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,8 +27,6 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.network.ChatroomFragment;
 import ch.tarsier.tarsier.network.ConnectionInterface;
-import ch.tarsier.tarsier.network.ChatStorageDelegate;
-import ch.tarsier.tarsier.network.ChatViewDelegate;
 import ch.tarsier.tarsier.network.MessageHandler;
 import ch.tarsier.tarsier.network.MessagingInterface;
 import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
@@ -64,6 +64,8 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
     private ChatroomFragment mChatroomFragment;
 
     private Activity mActivity;
+
+    private Bus mEventBus;
 
     public TarsierMessagingManager(final Activity activity, WifiP2pManager wifiManager,
             WifiP2pManager.Channel channel, Looper looper) {
@@ -226,13 +228,8 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
     }
 
     @Override
-    public void setConversationViewDelegate(ChatViewDelegate delegate) {
-        mConnection.setChatViewDelegate(delegate);
-    }
-
-    @Override
-    public void setConversationStorageDelegate(ChatStorageDelegate delegate) {
-        mConnection.setChatStorageDelegate(delegate);
+    public void setEventBus(Bus eventBus) {
+        mEventBus = eventBus;
     }
 
     @Override
