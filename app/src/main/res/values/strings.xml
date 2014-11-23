@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Tarsier</string>
 
-    <!--Activity Titles-->
+    <!-- Activity Titles -->
     <string name="title_activity_add_profile_picture">Add a profile picture</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
@@ -12,7 +13,7 @@
     <string name="title_activity_new_chatrooom">New Chatroom</string>
     <string name="title_activity_chat_list">Chats</string>
 
-    <!--Devices lists-->
+    <!-- Devices lists -->
     <string name="finding_service">Finding local peers</string>
 
     <!-- Network -->

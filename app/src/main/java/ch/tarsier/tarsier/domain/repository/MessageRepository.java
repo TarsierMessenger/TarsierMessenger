@@ -3,7 +3,6 @@ package ch.tarsier.tarsier.domain.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
-import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,6 +53,8 @@ public class MessageRepository extends AbstractRepository {
 
         String whereClause = COLUMN_ID + " = " + id;
 
+
+
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
                 COLUMNS,
@@ -62,7 +63,7 @@ public class MessageRepository extends AbstractRepository {
                 "1"
         );
 
-        if (cursor == null || cursor.getCount() == 0) {
+        if (cursor == null || cursor.getCount() <= 0) {
             throw new NoSuchModelException("No Message with id " + id + " found.");
         }
 
@@ -167,6 +168,10 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public void update(Message message) throws InvalidModelException, UpdateException {
+        if (message == null) {
+            throw new InvalidModelException("Message should not be null.");
+        }
+
         if (message.getId() < 1) {
             throw new InvalidModelException("Message's id invalid");
         }
@@ -211,10 +216,10 @@ public class MessageRepository extends AbstractRepository {
         }
 
         try {
-            int chatId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID));
-            String text = c.getString(c.getColumnIndex(Columns.Message.COLUMN_NAME_MSG));
-            long senderId = c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
-            long dateTime = c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME));
+            int chatId = c.getInt(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_CHAT_ID));
+            String text = c.getString(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_MSG));
+            long senderId = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_SENDER_ID));
+            long dateTime = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_DATETIME));
 
             long userId = Tarsier.app().getUserPreferences().getId();
 

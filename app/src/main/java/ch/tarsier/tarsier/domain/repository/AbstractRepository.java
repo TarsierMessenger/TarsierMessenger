@@ -16,10 +16,14 @@ abstract class AbstractRepository {
     }
 
     public SQLiteDatabase getReadableDatabase() {
+        while (!mDatabase.isReady()) { }
+
         return mDatabase.getReadable();
     }
 
     public SQLiteDatabase getWritableDatabase() {
+        while (!mDatabase.isReady()) { }
+
         return mDatabase.getWritable();
     }
 }

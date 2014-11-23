@@ -21,10 +21,10 @@ public class MessageRepositoryTest extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        Tarsier.app().reset();
         mMessageRepository = Tarsier.app().getMessageRepository();
     }
 
+    // test public Message findById(long id)
     public void testFindIllegalIds() {
         long[] illegalIds = {0, -1, -9001, Long.MIN_VALUE};
 
@@ -54,6 +54,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
         }
     }
 
+    // test public void insert(Message message)
     public void testInsertNullMessage() {
         try {
             mMessageRepository.insert(null);
@@ -75,6 +76,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
         }
     }
 
+    // test public void update(Message message)
     public void testUpdateNullMessage() {
         try {
             mMessageRepository.update(null);

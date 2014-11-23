@@ -64,19 +64,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_CHAT);
-        db.execSQL(SQL_CREATE_MESSAGES);
-        db.execSQL(SQL_CREATE_PEER);
+        db.beginTransaction();
 
-        boolean isDebuggable = 0 != (Tarsier.app().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE);
+        try {
+            db.execSQL(SQL_CREATE_CHAT);
+            db.execSQL(SQL_CREATE_MESSAGES);
+            db.execSQL(SQL_CREATE_PEER);
 
-        if (isDebuggable) {
-            System.out.println("===================================");
-            System.out.println("SQLiteDatabase onCreate generates :");
-            System.out.println(SQL_CREATE_CHAT);
-            System.out.println(SQL_CREATE_MESSAGES);
-            System.out.println(SQL_CREATE_PEER);
-            System.out.println("===================================");
+            boolean isDebuggable = 0 != (Tarsier.app().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE);
+
+            if (isDebuggable) {
+                System.out.println("===================================");
+                System.out.println("SQLiteDatabase onCreate generates :");
+                System.out.println(SQL_CREATE_CHAT);
+                System.out.println(SQL_CREATE_MESSAGES);
+                System.out.println(SQL_CREATE_PEER);
+                System.out.println("===================================");
+            }
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
     }
 
