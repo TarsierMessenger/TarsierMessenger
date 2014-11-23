@@ -38,8 +38,8 @@ public class ChatroomPeersActivity extends ListActivity {
         Peer[] peers;
 
         if (extras != null && hasRightExtras(extras)) {
-            chat = (Chat) extras.get(EXTRAS_CHAT_KEY);
-            peers = (User[]) extras.get(EXTRAS_PEERS_KEY);
+            chat = (Chat) extras.getSerializable(EXTRAS_CHAT_KEY);
+            peers = (User[]) extras.getSerializable(EXTRAS_PEERS_KEY);
         } else {
             // Just some test data in case we got nothing from the parent,
             // as it is the case when accessing this view from the menu.

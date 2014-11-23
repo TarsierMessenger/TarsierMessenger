@@ -1,10 +1,12 @@
 package ch.tarsier.tarsier.domain.model;
 
+import java.io.Serializable;
+
 /**
  * @author McMoudi
  * @author romac
  */
-public class Chat {
+public class Chat implements Serializable {
 
     private long mId;
     private String mTitle;

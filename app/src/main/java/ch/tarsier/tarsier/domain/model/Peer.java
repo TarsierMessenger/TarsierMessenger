@@ -3,8 +3,10 @@ package ch.tarsier.tarsier.domain.model;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import java.io.Serializable;
+
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.data.Serializable;
+import ch.tarsier.tarsier.data.ByteArraySerializable;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
@@ -13,7 +15,7 @@ import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
  * @author romac
  * @author FredericJacobs
  */
-public class Peer implements Serializable {
+public class Peer implements ByteArraySerializable, Serializable {
 
     private long mId;
     private PublicKey mPublicKey;
@@ -104,7 +106,7 @@ public class Peer implements Serializable {
         return false;
     }
 
-    public byte[] serialize() {
+    public byte[] toByteArray() {
         TarsierWireProtos.Peer.Builder peerBuilder = TarsierWireProtos.Peer.newBuilder();
         peerBuilder.setName(mUserName);
         peerBuilder.setPublicKey(ByteString.copyFrom(mPublicKey.getBytes()));
