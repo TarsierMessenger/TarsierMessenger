@@ -75,9 +75,12 @@
             android:name="ch.tarsier.tarsier.ui.activity.ChatActivity"
             android:label="@string/title_activity_conversation" >
         </activity>
-        <activity
+        <activity android:uiOptions="splitActionBarWhenNarrow"
             android:name=".ui.activity.NearbyListActivity"
-            android:label="@string/title_activity_nearby_list" >
+            android:label="@string/title_activity_nearby_list">
+            <meta-data android:name="android.support.UI_OPTIONS"
+            android:value="splitActionBarWhenNarrow"
+            android:theme="@style/AppTheme"/>
         </activity>
     </application>
 
