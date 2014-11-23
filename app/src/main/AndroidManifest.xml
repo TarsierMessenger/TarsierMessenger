@@ -71,13 +71,21 @@
             android:label="@string/title_activity_preferences" >
         </activity>
         <activity
+<<<<<<< HEAD
             android:name="ch.tarsier.tarsier.ui.activity.ChatListActivity"
+=======
+            android:name=".ui.activity.ChatListActivity"
+>>>>>>> Initial Commit - Hello world
             android:label="@string/title_activity_chat_list"
             android:theme="@style/CustomActionBarTheme" >
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.ChatActivity"
             android:label="@string/title_activity_conversation" >
+        </activity>
+        <activity
+            android:name=".ui.activity.NearbyListActivity"
+            android:label="@string/title_activity_nearby_list" >
         </activity>
     </application>
 
