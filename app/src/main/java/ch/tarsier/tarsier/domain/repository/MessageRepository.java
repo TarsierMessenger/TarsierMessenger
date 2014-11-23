@@ -72,79 +72,6 @@ public class MessageRepository extends AbstractRepository {
         }
     }
 
-    public List<Message> findByChat(Chat chat) throws IllegalArgumentException, NoSuchModelException {
-        final int all = -1;
-        return findByChat(chat, all);
-    }
-
-    public List<Message> findByChat(Chat chat, int number) throws IllegalArgumentException, NoSuchModelException {
-        if (chat.getId() < 1) {
-            throw new IllegalArgumentException("Chat must have a valid ID");
-        }
-
-        String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
-
-        Cursor cursor = getReadableDatabase().query(
-                TABLE_NAME,
-                COLUMNS,
-                whereClause,
-                null, null, null, null
-        );
-
-        if (!cursor.moveToFirst()) {
-            //TODO check that query() return null if it failed to query
-            //moveToFirst should do the trick, returns false if the cursor is empty, hence failed to query
-            throw new NoSuchModelException("Cursor is null");
-        }
-
-        try {
-            return buildListFromCursor(cursor, number);
-        } catch (InvalidCursorException e) {
-            throw new NoSuchModelException(e);
-        }
-    }
-
-    /**
-     * @param chat   the chat from which the messages shall be retrieved
-     * @param since  retrieve message older than this timestamp
-     * @param number number of messages to retrieve
-     * @return a list of message
-     */
-    public List<Message> findByChat(Chat chat, long since, int number) throws IllegalArgumentException, NoSuchModelException {
-        if (chat.getId() < 1) {
-            throw new IllegalArgumentException("Chat must have a valid ID");
-        }
-
-        String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
-
-        Cursor cursor = getReadableDatabase().query(
-                TABLE_NAME,
-                COLUMNS,
-                whereClause,
-                null, null, null,
-                DATETIME_DESCEND);
-
-        if (!cursor.moveToFirst()) {
-            throw new NoSuchModelException("cursor is empty, cannot move to first");
-        }
-        long cTime = 0;
-        do {
-            cTime = cursor.getLong(cursor.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME));
-        } while (cursor.moveToNext() && since < cTime);
-        //don't forget the descending order. since should be > cTime, amIRight?
-
-        List<Message> msgs = null;
-        try {
-            msgs = buildListFromCursor(cursor, number);
-        } catch (InvalidCursorException e) {
-            throw new NoSuchModelException(e);
-        }
-
-        Collections.reverse(msgs);
-        return msgs;
-    }
-
-
     public void insert(Message message) throws InvalidModelException, InsertException {
         if (message == null) {
             throw new InvalidModelException("Message should not be null.");
@@ -208,6 +135,80 @@ public class MessageRepository extends AbstractRepository {
         }
     }
 
+    public List<Message> findByChat(Chat chat) throws IllegalArgumentException, NoSuchModelException {
+        final int all = -1;
+        return findByChat(chat, all);
+    }
+
+    public List<Message> findByChat(Chat chat, int number) throws IllegalArgumentException, NoSuchModelException {
+        if (chat.getId() < 1) {
+            throw new IllegalArgumentException("Chat must have a valid ID");
+        }
+
+        String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                COLUMNS,
+                whereClause,
+                null, null, null, null
+        );
+
+        if (!cursor.moveToFirst()) {
+            //TODO check that query() return null if it failed to query
+            //moveToFirst should do the trick, returns false if the cursor is empty, hence failed to query
+            throw new NoSuchModelException("Cursor is null");
+        }
+
+        try {
+            return buildListFromCursor(cursor, number);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        }
+    }
+
+    /**
+     * @param chat   the chat from which the messages shall be retrieved
+     * @param since  retrieve message older than this timestamp
+     * @param number number of messages to retrieve
+     * @return a list of message
+     */
+    public List<Message> findByChat(Chat chat, long since, int number)
+            throws IllegalArgumentException, NoSuchModelException {
+
+        if (chat.getId() < 1) {
+            throw new IllegalArgumentException("Chat must have a valid ID");
+        }
+
+        String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                COLUMNS,
+                whereClause,
+                null, null, null,
+                DATETIME_DESCEND);
+
+        if (!cursor.moveToFirst()) {
+            throw new NoSuchModelException("cursor is empty, cannot move to first");
+        }
+        long cTime;
+        do {
+            cTime = cursor.getLong(cursor.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME));
+        } while (cursor.moveToNext() && since < cTime);
+        //don't forget the descending order. since should be > cTime, amIRight?
+
+        List<Message> msgs;
+        try {
+            msgs = buildListFromCursor(cursor, number);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        }
+
+        Collections.reverse(msgs);
+        return msgs;
+    }
+
     private Message buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
             throw new InvalidCursorException("Cursor is null");
@@ -227,6 +228,8 @@ public class MessageRepository extends AbstractRepository {
             } else {
                 message = new Message(chatId, text, senderId, dateTime);
             }
+
+            c.close();
 
             return message;
 

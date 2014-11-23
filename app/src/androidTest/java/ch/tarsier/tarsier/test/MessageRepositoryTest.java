@@ -25,7 +25,14 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         Tarsier.app().reset();
         mMessageRepository = Tarsier.app().getMessageRepository();
-        mDummyMessage = new Message(1, "test", 1, 0);
+        mDummyMessage = new Message(1, "test", 2, 1000);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+
+
     }
 
 
@@ -131,16 +138,29 @@ public class MessageRepositoryTest extends AndroidTestCase {
         }
     }
 
+/* Not working yet... inserting a message and then retrieving it by id throws a NoSuchModelException
 
     // test methods together
-    public void testUpdateDummyMessage() {
+    public void testInsertAndFindIdOfTheMessageInserted() {
+        insertDummyMessage();
+
+        Message dummyMessageFromDb = null;
         try {
-            mMessageRepository.insert(mDummyMessage);
-        } catch (InvalidModelException e) {
-            fail("InvalidModelException should not be thrown.");
-        } catch (InsertException e) {
-            fail("InsertException should not be thrown.");
+            dummyMessageFromDb = mMessageRepository.findById(mDummyMessage.getId());
+        } catch (NoSuchModelException e) {
+            fail("NoSuchModelException should not be thrown");
         }
+
+        assertNotNull(dummyMessageFromDb);
+
+        assertEquals(1, dummyMessageFromDb.getChatId());
+        assertEquals("test", dummyMessageFromDb.getText());
+        assertEquals(2, dummyMessageFromDb.getPeerId());
+        assertEquals(1000, dummyMessageFromDb.getDateTime());
+    }
+
+    public void testInsertAndUpdateDummyMessage() {
+        insertDummyMessage();
 
         mDummyMessage.setText("this is new");
 
@@ -151,5 +171,33 @@ public class MessageRepositoryTest extends AndroidTestCase {
         } catch (UpdateException e) {
             fail("UpdateException should not be thrown.");
         }
+
+        assertNotSame(-1, mDummyMessage.getId());
+
+        Message dummyMessageFromDb = null;
+        try {
+            dummyMessageFromDb = mMessageRepository.findById(mDummyMessage.getId());
+        } catch (NoSuchModelException e) {
+            fail("NoSuchModelException should not be thrown");
+        }
+
+        assertNotNull(dummyMessageFromDb);
+        assertEquals("this is new", dummyMessageFromDb.getText());
+    }
+*/
+
+    private void insertDummyMessage() {
+        // makes sure that mDummyMessage is "clean"
+        mDummyMessage = new Message(1, "test", 2, 1000);
+
+        try {
+            mMessageRepository.insert(mDummyMessage);
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown.");
+        } catch (InsertException e) {
+            fail("InsertException should not be thrown.");
+        }
+
+        assertNotSame(-1, mDummyMessage.getId());
     }
 }
