@@ -104,6 +104,7 @@ public class Tarsier extends Application {
         mMessageRepository = messageRepository;
     }
 
+    // Reset the Tarsier.app() singleton [for testing purpose only]
     public void reset() {
         setStorage(null);
         setUserPreferences(null);
@@ -112,5 +113,7 @@ public class Tarsier extends Application {
         setPeerRepository(null);
         setChatRepository(null);
         setMessageRepository(null);
+
+        Tarsier.app().onCreate();
     }
 }

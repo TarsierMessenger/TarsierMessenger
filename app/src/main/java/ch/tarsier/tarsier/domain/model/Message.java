@@ -80,4 +80,8 @@ public class Message {
     public void setId(long newId) {
         mId = newId;
     }
+
+    public void setText(String newText) {
+        mText = newText;
+    }
 }

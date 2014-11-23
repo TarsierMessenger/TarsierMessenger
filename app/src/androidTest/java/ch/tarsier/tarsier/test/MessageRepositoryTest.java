@@ -5,6 +5,7 @@ import android.test.AndroidTestCase;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
+import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
@@ -15,16 +16,20 @@ import ch.tarsier.tarsier.exception.UpdateException;
  */
 public class MessageRepositoryTest extends AndroidTestCase {
 
-    MessageRepository mMessageRepository;
+    private MessageRepository mMessageRepository;
+    private Message mDummyMessage;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
+        Tarsier.app().reset();
         mMessageRepository = Tarsier.app().getMessageRepository();
+        mDummyMessage = new Message(1, "test", 1, 0);
     }
 
-    // test public Message findById(long id)
+
+    // test public Message findById(long id) alone
     public void testFindIllegalIds() {
         long[] illegalIds = {0, -1, -9001, Long.MIN_VALUE};
 
@@ -33,6 +38,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
                 mMessageRepository.findById(id);
                 fail("Expecting IllegalArgumentException but none was thrown.");
             } catch (IllegalArgumentException e) {
+                // good
                 assertEquals("Message ID cannot be < 1", e.getMessage());
             }catch (NoSuchModelException e) {
                 fail("Expecting IllegalArgumentException to be thrown first.");
@@ -40,26 +46,28 @@ public class MessageRepositoryTest extends AndroidTestCase {
         }
     }
 
-    public void testFindGoodIds() {
-        long[] goodIds = {1, 42, 9001, Long.MAX_VALUE};
+    public void testFindLegalIds() {
+        long[] legalIds = {1, 42, 9001, Long.MAX_VALUE};
 
-        for (long id : goodIds) {
+        for (long id : legalIds) {
             try {
                 mMessageRepository.findById(id);
             } catch (IllegalArgumentException e) {
                 fail("IllegalArgumentException should not be thrown.");
             } catch (NoSuchModelException e) {
-                // good since the db is empty
+                // good
             }
         }
     }
 
-    // test public void insert(Message message)
+
+    // test public void insert(Message message) alone
     public void testInsertNullMessage() {
         try {
             mMessageRepository.insert(null);
             fail("Expecting InvalidModelException to be thrown.");
         } catch (InvalidModelException e) {
+            // good
             assertEquals("Message should not be null.", e.getMessage());
         } catch (InsertException e) {
             fail("Expecting InvalidModelException to be thrown first.");
@@ -68,7 +76,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
     public void testInsertDummyMessage() {
         try {
-            mMessageRepository.insert(new Message(1, "hello", 1, 0));
+            mMessageRepository.insert(mDummyMessage);
         } catch (InvalidModelException e) {
             fail("InvalidModelException should not be thrown.");
         } catch (InsertException e) {
@@ -76,20 +84,68 @@ public class MessageRepositoryTest extends AndroidTestCase {
         }
     }
 
-    // test public void update(Message message)
+
+    // test public void update(Message message) alone
     public void testUpdateNullMessage() {
         try {
             mMessageRepository.update(null);
         } catch (InvalidModelException e) {
+            // good
             assertEquals("Message should not be null.", e.getMessage());
         } catch (UpdateException e) {
             fail("Expecting InvalidModelException to be thrown first.");
         }
     }
 
+    public void testUpdateNotExistingMessage() {
+        try {
+            mMessageRepository.update(mDummyMessage);
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown.");
+        } catch (UpdateException e) {
+            // good
+        }
+    }
+
+
+    // test public void delete(Message message) alone
+    public void testDeleteNullMessage() {
+        try {
+            mMessageRepository.delete(null);
+        } catch (InvalidModelException e) {
+            // good
+            assertEquals("Message should not be null.", e.getMessage());
+        } catch (DeleteException e) {
+            fail("Expecting InvalidModelException to be thrown first.");
+        }
+    }
+
+    public void testDeleteMessageWithBadId() {
+        try {
+            mMessageRepository.delete(mDummyMessage);
+        } catch (InvalidModelException e) {
+            // good
+            assertEquals("Message ID is invalid", e.getMessage());
+        } catch (DeleteException e) {
+            fail("Expecting InvalidModelException to be thrown first.");
+        }
+    }
+
+
+    // test methods together
     public void testUpdateDummyMessage() {
         try {
-            mMessageRepository.update(new Message(1, "hello", 1, 0));
+            mMessageRepository.insert(mDummyMessage);
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown.");
+        } catch (InsertException e) {
+            fail("InsertException should not be thrown.");
+        }
+
+        mDummyMessage.setText("this is new");
+
+        try {
+            mMessageRepository.update(mDummyMessage);
         } catch (InvalidModelException e) {
             fail("InvalidModelException should not be thrown.");
         } catch (UpdateException e) {

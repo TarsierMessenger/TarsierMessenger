@@ -53,8 +53,6 @@ public class MessageRepository extends AbstractRepository {
 
         String whereClause = COLUMN_ID + " = " + id;
 
-
-
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
                 COLUMNS,
@@ -172,10 +170,6 @@ public class MessageRepository extends AbstractRepository {
             throw new InvalidModelException("Message should not be null.");
         }
 
-        if (message.getId() < 1) {
-            throw new InvalidModelException("Message's id invalid");
-        }
-
         ContentValues values = getValuesForMessage(message);
 
         String whereClause = COLUMN_ID + " = " + message.getId();
@@ -193,6 +187,10 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public void delete(Message message) throws InvalidModelException, DeleteException {
+        if (message == null) {
+            throw new InvalidModelException("Message should not be null.");
+        }
+
         if (message.getId() < 1) {
             throw new InvalidModelException("Message ID is invalid");
         }
