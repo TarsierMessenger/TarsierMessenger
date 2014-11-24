@@ -14,7 +14,7 @@ public interface MessagingInterface {
 
     int SERVER_PORT = 8888;
 
-    List<Peer> getMembersList();
+    List<Peer> getPeersList();
 
     void broadcastMessage(String message);
 

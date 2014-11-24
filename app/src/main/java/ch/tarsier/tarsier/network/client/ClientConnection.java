@@ -185,7 +185,7 @@ public class ClientConnection implements Runnable, ConnectionInterface {
     }
 
     @Override
-    public List<Peer> getMembersList() {
+    public List<Peer> getPeersList() {
         Set<String> peerKeySet = mPeersMap.keySet();
         ArrayList<Peer> membersList = new ArrayList<Peer>();
         for (String key : peerKeySet) {

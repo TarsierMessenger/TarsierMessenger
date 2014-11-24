@@ -1,7 +1,5 @@
 package ch.tarsier.tarsier.network.server;
 
-import com.google.protobuf.InvalidProtocolBufferException;
-
 import com.squareup.otto.Bus;
 
 import android.content.BroadcastReceiver;
@@ -14,7 +12,6 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -24,14 +21,13 @@ import java.util.List;
 
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ConnectedEvent;
+import ch.tarsier.tarsier.event.ReceivedPeersListEvent;
 import ch.tarsier.tarsier.network.client.ClientConnection;
-import ch.tarsier.tarsier.ui.fragment.ChatroomFragment;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.MessageHandler;
 import ch.tarsier.tarsier.network.MessagingInterface;
 import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.messages.MessageType;
-import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
 /**
  * @author FredericJacobs
@@ -53,26 +49,15 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
 
     private WifiP2pManager.PeerListListener peerListListener;
 
-    private final ArrayList<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
+    private final ArrayList<WifiP2pDevice> mPeers = new ArrayList<WifiP2pDevice>();
 
     private Handler mHandler = new Handler(this);
 
     private Runnable mConnectionHandler;
 
-    // private ChatroomFragment mChatroomFragment;
-
-    // private Context mContext;
-
     private Bus mEventBus;
 
-    public MessagingManager(final Context context, WifiP2pManager wifiManager,
-            WifiP2pManager.Channel channel, Looper looper) {
-        this(wifiManager, channel, looper);
-    }
-
-    public MessagingManager(WifiP2pManager wifiManager,
-                            WifiP2pManager.Channel channel,
-                            Looper looper) {
+    public MessagingManager(WifiP2pManager wifiManager, WifiP2pManager.Channel channel) {
 
         mConnectionHandler = null;
         mManager = wifiManager;
@@ -114,15 +99,6 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
             }
         }
         mConnection = (ConnectionInterface) mConnectionHandler;
-
-        /*
-        // TODO: Figure out what to do with this (romac)
-        mChatroomFragment = new ChatroomFragment();
-        mChatroomFragment.setMessengerDelegate(this);
-        mContextWrapper.getFragmentManager().beginTransaction()
-                .replace(R.id.container, mChatroomFragment).commit();
-        */
-
     }
 
     @Override
@@ -176,32 +152,20 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
         peerListListener = new WifiP2pManager.PeerListListener() {
             @Override
             public synchronized void onPeersAvailable(WifiP2pDeviceList peersList) {
-                peers.clear();
-                peers.addAll(peersList.getDeviceList());
+                mPeers.clear();
+                mPeers.addAll(peersList.getDeviceList());
 
                 // If an AdapterView is backed by this data, notify it
                 // of the change.  For instance, if you have a ListView of available
                 // peers, trigger an update.
 
-                // TODO: Figure out what to do with this (romac)
+                Log.d(WIFI_DIRECT_TAG, "Peer list updated: " + mPeers.toString());
 
-                /*
-                WiFiDirectGroupList fragment = (WiFiDirectGroupList) mContextWrapper.getFragmentManager()
-                        .findFragmentByTag("groups");
-                if (fragment != null) {
-                    WiFiDirectGroupList.WiFiDevicesAdapter adapter =
-                            (WiFiDirectGroupList.WiFiDevicesAdapter) fragment.getListAdapter();
+                mEventBus.post(new ReceivedPeersListEvent(getPeersList()));
 
-                    adapter.clear();
-                    adapter.addAll(peers);
-                    //TODO: Why it's not updated each time but only first time ?
-                    adapter.notifyDataSetChanged();
-                    Log.d(WIFI_DIRECT_TAG, "Peer list updated: " + peers.toString());
-                    if (peers.size() == 0) {
-                        Log.d(WIFI_DIRECT_TAG, "No devices found");
-                    }
+                if (mPeers.size() == 0) {
+                    Log.d(WIFI_DIRECT_TAG, "No devices found");
                 }
-                */
             }
         };
     }
@@ -230,8 +194,8 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
     }
 
     @Override
-    public List<Peer> getMembersList() {
-        return mConnection.getMembersList();
+    public List<Peer> getPeersList() {
+        return mConnection.getPeersList();
     }
 
     @Override
