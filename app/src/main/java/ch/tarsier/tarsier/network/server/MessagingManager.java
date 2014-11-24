@@ -25,20 +25,20 @@ import java.util.List;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.ui.fragment.ChatroomFragment;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.MessageHandler;
 import ch.tarsier.tarsier.network.MessagingInterface;
 import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.ui.fragment.WiFiDirectGroupList;
-import ch.tarsier.tarsier.network.client.TarsierClientConnection;
 import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
 /**
  * @author FredericJacobs
  */
-public class TarsierMessagingManager extends BroadcastReceiver implements MessagingInterface,
+public class MessagingManager extends BroadcastReceiver implements MessagingInterface,
         ConnectionInfoListener,
         Handler.Callback,
         MessageHandler {
@@ -67,7 +67,7 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
 
     private Bus mEventBus;
 
-    public TarsierMessagingManager(final Activity activity, WifiP2pManager wifiManager,
+    public MessagingManager(final Activity activity, WifiP2pManager wifiManager,
             WifiP2pManager.Channel channel, Looper looper) {
 
         handler = null;
@@ -92,7 +92,7 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
                 Log.d(WiFiDirectTag, "Connected as group owner");
                 try {
 
-                    handler = new TarsierServerConnection(((MessageHandler) this).getHandler());
+                    handler = new ServerConnection(((MessageHandler) this).getHandler());
 
 
                 } catch (IOException e) {
@@ -102,7 +102,7 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
                 }
             } else {
                 Log.d(WiFiDirectTag, "Connected as peer");
-                handler = new TarsierClientConnection(
+                handler = new ClientConnection(
                         ((MessageHandler) this).getHandler(),
                         p2pInfo.groupOwnerAddress);
 

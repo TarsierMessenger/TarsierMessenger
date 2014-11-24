@@ -29,7 +29,7 @@ import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
  * @author FredericJacobs
  * @author amirezza
  */
-public class TarsierServerConnection implements Runnable, ConnectionInterface {
+public class ServerConnection implements Runnable, ConnectionInterface {
 
     private static final String TAG = "TarsierServerConnection";
 
@@ -47,7 +47,7 @@ public class TarsierServerConnection implements Runnable, ConnectionInterface {
 
     private Bus mEventBus;
 
-    public TarsierServerConnection(Handler handler) throws IOException {
+    public ServerConnection(Handler handler) throws IOException {
         this.mServer = new ServerSocket(MessageType.SERVER_SOCKET);
         this.mHandler = handler;
         Thread t = new Thread(this);
@@ -179,13 +179,13 @@ public class TarsierServerConnection implements Runnable, ConnectionInterface {
 
         private OutputStream mOutputStream;
 
-        private TarsierServerConnection serverConnection;
+        private ServerConnection serverConnection;
 
         private TarsierWireProtos.Peer peer;
 
         private static final int CURRENT_MAX_MESSAGE_SIZE = 2048;
 
-        public ConnectionHandler(TarsierServerConnection connection, Socket socket,
+        public ConnectionHandler(ServerConnection connection, Socket socket,
                 Handler handler) {
             Log.d(TAG, "ConnectionHandler is created");
             this.serverConnection = connection;
