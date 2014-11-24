@@ -137,6 +137,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
         }
     }
 
+
     // test methods together
     public void testInsertAndFindIdOfTheMessageInserted() {
         insertDummyMessage();
