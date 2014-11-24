@@ -6,7 +6,6 @@ import com.squareup.otto.Bus;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -61,15 +60,15 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
 
     private ChatroomFragment mChatroomFragment;
 
-    private ContextWrapper mContextWrapper;
+    private Context mContext;
 
     private Bus mEventBus;
 
-    public MessagingManager(final ContextWrapper contextWrapper, WifiP2pManager wifiManager,
+    public MessagingManager(final Context context, WifiP2pManager wifiManager,
             WifiP2pManager.Channel channel, Looper looper) {
 
         mConnectionHandler = null;
-        mContextWrapper = contextWrapper;
+        mContext = context;
         mManager = wifiManager;
         mChannel = channel;
         createPeerListener();
