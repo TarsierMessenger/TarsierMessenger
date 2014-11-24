@@ -52,8 +52,6 @@ public class ClientConnection implements Runnable, ConnectionInterface {
 
     private InetAddress mAddress;
 
-    private Bus mEventBus;
-
     public ClientConnection(Handler handler, InetAddress groupOwnerAddress) {
         mHandler = handler;
         mAddress = groupOwnerAddress;
@@ -153,6 +151,11 @@ public class ClientConnection implements Runnable, ConnectionInterface {
     }
 
     @Override
+    public void broadcastMessage(byte[] message) {
+        broadcastMessage(mLocalUser.getPublicKey().getBytes(), message);
+    }
+
+    @Override
     public void broadcastMessage(byte[] publicKey, byte[] message) {
         TarsierWireProtos.TarsierPublicMessage.Builder publicMessage
                 = TarsierWireProtos.TarsierPublicMessage.newBuilder();
@@ -166,11 +169,6 @@ public class ClientConnection implements Runnable, ConnectionInterface {
     @Override
     public void sendMessage(Peer peer, byte[] message) {
         sendMessage(peer.getPublicKey(), message);
-    }
-
-    @Override
-    public void setEventBus(Bus eventBus) {
-        mEventBus = eventBus;
     }
 
     private void sendMessage(PublicKey publicKey, byte[] message) {
