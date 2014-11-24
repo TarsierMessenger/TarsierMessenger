@@ -237,6 +237,7 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
     @Override
     public void setEventBus(Bus eventBus) {
         mEventBus = eventBus;
+        mEventBus.register(this);
     }
 
     @Override
