@@ -10,7 +10,7 @@ import ch.tarsier.tarsier.domain.model.value.PublicKey;
  */
 public interface ConnectionInterface {
 
-    List<Peer> getMembersList();
+    List<Peer> getPeersList();
 
     void broadcastMessage(byte[] message);
 

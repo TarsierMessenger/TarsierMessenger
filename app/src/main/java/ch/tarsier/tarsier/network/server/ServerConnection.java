@@ -86,7 +86,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
     //This sends all public messages.
     @Override
     public void broadcastMessage(byte[] publicKey, byte[] message) {
-        for (Peer peer : getMembersList()) {
+        for (Peer peer : getPeersList()) {
             if (!peer.getPublicKey().equals(new PublicKey(publicKey))) {
                 ConnectionHandler connection = mConnectionMap.get(peer.getPublicKey().toString());
 
@@ -108,14 +108,14 @@ public class ServerConnection implements Runnable, ConnectionInterface {
         TarsierWireProtos.PeerUpdatedList.Builder peerList = TarsierWireProtos.PeerUpdatedList
                 .newBuilder();
 
-        for (Peer aPeer : getMembersList()) {
+        for (Peer aPeer : getPeersList()) {
             TarsierWireProtos.Peer.Builder tarsierPeer = TarsierWireProtos.Peer.newBuilder();
             tarsierPeer.setPublicKey(ByteString.copyFrom(aPeer.getPublicKey().getBytes()));
             tarsierPeer.setName(aPeer.getUserName());
             peerList.addPeer(tarsierPeer.build());
         }
 
-        for (Peer peer : getMembersList()) {
+        for (Peer peer : getPeersList()) {
             ConnectionHandler connection = mConnectionMap.get(peer.getPublicKey().toString());
             connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PEER_LIST,
                     peerList.build().toByteArray()));
@@ -156,7 +156,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
         return mLocalUser.getPublicKey().equals(new PublicKey(publicKey));
     }
 
-    public List<Peer> getMembersList() {
+    public List<Peer> getPeersList() {
         Set<String> peerKeySet = mPeersMap.keySet();
         ArrayList<Peer> membersList = new ArrayList<Peer>();
         for (String key : peerKeySet) {
