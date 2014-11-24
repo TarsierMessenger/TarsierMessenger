@@ -40,9 +40,9 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
         Handler.Callback,
         MessageHandler {
 
-    private static final String NetworkLayerTAG = "TarsierMessagingManager";
+    private static final String NETWORK_LAYER_TAG = "TarsierMessagingManager";
 
-    private static final String WiFiDirectTag = "WiFiDirect";
+    private static final String WIFI_DIRECT_TAG = "WiFiDirect";
 
     private WifiP2pManager mManager;
 
@@ -83,10 +83,10 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
         * The group owner accepts connections using a server socket and then spawns a
         * client socket for every client.
         */
-        Log.d(WiFiDirectTag, "onConnectionInfoAvail   ");
+        Log.d(WIFI_DIRECT_TAG, "onConnectionInfoAvail   ");
         if (mConnectionHandler == null) {
             if (p2pInfo.isGroupOwner) {
-                Log.d(WiFiDirectTag, "Connected as group owner");
+                Log.d(WIFI_DIRECT_TAG, "Connected as group owner");
                 try {
 
                     mConnectionHandler
@@ -94,12 +94,12 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
 
 
                 } catch (IOException e) {
-                    Log.d(WiFiDirectTag,
+                    Log.d(WIFI_DIRECT_TAG,
                             "Failed to create a server thread - " + e.getMessage());
                     return;
                 }
             } else {
-                Log.d(WiFiDirectTag, "Connected as peer");
+                Log.d(WIFI_DIRECT_TAG, "Connected as peer");
                 mConnectionHandler = new ClientConnection(
                         ((MessageHandler) this).getConnectionHandler(),
                         p2pInfo.groupOwnerAddress);
@@ -125,9 +125,9 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
         Log.d(WiFiDirectDebugActivity.TAG, action);
         if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 
-            Log.d(WiFiDirectTag, "WIFI_P2P_CONNECTION_CHANGED_ACTION");
+            Log.d(WIFI_DIRECT_TAG, "WIFI_P2P_CONNECTION_CHANGED_ACTION");
             if (mManager == null) {
-                Log.e(WiFiDirectTag, "Fatal error! mManager does not exist");
+                Log.e(WIFI_DIRECT_TAG, "Fatal error! mManager does not exist");
                 return;
             }
             NetworkInfo networkInfo = (NetworkInfo) intent
@@ -140,7 +140,7 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
                 mManager.requestConnectionInfo(mChannel,
                         this);
             } else {
-                Log.d(WiFiDirectTag, "Did receive a Intent action : " + action);
+                Log.d(WIFI_DIRECT_TAG, "Did receive a Intent action : " + action);
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
                 .equals(action)) {
@@ -154,7 +154,7 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
             if (mManager != null) {
                 mManager.requestPeers(mChannel, peerListListener);
             }
-            Log.d(WiFiDirectTag, "P2P peers changed");
+            Log.d(WIFI_DIRECT_TAG, "P2P peers changed");
 
         }
     }
@@ -184,9 +184,9 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
                     adapter.addAll(peers);
                     //TODO: Why it's not updated each time but only first time ?
                     adapter.notifyDataSetChanged();
-                    Log.d(WiFiDirectTag, "Peer list updated: " + peers.toString());
+                    Log.d(WIFI_DIRECT_TAG, "Peer list updated: " + peers.toString());
                     if (peers.size() == 0) {
-                        Log.d(WiFiDirectTag, "No devices found");
+                        Log.d(WIFI_DIRECT_TAG, "No devices found");
                     }
                 }
                 */
@@ -198,19 +198,19 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Log.d(WiFiDirectTag, "Peer discovery initiation succeeded");
+                Log.d(WIFI_DIRECT_TAG, "Peer discovery initiation succeeded");
             }
 
             @Override
             public void onFailure(int reasonCode) {
                 if (reasonCode == WifiP2pManager.P2P_UNSUPPORTED) {
-                    Log.d(WiFiDirectTag,
+                    Log.d(WIFI_DIRECT_TAG,
                             "Peer discovery initiation failed. P2P isn't supported on this device.");
                 } else if (reasonCode == WifiP2pManager.BUSY) {
-                    Log.d(WiFiDirectTag,
+                    Log.d(WIFI_DIRECT_TAG,
                             "Peer discovery initiation failed. The system is too busy to process the request.");
                 } else if (reasonCode == WifiP2pManager.ERROR) {
-                    Log.d(WiFiDirectTag,
+                    Log.d(WIFI_DIRECT_TAG,
                             "Peer discovery initiation failed. The operation failed due to an internal error.");
                 }
             }
@@ -241,19 +241,19 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
 
     @Override
     public boolean handleMessage(Message message) {
-        Log.d(NetworkLayerTAG, "handleMessage called");
+        Log.d(NETWORK_LAYER_TAG, "handleMessage called");
         switch (message.what) {
             case MessageType.MESSAGE_TYPE_HELLO:
-                Log.d(NetworkLayerTAG, "MESSAGE_TYPE_HELLO received.");
+                Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_HELLO received.");
                 break;
             case MessageType.MESSAGE_TYPE_PEER_LIST:
-                Log.d(NetworkLayerTAG, "MESSAGE_TYPE_PEER_LIST received.");
+                Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PEER_LIST received.");
                 break;
             case MessageType.MESSAGE_TYPE_PRIVATE:
-                Log.d(NetworkLayerTAG, "MESSAGE_TYPE_PRIVATE received.");
+                Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PRIVATE received.");
                 break;
             case MessageType.MESSAGE_TYPE_PUBLIC:
-                Log.d(NetworkLayerTAG, "MESSAGE_TYPE_PUBLIC received.");
+                Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PUBLIC received.");
                 TarsierWireProtos.TarsierPublicMessage publicMessage;
                 try {
                     publicMessage = TarsierWireProtos.TarsierPublicMessage
@@ -267,7 +267,7 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
                 break;
 
             default:
-                Log.d(NetworkLayerTAG, "Unknown message type");
+                Log.d(NETWORK_LAYER_TAG, "Unknown message type");
         }
         return true;
     }
