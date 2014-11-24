@@ -18,7 +18,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
+import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.User;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.util.ByteUtils;
 import ch.tarsier.tarsier.network.ConnectionInterface;
@@ -42,7 +44,7 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
 
     private LinkedHashMap<String, Peer> mPeersMap = new LinkedHashMap<String, Peer>();
 
-    private Peer localPeer;
+    private User mLocalUser = Tarsier.app().getUserRepository().getUser();
 
     private InputStream mIn;
 
@@ -112,7 +114,7 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
                         TarsierWireProtos.TarsierPrivateMessage privateMessage;
                         privateMessage = TarsierWireProtos.TarsierPrivateMessage
                                 .parseFrom(serializedProtoBuffer);
-                        if (isLocalPeer(privateMessage.getReceiverPublicKey().toByteArray())) {
+                        if (isLocalUser(privateMessage.getReceiverPublicKey().toByteArray())) {
                             mHandler.obtainMessage(MessageType.messageTypeFromData(buffer),
                                     serializedProtoBuffer).sendToTarget();
                         } else {
@@ -154,7 +156,7 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
     public void broadcastMessage(byte[] publicKey, byte[] message) {
         TarsierWireProtos.TarsierPublicMessage.Builder publicMessage
                 = TarsierWireProtos.TarsierPublicMessage.newBuilder();
-        publicMessage.setSenderPublicKey(ByteString.copyFrom(localPeer.getPublicKey().getBytes()));
+        publicMessage.setSenderPublicKey(ByteString.copyFrom(mLocalUser.getPublicKey().getBytes()));
         publicMessage.setPlainText(ByteString.copyFrom(message));
         write(ByteUtils
                 .prependInt(MessageType.MESSAGE_TYPE_PUBLIC, publicMessage.build().toByteArray()));
@@ -175,7 +177,7 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
         TarsierWireProtos.TarsierPrivateMessage.Builder privateMessage
                 = TarsierWireProtos.TarsierPrivateMessage.newBuilder();
         privateMessage.setReceiverPublicKey(ByteString.copyFrom(publicKey.getBytes()));
-        privateMessage.setSenderPublicKey(ByteString.copyFrom(localPeer.getPublicKey().getBytes()));
+        privateMessage.setSenderPublicKey(ByteString.copyFrom(mLocalUser.getPublicKey().getBytes()));
         // TODO: is the msg already encrypted? what is setIV ?
         privateMessage.setCipherText(ByteString.copyFrom(message));
         write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE,
@@ -200,8 +202,8 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
         return mPeersMap.get(publicKey);
     }
 
-    private boolean isLocalPeer(byte[] publicKey) {
-        return localPeer.getPublicKey().equals(new PublicKey(publicKey));
+    private boolean isLocalUser(byte[] publicKey) {
+        return mLocalUser.getPublicKey().equals(new PublicKey(publicKey));
     }
 
     private void updatePeers(List<TarsierWireProtos.Peer> peers) {
@@ -218,8 +220,8 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
                 .newBuilder();
 
         TarsierWireProtos.Peer.Builder peer = TarsierWireProtos.Peer.newBuilder();
-        peer.setName(localPeer.getUserName());
-        peer.setPublicKey(ByteString.copyFrom(localPeer.getPublicKey().getBytes()));
+        peer.setName(mLocalUser.getUserName());
+        peer.setPublicKey(ByteString.copyFrom(mLocalUser.getPublicKey().getBytes()));
 
         helloMessage.setPeer(peer.build());
 

@@ -8,6 +8,7 @@ import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
+import ch.tarsier.tarsier.domain.repository.UserRepository;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 
 /**
@@ -23,6 +24,7 @@ public class Tarsier extends Application {
     private PeerRepository mPeerRepository;
     private ChatRepository mChatRepository;
     private MessageRepository mMessageRepository;
+    private UserRepository mUserRepository;
 
     private Bus mEventBus;
 
@@ -100,6 +102,14 @@ public class Tarsier extends Application {
 
     public void setEventBus(Bus eventBus) {
         mEventBus = eventBus;
+    }
+
+    public UserRepository getUserRepository() {
+        if (mUserRepository == null) {
+            mUserRepository = new UserRepository();
+        }
+
+        return mUserRepository;
     }
 
     // Reset the Tarsier.app() singleton [for testing purpose only]
