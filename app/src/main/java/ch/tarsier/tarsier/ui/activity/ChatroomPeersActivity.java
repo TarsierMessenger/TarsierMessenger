@@ -21,8 +21,7 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.User;
-import ch.tarsier.tarsier.event.NewMessageEvent;
-import ch.tarsier.tarsier.event.ReceivedNewPeersListEvent;
+import ch.tarsier.tarsier.event.ReceivedPeersListEvent;
 
 /**
  * @author romac
@@ -44,7 +43,7 @@ public class ChatroomPeersActivity extends ListActivity {
     }
 
     @Subscribe
-    public void receivedNewPeersList(ReceivedNewPeersListEvent event) {
+    public void receivedNewPeersList(ReceivedPeersListEvent event) {
         mAdapter.clear();
         mAdapter.addAll(event.getPeers());
     }

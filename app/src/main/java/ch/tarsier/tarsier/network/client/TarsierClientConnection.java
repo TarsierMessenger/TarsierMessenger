@@ -20,7 +20,7 @@ import java.util.Set;
 
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
-import ch.tarsier.tarsier.network.ByteUtils;
+import ch.tarsier.tarsier.util.ByteUtils;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;

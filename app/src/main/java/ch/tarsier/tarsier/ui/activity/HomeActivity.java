@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.util.BitmapFromPath;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
