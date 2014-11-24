@@ -28,14 +28,12 @@ public class MessageRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
 
-    private static final String COLUMN_ID = "_id";
-
     private static final String[] COLUMNS = new String[]{
-            Columns.Message._ID,
-            Columns.Message.COLUMN_NAME_MSG,
-            Columns.Message.COLUMN_NAME_DATETIME,
-            Columns.Message.COLUMN_NAME_SENDER_ID,
-            Columns.Message.COLUMN_NAME_CHAT_ID
+        Columns.Message._ID,
+        Columns.Message.COLUMN_NAME_MSG,
+        Columns.Message.COLUMN_NAME_DATETIME,
+        Columns.Message.COLUMN_NAME_SENDER_ID,
+        Columns.Message.COLUMN_NAME_CHAT_ID
     };
 
     private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + "ASC";
@@ -51,7 +49,7 @@ public class MessageRepository extends AbstractRepository {
             throw new IllegalArgumentException("Message ID is invalid.");
         }
 
-        String whereClause = COLUMN_ID + " = " + id;
+        String whereClause = Columns.Message._ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -101,7 +99,7 @@ public class MessageRepository extends AbstractRepository {
 
         ContentValues values = getValuesForMessage(message);
 
-        String whereClause = COLUMN_ID + " = " + message.getId();
+        String whereClause = Columns.Message._ID + " = " + message.getId();
 
         long rowUpdated = getWritableDatabase().update(
                 TABLE_NAME,
@@ -124,7 +122,7 @@ public class MessageRepository extends AbstractRepository {
             throw new InvalidModelException("Message ID is invalid.");
         }
 
-        String whereClause = COLUMN_ID + " = " + message.getId();
+        String whereClause = Columns.Message._ID + " = " + message.getId();
 
         long rowDeleted = getWritableDatabase().delete(
                 TABLE_NAME,
@@ -224,6 +222,7 @@ public class MessageRepository extends AbstractRepository {
             long dateTime = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_DATETIME));
 
             Message message = new Message(chatId, text, senderId, dateTime);
+            message.setId(c.getLong(c.getColumnIndexOrThrow(Columns.Message._ID)));
 
             return message;
 

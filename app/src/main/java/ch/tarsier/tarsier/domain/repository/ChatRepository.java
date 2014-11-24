@@ -3,6 +3,7 @@ package ch.tarsier.tarsier.domain.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
+import android.database.sqlite.SQLiteDatabase;
 
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
@@ -22,14 +23,14 @@ import ch.tarsier.tarsier.exception.UpdateException;
  */
 public class ChatRepository extends AbstractRepository {
 
+    private static final String TABLE_NAME = Columns.Chat.TABLE_NAME;
+
     private static final String[] COLUMNS = new String[] {
         Columns.Chat._ID,
         Columns.Chat.COLUMN_NAME_TITLE,
         Columns.Chat.COLUMN_NAME_HOST_ID,
         Columns.Chat.COLUMN_NAME_IS_PRIVATE
     };
-
-    private static final String TABLE_NAME = Columns.Chat.TABLE_NAME;
 
     private PeerRepository mPeerRepository;
 
@@ -44,12 +45,13 @@ public class ChatRepository extends AbstractRepository {
             throw new IllegalArgumentException("Chat ID is invalid.");
         }
 
-        String selection = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + id;
+        String whereClause = Columns.Chat._ID + " = " + id;
+        SQLiteDatabase test = getReadableDatabase();
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
                 COLUMNS,
-                selection,
+                whereClause,
                 null, null, null, null,
                 "1"
         );
@@ -145,8 +147,8 @@ public class ChatRepository extends AbstractRepository {
             long id = c.getLong(c.getColumnIndexOrThrow(Columns.Chat._ID));
             String title = c.getString(c.getColumnIndexOrThrow(Columns.Chat.COLUMN_NAME_TITLE));
             long hostId = c.getLong(c.getColumnIndexOrThrow(Columns.Chat.COLUMN_NAME_HOST_ID));
-            boolean isPrivate = c.getInt(c.getColumnIndexOrThrow(Columns.Chat.COLUMN_NAME_IS_PRIVATE))
-                    != 0;
+            boolean isPrivate = c.getInt(c.getColumnIndexOrThrow
+                    (Columns.Chat.COLUMN_NAME_IS_PRIVATE)) != 0;
 
             Peer host = mPeerRepository.findById(hostId);
 
