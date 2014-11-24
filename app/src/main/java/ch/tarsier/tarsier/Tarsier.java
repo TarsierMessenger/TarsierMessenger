@@ -65,6 +65,8 @@ public class Tarsier extends Application {
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         mMessagingManager = new MessagingManager(this, mWifiP2pManager, mWifiP2pChannel, getMainLooper());
+        mMessagingManager.setEventBus(getEventBus());
+
         registerReceiver(mMessagingManager, intentFilter);
     }
 
