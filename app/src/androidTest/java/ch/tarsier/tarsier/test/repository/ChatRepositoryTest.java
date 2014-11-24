@@ -47,7 +47,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
                 // good
                 assertEquals("Chat ID is invalid.", e.getMessage());
             } catch (NoSuchModelException e) {
-                fail("NoSuchModelException should not be thrown.");
+                fail("NoSuchModelException should not be thrown: " + e.getMessage());
             }
         }
     }
@@ -60,7 +60,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
                 mChatRepository.findById(id);
                 // id 0, 1 may already be filled by previous tests
             } catch (IllegalArgumentException e) {
-                fail("IllegalArgumentException should not be thrown.");
+                fail("IllegalArgumentException should not be thrown: " + e.getMessage());
             } catch (NoSuchModelException e) {
                 // good
             }
@@ -77,7 +77,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
             // good
             assertEquals("Chat is null.", e.getMessage());
         } catch (InsertException e) {
-            fail("Expecting InvalidModelException to be thrown first.");
+            fail("Expecting InvalidModelException to be thrown first: " + e.getMessage());
         }
     }
 
@@ -85,9 +85,9 @@ public class ChatRepositoryTest extends AndroidTestCase {
         try {
             mChatRepository.insert(mDummyChat);
         } catch (InvalidModelException e) {
-            fail("InvalidModelException should not be thrown.");
+            fail("InvalidModelException should not be thrown: " + e.getMessage());
         } catch (InsertException e) {
-            fail("InsertException should not be thrown.");
+            fail("InsertException should not be thrown: " + e.getMessage());
         }
     }
 
@@ -101,7 +101,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
             // good
             assertEquals("Chat is null.", e.getMessage());
         } catch (UpdateException e) {
-            fail("Expecting InvalidModelException to be thrown first.");
+            fail("Expecting InvalidModelException to be thrown first: " + e.getMessage());
         }
     }
 
@@ -113,7 +113,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
             // good
             assertEquals("Chat ID is invalid.", e.getMessage());
         } catch (UpdateException e) {
-            fail("Expecting InvalidModelException to be thorwn first.");
+            fail("Expecting InvalidModelException to be thorwn first: " + e.getMessage());
         }
     }
 
@@ -127,7 +127,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
             // good
             assertEquals("Chat is null.", e.getMessage());
         } catch (DeleteException e) {
-            fail("Expecting InvalidModelException to be thrown first.");
+            fail("Expecting InvalidModelException to be thrown first: " + e.getMessage());
         }
     }
 
@@ -139,7 +139,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
             // good
             assertEquals("Chat ID is invalid.", e.getMessage());
         } catch (DeleteException e) {
-            fail("Expecting InvalidModelException to be thrown first.");
+            fail("Expecting InvalidModelException to be thrown first: " + e.getMessage());
         }
     }
 
@@ -152,7 +152,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
         try {
             dummyChatFormDb = mChatRepository.findById(mDummyChat.getId());
         } catch (IllegalArgumentException e) {
-            fail("IllegalArgumentException should ne be thrown.");
+            fail("IllegalArgumentException should ne be thrown: " + e.getMessage());
         } catch (NoSuchModelException e) {
             //FIXME insert Peer in insertDummyChat() once PeerRepository is tested
         }
@@ -176,9 +176,9 @@ public class ChatRepositoryTest extends AndroidTestCase {
         try {
             mChatRepository.update(mDummyChat);
         } catch (InvalidModelException e) {
-            fail("InvalidModelException should not be thrown.");
+            fail("InvalidModelException should not be thrown: " + e.getMessage());
         } catch (UpdateException e) {
-            fail("UpdateException should not be thrown.");
+            fail("UpdateException should not be thrown: " + e.getMessage());
         }
 
         assertNotSame(-1, mDummyChat.getId());
@@ -191,7 +191,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
         try {
             dummyChatFormDb = mChatRepository.findById(mDummyChat.getId());
         } catch (IllegalArgumentException e) {
-            fail("IllegalArgumentException should ne be thrown.");
+            fail("IllegalArgumentException should ne be thrown: " + e.getMessage());
         } catch (NoSuchModelException e) {
             //FIXME insert Peer in insertDummyChat() once PeerRepository is tested
         }
@@ -210,9 +210,9 @@ public class ChatRepositoryTest extends AndroidTestCase {
         try {
             mChatRepository.delete(mDummyChat);
         } catch (InvalidModelException e) {
-            fail("InvalidModelException should not be thrown.");
+            fail("InvalidModelException should not be thrown: " + e.getMessage());
         } catch (DeleteException e) {
-            fail("DeleteException should not be thrown.");
+            fail("DeleteException should not be thrown: " + e.getMessage());
         }
 
         assertEquals(-1, mDummyChat.getId());
@@ -230,9 +230,9 @@ public class ChatRepositoryTest extends AndroidTestCase {
         try {
             mChatRepository.insert(mDummyChat);
         } catch (InvalidModelException e) {
-            fail("InvalidModelException should not be thrown.");
+            fail("InvalidModelException should not be thrown: " + e.getMessage());
         } catch (InsertException e) {
-            fail("InsertException should not be thrown.");
+            fail("InsertException should not be thrown: " + e.getMessage());
         }
 
         assertNotSame(-1, mDummyChat.getId());
