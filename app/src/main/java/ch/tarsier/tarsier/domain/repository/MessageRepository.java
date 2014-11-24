@@ -28,14 +28,6 @@ public class MessageRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
 
-    private static final String[] COLUMNS = new String[]{
-        Columns.Message._ID,
-        Columns.Message.COLUMN_NAME_MSG,
-        Columns.Message.COLUMN_NAME_DATETIME,
-        Columns.Message.COLUMN_NAME_SENDER_ID,
-        Columns.Message.COLUMN_NAME_CHAT_ID
-    };
-
     private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + "ASC";
     private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + "DESC";
 
@@ -53,7 +45,7 @@ public class MessageRepository extends AbstractRepository {
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
-                COLUMNS,
+                null,
                 whereClause,
                 null, null, null, null,
                 "1"
@@ -151,7 +143,7 @@ public class MessageRepository extends AbstractRepository {
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
-                COLUMNS,
+                null,
                 whereClause,
                 null, null, null, null
         );
@@ -180,7 +172,7 @@ public class MessageRepository extends AbstractRepository {
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
-                COLUMNS,
+                null,
                 whereClause,
                 null, null, null,
                 DATETIME_DESCEND);

@@ -12,9 +12,8 @@ import ch.tarsier.tarsier.Tarsier;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
-
     public static final String DATABASE_NAME = "tarsier.db";
+    public static final int DATABASE_VERSION = 1;
 
     private static final String PRIMARY_KEY_TYPE = "INTEGER PRIMARY KEY AUTOINCREMENT";
     private static final String ID_TYPE = "INTEGER";
@@ -79,12 +78,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        /* Not sure about this
-        db.delete(SQL_CREATE_CHAT, null, null);
-        db.delete(SQL_CREATE_MESSAGES, null, null);
-        db.delete(SQL_CREATE_PEER, null, null);
+        db.execSQL("DROP TABLE IF EXISTS " + Columns.Chat.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + Columns.Message.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + Columns.Peer.TABLE_NAME);
 
         onCreate(db);
-        */
     }
 }

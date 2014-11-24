@@ -25,13 +25,6 @@ public class ChatRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Chat.TABLE_NAME;
 
-    private static final String[] COLUMNS = new String[] {
-        Columns.Chat._ID,
-        Columns.Chat.COLUMN_NAME_TITLE,
-        Columns.Chat.COLUMN_NAME_HOST_ID,
-        Columns.Chat.COLUMN_NAME_IS_PRIVATE
-    };
-
     private PeerRepository mPeerRepository;
 
     public ChatRepository(Database database) {
@@ -46,11 +39,10 @@ public class ChatRepository extends AbstractRepository {
         }
 
         String whereClause = Columns.Chat._ID + " = " + id;
-        SQLiteDatabase test = getReadableDatabase();
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
-                COLUMNS,
+                null,
                 whereClause,
                 null, null, null, null,
                 "1"
