@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.event.ConnectedEvent;
 import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.ui.fragment.ChatroomFragment;
 import ch.tarsier.tarsier.network.ConnectionInterface;
@@ -100,12 +101,16 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
                     return;
                 }
 
+                mEventBus.post(new ConnectedEvent(true));
+
             } else {
                 Log.d(WIFI_DIRECT_TAG, "Connected as peer");
 
                 mConnectionHandler = new ClientConnection(
                     getConnectionHandler(),
                     p2pInfo.groupOwnerAddress);
+
+                mEventBus.post(new ConnectedEvent(false));
             }
         }
         mConnection = (ConnectionInterface) mConnectionHandler;
