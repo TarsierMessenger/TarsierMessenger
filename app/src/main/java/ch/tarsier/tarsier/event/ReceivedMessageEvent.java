@@ -7,7 +7,7 @@ import ch.tarsier.tarsier.domain.model.Peer;
 /**
  * @author romac
  */
-public class NewMessageEvent {
+public class ReceivedMessageEvent {
 
     private final Optional<String> mDiscussion;
 
@@ -15,7 +15,7 @@ public class NewMessageEvent {
 
     private final Peer mPeer;
 
-    public NewMessageEvent(String message, Peer peer, Optional<String> discussion) {
+    public ReceivedMessageEvent(String message, Peer peer, Optional<String> discussion) {
         mMessage = message;
         mPeer = peer;
         mDiscussion = discussion;
