@@ -53,8 +53,8 @@
             android:label="@string/title_activity_profile" >
         </activity>
         <activity
-            android:name=".network.WiFiDirectDebugActivity"
-            android:label="@string/title_activity_wifidirectdebug">
+            android:name="ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity"
+            android:label="@string/title_activity_wifidirectdebug" >
         </activity>
         <activity
             android:name=".ui.activity.NewChatRoomActivity"
