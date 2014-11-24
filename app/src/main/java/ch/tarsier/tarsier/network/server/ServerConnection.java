@@ -3,8 +3,6 @@ package ch.tarsier.tarsier.network.server;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import com.squareup.otto.Bus;
-
 import android.os.Handler;
 import android.util.Log;
 
@@ -18,7 +16,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
+import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.User;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.util.ByteUtils;
 import ch.tarsier.tarsier.network.ConnectionInterface;
@@ -38,14 +38,11 @@ public class ServerConnection implements Runnable, ConnectionInterface {
 
     private LinkedHashMap<String, Peer> mPeersMap = new LinkedHashMap<String, Peer>();
 
-    // TODO: Fetch from storage;
-    private Peer localPeer = new Peer("ServerName", new PublicKey("ServerPublicKey".getBytes()));
+    private User mLocalUser = Tarsier.app().getUserRepository().getUser();
 
     private ServerSocket mServer;
 
     private Handler mHandler;
-
-    private Bus mEventBus;
 
     public ServerConnection(Handler handler) throws IOException {
         this.mServer = new ServerSocket(MessageType.SERVER_SOCKET);
@@ -82,20 +79,28 @@ public class ServerConnection implements Runnable, ConnectionInterface {
         Log.d(TAG, "Peer " + peer.getName() + " is out: " + mPeersMap.values().toString());
     }
 
+    public void broadcastMessage(byte[] message) {
+        broadcastMessage(mLocalUser.getPublicKey().getBytes(), message);
+    }
+
     //This sends all public messages.
     @Override
     public void broadcastMessage(byte[] publicKey, byte[] message) {
         for (Peer peer : getMembersList()) {
             if (!peer.getPublicKey().equals(new PublicKey(publicKey))) {
                 ConnectionHandler connection = mConnectionMap.get(peer.getPublicKey().toString());
+
                 TarsierWireProtos.TarsierPublicMessage.Builder publicMessage
                         = TarsierWireProtos.TarsierPublicMessage.newBuilder();
+
                 publicMessage.setSenderPublicKey(ByteString.copyFrom(publicKey));
                 publicMessage.setPlainText(ByteString.copyFrom(message));
+
                 connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PUBLIC,
                         publicMessage.build().toByteArray()));
             }
         }
+
         Log.d(TAG, "A public message is sent to all peers.");
     }
 
@@ -123,11 +128,6 @@ public class ServerConnection implements Runnable, ConnectionInterface {
         sendMessage(peer.getPublicKey().getBytes(), message);
     }
 
-    @Override
-    public void setEventBus(Bus eventBus) {
-        mEventBus = eventBus;
-    }
-
     protected void sendMessage(byte[] publicKey, byte[] message) {
         ConnectionHandler connection = mConnectionMap.get(new String(publicKey));
         if (connection != null) {
@@ -135,7 +135,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                     = TarsierWireProtos.TarsierPrivateMessage.newBuilder();
             privateMessage.setReceiverPublicKey(ByteString.copyFrom(publicKey));
             privateMessage
-                    .setSenderPublicKey(ByteString.copyFrom(localPeer.getPublicKey().getBytes()));
+                    .setSenderPublicKey(ByteString.copyFrom(mLocalUser.getPublicKey().getBytes()));
             //TODO: is the msg already encrypted? what is setIV ?
             privateMessage.setCipherText(ByteString.copyFrom(message));
             connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE,
@@ -153,7 +153,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
     }
 
     protected boolean isLocalPeer(byte[] publicKey) {
-        return localPeer.getPublicKey().equals(new PublicKey(publicKey));
+        return mLocalUser.getPublicKey().equals(new PublicKey(publicKey));
     }
 
     public List<Peer> getMembersList() {
