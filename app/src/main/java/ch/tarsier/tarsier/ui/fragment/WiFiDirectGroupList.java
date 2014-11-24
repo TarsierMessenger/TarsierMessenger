@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.network;
+package ch.tarsier.tarsier.ui.fragment;
 
 import android.app.ListFragment;
 import android.content.Context;
@@ -23,8 +23,7 @@ public class WiFiDirectGroupList extends ListFragment {
 
     private WiFiDevicesAdapter mListAdapter = null;
 
-    interface DeviceClickListener {
-
+    public interface DeviceClickListener {
         void connectP2p(WifiP2pDevice device);
     }
 
@@ -42,6 +41,7 @@ public class WiFiDirectGroupList extends ListFragment {
         mListAdapter = new WiFiDevicesAdapter(this.getActivity(),
                 android.R.layout.simple_list_item_2, android.R.id.text1,
                 new ArrayList<WifiP2pDevice>());
+
         setListAdapter(mListAdapter);
     }
 

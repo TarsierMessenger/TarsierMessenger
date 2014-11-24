@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.network;
+package ch.tarsier.tarsier.ui.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -15,6 +15,7 @@ import java.util.List;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.network.MessagingInterface;
 
 /**
  * @author amirezza

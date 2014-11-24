@@ -1,7 +1,7 @@
-package ch.tarsier.tarsier.network;
+package ch.tarsier.tarsier.util;
 
 /**
- * Created by fred on 10/11/14.
+ * @author FredericJacobs
  */
 public class ByteUtils {
 

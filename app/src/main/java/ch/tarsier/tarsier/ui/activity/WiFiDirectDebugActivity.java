@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.network;
+package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.network.server.TarsierMessagingManager;
+import ch.tarsier.tarsier.ui.fragment.WiFiDirectGroupList;
 
 // Important note: This is currently an activity, it will later be a ran as a service so that it
 // can run in the background too.

@@ -25,12 +25,12 @@ import java.util.List;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.network.ChatroomFragment;
+import ch.tarsier.tarsier.ui.fragment.ChatroomFragment;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.MessageHandler;
 import ch.tarsier.tarsier.network.MessagingInterface;
-import ch.tarsier.tarsier.network.WiFiDirectDebugActivity;
-import ch.tarsier.tarsier.network.WiFiDirectGroupList;
+import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
+import ch.tarsier.tarsier.ui.fragment.WiFiDirectGroupList;
 import ch.tarsier.tarsier.network.client.TarsierClientConnection;
 import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
@@ -86,7 +86,7 @@ public class TarsierMessagingManager extends BroadcastReceiver implements Messag
         * The group owner accepts connections using a server socket and then spawns a
         * client socket for every client.
         */
-        Log.d(WiFiDirectTag, "onConncetionInfoAvail   ");
+        Log.d(WiFiDirectTag, "onConnectionInfoAvail   ");
         if (handler == null) {
             if (p2pInfo.isGroupOwner) {
                 Log.d(WiFiDirectTag, "Connected as group owner");
