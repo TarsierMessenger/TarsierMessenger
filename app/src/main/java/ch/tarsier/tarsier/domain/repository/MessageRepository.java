@@ -61,10 +61,6 @@ public class MessageRepository extends AbstractRepository {
                 "1"
         );
 
-        if (cursor == null || cursor.getCount() <= 0) {
-            throw new NoSuchModelException("No Message with id " + id + " found.");
-        }
-
         try {
             return buildFromCursor(cursor);
         } catch (InvalidCursorException e) {
@@ -154,12 +150,6 @@ public class MessageRepository extends AbstractRepository {
                 null, null, null, null
         );
 
-        if (!cursor.moveToFirst()) {
-            //TODO check that query() return null if it failed to query
-            //moveToFirst should do the trick, returns false if the cursor is empty, hence failed to query
-            throw new NoSuchModelException("Cursor is null");
-        }
-
         try {
             return buildListFromCursor(cursor, number);
         } catch (InvalidCursorException e) {
@@ -192,6 +182,7 @@ public class MessageRepository extends AbstractRepository {
         if (!cursor.moveToFirst()) {
             throw new NoSuchModelException("cursor is empty, cannot move to first");
         }
+
         long cTime;
         do {
             cTime = cursor.getLong(cursor.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME));
@@ -211,7 +202,11 @@ public class MessageRepository extends AbstractRepository {
 
     private Message buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
-            throw new InvalidCursorException("Cursor is null");
+            throw new InvalidCursorException("Cursor is null.");
+        }
+
+        if (!c.moveToFirst()) {
+            throw new InvalidCursorException("Cannot move cursor to first element.");
         }
 
         try {
@@ -220,14 +215,7 @@ public class MessageRepository extends AbstractRepository {
             long senderId = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_SENDER_ID));
             long dateTime = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_DATETIME));
 
-            long userId = Tarsier.app().getUserPreferences().getId();
-
-            Message message;
-            if (senderId == userId) {
-                message = new Message(chatId, text, dateTime);
-            } else {
-                message = new Message(chatId, text, senderId, dateTime);
-            }
+            Message message = new Message(chatId, text, senderId, dateTime);
 
             c.close();
 

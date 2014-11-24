@@ -138,8 +138,6 @@ public class MessageRepositoryTest extends AndroidTestCase {
         }
     }
 
-/* Not working yet... inserting a message and then retrieving it by id throws a NoSuchModelException
-
     // test methods together
     public void testInsertAndFindIdOfTheMessageInserted() {
         insertDummyMessage();
@@ -184,7 +182,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
         assertNotNull(dummyMessageFromDb);
         assertEquals("this is new", dummyMessageFromDb.getText());
     }
-*/
+
 
     private void insertDummyMessage() {
         // makes sure that mDummyMessage is "clean"
