@@ -3,12 +3,16 @@ package ch.tarsier.tarsier;
 import com.squareup.otto.Bus;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pManager;
 
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.domain.repository.UserRepository;
+import ch.tarsier.tarsier.network.server.MessagingManager;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 
 /**
@@ -26,6 +30,10 @@ public class Tarsier extends Application {
     private MessageRepository mMessageRepository;
     private UserRepository mUserRepository;
 
+    private WifiP2pManager mWifiP2pManager;
+    private WifiP2pManager.Channel mWifiP2pChannel;
+    private MessagingManager mMessagingManager;
+
     private Bus mEventBus;
 
     public static Tarsier app() {
@@ -37,7 +45,27 @@ public class Tarsier extends Application {
         super.onCreate();
 
         app = this;
+
+        initDatabase();
+        initNetwork();
+    }
+
+    private void initDatabase() {
         mDatabase = new Database(getApplicationContext());
+    }
+
+    public void initNetwork() {
+        mWifiP2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        mWifiP2pChannel = mWifiP2pManager.initialize(this, getMainLooper(), null);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        mMessagingManager = new MessagingManager(this, mWifiP2pManager, mWifiP2pChannel, getMainLooper());
+        registerReceiver(mMessagingManager, intentFilter);
     }
 
     public UserPreferences getUserPreferences() {
