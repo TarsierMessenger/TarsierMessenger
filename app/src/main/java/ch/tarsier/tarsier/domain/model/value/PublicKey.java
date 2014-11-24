@@ -3,10 +3,12 @@ package ch.tarsier.tarsier.domain.model.value;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import ch.tarsier.tarsier.data.ByteArraySerializable;
+
 /**
  * @author romac
  */
-public class PublicKey implements Serializable {
+public class PublicKey implements Serializable, ByteArraySerializable {
 
     private byte[] mBytes;
 
