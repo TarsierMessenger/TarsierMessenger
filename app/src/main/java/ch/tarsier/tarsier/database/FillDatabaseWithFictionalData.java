@@ -79,6 +79,8 @@ public class FillDatabaseWithFictionalData {
             peerRepository.insert(yann);
         } catch (InsertException e) {
             e.printStackTrace();
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
         }
 
         //Generate the chats
