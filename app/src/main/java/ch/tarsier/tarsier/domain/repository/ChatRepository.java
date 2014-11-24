@@ -40,8 +40,8 @@ public class ChatRepository extends AbstractRepository {
     }
 
     public Chat findById(long id) throws IllegalArgumentException, NoSuchModelException {
-        if (id < 1) {
-            throw new IllegalArgumentException("Chat ID cannot be < 1");
+        if (id < 0) {
+            throw new IllegalArgumentException("Chat ID is invalid.");
         }
 
         String selection = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + id;
@@ -50,21 +50,24 @@ public class ChatRepository extends AbstractRepository {
                 TABLE_NAME,
                 COLUMNS,
                 selection,
-                null, null, null, null
+                null, null, null, null,
+                "1"
         );
-
-        if (cursor == null || cursor.getCount() == 0) {
-            throw new NoSuchModelException("No Chat with id " + id + " found.");
-        }
 
         try {
             return buildFromCursor(cursor);
         } catch (InvalidCursorException e) {
             throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
         }
     }
 
     public void insert(Chat chat) throws InvalidModelException, InsertException {
+        if (chat == null) {
+            throw new InvalidModelException("Chat is null.");
+        }
+
         ContentValues values = getValuesForChat(chat);
 
         long rowId = getWritableDatabase().insert(
@@ -81,8 +84,12 @@ public class ChatRepository extends AbstractRepository {
     }
 
     public void update(Chat chat) throws InvalidModelException, UpdateException {
-        if (chat.getId() <= 0) {
-            throw new InvalidModelException("Chat ID is invalid");
+        if (chat == null) {
+            throw new InvalidModelException("Chat is null.");
+        }
+
+        if (chat.getId() < 0) {
+            throw new InvalidModelException("Chat ID is invalid.");
         }
 
         ContentValues values = getValuesForChat(chat);
@@ -97,13 +104,17 @@ public class ChatRepository extends AbstractRepository {
         );
 
         if (rowUpdated == 0) {
-            throw new UpdateException("UPDATE operation failed");
+            throw new UpdateException("UPDATE operation failed.");
         }
     }
 
     public void delete(Chat chat) throws InvalidModelException, DeleteException {
+        if (chat == null) {
+            throw new InvalidModelException("Chat is null.");
+        }
+
         if (chat.getId() < 0) {
-            throw new InvalidModelException("Chat ID is invalid");
+            throw new InvalidModelException("Chat ID is invalid.");
         }
 
         String whereClause = Columns.Chat._ID + " = " + chat.getId();
@@ -115,16 +126,26 @@ public class ChatRepository extends AbstractRepository {
         );
 
         if (rowDeleted == 0) {
-            throw new DeleteException("DELETE operation failed");
+            throw new DeleteException("DELETE operation failed.");
         }
+
+        chat.setId(-1);
     }
 
     private Chat buildFromCursor(Cursor c) throws NoSuchModelException, InvalidCursorException {
+        if (c == null) {
+            throw new InvalidCursorException("Cursor is null.");
+        }
+
+        if (!c.moveToFirst()) {
+            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+        }
+
         try {
-            long id = c.getLong(c.getColumnIndex(Columns.Chat._ID));
-            String title = c.getString(c.getColumnIndex(Columns.Chat.COLUMN_NAME_TITLE));
-            long hostId = c.getLong(c.getColumnIndex(Columns.Chat.COLUMN_NAME_HOST_ID));
-            boolean isPrivate = c.getInt(c.getColumnIndex(Columns.Chat.COLUMN_NAME_IS_PRIVATE))
+            long id = c.getLong(c.getColumnIndexOrThrow(Columns.Chat._ID));
+            String title = c.getString(c.getColumnIndexOrThrow(Columns.Chat.COLUMN_NAME_TITLE));
+            long hostId = c.getLong(c.getColumnIndexOrThrow(Columns.Chat.COLUMN_NAME_HOST_ID));
+            boolean isPrivate = c.getInt(c.getColumnIndexOrThrow(Columns.Chat.COLUMN_NAME_IS_PRIVATE))
                     != 0;
 
             Peer host = mPeerRepository.findById(hostId);
@@ -136,6 +157,7 @@ public class ChatRepository extends AbstractRepository {
             chat.setPrivate(isPrivate);
 
             return chat;
+
         } catch (CursorIndexOutOfBoundsException e) {
             throw new InvalidCursorException(e);
         }

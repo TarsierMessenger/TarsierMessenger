@@ -47,8 +47,8 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public Message findById(long id) throws IllegalArgumentException, NoSuchModelException {
-        if (id < 1) {
-            throw new IllegalArgumentException("Message ID cannot be < 1");
+        if (id < 0) {
+            throw new IllegalArgumentException("Message ID is invalid.");
         }
 
         String whereClause = COLUMN_ID + " = " + id;
@@ -65,12 +65,14 @@ public class MessageRepository extends AbstractRepository {
             return buildFromCursor(cursor);
         } catch (InvalidCursorException e) {
             throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
         }
     }
 
     public void insert(Message message) throws InvalidModelException, InsertException {
         if (message == null) {
-            throw new InvalidModelException("Message should not be null.");
+            throw new InvalidModelException("Message is null.");
         }
 
         ContentValues values = getValuesForMessage(message);
@@ -82,7 +84,7 @@ public class MessageRepository extends AbstractRepository {
         );
 
         if (rowId == -1) {
-            throw new InsertException("INSERT operation failed");
+            throw new InsertException("INSERT operation failed.");
         }
 
         message.setId(rowId);
@@ -90,7 +92,11 @@ public class MessageRepository extends AbstractRepository {
 
     public void update(Message message) throws InvalidModelException, UpdateException {
         if (message == null) {
-            throw new InvalidModelException("Message should not be null.");
+            throw new InvalidModelException("Message is null.");
+        }
+
+        if (message.getId() < 0) {
+            throw new InvalidModelException("Message ID is invalid.");
         }
 
         ContentValues values = getValuesForMessage(message);
@@ -105,17 +111,17 @@ public class MessageRepository extends AbstractRepository {
         );
 
         if (rowUpdated == 0) {
-            throw new UpdateException("UPDATE operation failed");
+            throw new UpdateException("UPDATE operation failed.");
         }
     }
 
     public void delete(Message message) throws InvalidModelException, DeleteException {
         if (message == null) {
-            throw new InvalidModelException("Message should not be null.");
+            throw new InvalidModelException("Message is null.");
         }
 
-        if (message.getId() < 1) {
-            throw new InvalidModelException("Message ID is invalid");
+        if (message.getId() < 0) {
+            throw new InvalidModelException("Message ID is invalid.");
         }
 
         String whereClause = COLUMN_ID + " = " + message.getId();
@@ -127,7 +133,7 @@ public class MessageRepository extends AbstractRepository {
         );
 
         if (rowDeleted == 0) {
-            throw new DeleteException("DELETE operation failed");
+            throw new DeleteException("DELETE operation failed.");
         }
 
         message.setId(-1);
@@ -139,8 +145,8 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public List<Message> findByChat(Chat chat, int number) throws IllegalArgumentException, NoSuchModelException {
-        if (chat.getId() < 1) {
-            throw new IllegalArgumentException("Chat must have a valid ID");
+        if (chat.getId() < 0) {
+            throw new IllegalArgumentException("Chat ID is invalid.");
         }
 
         String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
@@ -168,8 +174,8 @@ public class MessageRepository extends AbstractRepository {
     public List<Message> findByChat(Chat chat, long since, int number)
             throws IllegalArgumentException, NoSuchModelException {
 
-        if (chat.getId() < 1) {
-            throw new IllegalArgumentException("Chat must have a valid ID");
+        if (chat.getId() < 0) {
+            throw new IllegalArgumentException("Chat ID is invalid.");
         }
 
         String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
@@ -182,7 +188,7 @@ public class MessageRepository extends AbstractRepository {
                 DATETIME_DESCEND);
 
         if (!cursor.moveToFirst()) {
-            throw new NoSuchModelException("cursor is empty, cannot move to first");
+            throw new NoSuchModelException("Cannot move to first element of the cursor.");
         }
 
         long cTime;
@@ -208,7 +214,7 @@ public class MessageRepository extends AbstractRepository {
         }
 
         if (!c.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move cursor to first element.");
+            throw new InvalidCursorException("Cannot move to first element of the cursor.");
         }
 
         try {
@@ -218,8 +224,6 @@ public class MessageRepository extends AbstractRepository {
             long dateTime = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_DATETIME));
 
             Message message = new Message(chatId, text, senderId, dateTime);
-
-            c.close();
 
             return message;
 

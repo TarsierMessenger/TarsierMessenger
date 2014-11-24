@@ -46,7 +46,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
                 fail("Expecting IllegalArgumentException but none was thrown.");
             } catch (IllegalArgumentException e) {
                 // good
-                assertEquals("Message ID cannot be < 1", e.getMessage());
+                assertEquals("Message ID is invalid.", e.getMessage());
             }catch (NoSuchModelException e) {
                 fail("Expecting IllegalArgumentException to be thrown first.");
             }
@@ -98,7 +98,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
             mMessageRepository.update(null);
         } catch (InvalidModelException e) {
             // good
-            assertEquals("Message should not be null.", e.getMessage());
+            assertEquals("Message is null.", e.getMessage());
         } catch (UpdateException e) {
             fail("Expecting InvalidModelException to be thrown first.");
         }
@@ -121,7 +121,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
             mMessageRepository.delete(null);
         } catch (InvalidModelException e) {
             // good
-            assertEquals("Message should not be null.", e.getMessage());
+            assertEquals("Message is null.", e.getMessage());
         } catch (DeleteException e) {
             fail("Expecting InvalidModelException to be thrown first.");
         }

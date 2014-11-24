@@ -6,6 +6,8 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
+import ch.tarsier.tarsier.network.old.MyConnection;
 
 /**
  * @author gluthier
@@ -32,5 +34,34 @@ public class ChatRepositoryTest extends AndroidTestCase {
         mDummyPublicChat.setPrivate(false);
         mDummyPublicChat.setHost(host);
         mDummyPublicChat.setTitle("Public chat title");
+    }
+
+    public void testFindIllegalIds() {
+        long[] illegalIds = {0, -1, -9001, Long.MIN_VALUE};
+
+        for (long id : illegalIds) {
+            try {
+                mChatRepository.findById(id);
+            } catch (IllegalArgumentException e) {
+                // good
+                assertEquals("Chat ID cannot be < 1", e.getMessage());
+            } catch (NoSuchModelException e) {
+                fail("NoSuchModelException should not be thrown.");
+            }
+        }
+    }
+
+    public void testFindLegalIds() {
+        long[] legalIds = {1, 42, 9001, Long.MAX_VALUE};
+
+        for (long id : legalIds) {
+            try {
+                mChatRepository.findById(id);
+            } catch (IllegalArgumentException e) {
+                fail("IllegalArgumentException should not be thrown.");
+            } catch (NoSuchModelException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
