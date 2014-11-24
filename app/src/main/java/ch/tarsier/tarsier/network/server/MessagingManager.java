@@ -4,9 +4,9 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import com.squareup.otto.Bus;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.ui.fragment.ChatroomFragment;
@@ -31,7 +30,6 @@ import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.MessageHandler;
 import ch.tarsier.tarsier.network.MessagingInterface;
 import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
-import ch.tarsier.tarsier.ui.fragment.WiFiDirectGroupList;
 import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
@@ -59,19 +57,19 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
 
     private Handler mHandler = new Handler(this);
 
-    private Runnable handler;
+    private Runnable mConnectionHandler;
 
     private ChatroomFragment mChatroomFragment;
 
-    private Activity mActivity;
+    private ContextWrapper mContextWrapper;
 
     private Bus mEventBus;
 
-    public MessagingManager(final Activity activity, WifiP2pManager wifiManager,
+    public MessagingManager(final ContextWrapper contextWrapper, WifiP2pManager wifiManager,
             WifiP2pManager.Channel channel, Looper looper) {
 
-        handler = null;
-        mActivity = activity;
+        mConnectionHandler = null;
+        mContextWrapper = contextWrapper;
         mManager = wifiManager;
         mChannel = channel;
         createPeerListener();
@@ -87,12 +85,13 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
         * client socket for every client.
         */
         Log.d(WiFiDirectTag, "onConnectionInfoAvail   ");
-        if (handler == null) {
+        if (mConnectionHandler == null) {
             if (p2pInfo.isGroupOwner) {
                 Log.d(WiFiDirectTag, "Connected as group owner");
                 try {
 
-                    handler = new ServerConnection(((MessageHandler) this).getHandler());
+                    mConnectionHandler
+                            = new ServerConnection(((MessageHandler) this).getConnectionHandler());
 
 
                 } catch (IOException e) {
@@ -102,17 +101,21 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
                 }
             } else {
                 Log.d(WiFiDirectTag, "Connected as peer");
-                handler = new ClientConnection(
-                        ((MessageHandler) this).getHandler(),
+                mConnectionHandler = new ClientConnection(
+                        ((MessageHandler) this).getConnectionHandler(),
                         p2pInfo.groupOwnerAddress);
 
             }
         }
-        mConnection = (ConnectionInterface) handler;
+        mConnection = (ConnectionInterface) mConnectionHandler;
+
+        /*
+        // TODO: Figure out what to do with this (romac)
         mChatroomFragment = new ChatroomFragment();
         mChatroomFragment.setMessengerDelegate(this);
-        mActivity.getFragmentManager().beginTransaction()
+        mContextWrapper.getFragmentManager().beginTransaction()
                 .replace(R.id.container, mChatroomFragment).commit();
+        */
 
     }
 
@@ -168,7 +171,11 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
                 // If an AdapterView is backed by this data, notify it
                 // of the change.  For instance, if you have a ListView of available
                 // peers, trigger an update.
-                WiFiDirectGroupList fragment = (WiFiDirectGroupList) mActivity.getFragmentManager()
+
+                // TODO: Figure out what to do with this (romac)
+
+                /*
+                WiFiDirectGroupList fragment = (WiFiDirectGroupList) mContextWrapper.getFragmentManager()
                         .findFragmentByTag("groups");
                 if (fragment != null) {
                     WiFiDirectGroupList.WiFiDevicesAdapter adapter =
@@ -183,6 +190,7 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
                         Log.d(WiFiDirectTag, "No devices found");
                     }
                 }
+                */
             }
         };
     }
@@ -266,7 +274,7 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
     }
 
     @Override
-    public Handler getHandler() {
+    public Handler getConnectionHandler() {
         return mHandler;
     }
 }
