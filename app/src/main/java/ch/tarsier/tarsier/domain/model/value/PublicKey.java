@@ -17,6 +17,9 @@ public class PublicKey implements Serializable {
     public byte[] getBytes() {
         return mBytes;
     }
+    public byte[] toByteArray() {
+        return mBytes;
+    }
 
     @Override
     public boolean equals(Object that) {
