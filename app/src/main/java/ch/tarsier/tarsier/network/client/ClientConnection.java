@@ -30,7 +30,7 @@ import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 /**
  * @author amirreza
  */
-public class TarsierClientConnection implements Runnable, ConnectionInterface {
+public class ClientConnection implements Runnable, ConnectionInterface {
 
     private static final String TAG = "TarsierClientConnection";
 
@@ -54,7 +54,7 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
 
     private Bus mEventBus;
 
-    public TarsierClientConnection(Handler handler, InetAddress groupOwnerAddress) {
+    public ClientConnection(Handler handler, InetAddress groupOwnerAddress) {
         mHandler = handler;
         mAddress = groupOwnerAddress;
 
@@ -231,5 +231,3 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
     }
 
 }
-
-
