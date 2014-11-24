@@ -129,6 +129,8 @@ public class MessageRepository extends AbstractRepository {
         if (rowDeleted == 0) {
             throw new DeleteException("DELETE operation failed");
         }
+
+        message.setId(-1);
     }
 
     public List<Message> findByChat(Chat chat) throws IllegalArgumentException, NoSuchModelException {

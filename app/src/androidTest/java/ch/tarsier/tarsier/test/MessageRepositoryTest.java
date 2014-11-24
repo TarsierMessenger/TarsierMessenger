@@ -160,7 +160,10 @@ public class MessageRepositoryTest extends AndroidTestCase {
     public void testInsertAndUpdateDummyMessage() {
         insertDummyMessage();
 
+        mDummyMessage.setChatId(10);
         mDummyMessage.setText("this is new");
+        mDummyMessage.setPeerId(20);
+        mDummyMessage.setDateTime(2000);
 
         try {
             mMessageRepository.update(mDummyMessage);
@@ -172,6 +175,11 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         assertNotSame(-1, mDummyMessage.getId());
 
+        assertEquals(10, mDummyMessage.getChatId());
+        assertEquals("this is new", mDummyMessage.getText());
+        assertEquals(20, mDummyMessage.getPeerId());
+        assertEquals(2000, mDummyMessage.getDateTime());
+
         Message dummyMessageFromDb = null;
         try {
             dummyMessageFromDb = mMessageRepository.findById(mDummyMessage.getId());
@@ -180,7 +188,25 @@ public class MessageRepositoryTest extends AndroidTestCase {
         }
 
         assertNotNull(dummyMessageFromDb);
+
+        assertEquals(10, dummyMessageFromDb.getChatId());
         assertEquals("this is new", dummyMessageFromDb.getText());
+        assertEquals(20, dummyMessageFromDb.getPeerId());
+        assertEquals(2000, dummyMessageFromDb.getDateTime());
+    }
+
+    public void testInsertAndDeleteDummyMessage() {
+        insertDummyMessage();
+
+        try {
+            mMessageRepository.delete(mDummyMessage);
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown.");
+        } catch (DeleteException e) {
+            fail("DeleteException should not be thrown.");
+        }
+
+        assertEquals(-1, mDummyMessage.getId());
     }
 
 
