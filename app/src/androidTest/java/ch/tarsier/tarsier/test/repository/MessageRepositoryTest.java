@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.test;
+package ch.tarsier.tarsier.test.repository;
 
 import android.test.AndroidTestCase;
 

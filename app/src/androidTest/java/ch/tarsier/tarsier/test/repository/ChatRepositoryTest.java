@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.test;
+package ch.tarsier.tarsier.test.repository;
 
 import android.test.AndroidTestCase;
 
@@ -27,7 +27,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
 
         Tarsier.app().reset();
         mChatRepository = Tarsier.app().getChatRepository();
-        Peer host = new Peer("Olivier", 1);
+        Peer host = new Peer("Olivier");
 
         mDummyChat = new Chat();
         mDummyChat.setPrivate(false);
@@ -144,7 +144,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
         }
     }
 
-/* Need to be tested with PeerRepository
+
     // test methods together
     public void testInsertAndFindIdOfTheChatInserted() {
         insertDummyChat();
@@ -155,21 +155,22 @@ public class ChatRepositoryTest extends AndroidTestCase {
         } catch (IllegalArgumentException e) {
             fail("IllegalArgumentException should ne be thrown.");
         } catch (NoSuchModelException e) {
-            fail("NoSuchModelException should not be thrown.");
+            //FIXME insert Peer in insertDummyChat() once PeerRepository is tested
         }
-
+/* FIXME uncomment this once PeerRepository is tested
         assertNotNull(dummyChatFormDb);
 
         assertEquals("Olivier", dummyChatFormDb.getHost().getUserName());
-        assertEquals(1, dummyChatFormDb.getHost().getId());
+        assertEquals(-1, dummyChatFormDb.getHost().getId());
         assertEquals("Public chat title", dummyChatFormDb.getTitle());
         assertEquals(false, dummyChatFormDb.isPrivate());
+*/
     }
 
     public void testInsertAndUpdateDummyChat() {
         insertDummyChat();
 
-        Peer newPeer = new Peer("Jean", 2);
+        Peer newPeer = new Peer("Jean");
         mDummyChat.setTitle("New title");
         mDummyChat.setHost(newPeer);
 
@@ -184,7 +185,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
         assertNotSame(-1, mDummyChat.getId());
 
         assertEquals("Jean", mDummyChat.getHost().getUserName());
-        assertEquals(2, mDummyChat.getHost().getId());
+        assertEquals(-1, mDummyChat.getHost().getId());
         assertEquals("New title", mDummyChat.getTitle());
 
         Chat dummyChatFormDb = null;
@@ -193,16 +194,17 @@ public class ChatRepositoryTest extends AndroidTestCase {
         } catch (IllegalArgumentException e) {
             fail("IllegalArgumentException should ne be thrown.");
         } catch (NoSuchModelException e) {
-            fail("NoSuchModelException should not be thrown.");
+            //FIXME insert Peer in insertDummyChat() once PeerRepository is tested
         }
-
+/* FIXME uncomment this once PeerRepository is tested
         assertNotNull(dummyChatFormDb);
 
         assertEquals("Jean", dummyChatFormDb.getHost().getUserName());
         assertEquals(2, dummyChatFormDb.getHost().getId());
         assertEquals("New title", dummyChatFormDb.getTitle());
-    }
 */
+    }
+
     public void testInsertAndDeleteDummyMessage() {
         insertDummyChat();
 
@@ -220,7 +222,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
 
     private void insertDummyChat() {
         // makes sure that mDummyChat is "clean"
-        Peer host = new Peer("Olivier", 1);
+        Peer host = new Peer("Olivier");
         mDummyChat = new Chat();
         mDummyChat.setPrivate(false);
         mDummyChat.setHost(host);
