@@ -13,6 +13,10 @@ public class Chat implements Serializable {
     private Peer mHost;
     private boolean mPrivate;
 
+    public Chat() {
+        mId = -1;
+    }
+
     public long getId() {
         return mId;
     }
