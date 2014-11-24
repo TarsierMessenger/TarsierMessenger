@@ -37,14 +37,14 @@ public class ChatRepositoryTest extends AndroidTestCase {
     }
 
     public void testFindIllegalIds() {
-        long[] illegalIds = {0, -1, -9001, Long.MIN_VALUE};
+        long[] illegalIds = {-1, -9001, Long.MIN_VALUE};
 
         for (long id : illegalIds) {
             try {
                 mChatRepository.findById(id);
             } catch (IllegalArgumentException e) {
                 // good
-                assertEquals("Chat ID cannot be < 1", e.getMessage());
+                assertEquals("Chat ID is invalid.", e.getMessage());
             } catch (NoSuchModelException e) {
                 fail("NoSuchModelException should not be thrown.");
             }
@@ -52,7 +52,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
     }
 
     public void testFindLegalIds() {
-        long[] legalIds = {1, 42, 9001, Long.MAX_VALUE};
+        long[] legalIds = {0, 1, 42, 9001, Long.MAX_VALUE};
 
         for (long id : legalIds) {
             try {

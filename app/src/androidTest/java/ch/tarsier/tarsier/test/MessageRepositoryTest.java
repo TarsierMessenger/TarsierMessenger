@@ -38,7 +38,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
     // test public Message findById(long id) alone
     public void testFindIllegalIds() {
-        long[] illegalIds = {0, -1, -9001, Long.MIN_VALUE};
+        long[] illegalIds = {-1, -9001, Long.MIN_VALUE};
 
         for (long id : illegalIds) {
             try {
@@ -54,7 +54,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
     }
 
     public void testFindLegalIds() {
-        long[] legalIds = {1, 42, 9001, Long.MAX_VALUE};
+        long[] legalIds = {0, 1, 42, 9001, Long.MAX_VALUE};
 
         for (long id : legalIds) {
             try {
@@ -75,7 +75,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
             fail("Expecting InvalidModelException to be thrown.");
         } catch (InvalidModelException e) {
             // good
-            assertEquals("Message should not be null.", e.getMessage());
+            assertEquals("Message is null.", e.getMessage());
         } catch (InsertException e) {
             fail("Expecting InvalidModelException to be thrown first.");
         }
@@ -108,9 +108,10 @@ public class MessageRepositoryTest extends AndroidTestCase {
         try {
             mMessageRepository.update(mDummyMessage);
         } catch (InvalidModelException e) {
-            fail("InvalidModelException should not be thrown.");
-        } catch (UpdateException e) {
             // good
+            assertEquals("Message ID is invalid.", e.getMessage());
+        } catch (UpdateException e) {
+            fail("UpdateException should not be thrown.");
         }
     }
 
@@ -132,7 +133,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
             mMessageRepository.delete(mDummyMessage);
         } catch (InvalidModelException e) {
             // good
-            assertEquals("Message ID is invalid", e.getMessage());
+            assertEquals("Message ID is invalid.", e.getMessage());
         } catch (DeleteException e) {
             fail("Expecting InvalidModelException to be thrown first.");
         }
