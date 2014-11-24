@@ -27,11 +27,10 @@ public class ChatRepositoryTest extends AndroidTestCase {
 
         Tarsier.app().reset();
         mChatRepository = Tarsier.app().getChatRepository();
-        Peer host = new Peer("Olivier");
 
         mDummyChat = new Chat();
         mDummyChat.setPrivate(false);
-        mDummyChat.setHost(host);
+        mDummyChat.setHost(new Peer("Olivier"));
         mDummyChat.setTitle("Public chat title");
     }
 

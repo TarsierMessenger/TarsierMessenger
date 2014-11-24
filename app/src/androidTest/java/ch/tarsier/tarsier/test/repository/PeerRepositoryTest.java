@@ -20,6 +20,12 @@ public class PeerRepositoryTest extends AndroidTestCase {
 
         Tarsier.app().reset();
         mPeerRepository = Tarsier.app().getPeerRepository();
-        mDummyPeer = new Peer();
+
+        mDummyPeer = new Peer("Alfred");
+        mDummyPeer.setStatusMessage("posey");
     }
+
+
+    // test findById(long id) alone
+
 }
