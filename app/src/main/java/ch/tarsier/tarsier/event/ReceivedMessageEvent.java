@@ -9,20 +9,13 @@ import ch.tarsier.tarsier.domain.model.Peer;
  */
 public class ReceivedMessageEvent {
 
-    private final Optional<String> mDiscussion;
-
     private final String mMessage;
 
     private final Peer mPeer;
 
-    public ReceivedMessageEvent(String message, Peer peer, Optional<String> discussion) {
+    public ReceivedMessageEvent(String message, Peer peer) {
         mMessage = message;
         mPeer = peer;
-        mDiscussion = discussion;
-    }
-
-    public Optional<String> getDiscussion() {
-        return mDiscussion;
     }
 
     public String getMessage() {

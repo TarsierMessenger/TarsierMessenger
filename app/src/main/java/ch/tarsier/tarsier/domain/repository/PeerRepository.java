@@ -50,6 +50,10 @@ public class PeerRepository extends AbstractRepository {
         }
     }
 
+    public Peer findByPublicKey(byte[] publicKey) throws NoSuchModelException, InvalidCursorException {
+        return findByPublicKey(new PublicKey(publicKey));
+    }
+
     public Peer findByPublicKey(PublicKey publicKey)
             throws IllegalArgumentException, NoSuchModelException {
 

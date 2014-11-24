@@ -3,7 +3,7 @@ package ch.tarsier.tarsier.exception;
 /**
  * @author gluthier
  */
-public class InvalidCursorException extends Exception {
+public class InvalidCursorException extends DomainException {
 
     public InvalidCursorException(String detailMessage) {
         super(detailMessage);
