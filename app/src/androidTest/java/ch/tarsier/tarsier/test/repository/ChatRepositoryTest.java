@@ -6,7 +6,9 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
@@ -19,6 +21,7 @@ import ch.tarsier.tarsier.exception.UpdateException;
 public class ChatRepositoryTest extends AndroidTestCase {
 
     private ChatRepository mChatRepository;
+    private PeerRepository mPeerRepository;
     private Chat mDummyChat;
 
     @Override
@@ -27,6 +30,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
 
         Tarsier.app().reset();
         mChatRepository = Tarsier.app().getChatRepository();
+        mPeerRepository = Tarsier.app().getPeerRepository();
 
         mDummyChat = new Chat();
         mDummyChat.setPrivate(false);
@@ -154,22 +158,30 @@ public class ChatRepositoryTest extends AndroidTestCase {
         } catch (IllegalArgumentException e) {
             fail("IllegalArgumentException should ne be thrown: " + e.getMessage());
         } catch (NoSuchModelException e) {
-            //FIXME insert Peer in insertDummyChat() once PeerRepository is tested
+            fail("NoSuchModelException should not be thrown: " + e.getMessage());
         }
-/* FIXME uncomment this once PeerRepository is tested
         assertNotNull(dummyChatFormDb);
 
-        assertEquals("Olivier", dummyChatFormDb.getHost().getUserName());
-        assertEquals(-1, dummyChatFormDb.getHost().getId());
+        assertEquals("Quentin", dummyChatFormDb.getHost().getUserName());
         assertEquals("Public chat title", dummyChatFormDb.getTitle());
         assertEquals(false, dummyChatFormDb.isPrivate());
-*/
     }
 
     public void testInsertAndUpdateDummyChat() {
         insertDummyChat();
 
         Peer newPeer = new Peer("Jean");
+        newPeer.setStatusMessage("trankil");
+        newPeer.setPublicKey(new PublicKey(new byte[]{0, 0}));
+
+        try {
+            mPeerRepository.insert(newPeer);
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown: " + e.getMessage());
+        } catch (InsertException e) {
+            fail("InsertException should not be thrown: " + e.getMessage());
+        }
+
         mDummyChat.setTitle("New title");
         mDummyChat.setHost(newPeer);
 
@@ -184,7 +196,6 @@ public class ChatRepositoryTest extends AndroidTestCase {
         assertNotSame(-1, mDummyChat.getId());
 
         assertEquals("Jean", mDummyChat.getHost().getUserName());
-        assertEquals(-1, mDummyChat.getHost().getId());
         assertEquals("New title", mDummyChat.getTitle());
 
         Chat dummyChatFormDb = null;
@@ -193,15 +204,12 @@ public class ChatRepositoryTest extends AndroidTestCase {
         } catch (IllegalArgumentException e) {
             fail("IllegalArgumentException should ne be thrown: " + e.getMessage());
         } catch (NoSuchModelException e) {
-            //FIXME insert Peer in insertDummyChat() once PeerRepository is tested
+            fail("NoSuchModelException should not be thrown: " + e.getMessage());
         }
-/* FIXME uncomment this once PeerRepository is tested
         assertNotNull(dummyChatFormDb);
 
         assertEquals("Jean", dummyChatFormDb.getHost().getUserName());
-        assertEquals(2, dummyChatFormDb.getHost().getId());
         assertEquals("New title", dummyChatFormDb.getTitle());
-*/
     }
 
     public void testInsertAndDeleteDummyMessage() {
@@ -221,7 +229,19 @@ public class ChatRepositoryTest extends AndroidTestCase {
 
     private void insertDummyChat() {
         // makes sure that mDummyChat is "clean"
-        Peer host = new Peer("Olivier");
+        Peer host = new Peer("Quentin");
+        host.setStatusMessage("au max");
+        host.setPublicKey(new PublicKey(new byte[]{1, 1}));
+
+
+        try {
+            mPeerRepository.insert(host);
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown: " + e.getMessage());
+        } catch (InsertException e) {
+            fail("InsertException should not be thrown: " + e.getMessage());
+        }
+
         mDummyChat = new Chat();
         mDummyChat.setPrivate(false);
         mDummyChat.setHost(host);
