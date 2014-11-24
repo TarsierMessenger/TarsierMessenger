@@ -71,10 +71,11 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
         mContext = context;
         mManager = wifiManager;
         mChannel = channel;
+
         createPeerListener();
         initiatePeerDiscovery();
-        mManager.requestPeers(mChannel, peerListListener);
 
+        mManager.requestPeers(mChannel, peerListListener);
     }
 
     @Override
@@ -83,27 +84,25 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
         * The group owner accepts connections using a server socket and then spawns a
         * client socket for every client.
         */
-        Log.d(WIFI_DIRECT_TAG, "onConnectionInfoAvail   ");
+        Log.d(WIFI_DIRECT_TAG, "onConnectionInfoAvailable");
+
         if (mConnectionHandler == null) {
             if (p2pInfo.isGroupOwner) {
                 Log.d(WIFI_DIRECT_TAG, "Connected as group owner");
+
                 try {
-
-                    mConnectionHandler
-                            = new ServerConnection(((MessageHandler) this).getConnectionHandler());
-
-
+                    mConnectionHandler = new ServerConnection(getConnectionHandler());
                 } catch (IOException e) {
-                    Log.d(WIFI_DIRECT_TAG,
-                            "Failed to create a server thread - " + e.getMessage());
+                    Log.d(WIFI_DIRECT_TAG, "Failed to create a server thread - " + e.getMessage());
                     return;
                 }
+
             } else {
                 Log.d(WIFI_DIRECT_TAG, "Connected as peer");
-                mConnectionHandler = new ClientConnection(
-                        ((MessageHandler) this).getConnectionHandler(),
-                        p2pInfo.groupOwnerAddress);
 
+                mConnectionHandler = new ClientConnection(
+                    getConnectionHandler(),
+                    p2pInfo.groupOwnerAddress);
             }
         }
         mConnection = (ConnectionInterface) mConnectionHandler;
@@ -122,31 +121,36 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
     // BroadcastReceiver inherited method
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        Log.d(WiFiDirectDebugActivity.TAG, action);
-        if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 
+        Log.d(WiFiDirectDebugActivity.TAG, action);
+
+        if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             Log.d(WIFI_DIRECT_TAG, "WIFI_P2P_CONNECTION_CHANGED_ACTION");
+
             if (mManager == null) {
                 Log.e(WIFI_DIRECT_TAG, "Fatal error! mManager does not exist");
                 return;
             }
-            NetworkInfo networkInfo = (NetworkInfo) intent
-                    .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+
+            NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+
             if (networkInfo.isConnected()) {
                 // we are connected with the other device, request connection
                 // info to find group owner IP
                 Log.d(WiFiDirectDebugActivity.TAG,
-                        "Connected to p2p network. Requesting network details");
-                mManager.requestConnectionInfo(mChannel,
-                        this);
+                      "Connected to p2p network. Requesting network details");
+
+                mManager.requestConnectionInfo(mChannel, this);
             } else {
                 Log.d(WIFI_DIRECT_TAG, "Did receive a Intent action : " + action);
             }
-        } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
-                .equals(action)) {
-            WifiP2pDevice device = (WifiP2pDevice) intent
-                    .getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+
+        } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
+
+            WifiP2pDevice device = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+
             Log.d(WiFiDirectDebugActivity.TAG, "Device status -" + device.status);
+
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             // Request available peers from the wifi p2p manager. This is an
             // asynchronous call and the calling activity is notified with a
@@ -154,8 +158,8 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
             if (mManager != null) {
                 mManager.requestPeers(mChannel, peerListListener);
             }
-            Log.d(WIFI_DIRECT_TAG, "P2P peers changed");
 
+            Log.d(WIFI_DIRECT_TAG, "P2P peers changed");
         }
     }
 
@@ -215,8 +219,6 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
                 }
             }
         });
-
-
     }
 
     @Override
