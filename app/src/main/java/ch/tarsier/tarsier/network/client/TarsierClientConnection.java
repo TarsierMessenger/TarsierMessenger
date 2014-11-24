@@ -30,7 +30,6 @@ import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
  */
 public class TarsierClientConnection implements Runnable, ConnectionInterface {
 
-
     private static final String TAG = "TarsierClientConnection";
 
     private static final int CURRENT_MAX_MESSAGE_SIZE = 2048;
@@ -39,24 +38,24 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
 
     private Socket mSocket;
 
-    private Handler handler;
+    private Handler mHandler;
 
     private LinkedHashMap<String, Peer> mPeersMap = new LinkedHashMap<String, Peer>();
 
-    // TODO: Fetch from storage;
-    private Peer localPeer = new Peer("Client name", new PublicKey("ClientPublicKey".getBytes()));
+    private Peer localPeer;
 
-    private InputStream in;
+    private InputStream mIn;
 
-    private OutputStream out;
+    private OutputStream mOut;
 
     private InetAddress mAddress;
 
     private Bus mEventBus;
 
     public TarsierClientConnection(Handler handler, InetAddress groupOwnerAddress) {
-        this.handler = handler;
-        this.mAddress = groupOwnerAddress;
+        mHandler = handler;
+        mAddress = groupOwnerAddress;
+
         Log.d(TAG, "Client is created successfully.");
         Thread t = new Thread(this);
         t.start();
@@ -70,8 +69,8 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
             mSocket.connect(new InetSocketAddress(mAddress.getHostAddress(),
                     MessageType.SERVER_SOCKET), TIMEOUT_SOCKET_LIMIT);
 
-            in = mSocket.getInputStream();
-            out = mSocket.getOutputStream();
+            mIn = mSocket.getInputStream();
+            mOut = mSocket.getOutputStream();
             int bytes;
             byte[] buffer = new byte[CURRENT_MAX_MESSAGE_SIZE];
 
@@ -80,7 +79,7 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
 
             while (true) {
                 // Read from the InputStream
-                bytes = in.read(buffer);
+                bytes = mIn.read(buffer);
                 if (bytes == -1) {
                     break;
                 }
@@ -114,14 +113,14 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
                         privateMessage = TarsierWireProtos.TarsierPrivateMessage
                                 .parseFrom(serializedProtoBuffer);
                         if (isLocalPeer(privateMessage.getReceiverPublicKey().toByteArray())) {
-                            handler.obtainMessage(MessageType.messageTypeFromData(buffer),
+                            mHandler.obtainMessage(MessageType.messageTypeFromData(buffer),
                                     serializedProtoBuffer).sendToTarget();
                         } else {
                             Log.e(TAG, "A private message for another peer is received.");
                         }
                         break;
                     case MessageType.MESSAGE_TYPE_PUBLIC:
-                        handler.obtainMessage(MessageType.messageTypeFromData(buffer),
+                        mHandler.obtainMessage(MessageType.messageTypeFromData(buffer),
                                 serializedProtoBuffer).sendToTarget();
                         Log.d(TAG, "Public message handled to handler");
                         break;
@@ -141,12 +140,12 @@ public class TarsierClientConnection implements Runnable, ConnectionInterface {
     private synchronized void write(byte[] buffer) {
         try {
             if (buffer.length < CURRENT_MAX_MESSAGE_SIZE) {
-                out.write(buffer);
+                mOut.write(buffer);
             } else {
                 Log.d(TAG, "buffer.length > CURRENT_MAX_MESSAGE_SIZE : " + buffer.length);
             }
         } catch (IOException e) {
-            handler.sendEmptyMessage(MessageType.MESSAGE_TYPE_DISCONNECT);
+            mHandler.sendEmptyMessage(MessageType.MESSAGE_TYPE_DISCONNECT);
             Log.e(TAG, "Exception during write", e);
         }
     }
