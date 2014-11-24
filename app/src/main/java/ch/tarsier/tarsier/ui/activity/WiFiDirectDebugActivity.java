@@ -131,7 +131,7 @@ public class WiFiDirectDebugActivity
     @Override
     public void onResume() {
         super.onResume();
-        mReceiver = new MessagingManager(this, mManager, mChannel, getMainLooper());
+        mReceiver = new MessagingManager(mManager, mChannel);
         registerReceiver(mReceiver, mIntentFilter);
     }
 

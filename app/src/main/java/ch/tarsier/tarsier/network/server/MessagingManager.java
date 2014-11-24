@@ -1,5 +1,7 @@
 package ch.tarsier.tarsier.network.server;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import com.squareup.otto.Bus;
 
 import android.content.BroadcastReceiver;
@@ -19,15 +21,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ConnectedEvent;
+import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.event.ReceivedPeersListEvent;
+import ch.tarsier.tarsier.exception.DomainException;
 import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.MessageHandler;
 import ch.tarsier.tarsier.network.MessagingInterface;
+import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.messages.MessageType;
+
+import static ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPublicMessage;
 
 /**
  * @author FredericJacobs
@@ -231,14 +239,20 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
             case MessageType.MESSAGE_TYPE_PUBLIC:
                 Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PUBLIC received.");
 
-                // try {
-                //     TarsierWireProtos.TarsierPublicMessage publicMessage;
-                //     publicMessage = TarsierWireProtos.TarsierPublicMessage.parseFrom((byte[]) message.obj);
-                //     mChatroomFragment.pushMessage(
-                //         "Buddy: " + new String(publicMessage.getPlainText().toByteArray()));
-                // } catch (InvalidProtocolBufferException e) {
-                //     e.printStackTrace();
-                // }
+                try {
+                    TarsierPublicMessage msg = TarsierPublicMessage.parseFrom((byte[]) message.obj);
+
+                    byte[] publicKey = msg.getSenderPublicKey().toByteArray();
+                    String contents = msg.getPlainText().toString();
+
+                    Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
+                    mEventBus.post(new ReceivedMessageEvent(contents, sender));
+
+                } catch (InvalidProtocolBufferException e) {
+                     e.printStackTrace();
+                } catch (DomainException e) {
+                    Log.d(NETWORK_LAYER_TAG, "Could not find peer in database for received message.");
+                }
 
                 break;
 
