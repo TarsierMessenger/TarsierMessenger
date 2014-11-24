@@ -58,17 +58,22 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
 
     private Runnable mConnectionHandler;
 
-    private ChatroomFragment mChatroomFragment;
+    // private ChatroomFragment mChatroomFragment;
 
-    private Context mContext;
+    // private Context mContext;
 
     private Bus mEventBus;
 
     public MessagingManager(final Context context, WifiP2pManager wifiManager,
             WifiP2pManager.Channel channel, Looper looper) {
+        this(wifiManager, channel, looper);
+    }
+
+    public MessagingManager(WifiP2pManager wifiManager,
+                            WifiP2pManager.Channel channel,
+                            Looper looper) {
 
         mConnectionHandler = null;
-        mContext = context;
         mManager = wifiManager;
         mChannel = channel;
 
@@ -80,10 +85,8 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
-        /*
-        * The group owner accepts connections using a server socket and then spawns a
-        * client socket for every client.
-        */
+        // The group owner accepts connections using a server socket and then spawns a
+        // client socket for every client.
         Log.d(WIFI_DIRECT_TAG, "onConnectionInfoAvailable");
 
         if (mConnectionHandler == null) {
@@ -228,7 +231,7 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
 
     @Override
     public void broadcastMessage(String message) {
-        mConnection.broadcastMessage("MytemplatePublicKey".getBytes(), message.getBytes());
+        mConnection.broadcastMessage(message.getBytes());
     }
 
     @Override
@@ -245,6 +248,7 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
     @Override
     public boolean handleMessage(Message message) {
         Log.d(NETWORK_LAYER_TAG, "handleMessage called");
+
         switch (message.what) {
             case MessageType.MESSAGE_TYPE_HELLO:
                 Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_HELLO received.");
@@ -257,15 +261,15 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
                 break;
             case MessageType.MESSAGE_TYPE_PUBLIC:
                 Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PUBLIC received.");
-                TarsierWireProtos.TarsierPublicMessage publicMessage;
-                try {
-                    publicMessage = TarsierWireProtos.TarsierPublicMessage
-                            .parseFrom((byte[]) message.obj);
-                    mChatroomFragment.pushMessage(
-                            "Buddy: " + new String(publicMessage.getPlainText().toByteArray()));
-                } catch (InvalidProtocolBufferException e) {
-                    e.printStackTrace();
-                }
+
+                // try {
+                //     TarsierWireProtos.TarsierPublicMessage publicMessage;
+                //     publicMessage = TarsierWireProtos.TarsierPublicMessage.parseFrom((byte[]) message.obj);
+                //     mChatroomFragment.pushMessage(
+                //         "Buddy: " + new String(publicMessage.getPlainText().toByteArray()));
+                // } catch (InvalidProtocolBufferException e) {
+                //     e.printStackTrace();
+                // }
 
                 break;
 
