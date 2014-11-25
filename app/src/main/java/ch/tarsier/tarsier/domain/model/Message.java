@@ -80,4 +80,20 @@ public class Message {
     public void setId(long newId) {
         mId = newId;
     }
+
+    public void setText(String newText) {
+        mText = newText;
+    }
+
+    public void setChatId(long newId) {
+        mChatId = newId;
+    }
+
+    public void setPeerId(long newId) {
+        mPeerId = newId;
+    }
+
+    public void setDateTime(long newTime) {
+        mDateTime = newTime;
+    }
 }

@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 
 /**
@@ -45,9 +46,12 @@ public class Database {
 
         @Override
         protected Void doInBackground(String... params) {
-            mReadable = mDatabaseHelper.getReadableDatabase();
-            mWritable = mDatabaseHelper.getWritableDatabase();
-
+            try {
+                mReadable = mDatabaseHelper.getReadableDatabase();
+                mWritable = mDatabaseHelper.getWritableDatabase();
+            } catch (SQLiteException e) {
+                e.printStackTrace();
+            }
             return null;
         }
 

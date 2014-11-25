@@ -2,6 +2,8 @@ package ch.tarsier.tarsier.domain.repository;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
+
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Peer;
@@ -19,56 +21,66 @@ import ch.tarsier.tarsier.exception.UpdateException;
 public class PeerRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Peer.TABLE_NAME;
-    private static final String[] COLUMNS = new String[] {
-        Columns.Peer._ID,
-        Columns.Peer.COLUMN_NAME_PUBLIC_KEY,
-        Columns.Peer.COLUMN_NAME_USERNAME,
-        Columns.Peer.COLUMN_NAME_STATUS_MESSAGE,
-        Columns.Peer.COLUMN_NAME_PICTURE_PATH,
-        Columns.Peer.COLUMN_NAME_IS_ONLINE
-    };
 
     public PeerRepository(Database database) {
         super(database);
     }
 
-    public Peer findById(long id) throws NoSuchModelException, InvalidCursorException {
-        String selection = Columns.Peer._ID + " = " + id;
+    public Peer findById(long id) throws IllegalArgumentException, NoSuchModelException {
+        if (id < 0) {
+            throw new IllegalArgumentException("Peer ID is invalid.");
+        }
+
+        String whereClause = Columns.Peer._ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
-                COLUMNS,
-                selection,
-                null, null, null, null
+                null,
+                whereClause,
+                null, null, null, null,
+                "1"
         );
 
-        //Empty cursor
-        if (cursor.getCount() <= 0) {
-            throw new NoSuchModelException("Cursor is empty");
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
         }
-
-        return buildFromCursor(cursor);
     }
 
-    public Peer findByPublicKey(PublicKey publicKey) throws NoSuchModelException, InvalidCursorException {
-        String selection = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = " + publicKey;
+    public Peer findByPublicKey(PublicKey publicKey)
+            throws IllegalArgumentException, NoSuchModelException {
+
+        if (publicKey == null) {
+            throw new IllegalArgumentException("PublicKey is null.");
+        }
+
+        String whereClause = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = " + publicKey;
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
-                COLUMNS,
-                selection,
-                null, null, null, null
+                null,
+                whereClause,
+                null, null, null, null,
+                "1"
         );
 
-        //Empty cursor
-        if (cursor.getCount() <= 0) {
-            throw new NoSuchModelException("Cursor is empty");
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
         }
-
-        return buildFromCursor(cursor);
     }
 
-    public void insert(Peer peer) throws InsertException {
+    public void insert(Peer peer) throws InvalidModelException, InsertException {
+        if (peer == null) {
+            throw new InvalidModelException("Peer is null.");
+        }
+
         ContentValues values = getPeerValues(peer);
 
         long rowId = getWritableDatabase().insert(
@@ -78,73 +90,92 @@ public class PeerRepository extends AbstractRepository {
         );
 
         if (rowId == -1) {
-            throw new InsertException("INSERT operation failed");
+            throw new InsertException("INSERT operation failed.");
         }
 
         peer.setId(rowId);
     }
 
     public void update(Peer peer) throws InvalidModelException, UpdateException {
+        if (peer == null) {
+            throw new InvalidModelException("Peer is null.");
+        }
+
         if (peer.getId() < 0) {
-            throw new InvalidModelException("Invalid peer ID");
+            throw new InvalidModelException("Peer ID is invalid.");
         }
 
         ContentValues values = getPeerValues(peer);
 
-        String selection = Columns.Peer._ID + " = " + peer.getId();
+        String whereClause = Columns.Peer._ID + " = " + peer.getId();
 
         long updatedRows = getWritableDatabase().update(
             TABLE_NAME,
             values,
-            selection,
+            whereClause,
             null
         );
 
         if (updatedRows == 0) {
-            throw new UpdateException("UPDATE operation failed");
+            throw new UpdateException("UPDATE operation failed.");
         }
     }
 
     public void delete(Peer peer) throws InvalidModelException, DeleteException {
-        if (peer.getId() < 0) {
-            throw new InvalidModelException("Invalid peer ID");
+        if (peer == null) {
+            throw new InvalidModelException("Peer is null.");
         }
 
-        String selection = Columns.Peer._ID + " = " + peer.getId();
+        if (peer.getId() < 0) {
+            throw new InvalidModelException("Peer ID is invalid.");
+        }
+
+        String whereClause = Columns.Peer._ID + " = " + peer.getId();
 
         long deletedRows = getWritableDatabase().delete(
                 TABLE_NAME,
-                selection,
+                whereClause,
                 null
         );
 
         if (deletedRows == 0) {
-            throw new DeleteException("DELETE operation failed");
+            throw new DeleteException("DELETE operation failed.");
         }
+
+        peer.setId(-1);
     }
 
-    private Peer buildFromCursor(Cursor c) throws InvalidCursorException {
+    private Peer buildFromCursor(Cursor c) throws InvalidCursorException, NoSuchModelException {
         if (c == null) {
-            throw new InvalidCursorException("Cursor is null");
+            throw new InvalidCursorException("Cursor is null.");
         }
 
-        long id = c.getLong(c.getColumnIndex(Columns.Peer._ID));
-        byte[] publicKeyBytes = c.getBlob(c.getColumnIndex(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
-        PublicKey publicKey = new PublicKey(publicKeyBytes);
-        String userName = c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_USERNAME));
-        String statusMessage = c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_STATUS_MESSAGE));
-        String picturePath = c.getString(c.getColumnIndex(Columns.Peer.COLUMN_NAME_PICTURE_PATH));
-        boolean online = c.getInt(c.getColumnIndex(Columns.Peer.COLUMN_NAME_IS_ONLINE)) != 0;
+        if (!c.moveToFirst()) {
+            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+        }
 
-        Peer peer = new Peer();
-        peer.setId(id);
-        peer.setPublicKey(publicKey);
-        peer.setUserName(userName);
-        peer.setStatusMessage(statusMessage);
-        peer.setPicturePath(picturePath);
-        peer.setOnline(online);
+        try {
+            long id = c.getLong(c.getColumnIndexOrThrow(Columns.Peer._ID));
+            byte[] publicKeyBytes = c.getBlob(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
+            PublicKey publicKey = new PublicKey(publicKeyBytes);
+            String userName = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_USERNAME));
+            String statusMessage = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_STATUS_MESSAGE));
+            String picturePath = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_PICTURE_PATH));
+            boolean online = c.getInt(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_IS_ONLINE)) != 0;
 
-        return peer;
+            Peer peer = new Peer();
+            peer.setId(id);
+            peer.setPublicKey(publicKey);
+            peer.setUserName(userName);
+            peer.setStatusMessage(statusMessage);
+            peer.setPicturePath(picturePath);
+            peer.setOnline(online);
+
+            return peer;
+
+        } catch (CursorIndexOutOfBoundsException e) {
+            throw new InvalidCursorException(e);
+        }
     }
 
     private ContentValues getPeerValues(Peer peer) {

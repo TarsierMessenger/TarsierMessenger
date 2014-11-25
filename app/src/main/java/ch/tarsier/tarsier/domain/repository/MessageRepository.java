@@ -28,16 +28,6 @@ public class MessageRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
 
-    private static final String COLUMN_ID = "_id";
-
-    private static final String[] COLUMNS = new String[]{
-            Columns.Message._ID,
-            Columns.Message.COLUMN_NAME_MSG,
-            Columns.Message.COLUMN_NAME_DATETIME,
-            Columns.Message.COLUMN_NAME_SENDER_ID,
-            Columns.Message.COLUMN_NAME_CHAT_ID
-    };
-
     private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + "ASC";
     private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + "DESC";
 
@@ -47,29 +37,96 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public Message findById(long id) throws IllegalArgumentException, NoSuchModelException {
-        if (id < 1) {
-            throw new IllegalArgumentException("Message ID cannot be < 1");
+        if (id < 0) {
+            throw new IllegalArgumentException("Message ID is invalid.");
         }
 
-        String whereClause = COLUMN_ID + " = " + id;
+        String whereClause = Columns.Message._ID + " = " + id;
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
-                COLUMNS,
+                null,
                 whereClause,
                 null, null, null, null,
                 "1"
         );
 
-        if (cursor == null || cursor.getCount() == 0) {
-            throw new NoSuchModelException("No Message with id " + id + " found.");
-        }
-
         try {
             return buildFromCursor(cursor);
         } catch (InvalidCursorException e) {
             throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
         }
+    }
+
+    public void insert(Message message) throws InvalidModelException, InsertException {
+        if (message == null) {
+            throw new InvalidModelException("Message is null.");
+        }
+
+        ContentValues values = getValuesForMessage(message);
+
+        long rowId = getWritableDatabase().insert(
+                TABLE_NAME,
+                null,
+                values
+        );
+
+        if (rowId == -1) {
+            throw new InsertException("INSERT operation failed.");
+        }
+
+        message.setId(rowId);
+    }
+
+    public void update(Message message) throws InvalidModelException, UpdateException {
+        if (message == null) {
+            throw new InvalidModelException("Message is null.");
+        }
+
+        if (message.getId() < 0) {
+            throw new InvalidModelException("Message ID is invalid.");
+        }
+
+        ContentValues values = getValuesForMessage(message);
+
+        String whereClause = Columns.Message._ID + " = " + message.getId();
+
+        long rowUpdated = getWritableDatabase().update(
+                TABLE_NAME,
+                values,
+                whereClause,
+                null
+        );
+
+        if (rowUpdated == 0) {
+            throw new UpdateException("UPDATE operation failed.");
+        }
+    }
+
+    public void delete(Message message) throws InvalidModelException, DeleteException {
+        if (message == null) {
+            throw new InvalidModelException("Message is null.");
+        }
+
+        if (message.getId() < 0) {
+            throw new InvalidModelException("Message ID is invalid.");
+        }
+
+        String whereClause = Columns.Message._ID + " = " + message.getId();
+
+        long rowDeleted = getWritableDatabase().delete(
+                TABLE_NAME,
+                whereClause,
+                null
+        );
+
+        if (rowDeleted == 0) {
+            throw new DeleteException("DELETE operation failed.");
+        }
+
+        message.setId(-1);
     }
 
     public List<Message> findByChat(Chat chat) throws IllegalArgumentException, NoSuchModelException {
@@ -78,24 +135,18 @@ public class MessageRepository extends AbstractRepository {
     }
 
     public List<Message> findByChat(Chat chat, int number) throws IllegalArgumentException, NoSuchModelException {
-        if (chat.getId() < 1) {
-            throw new IllegalArgumentException("Chat must have a valid ID");
+        if (chat.getId() < 0) {
+            throw new IllegalArgumentException("Chat ID is invalid.");
         }
 
         String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
-                COLUMNS,
+                null,
                 whereClause,
                 null, null, null, null
         );
-
-        if (!cursor.moveToFirst()) {
-            //TODO check that query() return null if it failed to query
-            //moveToFirst should do the trick, returns false if the cursor is empty, hence failed to query
-            throw new NoSuchModelException("Cursor is null");
-        }
 
         try {
             return buildListFromCursor(cursor, number);
@@ -110,30 +161,33 @@ public class MessageRepository extends AbstractRepository {
      * @param number number of messages to retrieve
      * @return a list of message
      */
-    public List<Message> findByChat(Chat chat, long since, int number) throws IllegalArgumentException, NoSuchModelException {
-        if (chat.getId() < 1) {
-            throw new IllegalArgumentException("Chat must have a valid ID");
+    public List<Message> findByChat(Chat chat, long since, int number)
+            throws IllegalArgumentException, NoSuchModelException {
+
+        if (chat.getId() < 0) {
+            throw new IllegalArgumentException("Chat ID is invalid.");
         }
 
         String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
-                COLUMNS,
+                null,
                 whereClause,
                 null, null, null,
                 DATETIME_DESCEND);
 
         if (!cursor.moveToFirst()) {
-            throw new NoSuchModelException("cursor is empty, cannot move to first");
+            throw new NoSuchModelException("Cannot move to first element of the cursor.");
         }
-        long cTime = 0;
+
+        long cTime;
         do {
             cTime = cursor.getLong(cursor.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME));
         } while (cursor.moveToNext() && since < cTime);
         //don't forget the descending order. since should be > cTime, amIRight?
 
-        List<Message> msgs = null;
+        List<Message> msgs;
         try {
             msgs = buildListFromCursor(cursor, number);
         } catch (InvalidCursorException e) {
@@ -144,81 +198,23 @@ public class MessageRepository extends AbstractRepository {
         return msgs;
     }
 
-
-    public void insert(Message message) throws InvalidModelException, InsertException {
-        ContentValues values = getValuesForMessage(message);
-
-        long rowId = getWritableDatabase().insert(
-                TABLE_NAME,
-                null,
-                values
-        );
-
-        if (rowId == -1) {
-            throw new InsertException("INSERT operation failed");
-        }
-
-        message.setId(rowId);
-    }
-
-    public void update(Message message) throws InvalidModelException, UpdateException {
-        if (message.getId() < 1) {
-            throw new InvalidModelException("Message's id invalid");
-        }
-
-        ContentValues values = getValuesForMessage(message);
-
-        String whereClause = COLUMN_ID + " = " + message.getId();
-
-        long rowUpdated = getWritableDatabase().update(
-                TABLE_NAME,
-                values,
-                whereClause,
-                null
-        );
-
-        if (rowUpdated == 0) {
-            throw new UpdateException("UPDATE operation failed");
-        }
-    }
-
-    public void delete(Message message) throws InvalidModelException, DeleteException {
-        if (message.getId() < 1) {
-            throw new InvalidModelException("Message ID is invalid");
-        }
-
-        String whereClause = COLUMN_ID + " = " + message.getId();
-
-        long rowDeleted = getWritableDatabase().delete(
-                TABLE_NAME,
-                whereClause,
-                null
-        );
-
-        if (rowDeleted == 0) {
-            throw new DeleteException("DELETE operation failed");
-        }
-    }
-
     private Message buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
-            throw new InvalidCursorException("Cursor is null");
+            throw new InvalidCursorException("Cursor is null.");
+        }
+
+        if (!c.moveToFirst()) {
+            throw new InvalidCursorException("Cannot move to first element of the cursor.");
         }
 
         try {
-            int chatId = c.getInt(c.getColumnIndex(Columns.Message.COLUMN_NAME_CHAT_ID));
-            String text = c.getString(c.getColumnIndex(Columns.Message.COLUMN_NAME_MSG));
-            long senderId = c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_SENDER_ID));
-            long dateTime = c.getLong(c.getColumnIndex(Columns.Message.COLUMN_NAME_DATETIME));
+            int chatId = c.getInt(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_CHAT_ID));
+            String text = c.getString(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_MSG));
+            long senderId = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_SENDER_ID));
+            long dateTime = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_DATETIME));
 
-            long userId = Tarsier.app().getUserPreferences().getId();
-
-            Message message;
-            if (senderId == userId) {
-                message = new Message(chatId, text, dateTime);
-            } else {
-                message = new Message(chatId, text, senderId, dateTime);
-            }
+            Message message = new Message(chatId, text, senderId, dateTime);
+            message.setId(c.getLong(c.getColumnIndexOrThrow(Columns.Message._ID)));
 
             return message;
 

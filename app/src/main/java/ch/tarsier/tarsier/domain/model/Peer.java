@@ -27,6 +27,12 @@ public class Peer implements ByteArraySerializable, Serializable {
     public Peer() {
         // FIXME: Only until we properly retrieve the peer's picture.
         mPicturePath = Tarsier.app().getStorage().getMyPicturePath();
+        mId = -1;
+    }
+
+    public Peer(String name) {
+        mUserName = name;
+        mId = -1;
     }
 
     // TODO: Remove when ChatroomPeersActivity won't need it anymore.
@@ -34,18 +40,14 @@ public class Peer implements ByteArraySerializable, Serializable {
         this();
         mUserName = name;
         mStatusMessage = statusMessage;
-    }
-
-    public Peer(String name, long id) {
-        this();
-        mUserName = name;
-        mId = id;
+        mId = -1;
     }
 
     public Peer(String name, PublicKey publicKey) {
         this();
         mUserName = name;
         mPublicKey = publicKey;
+        mId = -1;
     }
 
     public Peer (byte[] data) throws InvalidProtocolBufferException {
