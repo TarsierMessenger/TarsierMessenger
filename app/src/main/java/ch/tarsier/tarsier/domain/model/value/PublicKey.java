@@ -25,7 +25,7 @@ public class PublicKey implements Serializable {
         }
 
         // noinspection SimplifiableIfStatement
-        if (that == null || this.getClass() != that.getClass()) {
+        if (that == null || ((Object) this).getClass() != that.getClass()) {
             return false;
         }
 
