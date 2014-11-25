@@ -9,4 +9,10 @@
         android:text="Chat list nearby"
         android:id="@+id/textView_chat_list_nearby"
         android:layout_gravity="center_horizontal" />
+
+    <ListView
+        android:id="@+id/nearby_chat_list"
+        android:layout_width="match_parent"                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+        android:layout_height="match_parent" />
+
 </LinearLayout>

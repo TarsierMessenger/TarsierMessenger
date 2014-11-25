@@ -9,4 +9,10 @@
         android:text="Nearby peers"
         android:id="@+id/textView_test"
         android:layout_gravity="center_horizontal" />
+
+    <ListView
+    android:id="@+id/nearby_peer_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
 </LinearLayout>
