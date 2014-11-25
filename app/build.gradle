@@ -53,6 +53,13 @@ android {
     }
 }
 
+
+// connectedCheck {
+//   jacoco {
+//     excludes ['**/com/google/**', '**/TarsierWireProtos.java', '**/FillDatabaseWithFictionalData.java']
+// }
+// }
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile files('libs/espresso-contrib-1.1-bundled.jar')
