@@ -7,7 +7,7 @@
     android:padding="10dp">
 
     <RelativeLayout
-        android:id="@+id/icons"
+        android:id="@+id/nearbyPeerIcons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp">
@@ -39,7 +39,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/icons">
+        android:layout_toRightOf="@id/nearbyPeerIcons">
 
         <TextView
             android:id="@+id/nearbyPeerName"

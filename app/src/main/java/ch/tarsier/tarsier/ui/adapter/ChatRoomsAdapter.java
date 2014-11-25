@@ -42,7 +42,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<ChatRoomSummary> {
             holder.mId = row.getId();
             holder.mName = (TextView) row.findViewById(R.id.nearbyChatRoomName);
             holder.mLastMessage = (TextView) row.findViewById(R.id.nearbyChatRoomLastMessage);
-            holder.mNbPeers = (TextView) row.findViewById(R.id.nearbyNbPeers);
+            holder.mNbPeers = (TextView) row.findViewById(R.id.nearbyChatRoomNbPeers);
 
             row.setTag(holder);
         } else {
