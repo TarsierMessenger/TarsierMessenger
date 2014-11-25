@@ -10,9 +10,11 @@ import android.widget.ListView;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.ChatRoomSummary;
-import ch.tarsier.tarsier.ui.view.EndlessListView;
 
 public class NearbyListActivity extends Activity {
+
+    private NearbyPeerFragment mNearbyPeer;
+    private NearbyChatListFragment mNearbyChatList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +27,23 @@ public class NearbyListActivity extends Activity {
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
 
+        mNearbyPeer = new NearbyPeerFragment();
+        mNearbyChatList = new NearbyChatListFragment();
+
 
         // Create a tab listener that is called when the user changes tabs.
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // show the given tab
+                if (tab.getPosition() == 0) {
+                    ft.replace(R.id.inside_nearby,mNearbyChatList);
+                } else if (tab.getPosition() == 1) {
+                    ft.replace(R.id.inside_nearby,mNearbyPeer);
+                    //ft.add(R.id.inside_nearby,mNearbyChatList,"chatList");
+                }
             }
 
             public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // hide the given tab
+
             }
 
             public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
@@ -44,20 +54,17 @@ public class NearbyListActivity extends Activity {
         actionBar.addTab(actionBar.newTab().setText("Peers").setTabListener(tabListener));
 
 
-
-
-
-        ChatRoomSummary[] chatRoomSummary = {
-                new ChatRoomSummary(7,"SwEng","23:02",55),
-                new ChatRoomSummary(6,"Sat Rocks","Yesterday",163),
-                new ChatRoomSummary(5,"CO2","Friday",158),
-                new ChatRoomSummary(4,"Grillades Préverenges","Wednesday",18),
-                new ChatRoomSummary(3,"Hong Kong's umbrella movement","Tuesday",88954),
-                new ChatRoomSummary(2,"M2 EPFL","16.10.14",32),
-                new ChatRoomSummary(1,"TA meeting 1","14.10.14",8)
-        };
-
-        final ListView nearbyChatRoomList = (ListView) findViewById(R.id.nearby_chat_list);
+//        ChatRoomSummary[] chatRoomSummary = {
+//                new ChatRoomSummary(7,"SwEng","23:02",55),
+//                new ChatRoomSummary(6,"Sat Rocks","Yesterday",163),
+//                new ChatRoomSummary(5,"CO2","Friday",158),
+//                new ChatRoomSummary(4,"Grillades Préverenges","Wednesday",18),
+//                new ChatRoomSummary(3,"Hong Kong's umbrella movement","Tuesday",88954),
+//                new ChatRoomSummary(2,"M2 EPFL","16.10.14",32),
+//                new ChatRoomSummary(1,"TA meeting 1","14.10.14",8)
+//        };
+//
+//        final ListView nearbyChatRoomList = (ListView) findViewById(R.id.nearby_chat_list);
 
 
     }
