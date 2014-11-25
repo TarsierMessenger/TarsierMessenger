@@ -35,7 +35,7 @@ public class MessageRepository extends AbstractRepository {
         super(database);
     }
 
-    public Message findById(long id) throws IllegalArgumentException, NoSuchModelException {
+    public Message findById(long id) throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
         if (id < 0) {
             throw new IllegalArgumentException("Message ID is invalid.");
         }
@@ -49,6 +49,10 @@ public class MessageRepository extends AbstractRepository {
                 null, null, null, null,
                 "1"
         );
+
+        if (!cursor.moveToFirst()) {
+            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+        }
 
         try {
             return buildFromCursor(cursor);
@@ -200,10 +204,6 @@ public class MessageRepository extends AbstractRepository {
     private Message buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
             throw new InvalidCursorException("Cursor is null.");
-        }
-
-        if (!c.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
         }
 
         try {

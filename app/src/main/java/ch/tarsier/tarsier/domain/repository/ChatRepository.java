@@ -31,6 +31,8 @@ public class ChatRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Chat.TABLE_NAME;
 
+    private static final String ID_DESCEND = Columns.Message._ID + " DESC";
+
     private PeerRepository mPeerRepository;
 
     public ChatRepository(Database database) {
@@ -39,7 +41,7 @@ public class ChatRepository extends AbstractRepository {
         mPeerRepository = Tarsier.app().getPeerRepository();
     }
 
-    public Chat findById(long id) throws IllegalArgumentException, NoSuchModelException {
+    public Chat findById(long id) throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
         if (id < 0) {
             throw new IllegalArgumentException("Chat ID is invalid.");
         }
@@ -53,6 +55,10 @@ public class ChatRepository extends AbstractRepository {
                 null, null, null, null,
                 "1"
         );
+
+        if (!cursor.moveToFirst()) {
+            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+        }
 
         try {
             return buildFromCursor(cursor);
@@ -132,13 +138,37 @@ public class ChatRepository extends AbstractRepository {
         chat.setId(-1);
     }
 
+    public List<Chat> fetchAllChats() {
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null, null, null, null, null,
+                ID_DESCEND,
+                null
+        );
+
+        List<Chat> chatList = new ArrayList<Chat>();
+
+
+        if (!cursor.moveToFirst()) {
+            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+        }
+
+        do {
+            try {
+                chatList.add(buildFromCursor(cursor));
+            } catch (InvalidCursorException e) {
+                e.printStackTrace();
+            } catch (NoSuchModelException e) {
+                e.printStackTrace();
+            }
+        } while (cursor.moveToNext());
+
+    }
+
     private Chat buildFromCursor(Cursor c) throws InvalidCursorException, NoSuchModelException {
         if (c == null) {
             throw new InvalidCursorException("Cursor is null.");
-        }
-
-        if (!c.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
         }
 
         try {

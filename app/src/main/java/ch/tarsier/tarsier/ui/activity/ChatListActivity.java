@@ -25,12 +25,10 @@ import ch.tarsier.tarsier.ui.view.EndlessListener;
  */
 public class ChatListActivity extends Activity implements EndlessListener {
 
-    private final static String ID_CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.ID_CHAT";
-    private final static int NUMBER_OF_CHATS_TO_FETCH_AT_ONCE = 15;
+    private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
 
     private EndlessChatListView mEndlessChatListView;
     private ChatListAdapter mChatListAdapter;
-    private int mult = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +45,9 @@ public class ChatListActivity extends Activity implements EndlessListener {
         mEndlessChatListView.setOnClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                long chatId = mChatListAdapter.getItemId(i);
-
 
                 Intent chatIdIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                chatIdIntent.putExtra(ID_CHAT_MESSAGE, chatId);
+                chatIdIntent.putExtra(CHAT_MESSAGE, mChatListAdapter.getItemId(i));
 
                 startActivity(chatIdIntent);
             }
@@ -104,7 +100,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
     @Override
     public void loadData() {
-        mult += 10;
         ChatLoader chatLoader = new ChatLoader();
         chatLoader.execute();
     }

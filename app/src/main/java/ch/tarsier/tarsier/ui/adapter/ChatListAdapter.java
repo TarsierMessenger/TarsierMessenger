@@ -25,9 +25,9 @@ import ch.tarsier.tarsier.util.DateUtil;
  */
 public class ChatListAdapter extends ArrayAdapter<Chat> {
 
-    private List<Chat> mChatList;
     private Context mContext;
     private int mLayoutResourceId;
+    private List<Chat> mChatList;
 
     public ChatListAdapter(Context context, int layoutResourceId, List<Chat> chatList) {
         super(context, layoutResourceId, chatList);

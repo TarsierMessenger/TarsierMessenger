@@ -26,7 +26,7 @@ public class PeerRepository extends AbstractRepository {
         super(database);
     }
 
-    public Peer findById(long id) throws IllegalArgumentException, NoSuchModelException {
+    public Peer findById(long id) throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
         if (id < 0) {
             throw new IllegalArgumentException("Peer ID is invalid.");
         }
@@ -40,6 +40,10 @@ public class PeerRepository extends AbstractRepository {
                 null, null, null, null,
                 "1"
         );
+
+        if (!cursor.moveToFirst()) {
+            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+        }
 
         try {
             return buildFromCursor(cursor);
@@ -55,7 +59,7 @@ public class PeerRepository extends AbstractRepository {
     }
 
     public Peer findByPublicKey(PublicKey publicKey)
-            throws IllegalArgumentException, NoSuchModelException {
+            throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
 
         if (publicKey == null) {
             throw new IllegalArgumentException("PublicKey is null.");
@@ -70,6 +74,10 @@ public class PeerRepository extends AbstractRepository {
                 null, null, null, null,
                 "1"
         );
+
+        if (!cursor.moveToFirst()) {
+            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+        }
 
         try {
             return buildFromCursor(cursor);
@@ -152,10 +160,6 @@ public class PeerRepository extends AbstractRepository {
     private Peer buildFromCursor(Cursor c) throws InvalidCursorException, NoSuchModelException {
         if (c == null) {
             throw new InvalidCursorException("Cursor is null.");
-        }
-
-        if (!c.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
         }
 
         try {
