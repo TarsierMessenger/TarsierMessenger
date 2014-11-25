@@ -79,9 +79,7 @@ public class HomeActivity extends Activity {
             saveProfileInfos();
             //remove this activity from the stack.
             this.finish();
-            // FIXME: should go to NearbyPeer the first time the app is used
-            Intent nearbyIntent = new Intent(this, ChatListActivity.class);
-            //Intent nearbyIntent = new Intent(this, NearbyPeersActivity.class);
+            Intent nearbyIntent = new Intent(this, NearbyListActivity.class);
             startActivity(nearbyIntent);
         } else {
             Toast.makeText(this, getString(R.string.error_lets_chat_toast), Toast.LENGTH_SHORT).show();

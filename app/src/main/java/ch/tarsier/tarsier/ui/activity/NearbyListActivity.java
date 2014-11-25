@@ -25,7 +25,7 @@ public class NearbyListActivity extends Activity {
         // Specify that tabs should be displayed in the action bar.
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
 
         mNearbyPeer = new NearbyPeerFragment();
         mNearbyChatList = new NearbyChatListFragment();
