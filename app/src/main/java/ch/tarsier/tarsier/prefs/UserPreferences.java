@@ -5,6 +5,8 @@ import android.os.Environment;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.crypto.EC25519;
+import ch.tarsier.tarsier.crypto.KeyPair;
 
 /**
  * @author romac
@@ -15,14 +17,34 @@ import ch.tarsier.tarsier.Tarsier;
 public class UserPreferences extends AbstractPreferences {
 
     public static final String PROFILE_PICTURE_NAME = "profile_picture_temp.png";
+    private KeyPair mKeyPair;
 
     @Override
     protected String getPreferencesFile() {
         return Tarsier.app().getString(R.string.personnal_file_key);
     }
 
-    public long getId() {
-        return getLong(R.string.personnal_file_key_myid, 0L);
+    public KeyPair getKeyPair() {
+        if (mKeyPair != null) {
+            return mKeyPair;
+        } else {
+            byte[] publicKey = getString(R.string.personnal_file_public_key).getBytes();
+            byte[] privateKey = getString(R.string.personnal_file_private_key).getBytes();
+            return new KeyPair(publicKey, privateKey);
+        }
+    }
+
+    /**
+     * Generate a KeyPair and store it in the user preferences
+     */
+    public void setKeyPair() {
+        if (getString(R.string.personnal_file_public_key) == null) {
+            mKeyPair = EC25519.generateKeyPair();
+            setString(R.string.personnal_file_public_key, new String(mKeyPair.getPublicKey()));
+            setString(R.string.personnal_file_private_key, new String(mKeyPair.getPrivateKey()));
+        } else {
+            //TODO : throw exception because we can't regenerate a new keyPair
+        }
     }
 
     public String getUsername() {

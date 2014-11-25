@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="personnal_file_key">who_am_i</string>
-    <string name="personnal_file_key_myid">uid</string>
+    <string name="personnal_file_public_key">uid</string>
+    <string name="personnal_file_private_key">uid</string>
     <string name="personnal_file_key_myusername">username</string>
     <string name="personnal_file_key_mymood">mood</string>
     <string name="preferences_file_key">settings</string>

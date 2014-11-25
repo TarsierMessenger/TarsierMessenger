@@ -35,7 +35,7 @@ public final class Columns {
 
         public static final String COLUMN_NAME_MSG = "msg";
         public static final String COLUMN_NAME_DATETIME = "datetime";
-        public static final String COLUMN_NAME_SENDER_ID = "senderId";
+        public static final String COLUMN_NAME_SENDER_PUBLIC_KEY = "senderPublicKey";
         public static final String COLUMN_NAME_CHAT_ID = "chatId";
 
     }
