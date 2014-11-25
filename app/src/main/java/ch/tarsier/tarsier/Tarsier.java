@@ -7,7 +7,6 @@ import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.prefs.UserPreferences;
-import ch.tarsier.tarsier.storage.StorageAccess;
 
 /**
  * @author romac
@@ -16,7 +15,6 @@ public class Tarsier extends Application {
 
     private static Tarsier app;
 
-    private StorageAccess mStorage;
     private UserPreferences mUserPreferences;
     private Database mDatabase;
 
@@ -34,18 +32,6 @@ public class Tarsier extends Application {
 
         app = this;
         mDatabase = new Database(getApplicationContext());
-    }
-
-    public StorageAccess getStorage() {
-        if (mStorage == null) {
-            mStorage = new StorageAccess(getApplicationContext());
-        }
-
-        return mStorage;
-    }
-
-    public void setStorage(StorageAccess storage) {
-        mStorage = storage;
     }
 
     public UserPreferences getUserPreferences() {
@@ -106,7 +92,6 @@ public class Tarsier extends Application {
 
     // Reset the Tarsier.app() singleton [for testing purpose only]
     public void reset() {
-        setStorage(null);
         setUserPreferences(null);
         setDatabase(null);
 

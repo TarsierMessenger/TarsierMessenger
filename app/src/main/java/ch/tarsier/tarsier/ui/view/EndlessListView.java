@@ -6,10 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
-
 import java.util.List;
-
-import ch.tarsier.tarsier.domain.model.MessageViewModel;
+import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 
 /**
@@ -40,7 +38,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
         mAllMessagesLoaded = false;
     }
 
-    public void addNewData(List<MessageViewModel> data) {
+    public void addNewData(List<Message> data) {
         this.removeHeaderView(mHeader);
 
         mBubbleAdapter.addAll(data);
@@ -48,7 +46,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
         isLoading = false;
     }
 
-    public void addNewData(MessageViewModel data) {
+    public void addNewData(Message data) {
         mBubbleAdapter.add(data);
         mBubbleAdapter.notifyDataSetChanged();
     }
