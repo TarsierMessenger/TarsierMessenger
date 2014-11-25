@@ -27,8 +27,8 @@ public class MessageRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
 
-    private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + "ASC";
-    private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + "DESC";
+    private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + " ASC";
+    private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + " DESC";
 
 
     public MessageRepository(Database database) {
@@ -199,6 +199,27 @@ public class MessageRepository extends AbstractRepository {
 
         Collections.reverse(msgs);
         return msgs;
+    }
+
+    public Message getLastMessage() throws NoSuchModelException {
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null, null, null, null, null,
+                DATETIME_DESCEND,
+                null
+        );
+
+        if (!cursor.moveToFirst()) {
+            throw new NoSuchModelException("Cannot move to first element of the cursor.");
+        }
+
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
+        }
     }
 
     private Message buildFromCursor(Cursor c) throws InvalidCursorException {

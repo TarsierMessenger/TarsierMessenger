@@ -128,10 +128,14 @@ public class ChatActivity extends Activity implements EndlessListener {
 
             List<Message> newMessages = null;
             try {
-                newMessages = Tarsier.app().getMessageRepository().findByChat(
-                        Tarsier.app().getChatRepository().findById(mChatId),
-                        lastMessageTimestamp,
-                        NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE);
+                try {
+                    newMessages = Tarsier.app().getMessageRepository().findByChat(
+                            Tarsier.app().getChatRepository().findById(mChatId),
+                            lastMessageTimestamp,
+                            NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE);
+                } catch (InvalidCursorException e) {
+                    e.printStackTrace();
+                }
             } catch (NoSuchModelException e) {
                 e.printStackTrace();
             }

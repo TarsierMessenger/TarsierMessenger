@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.List;
@@ -38,8 +39,13 @@ public class EndlessChatListView extends ListView implements AbsListView.OnScrol
         this.setOnScrollListener(this);
     }
 
-    public void setListener(EndlessListener listener) {
+    public void setEndlessListener(EndlessListener listener) {
         mEndlessListener = listener;
+    }
+
+    public void setChatListAdapter(ChatListAdapter chatListAdapter) {
+        super.setAdapter(chatListAdapter);
+        mChatListAdapter = chatListAdapter;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class ChatRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Chat.TABLE_NAME;
 
-    private static final String ID_DESCEND = Columns.Message._ID + " DESC";
+    private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + " DESC";
 
     private PeerRepository mPeerRepository;
 
@@ -138,17 +138,16 @@ public class ChatRepository extends AbstractRepository {
         chat.setId(-1);
     }
 
-    public List<Chat> fetchAllChats() {
+    public List<Chat> fetchAllChats() throws InvalidCursorException {
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
                 null, null, null, null, null,
-                ID_DESCEND,
+                DATETIME_DESCEND,
                 null
         );
 
         List<Chat> chatList = new ArrayList<Chat>();
-
 
         if (!cursor.moveToFirst()) {
             throw new InvalidCursorException("Cannot move to first element of the cursor.");
@@ -164,6 +163,7 @@ public class ChatRepository extends AbstractRepository {
             }
         } while (cursor.moveToNext());
 
+        return chatList;
     }
 
     private Chat buildFromCursor(Cursor c) throws InvalidCursorException, NoSuchModelException {

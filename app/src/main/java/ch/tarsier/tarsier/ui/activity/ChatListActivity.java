@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.ui.view.EndlessChatListView;
@@ -36,12 +38,16 @@ public class ChatListActivity extends Activity implements EndlessListener {
         setContentView(R.layout.activity_chat_list);
 
         mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
-        mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list, createItems(mult));
+        mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list);
 
         mEndlessChatListView.setLoadingView(R.layout.loading_layout);
         mEndlessChatListView.setAdapter(mChatListAdapter);
-        mEndlessChatListView.setListener(this);
+        mEndlessChatListView.setEndlessListener(this);
 
+        ChatLoader chatLoader = new ChatLoader();
+        List<Chat> chatList = chatLoader.doInBackground();
+        chatLoader.onPostExecute(chatList);
+/*
         mEndlessChatListView.setOnClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -52,7 +58,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
                 startActivity(chatIdIntent);
             }
         });
-
+*/
         // FIXME: Handle potential NullPointerException
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
@@ -88,16 +94,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
         startActivity(openSettingsIntent);
     }
 
-    private List<Chat> createItems(int mult) {
-        List<Chat> chatSummaryList = new ArrayList<Chat>();
-
-        for (int i = 0; i < NUMBER_OF_CHATS_TO_FETCH_AT_ONCE; ++i) {
-            //chatSummaryList.add();
-        }
-
-        return chatSummaryList;
-    }
-
     @Override
     public void loadData() {
         ChatLoader chatLoader = new ChatLoader();
@@ -109,20 +105,15 @@ public class ChatListActivity extends Activity implements EndlessListener {
         @Override
         protected List<Chat> doInBackground(Void... voids) {
             ChatRepository chatRepository = Tarsier.app().getChatRepository();
-/*
-            List<Chat> chatList = chatRepository.getChats(
-                NUMBER_OF_CHATS_TO_FETCH_AT_ONCE,
-                1
-            );
 
-            //Encapsulate chats
-            ArrayList<Chat> chatArrayList = new ArrayList<Chat>();
-            for (Chat chat : chatList) {
-                chatArrayList.add(chat);
+            List<Chat> chatList = null;
+            try {
+                chatList = chatRepository.fetchAllChats();
+            } catch (InvalidCursorException e) {
+                e.printStackTrace();
             }
 
-*/
-            return null;
+            return chatList;
         }
 
         @Override

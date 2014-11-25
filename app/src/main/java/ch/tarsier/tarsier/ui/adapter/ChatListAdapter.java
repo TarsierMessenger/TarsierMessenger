@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -29,11 +30,11 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
     private int mLayoutResourceId;
     private List<Chat> mChatList;
 
-    public ChatListAdapter(Context context, int layoutResourceId, List<Chat> chatList) {
-        super(context, layoutResourceId, chatList);
+    public ChatListAdapter(Context context, int layoutResourceId) {
+        super(context, layoutResourceId);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
-        mChatList = chatList;
+        mChatList = new ArrayList<Chat>();
     }
 
     @Override
@@ -42,8 +43,13 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
     }
 
     @Override
+    public Chat getItem(int position) {
+        return mChatList.get(position);
+    }
+
+    @Override
     public long getItemId(int position) {
-        return mChatList.get(position).hashCode();
+        return mChatList.get(position).getId();
     }
 
     @Override
@@ -67,19 +73,16 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             holder = (ChatHolder) row.getTag();
         }
 
-        Chat chat = mChatList.get(position);
+        Chat chat = this.getItem(position);
 
         MessageRepository messageRepository = Tarsier.app().getMessageRepository();
-        Message lastMessage = null;/*
+        Message lastMessage = null;
         try {
-            lastMessage = messageRepository.getLastMessageOf(chat);
+            lastMessage = messageRepository.getLastMessage();
         } catch (NoSuchModelException e) {
             e.printStackTrace();
-        } catch (InvalidCursorException e) {
-            e.printStackTrace();
-        }*/
+        }
 
-        holder.mId = chat.getId();
         holder.mAvatarSrc.setImageResource(chat.getAvatarRessourceId());
         holder.mTitle.setText(chat.getTitle());
         holder.mLastMessage.setText(lastMessage.getText());
@@ -92,11 +95,9 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
      * DiscussionSummaryHolder is the class containing the discussion's information
      */
     private class ChatHolder {
-        private long mId;
         private ImageView mAvatarSrc;
         private TextView mTitle;
         private TextView mLastMessage;
         private TextView mHumanTime;
     }
-
 }
