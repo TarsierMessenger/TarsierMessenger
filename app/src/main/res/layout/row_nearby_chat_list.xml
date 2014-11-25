@@ -18,7 +18,7 @@
             android:textColor="@color/tarsier_font" />
 
         <TextView
-            android:id="@+id/nearbyChatRoomParticipants"
+            android:id="@+id/nearbyChatRoomNbPeers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/nearbyChatRoomName"
