@@ -10,7 +10,7 @@ public class Message {
 
     private long mChatId;
     private String mText;
-    private long mPeerId;
+    private byte[] mSenderPublicKey;
     private long mDateTime;
     private boolean mIsSentByUser;
     // mId is set to a value > 0 when the Message is inserted into the database
@@ -21,13 +21,13 @@ public class Message {
      *
      * @param chatId the id of the chat in which the message has been sent
      * @param text the body of the message
-     * @param peerId the id of the peer which sent the message
+     * @param senderPublicKey the id of the peer which sent the message
      * @param dateTime the timestamp at which the message has been sent
      */
-    public Message(long chatId, String text, long peerId, long dateTime) {
+    public Message(long chatId, String text, byte[] senderPublicKey, long dateTime) {
         mChatId = chatId;
         mText = text;
-        mPeerId = peerId;
+        mSenderPublicKey = senderPublicKey;
         mIsSentByUser = false;
         mDateTime = dateTime;
         mId = -1;
@@ -43,7 +43,7 @@ public class Message {
     public Message(long chatId, String text, long dateTime) {
         mChatId = chatId;
         mText = text;
-        mPeerId = Tarsier.app().getUserPreferences().getId();
+        mSenderPublicKey = Tarsier.app().getUserPreferences().getKeyPair().getPublicKey();
         mIsSentByUser = true;
         mDateTime = dateTime;
         mId = -1;
@@ -53,16 +53,12 @@ public class Message {
         return mText;
     }
 
-    public long getAuthor() {
-        return mPeerId;
-    }
-
     public long getChatId() {
         return mChatId;
     }
 
-    public long getPeerId() {
-        return mPeerId;
+    public byte[] getSenderPublicKey() {
+        return mSenderPublicKey;
     }
 
     public long getDateTime() {
@@ -87,10 +83,6 @@ public class Message {
 
     public void setChatId(long newId) {
         mChatId = newId;
-    }
-
-    public void setPeerId(long newId) {
-        mPeerId = newId;
     }
 
     public void setDateTime(long newTime) {

@@ -1,6 +1,8 @@
 package ch.tarsier.tarsier.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
-import ch.tarsier.tarsier.domain.model.MessageViewModel;
+import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.R;
 
 /**
@@ -25,9 +30,9 @@ import ch.tarsier.tarsier.R;
  * Inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
  * and https://github.com/survivingwithandroid/Surviving-with-android/tree/master/EndlessAdapter
  */
-public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
+public class BubbleAdapter extends ArrayAdapter<Message> {
     private Context mContext;
-    private List<MessageViewModel> mMessageViewModels;
+    private List<Message> mMessages;
     private int mLayoutId;
 
     public BubbleAdapter(Context context, int layoutId) {
@@ -35,12 +40,12 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
 
         this.mContext = context;
         this.mLayoutId = layoutId;
-        this.mMessageViewModels = new ArrayList<MessageViewModel>();
+        this.mMessages = new ArrayList<Message>();
     }
 
     @Override
     public int getCount() {
-        return mMessageViewModels.size();
+        return mMessages.size();
     }
 
     /**
@@ -49,8 +54,8 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
      * @return The element at the given position (reverse order)
      */
     @Override
-    public MessageViewModel getItem(int position) {
-        return mMessageViewModels.get(mMessageViewModels.size()-1-position);
+    public Message getItem(int position) {
+        return mMessages.get(mMessages.size()-1-position);
     }
 
     @Override
@@ -60,8 +65,8 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
     }
 
     public long getLastMessageTimestamp() {
-        if (mMessageViewModels.size() > 0) {
-            return mMessageViewModels.get(mMessageViewModels.size()-1).getTimeSent();
+        if (mMessages.size() > 0) {
+            return mMessages.get(mMessages.size()-1).getDateTime();
         } else {
             return DateUtil.getNowTimestamp();
         }
@@ -69,7 +74,14 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MessageViewModel messageViewModel = this.getItem(position);
+        Message message = this.getItem(position);
+
+        Peer sender = null;
+        try {
+            sender = Tarsier.app().getPeerRepository().findByPublicKey(new PublicKey(message.getSenderPublicKey()));
+        } catch (NoSuchModelException e) {
+            //TODO : handle this case
+        }
 
         ViewHolder holder;
         if (convertView == null) {
@@ -85,15 +97,16 @@ public class BubbleAdapter extends ArrayAdapter<MessageViewModel> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.dateSeparator.setText(DateUtil.computeDateSeparator(messageViewModel.getTimeSent()));
-        holder.picture.setImageBitmap(messageViewModel.getPicture());
-        holder.name.setText(messageViewModel.getAuthorName());
-        holder.message.setText(messageViewModel.getText());
-        holder.hour.setText(DateUtil.computeHour(messageViewModel.getTimeSent()));
+        holder.dateSeparator.setText(DateUtil.computeDateSeparator(message.getDateTime()));
+        Bitmap profilePicture = BitmapFactory.decodeFile(sender.getPicturePath());
+        holder.picture.setImageBitmap(profilePicture);
+        holder.name.setText(sender.getUserName());
+        holder.message.setText(message.getText());
+        holder.hour.setText(DateUtil.computeHour(message.getDateTime()));
 
         LayoutParams lp = (LayoutParams) holder.message.getLayoutParams();
 
-        if (messageViewModel.isMessageSentByUser()) {
+        if (message.isSentByUser()) {
             holder.message.setBackgroundResource(R.drawable.bubble_text_right);
             lp.gravity = Gravity.RIGHT;
         } else {

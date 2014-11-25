@@ -12,7 +12,7 @@ public class KeyPair {
      * @param publicKey  The public  key
      * @param privateKey The private key
      */
-    KeyPair(byte[] publicKey, byte[] privateKey) {
+    public KeyPair(byte[] publicKey, byte[] privateKey) {
         mPublicKey  = publicKey;
         mPrivateKey = privateKey;
     }

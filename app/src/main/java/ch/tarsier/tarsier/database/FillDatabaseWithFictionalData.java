@@ -59,14 +59,14 @@ public class FillDatabaseWithFictionalData {
         Peer yann = new Peer();
         yann.setUserName("Yann Mahmoudi");
 
-        long amirrezaId = amirreza.getId();
-        long benjaminId = benjamin.getId();
-        long fredericId = frederic.getId();
-        long gabrielId = gabriel.getId();
-        long marinId = marin.getId();
-        long romainId = romain.getId();
-        long xavierId = xavier.getId();
-        long yannId = yann.getId();
+        byte[] amirrezaId = amirreza.getPublicKey().getBytes();
+        byte[] benjaminId = benjamin.getPublicKey().getBytes();
+        byte[] fredericId = frederic.getPublicKey().getBytes();
+        byte[] gabrielId = gabriel.getPublicKey().getBytes();
+        byte[] marinId = marin.getPublicKey().getBytes();
+        byte[] romainId = romain.getPublicKey().getBytes();
+        byte[] xavierId = xavier.getPublicKey().getBytes();
+        byte[] yannId = yann.getPublicKey().getBytes();
 
         try {
             peerRepository.insert(amirreza);

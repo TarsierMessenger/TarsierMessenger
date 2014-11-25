@@ -155,7 +155,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         assertEquals(1, dummyMessageFromDb.getChatId());
         assertEquals("test", dummyMessageFromDb.getText());
-        assertEquals(2, dummyMessageFromDb.getPeerId());
+        assertEquals(2, dummyMessageFromDb.getSenderPublicKey());
         assertEquals(1000, dummyMessageFromDb.getDateTime());
     }
 
@@ -179,7 +179,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         assertEquals(10, mDummyMessage.getChatId());
         assertEquals("this is new", mDummyMessage.getText());
-        assertEquals(20, mDummyMessage.getPeerId());
+        assertEquals(20, mDummyMessage.getSenderPublicKey());
         assertEquals(2000, mDummyMessage.getDateTime());
 
         Message dummyMessageFromDb = null;
@@ -195,7 +195,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         assertEquals(10, dummyMessageFromDb.getChatId());
         assertEquals("this is new", dummyMessageFromDb.getText());
-        assertEquals(20, dummyMessageFromDb.getPeerId());
+        assertEquals(20, dummyMessageFromDb.getSenderPublicKey());
         assertEquals(2000, dummyMessageFromDb.getDateTime());
     }
 

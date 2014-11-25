@@ -13,6 +13,7 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.exception.InsertException;
@@ -77,7 +78,8 @@ public class NewChatRoomActivity extends Activity {
             PeerRepository peerRepository = Tarsier.app().getPeerRepository();
             UserPreferences userPreferences= Tarsier.app().getUserPreferences();
 
-            Peer user = peerRepository.findById(userPreferences.getId());
+            Peer user = peerRepository.findByPublicKey(
+                    new PublicKey(userPreferences.getKeyPair().getPublicKey()));
 
             Chat newChatroom = new Chat();
             newChatroom.setPrivate(false);

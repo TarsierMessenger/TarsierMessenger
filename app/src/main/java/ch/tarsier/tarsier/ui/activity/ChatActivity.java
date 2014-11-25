@@ -26,7 +26,6 @@ import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 import ch.tarsier.tarsier.util.DateUtil;
 import ch.tarsier.tarsier.ui.view.EndlessListView;
 import ch.tarsier.tarsier.ui.view.EndlessListener;
-import ch.tarsier.tarsier.domain.model.MessageViewModel;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.validation.EditTextMessageValidator;
@@ -59,19 +58,11 @@ public class ChatActivity extends Activity implements EndlessListener {
 
 
         //Add the message to the ListView
-        MessageViewModel messageViewModel = null;
         try {
-            messageViewModel = new MessageViewModel(sentMessage);
-
-            mListView.addNewData(messageViewModel);
+            mListView.addNewData(sentMessage);
 
             //Add the message to the database
             Tarsier.app().getMessageRepository().insert(sentMessage);
-        } catch (InvalidCursorException e) {
-            //TODO : handle the exceptions correctly
-            e.printStackTrace();
-        } catch (NoSuchModelException e) {
-            e.printStackTrace();
         } catch (InsertException e) {
             e.printStackTrace();
         } catch (InvalidModelException e) {
@@ -92,8 +83,6 @@ public class ChatActivity extends Activity implements EndlessListener {
         inflater.inflate(R.menu.chat, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +105,7 @@ public class ChatActivity extends Activity implements EndlessListener {
         mListView.setEndlessListener(this);
 
         DatabaseLoader dbl = new DatabaseLoader();
-        List<MessageViewModel> firstMessages = dbl.doInBackground();
+        List<Message> firstMessages = dbl.doInBackground();
         dbl.onPostExecute(firstMessages);
 
         mMessageToBeSend = (EditText) findViewById(R.id.message_to_send);
@@ -128,15 +117,13 @@ public class ChatActivity extends Activity implements EndlessListener {
          */
     }
 
-
-
     /**
      * Async Task for the loading of the messages from the database on another thread.
      */
-    private class DatabaseLoader extends AsyncTask<Void, Void, List<MessageViewModel>> {
+    private class DatabaseLoader extends AsyncTask<Void, Void, List<Message>> {
 
         @Override
-        protected List<MessageViewModel> doInBackground(Void... params) {
+        protected List<Message> doInBackground(Void... params) {
             long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
 
             List<Message> newMessages = null;
@@ -150,23 +137,16 @@ public class ChatActivity extends Activity implements EndlessListener {
             }
 
             //Encapsulate messages into messageViewModels
-            ArrayList<MessageViewModel> newMessageViewModels = new ArrayList<MessageViewModel>();
+            ArrayList<Message> newMessageViewModels = new ArrayList<Message>();
             for (Message message: newMessages) {
-                try {
-                    newMessageViewModels.add(new MessageViewModel(message));
-                } catch (InvalidCursorException e) {
-                    //TODO : handle the exceptions correctly
-                    e.printStackTrace();
-                } catch (NoSuchModelException e) {
-                    e.printStackTrace();
-                }
+                newMessageViewModels.add(message);
             }
 
             return newMessageViewModels;
         }
 
         @Override
-        protected void onPostExecute(List<MessageViewModel> result) {
+        protected void onPostExecute(List<Message> result) {
             super.onPostExecute(result);
             mListView.addNewData(result);
 
@@ -177,8 +157,6 @@ public class ChatActivity extends Activity implements EndlessListener {
         }
     }
 
-
-
     /**
      * Toggle the clickable property of the lets_chat Button
      * @param enable true makes the Button clickable.
@@ -187,9 +165,6 @@ public class ChatActivity extends Activity implements EndlessListener {
         ImageButton send = (ImageButton) findViewById(R.id.sendImageButton);
         send.setClickable(enable);
     }
-
-
-
 
     /**
      * Verify that we can enable the Button that can send the message to the listView and to the
@@ -212,8 +187,6 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         }
     }
-
-
 
     private boolean sendMessageImageButtonCanBeEnabled() {
         return validateSendMessage();
