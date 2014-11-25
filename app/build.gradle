@@ -1,9 +1,10 @@
 apply plugin: "com.android.application"
 apply plugin: "checkstyle"
+apply plugin: "jacoco"
 
 android {
     compileSdkVersion 18
-    buildToolsVersion "20.0.0"
+    buildToolsVersion "21.1.1"
     defaultConfig {
         applicationId "ch.tarsier.tarsier"
         minSdkVersion 17
@@ -23,11 +24,15 @@ android {
     }    
 
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             runProguard false
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
     productFlavors {
     }
 
@@ -47,6 +52,13 @@ android {
 
     }
 }
+
+
+// connectedCheck {
+//   jacoco {
+//     excludes ['**/com/google/**', '**/TarsierWireProtos.java', '**/FillDatabaseWithFictionalData.java']
+// }
+// }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -74,7 +86,5 @@ task checkstyle(type: Checkstyle) {
     source 'src'
     include '**/*.java'
     exclude '**/FillDatabaseWithFictionalData.java', '**/com/google/**', '**/TarsierWireProtos.java'
-    // exclude '**/packageName/**', '**/utils/MyFile.java'
     classpath = files()
 }
-

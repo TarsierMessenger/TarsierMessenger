@@ -14,7 +14,10 @@ public class TarsierTestCase<T> extends ActivityInstrumentationTestCase2 {
     protected void setUp() throws Exception {
         super.setUp();
         // XXX: Hack required to make Mockito work on Android
-        System.setProperty("dexmaker.dexcache",
+        if (getInstrumentation() != null && getInstrumentation().getTargetContext() != null &&
+            getInstrumentation().getTargetContext().getCacheDir() != null) {
+            System.setProperty("dexmaker.dexcache",
                 getInstrumentation().getTargetContext().getCacheDir().getPath());
+        }
     }
 }
