@@ -25,13 +25,16 @@ public class UserPreferences extends AbstractPreferences {
     }
 
     public KeyPair getKeyPair() {
-        if (mKeyPair != null) {
-            return mKeyPair;
-        } else {
-            byte[] publicKey = getString(R.string.personnal_file_public_key).getBytes();
-            byte[] privateKey = getString(R.string.personnal_file_private_key).getBytes();
-            return new KeyPair(publicKey, privateKey);
+        if (mKeyPair == null) {
+            if (getString(R.string.personnal_file_public_key) == null) {
+                this.setKeyPair();
+            } else {
+                byte[] publicKey = getString(R.string.personnal_file_public_key).getBytes();
+                byte[] privateKey = getString(R.string.personnal_file_private_key).getBytes();
+                mKeyPair = new KeyPair(publicKey, privateKey);
+            }
         }
+        return mKeyPair;
     }
 
     /**
