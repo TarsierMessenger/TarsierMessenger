@@ -24,7 +24,7 @@ public class PeerRepositoryTest extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        Tarsier.app().reset();
+        // Tarsier.app().reset();
         mPeerRepository = Tarsier.app().getPeerRepository();
 
         mDummyPeer = new Peer("Alfred");
