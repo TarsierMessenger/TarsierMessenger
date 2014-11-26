@@ -25,8 +25,7 @@ public class Peer implements ByteArraySerializable, Serializable {
     private boolean mOnline;
 
     public Peer() {
-        // FIXME: Only until we properly retrieve the peer's picture.
-        mPicturePath = Tarsier.app().getStorage().getMyPicturePath();
+        mPicturePath = Tarsier.app().getUserPreferences().getPicturePath();
         mId = -1;
     }
 

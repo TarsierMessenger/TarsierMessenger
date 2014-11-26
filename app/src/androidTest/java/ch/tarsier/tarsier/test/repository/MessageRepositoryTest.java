@@ -18,6 +18,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
     private MessageRepository mMessageRepository;
     private Message mDummyMessage;
+    private byte[] mUserPublicKey;
 
     @Override
     protected void setUp() throws Exception {
@@ -25,7 +26,8 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         Tarsier.app().reset();
         mMessageRepository = Tarsier.app().getMessageRepository();
-        mDummyMessage = new Message(1, "test", 2, 1000);
+        mUserPublicKey = Tarsier.app().getUserPreferences().getKeyPair().getPublicKey();
+        mDummyMessage = new Message(1, "test", mUserPublicKey, 1000);
     }
 
 
@@ -155,7 +157,6 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         assertEquals(1, dummyMessageFromDb.getChatId());
         assertEquals("test", dummyMessageFromDb.getText());
-        assertEquals(2, dummyMessageFromDb.getPeerId());
         assertEquals(1000, dummyMessageFromDb.getDateTime());
     }
 
@@ -164,7 +165,6 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         mDummyMessage.setChatId(10);
         mDummyMessage.setText("this is new");
-        mDummyMessage.setPeerId(20);
         mDummyMessage.setDateTime(2000);
 
         try {
@@ -179,7 +179,6 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         assertEquals(10, mDummyMessage.getChatId());
         assertEquals("this is new", mDummyMessage.getText());
-        assertEquals(20, mDummyMessage.getPeerId());
         assertEquals(2000, mDummyMessage.getDateTime());
 
         Message dummyMessageFromDb = null;
@@ -195,7 +194,6 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         assertEquals(10, dummyMessageFromDb.getChatId());
         assertEquals("this is new", dummyMessageFromDb.getText());
-        assertEquals(20, dummyMessageFromDb.getPeerId());
         assertEquals(2000, dummyMessageFromDb.getDateTime());
     }
 
@@ -216,7 +214,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
     private void insertDummyMessage() {
         // makes sure that mDummyMessage is "clean"
-        mDummyMessage = new Message(1, "test", 2, 1000);
+        mDummyMessage = new Message(1, "test", mUserPublicKey, 1000);
 
         try {
             mMessageRepository.insert(mDummyMessage);
