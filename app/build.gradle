@@ -25,10 +25,11 @@ android {
 
     buildTypes {
         debug {
+            runProguard false
             testCoverageEnabled true
         }
         release {
-            runProguard false
+            runProguard true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
@@ -49,16 +50,8 @@ android {
                'IconDuplicatesConfig',
                'UselessParent',
                'IconColors'
-
     }
 }
-
-
-// connectedCheck {
-//   jacoco {
-//     excludes ['**/com/google/**', '**/TarsierWireProtos.java', '**/FillDatabaseWithFictionalData.java']
-// }
-// }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
