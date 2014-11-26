@@ -10,24 +10,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.domain.model.PeerViewModel;
 import ch.tarsier.tarsier.util.BitmapFromPath;
 
 /**
  * Created by benjamin on 25/11/14.
  */
-public class PeerAdapter extends ArrayAdapter<PeerViewModel> {
+public class PeerAdapter extends ArrayAdapter<Peer> {
 
-    private PeerViewModel[] tablePeers;
+    private Peer[] tablePeers;
     private Context mContext;
     private int mRowLayoutId;
 
 
-    public PeerAdapter(Context context, int resource, PeerViewModel[] peers) {
+    public PeerAdapter(Context context, int resource, Peer[] peers) {
         super(context, resource, peers);
         //initiate with fictional peers - to be removed
 
@@ -40,13 +37,13 @@ public class PeerAdapter extends ArrayAdapter<PeerViewModel> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        PeerViewModelHolder peerHolder = null;
+        PeerHolder peerHolder = null;
         Log.d("PeerAdapter", "mContext is : " + ((Activity) mContext).getLocalClassName());
         if (row == null) {
             //create row
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             row = inflater.inflate(mRowLayoutId,parent,false);
-            peerHolder = new PeerViewModelHolder();
+            peerHolder = new PeerHolder();
 
             peerHolder.mProfilePicture = (ImageView) row.findViewById(R.id.nearbyPeerPicture);
             peerHolder.mStatus = (TextView) row.findViewById(R.id.nearbyPeerStatus);
@@ -56,13 +53,13 @@ public class PeerAdapter extends ArrayAdapter<PeerViewModel> {
 
         } else {
             // recover the information
-            peerHolder = (PeerViewModelHolder) row.getTag();
+            peerHolder = (PeerHolder) row.getTag();
         }
-        PeerViewModel peerToShow = tablePeers[position];
-        peerHolder.mUsername.setText(peerToShow.getPeerName());
-        peerHolder.mStatus.setText(peerToShow.getPeerStatusMessage());
+        Peer peerToShow = tablePeers[position];
+        peerHolder.mUsername.setText(peerToShow.getUserName());
+        peerHolder.mStatus.setText(peerToShow.getStatusMessage());
         peerHolder.mProfilePicture.setImageBitmap(
-                BitmapFromPath.getBitmapFromPath(mContext, peerToShow.getPeerPicturePath())
+                BitmapFromPath.getBitmapFromPath(mContext, peerToShow.getPicturePath())
         );
 
         return row;
@@ -70,7 +67,7 @@ public class PeerAdapter extends ArrayAdapter<PeerViewModel> {
 
 
 
-    private class PeerViewModelHolder {
+    private class PeerHolder {
         TextView mUsername;
         TextView mStatus;
         ImageView mProfilePicture;
