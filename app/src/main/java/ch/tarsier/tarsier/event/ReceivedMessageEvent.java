@@ -1,7 +1,5 @@
 package ch.tarsier.tarsier.event;
 
-import com.google.common.base.Optional;
-
 import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
@@ -11,18 +9,18 @@ public class ReceivedMessageEvent {
 
     private final String mMessage;
 
-    private final Peer mPeer;
+    private final Peer mSender;
 
-    public ReceivedMessageEvent(String message, Peer peer) {
+    public ReceivedMessageEvent(String message, Peer sender) {
         mMessage = message;
-        mPeer = peer;
+        mSender = sender;
     }
 
     public String getMessage() {
         return mMessage;
     }
 
-    public Peer getPeer() {
-        return mPeer;
+    public Peer getSender() {
+        return mSender;
     }
 }

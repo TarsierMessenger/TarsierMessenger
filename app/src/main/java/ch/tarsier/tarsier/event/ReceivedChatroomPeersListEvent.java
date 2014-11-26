@@ -7,11 +7,11 @@ import ch.tarsier.tarsier.domain.model.Peer;
 /**
  * @author romac
  */
-public class ReceivedPeersListEvent {
+public class ReceivedChatroomPeersListEvent {
 
     private final List<Peer> mPeers;
 
-    public ReceivedPeersListEvent(List<Peer> peers) {
+    public ReceivedChatroomPeersListEvent(List<Peer> peers) {
         mPeers = peers;
     }
 
