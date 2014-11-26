@@ -71,11 +71,7 @@
             android:label="@string/title_activity_preferences" >
         </activity>
         <activity
-<<<<<<< HEAD
             android:name="ch.tarsier.tarsier.ui.activity.ChatListActivity"
-=======
-            android:name=".ui.activity.ChatListActivity"
->>>>>>> Initial Commit - Hello world
             android:label="@string/title_activity_chat_list"
             android:theme="@style/CustomActionBarTheme" >
         </activity>
