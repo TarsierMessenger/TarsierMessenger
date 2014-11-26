@@ -9,6 +9,7 @@ import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.User;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
@@ -36,28 +37,44 @@ public class FillDatabaseWithFictionalData {
         //Generate the user
         User gabriel = new User();
         gabriel.setUserName("Gabriel Luthier");
+        gabriel.setPublicKey(new PublicKey(new byte[]{0, 0}));
+        gabriel.setStatusMessage("en forme");
 
         //Generate the peers
         Peer amirreza = new Peer();
         amirreza.setUserName("Amirreza Bahreini");
+        amirreza.setPublicKey(new PublicKey(new byte[]{1, 1}));
+        amirreza.setStatusMessage("la patate");
 
         Peer benjamin = new Peer();
         benjamin.setUserName("Benjamin Paccaud");
+        benjamin.setPublicKey(new PublicKey(new byte[]{2, 2}));
+        benjamin.setStatusMessage("happy");
 
         Peer frederic = new Peer();
         frederic.setUserName("Frederic Jacobs");
+        frederic.setPublicKey(new PublicKey(new byte[]{3, 3}));
+        frederic.setStatusMessage("content");
 
         Peer marin = new Peer();
         marin.setUserName("Marin-Jerry Nicolini");
+        marin.setPublicKey(new PublicKey(new byte[]{4, 4}));
+        marin.setStatusMessage("swag");
 
         Peer romain = new Peer();
         romain.setUserName("Romain Ruetschi");
+        romain.setPublicKey(new PublicKey(new byte[]{5, 5}));
+        romain.setStatusMessage("yolo");
 
         Peer xavier = new Peer();
         xavier.setUserName("Xavier Willemin");
+        xavier.setPublicKey(new PublicKey(new byte[]{6, 6}));
+        xavier.setStatusMessage("salut");
 
         Peer yann = new Peer();
         yann.setUserName("Yann Mahmoudi");
+        yann.setPublicKey(new PublicKey(new byte[]{7, 7}));
+        yann.setStatusMessage("oui");
 
         byte[] amirrezaId = amirreza.getPublicKey().getBytes();
         byte[] benjaminId = benjamin.getPublicKey().getBytes();

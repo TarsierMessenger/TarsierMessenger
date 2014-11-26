@@ -8,12 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
@@ -37,17 +36,17 @@ public class ChatListActivity extends Activity implements EndlessListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
+        FillDatabaseWithFictionalData.populate();
+
         mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
         mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list);
 
         mEndlessChatListView.setLoadingView(R.layout.loading_layout);
-        mEndlessChatListView.setAdapter(mChatListAdapter);
+        mEndlessChatListView.setChatListAdapter(mChatListAdapter);
         mEndlessChatListView.setEndlessListener(this);
 
-        ChatLoader chatLoader = new ChatLoader();
-        List<Chat> chatList = chatLoader.doInBackground();
-        chatLoader.onPostExecute(chatList);
-/*
+        this.loadData();
+
         mEndlessChatListView.setOnClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -58,9 +57,9 @@ public class ChatListActivity extends Activity implements EndlessListener {
                 startActivity(chatIdIntent);
             }
         });
-*/
+
         // FIXME: Handle potential NullPointerException
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setDisplayShowHomeEnabled(false);
     }
 
@@ -118,6 +117,9 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
         @Override
         protected void onPostExecute(List<Chat> chatList) {
+            if (chatList == null) {
+                throw new IllegalArgumentException("ChatList is null.");
+            }
             super.onPostExecute(chatList);
             mEndlessChatListView.addNewData(chatList);
         }

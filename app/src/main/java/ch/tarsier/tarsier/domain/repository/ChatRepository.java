@@ -31,7 +31,7 @@ public class ChatRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Chat.TABLE_NAME;
 
-    private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + " DESC";
+    private static final String ID_DESCEND = Columns.Message._ID + " DESC";
 
     private PeerRepository mPeerRepository;
 
@@ -143,7 +143,7 @@ public class ChatRepository extends AbstractRepository {
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
                 null, null, null, null, null,
-                DATETIME_DESCEND,
+                ID_DESCEND,
                 null
         );
 
@@ -162,6 +162,8 @@ public class ChatRepository extends AbstractRepository {
                 e.printStackTrace();
             }
         } while (cursor.moveToNext());
+
+        cursor.close();
 
         return chatList;
     }
