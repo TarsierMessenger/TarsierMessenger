@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
+
 import ch.tarsier.tarsier.util.BitmapFromPath;
 
 /**
@@ -23,8 +24,8 @@ public class PeerAdapter extends ArrayAdapter<Peer> {
     private Context mContext;
     private int mRowLayoutId;
 
-
     public PeerAdapter(Context context, int resource, Peer[] peers) {
+
         super(context, resource, peers);
         //initiate with fictional peers - to be removed
 
@@ -38,6 +39,7 @@ public class PeerAdapter extends ArrayAdapter<Peer> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         PeerHolder peerHolder = null;
+
         Log.d("PeerAdapter", "mContext is : " + ((Activity) mContext).getLocalClassName());
         if (row == null) {
             //create row
