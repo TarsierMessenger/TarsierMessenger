@@ -127,6 +127,10 @@ public class Tarsier extends Application {
     }
 
     public Bus getEventBus() {
+        if (mEventBus == null) {
+            mEventBus = new Bus();
+        }
+
         return mEventBus;
     }
 
