@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="tarsier_principal" type="color">#0BDA51</item>
+    <item name="tarsier_principal_dark" type="color">#006723</item>
     <item name="tarsier_principal_complementary" type="color">#119DCB</item>
     <item name="tarsier_secondary" type="color">#FF890D</item>
     <item name="tarsier_secondary_complementary" type="color">#FF330D</item>
