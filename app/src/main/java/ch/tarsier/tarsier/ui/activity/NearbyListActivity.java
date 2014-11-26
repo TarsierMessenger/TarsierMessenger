@@ -22,8 +22,6 @@ public class NearbyListActivity extends Activity {
 
         // Specify that tabs should be displayed in the action bar.
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-//        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(getString(R.string.action_bar_title));
 
         mNearbyPeer = new NearbyPeerFragment();

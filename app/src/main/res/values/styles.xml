@@ -8,8 +8,9 @@
     <style name="GreenActionBar"
            parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/tarsier_principal</item>
-        <item name="android:backgroundStacked">@color/tarsier_principal</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_tarsier</item>
         <item name="android:backgroundSplit">@color/tarsier_principal</item>
+        <item name="android:actionBarTabBarStyle">@color/tarsier_secondary</item>
     </style>
     <style name="boldText">
         <item name="android:textStyle">bold|italic</item>
