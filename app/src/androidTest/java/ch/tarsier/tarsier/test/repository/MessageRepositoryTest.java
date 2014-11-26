@@ -16,18 +16,18 @@ import ch.tarsier.tarsier.exception.UpdateException;
  */
 public class MessageRepositoryTest extends AndroidTestCase {
 
+    final private static byte[] USER_PUBLIC_KEY = new byte[] {1, 3, 3, 7};
+
     private MessageRepository mMessageRepository;
     private Message mDummyMessage;
-    private byte[] mUserPublicKey;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        Tarsier.app().reset();
+        // Tarsier.app().reset();
         mMessageRepository = Tarsier.app().getMessageRepository();
-        mUserPublicKey = Tarsier.app().getUserPreferences().getKeyPair().getPublicKey();
-        mDummyMessage = new Message(1, "test", mUserPublicKey, 1000);
+        mDummyMessage = new Message(1, "test", USER_PUBLIC_KEY, 1000);
     }
 
 
@@ -214,7 +214,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
     private void insertDummyMessage() {
         // makes sure that mDummyMessage is "clean"
-        mDummyMessage = new Message(1, "test", mUserPublicKey, 1000);
+        mDummyMessage = new Message(1, "test", USER_PUBLIC_KEY, 1000);
 
         try {
             mMessageRepository.insert(mDummyMessage);

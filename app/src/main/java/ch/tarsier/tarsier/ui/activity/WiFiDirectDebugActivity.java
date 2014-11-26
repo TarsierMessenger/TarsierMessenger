@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.network;
+package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -15,7 +15,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.network.server.TarsierMessagingManager;
+import ch.tarsier.tarsier.network.server.MessagingManager;
+import ch.tarsier.tarsier.ui.fragment.WiFiDirectGroupList;
 
 // Important note: This is currently an activity, it will later be a ran as a service so that it
 // can run in the background too.
@@ -39,7 +40,7 @@ public class WiFiDirectDebugActivity
 
     private WifiP2pManager.Channel mChannel;
 
-    private TarsierMessagingManager mReceiver;
+    private MessagingManager mReceiver;
 
     private WiFiDirectGroupList groupList;
 
@@ -130,7 +131,7 @@ public class WiFiDirectDebugActivity
     @Override
     public void onResume() {
         super.onResume();
-        mReceiver = new TarsierMessagingManager(this, mManager, mChannel, getMainLooper());
+        mReceiver = new MessagingManager(mManager, mChannel);
         registerReceiver(mReceiver, mIntentFilter);
     }
 

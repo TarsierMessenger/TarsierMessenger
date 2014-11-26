@@ -7,6 +7,6 @@ import android.os.Handler;
  */
 public interface MessageHandler {
 
-    public Handler getHandler();
+    public Handler getConnectionHandler();
 
 }

@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.network;
+package ch.tarsier.tarsier.ui.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -15,11 +15,12 @@ import java.util.List;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.network.MessagingInterface;
 
 /**
  * @author amirezza
  */
-public class ChatroomFragment extends Fragment implements ChatViewDelegate {
+public class ChatroomFragment extends Fragment {
 
     private MessagingInterface mMessengerDelegate;
 
@@ -58,16 +59,6 @@ public class ChatroomFragment extends Fragment implements ChatViewDelegate {
                     }
                 });
         return mView;
-    }
-
-    @Override
-    public void connected() {
-
-    }
-
-    @Override
-    public void receivedNewPeersList(List<Peer> peers) {
-
     }
 
     public void pushMessage(String readMessage) {

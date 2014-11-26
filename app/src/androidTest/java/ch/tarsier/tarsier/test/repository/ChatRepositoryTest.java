@@ -28,7 +28,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        Tarsier.app().reset();
+        // Tarsier.app().reset();
         mChatRepository = Tarsier.app().getChatRepository();
         mPeerRepository = Tarsier.app().getPeerRepository();
 
@@ -211,6 +211,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
         assertEquals("Jean", dummyChatFormDb.getHost().getUserName());
         assertEquals("New title", dummyChatFormDb.getTitle());
     }
+
 
     public void testInsertAndDeleteDummyMessage() {
         insertDummyChat();

@@ -1,11 +1,19 @@
 package ch.tarsier.tarsier;
 
+import com.squareup.otto.Bus;
+
 import android.app.Application;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pManager;
 
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
+import ch.tarsier.tarsier.domain.repository.UserRepository;
+import ch.tarsier.tarsier.event.MainThreadBus;
+import ch.tarsier.tarsier.network.server.MessagingManager;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 
 /**
@@ -21,6 +29,13 @@ public class Tarsier extends Application {
     private PeerRepository mPeerRepository;
     private ChatRepository mChatRepository;
     private MessageRepository mMessageRepository;
+    private UserRepository mUserRepository;
+
+    private WifiP2pManager mWifiP2pManager;
+    private WifiP2pManager.Channel mWifiP2pChannel;
+    private MessagingManager mMessagingManager;
+
+    private Bus mEventBus;
 
     public static Tarsier app() {
         return app;
@@ -31,7 +46,29 @@ public class Tarsier extends Application {
         super.onCreate();
 
         app = this;
+
+        initDatabase();
+        initNetwork();
+    }
+
+    private void initDatabase() {
         mDatabase = new Database(getApplicationContext());
+    }
+
+    public void initNetwork() {
+        mWifiP2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        mWifiP2pChannel = mWifiP2pManager.initialize(this, getMainLooper(), null);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        mMessagingManager = new MessagingManager(mWifiP2pManager, mWifiP2pChannel);
+        mMessagingManager.setEventBus(getEventBus());
+
+        registerReceiver(mMessagingManager, intentFilter);
     }
 
     public UserPreferences getUserPreferences() {
@@ -90,15 +127,35 @@ public class Tarsier extends Application {
         mMessageRepository = messageRepository;
     }
 
+    public Bus getEventBus() {
+        if (mEventBus == null) {
+            mEventBus = new MainThreadBus();
+        }
+
+        return mEventBus;
+    }
+
+    public void setEventBus(Bus eventBus) {
+        mEventBus = eventBus;
+    }
+
+    public UserRepository getUserRepository() {
+        if (mUserRepository == null) {
+            mUserRepository = new UserRepository();
+        }
+
+        return mUserRepository;
+    }
+
     // Reset the Tarsier.app() singleton [for testing purpose only]
     public void reset() {
-        setUserPreferences(null);
+        /*setUserPreferences(null);
         setDatabase(null);
 
         setPeerRepository(null);
         setChatRepository(null);
         setMessageRepository(null);
 
-        Tarsier.app().onCreate();
+        Tarsier.app().onCreate();*/
     }
 }

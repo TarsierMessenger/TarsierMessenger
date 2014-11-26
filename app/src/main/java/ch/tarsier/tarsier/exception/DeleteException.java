@@ -3,7 +3,7 @@ package ch.tarsier.tarsier.exception;
 /**
  * @author gluthier
  */
-public class DeleteException extends Exception {
+public class DeleteException extends DomainException {
 
     public DeleteException() {
         super();
