@@ -202,6 +202,10 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
 
     @Override
     public List<Peer> getPeersList() {
+        if (mConnection == null) {
+            return new ArrayList<Peer>();
+        }
+
         return mConnection.getPeersList();
     }
 
@@ -217,6 +221,10 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
 
     @Override
     public void setEventBus(Bus eventBus) {
+        if (eventBus == null) {
+            throw new IllegalArgumentException("Event bus cannot be null");
+        }
+
         mEventBus = eventBus;
         mEventBus.register(this);
     }
