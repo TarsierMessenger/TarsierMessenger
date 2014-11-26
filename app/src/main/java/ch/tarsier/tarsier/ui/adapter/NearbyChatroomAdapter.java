@@ -6,22 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.domain.model.ChatRoomSummary;
-import ch.tarsier.tarsier.domain.model.DiscussionSummary;
+import ch.tarsier.tarsier.domain.model.NearbyChatroomSummary;
 
 /**
  * Created by Marin on 23.11.2014.
  */
-public class ChatRoomsAdapter extends ArrayAdapter<ChatRoomSummary> {
-    private ChatRoomSummary[] mChatrooms;
+public class NearbyChatroomAdapter extends ArrayAdapter<NearbyChatroomSummary> {
+    private NearbyChatroomSummary[] mChatrooms;
     private int mLayoutResourceId;
     private Context mContext;
 
-    public ChatRoomsAdapter(Context context, int layoutResourceId, ChatRoomSummary[] chatrooms) {
+    public NearbyChatroomAdapter(Context context, int layoutResourceId, NearbyChatroomSummary[] chatrooms) {
         super(context, layoutResourceId, chatrooms);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
@@ -31,13 +29,13 @@ public class ChatRoomsAdapter extends ArrayAdapter<ChatRoomSummary> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ChatRoomSummaryHolder holder = null;
+        NearbyChatroomSummaryHolder holder = null;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             row = inflater.inflate(mLayoutResourceId, parent, false);
 
-            holder = new ChatRoomSummaryHolder();
+            holder = new NearbyChatroomSummaryHolder();
             //TODO check if row.getId() is the good id
             holder.mId = row.getId();
             holder.mName = (TextView) row.findViewById(R.id.nearbyChatRoomName);
@@ -46,14 +44,14 @@ public class ChatRoomsAdapter extends ArrayAdapter<ChatRoomSummary> {
 
             row.setTag(holder);
         } else {
-            holder = (ChatRoomSummaryHolder) row.getTag();
+            holder = (NearbyChatroomSummaryHolder) row.getTag();
         }
 
-        ChatRoomSummary chatRoomSummary = mChatrooms[position];
-        holder.mId = chatRoomSummary.getId();
-        holder.mName.setText(chatRoomSummary.getChatRoomName());
-        holder.mLastMessage.setText(chatRoomSummary.getChatRoomLastMessage());
-        holder.mNbPeers.setText("Participants : " + chatRoomSummary.getNbPeers());
+        NearbyChatroomSummary nearbyChatroomSummary = mChatrooms[position];
+        holder.mId = nearbyChatroomSummary.getId();
+        holder.mName.setText(nearbyChatroomSummary.getChatroomName());
+        holder.mLastMessage.setText(nearbyChatroomSummary.getChatroomLastMessage());
+        holder.mNbPeers.setText("Participants : " + nearbyChatroomSummary.getNbPeers());
 
         return row;
     }
@@ -61,7 +59,7 @@ public class ChatRoomsAdapter extends ArrayAdapter<ChatRoomSummary> {
     /**
      * ChatRoomSummaryHolder is the class containing the chatRoom's information
      */
-    private class ChatRoomSummaryHolder {
+    private class NearbyChatroomSummaryHolder {
         private int mId;
         private TextView mName;
         private TextView mLastMessage;

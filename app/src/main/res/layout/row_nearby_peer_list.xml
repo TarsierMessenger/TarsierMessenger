@@ -22,17 +22,6 @@
             android:src="@drawable/placeholder"
             android:layout_marginRight="5dp" />
 
-        <!--<ImageView-->
-            <!--android:id="@+id/mask"-->
-            <!--android:layout_width="48dp"-->
-            <!--android:layout_height="48dp"-->
-            <!--android:layout_alignTop="@id/nearbyPeerPicture"-->
-            <!--android:layout_alignBottom="@id/nearbyPeerPicture"-->
-            <!--android:layout_alignLeft="@id/nearbyPeerPicture"-->
-            <!--android:layout_alignRight="@id/nearbyPeerPicture"-->
-            <!--android:scaleType="fitXY"-->
-            <!--android:src="@drawable/mask" />-->
-
 
     </RelativeLayout>
 
@@ -45,6 +34,7 @@
             android:id="@+id/nearbyPeerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:textColor="@color/tarsier_font" />
 
         <TextView

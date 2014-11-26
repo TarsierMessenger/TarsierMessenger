@@ -3,24 +3,24 @@ package ch.tarsier.tarsier.domain.model;
 /**
  * Created by Marin on 23.11.2014.
  */
-public class ChatRoomSummary{
+public class NearbyChatroomSummary {
     private int mId;
-    private String mChatRoomName;
+    private String mNearbyChatroomName;
     private String mLastMessage;
     private int mNbPeers;
 
-    public ChatRoomSummary(int id, String name, String lastMessage, int nbPeers ){
+    public NearbyChatroomSummary(int id, String name, String lastMessage, int nbPeers) {
         mId=id;
-        mChatRoomName=name;
+        mNearbyChatroomName =name;
         mLastMessage=lastMessage;
         mNbPeers=nbPeers;
     }
 
     public int getId(){ return mId; }
 
-    public String getChatRoomName(){ return mChatRoomName; }
+    public String getChatroomName(){ return mNearbyChatroomName; }
 
-    public String getChatRoomLastMessage(){ return mLastMessage; }
+    public String getChatroomLastMessage(){ return mLastMessage; }
 
     public int getNbPeers(){ return mNbPeers; }
 }
