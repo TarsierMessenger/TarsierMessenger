@@ -24,14 +24,13 @@ import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ConnectedEvent;
+import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
-import ch.tarsier.tarsier.event.ReceivedPeersListEvent;
 import ch.tarsier.tarsier.exception.DomainException;
 import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.MessageHandler;
 import ch.tarsier.tarsier.network.MessagingInterface;
-import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.messages.MessageType;
 
@@ -169,7 +168,7 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
 
                 Log.d(WIFI_DIRECT_TAG, "Peer list updated: " + mPeers.toString());
 
-                mEventBus.post(new ReceivedPeersListEvent(getPeersList()));
+                mEventBus.post(new ReceivedChatroomPeersListEvent(getPeersList()));
 
                 if (mPeers.size() == 0) {
                     Log.d(WIFI_DIRECT_TAG, "No devices found");

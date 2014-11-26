@@ -5,4 +5,8 @@ package ch.tarsier.tarsier.event;
  */
 public class DisconnectedEvent {
 
+    public DisconnectedEvent() {
+
+    }
+
 }
