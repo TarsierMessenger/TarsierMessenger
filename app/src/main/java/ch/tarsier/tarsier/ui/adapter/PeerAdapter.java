@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
-
 import ch.tarsier.tarsier.util.BitmapFromPath;
 
 /**
