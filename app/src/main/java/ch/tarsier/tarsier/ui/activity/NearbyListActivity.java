@@ -34,12 +34,11 @@ public class NearbyListActivity extends Activity {
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 if (tab.getPosition() == 0) {
-                    ft.attach(mNearbyChatList);
+                    //ft.attach(mNearbyChatList);
                     ft.replace(R.id.inside_nearby,mNearbyChatList);
                 } else if (tab.getPosition() == 1) {
-                    ft.attach(mNearbyPeer);
+                    //ft.attach(mNearbyPeer);
                     ft.replace(R.id.inside_nearby,mNearbyPeer);
-                    //ft.add(R.id.inside_nearby,mNearbyChatList,"chatList");
                 }
             }
 
@@ -53,20 +52,6 @@ public class NearbyListActivity extends Activity {
         };
         actionBar.addTab(actionBar.newTab().setText("Chat rooms").setTabListener(tabListener));
         actionBar.addTab(actionBar.newTab().setText("Peers").setTabListener(tabListener));
-
-
-//        ChatRoomSummary[] chatRoomSummary = {
-//                new ChatRoomSummary(7,"SwEng","23:02",55),
-//                new ChatRoomSummary(6,"Sat Rocks","Yesterday",163),
-//                new ChatRoomSummary(5,"CO2","Friday",158),
-//                new ChatRoomSummary(4,"Grillades Préverenges","Wednesday",18),
-//                new ChatRoomSummary(3,"Hong Kong's umbrella movement","Tuesday",88954),
-//                new ChatRoomSummary(2,"M2 EPFL","16.10.14",32),
-//                new ChatRoomSummary(1,"TA meeting 1","14.10.14",8)
-//        };
-//
-//        final ListView nearbyChatRoomList = (ListView) findViewById(R.id.nearby_chat_list);
-
 
     }
 

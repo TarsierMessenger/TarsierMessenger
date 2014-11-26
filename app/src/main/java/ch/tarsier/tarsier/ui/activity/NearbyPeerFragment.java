@@ -17,8 +17,8 @@ import ch.tarsier.tarsier.ui.adapter.PeerAdapter;
  */
 public class NearbyPeerFragment extends Fragment {
 
-    Activity mActivity;
-    PeerAdapter mPeerAdapter;
+    private Activity mActivity;
+    private PeerAdapter mPeerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -17,8 +17,8 @@ import ch.tarsier.tarsier.ui.adapter.NearbyChatroomAdapter;
  */
 public class NearbyChatListFragment extends Fragment {
 
-    Activity mActivity;
-    NearbyChatroomAdapter mNearbyChatroomAdapter;
+    private Activity mActivity;
+    private NearbyChatroomAdapter mNearbyChatroomAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
