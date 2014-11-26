@@ -30,8 +30,7 @@ import ch.tarsier.tarsier.exception.UpdateException;
 public class ChatRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Chat.TABLE_NAME;
-
-    private static final String ID_DESCEND = Columns.Message._ID + " DESC";
+    private static final String ID_DESCEND = Columns.Chat._ID + " DESC";
 
     private PeerRepository mPeerRepository;
 

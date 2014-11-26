@@ -26,9 +26,9 @@ import ch.tarsier.tarsier.exception.UpdateException;
 public class MessageRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
-
     private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + " ASC";
     private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + " DESC";
+    private static final String ID_DESCEND = Columns.Message._ID + " DESC";
 
 
     public MessageRepository(Database database) {
@@ -220,6 +220,34 @@ public class MessageRepository extends AbstractRepository {
         } finally {
             cursor.close();
         }
+    }
+
+    public List<Message> fetchAllMessages() throws InvalidCursorException {
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null, null, null, null, null,
+                ID_DESCEND,
+                null
+        );
+
+        List<Message> messageList = new ArrayList<Message>();
+
+        if (!cursor.moveToFirst()) {
+            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+        }
+
+        do {
+            try {
+                messageList.add(buildFromCursor(cursor));
+            } catch (InvalidCursorException e) {
+                e.printStackTrace();
+            }
+        } while (cursor.moveToNext());
+
+        cursor.close();
+
+        return messageList;
     }
 
     private Message buildFromCursor(Cursor c) throws InvalidCursorException {

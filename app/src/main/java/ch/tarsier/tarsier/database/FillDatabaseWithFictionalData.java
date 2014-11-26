@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.database;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -13,7 +14,9 @@ import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
+import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 
 /**
@@ -21,7 +24,43 @@ import ch.tarsier.tarsier.exception.InvalidModelException;
  */
 public class FillDatabaseWithFictionalData {
 
+    private static void clear() {
+        ChatRepository chatRepository = Tarsier.app().getChatRepository();
+        PeerRepository peerRepository = Tarsier.app().getPeerRepository();
+        MessageRepository messageRepository = Tarsier.app().getMessageRepository();
+
+        List<Chat> chatList = null;
+        List<Message> messageList = null;
+        List<Peer> peerList = null;
+
+        try {
+            chatList = chatRepository.fetchAllChats();
+            messageList = messageRepository.fetchAllMessages();
+            peerList = peerRepository.fetchAllPeers();
+        } catch (InvalidCursorException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            for (Chat c : chatList) {
+                chatRepository.delete(c);
+            }
+            for (Message m : messageList) {
+                messageRepository.delete(m);
+            }
+            for (Peer p : peerList) {
+                peerRepository.delete(p);
+            }
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (DeleteException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void populate() {
+
+        clear();
 
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
         PeerRepository peerRepository = Tarsier.app().getPeerRepository();

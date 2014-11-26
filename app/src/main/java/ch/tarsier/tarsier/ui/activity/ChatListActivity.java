@@ -36,6 +36,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
+        Tarsier.app().reset();
         FillDatabaseWithFictionalData.populate();
 
         mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
