@@ -12,6 +12,7 @@ import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.domain.repository.UserRepository;
+import ch.tarsier.tarsier.event.MainThreadBus;
 import ch.tarsier.tarsier.network.server.MessagingManager;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 
@@ -128,7 +129,7 @@ public class Tarsier extends Application {
 
     public Bus getEventBus() {
         if (mEventBus == null) {
-            mEventBus = new Bus();
+            mEventBus = new MainThreadBus();
         }
 
         return mEventBus;
@@ -148,13 +149,13 @@ public class Tarsier extends Application {
 
     // Reset the Tarsier.app() singleton [for testing purpose only]
     public void reset() {
-        setUserPreferences(null);
+        /*setUserPreferences(null);
         setDatabase(null);
 
         setPeerRepository(null);
         setChatRepository(null);
         setMessageRepository(null);
 
-        Tarsier.app().onCreate();
+        Tarsier.app().onCreate();*/
     }
 }
