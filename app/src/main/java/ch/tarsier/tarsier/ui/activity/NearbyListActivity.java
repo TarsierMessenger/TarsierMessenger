@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.ui.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,8 +25,8 @@ public class NearbyListActivity extends Activity {
 
         // Specify that tabs should be displayed in the action bar.
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
 
         mNearbyPeer = new NearbyPeerFragment();
         mNearbyChatList = new NearbyChatListFragment();
@@ -35,8 +36,10 @@ public class NearbyListActivity extends Activity {
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 if (tab.getPosition() == 0) {
+                    ft.attach(mNearbyChatList);
                     ft.replace(R.id.inside_nearby,mNearbyChatList);
                 } else if (tab.getPosition() == 1) {
+                    ft.attach(mNearbyPeer);
                     ft.replace(R.id.inside_nearby,mNearbyPeer);
                     //ft.add(R.id.inside_nearby,mNearbyChatList,"chatList");
                 }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.prefs.UserPreferences;
+import ch.tarsier.tarsier.util.BitmapFromPath;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
@@ -179,15 +180,9 @@ public class HomeActivity extends Activity {
         String statusMessage = mUserPreferences.getStatusMessage();
         mStatusMessage.setText(statusMessage);
 
-        // check existence of picture profile
+        // check existence of picture profile. put default if non existent.
         String filePath = mUserPreferences.getPicturePath();
-
-        Bitmap profilePicture = BitmapFactory.decodeFile(filePath);
-
-        if (profilePicture == null) {
-            profilePicture = BitmapFactory.decodeResource(getResources(), R.drawable.add_picture_home);
-        }
-
+        Bitmap profilePicture = BitmapFromPath.getBitmapFromPath(this,filePath);
         mProfilePicture.setImageBitmap(profilePicture);
 
         validateFields();
@@ -206,12 +201,10 @@ public class HomeActivity extends Activity {
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-
         }
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-
         }
 
         @Override
