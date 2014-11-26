@@ -22,7 +22,6 @@
             android:src="@drawable/placeholder"
             android:layout_marginRight="5dp" />
 
-
     </RelativeLayout>
 
     <RelativeLayout
