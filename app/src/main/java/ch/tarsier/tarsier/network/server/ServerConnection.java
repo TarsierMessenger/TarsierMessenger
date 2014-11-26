@@ -263,12 +263,15 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                                     TarsierWireProtos.TarsierPublicMessage publicMessage;
                                     publicMessage = TarsierWireProtos.TarsierPublicMessage
                                             .parseFrom(serializedProtoBuffer);
+
                                     serverConnection.broadcastMessage(
                                             publicMessage.getSenderPublicKey().toByteArray(),
                                             publicMessage.getPlainText().toByteArray());
+
                                     handler.obtainMessage(MessageType.messageTypeFromData(buffer),
                                             serializedProtoBuffer).sendToTarget();
-                                    Log.d(TAG, "A public message is received.");
+
+                                    Log.d(TAG, "A public message is received: " + serializedProtoBuffer.toString());
                                     break;
                             }
                         }
@@ -282,6 +285,15 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                     serverConnection.peerDisconnected(peer);
                     serverConnection.broadcastUpdatedPeerList();
                 }
+
+                e.printStackTrace();
+
+            } catch (NullPointerException e) {
+                if (peer != null) {
+                    serverConnection.peerDisconnected(peer);
+                    serverConnection.broadcastUpdatedPeerList();
+                }
+
                 e.printStackTrace();
             }
         }
