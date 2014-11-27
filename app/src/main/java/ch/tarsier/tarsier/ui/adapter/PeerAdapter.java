@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+    
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
@@ -19,19 +22,30 @@ import ch.tarsier.tarsier.util.BitmapFromPath;
  */
 public class PeerAdapter extends ArrayAdapter<Peer> {
 
-    private Peer[] tablePeers;
+    private List<Peer> mPeerList;
     private Context mContext;
     private int mRowLayoutId;
 
-    public PeerAdapter(Context context, int resource, Peer[] peers) {
-
-        super(context, resource, peers);
-        //initiate with fictional peers - to be removed
-
-        tablePeers = peers;
+    public PeerAdapter(Context context, int resource) {
+        super(context, resource);
+        mPeerList = new ArrayList<Peer>();
         mContext = context;
         mRowLayoutId = resource;
 
+    }
+
+    public void setPeerList(List<Peer> newListPeer) {
+        mPeerList = newListPeer;
+    }
+
+    @Override
+    public Peer getItem(int position) {
+        return mPeerList.get(position);
+    }
+
+    @Override
+    public int getCount() {
+        return mPeerList.size();
     }
 
     @Override
@@ -56,7 +70,7 @@ public class PeerAdapter extends ArrayAdapter<Peer> {
             // recover the information
             peerHolder = (PeerHolder) row.getTag();
         }
-        Peer peerToShow = tablePeers[position];
+        Peer peerToShow = getItem(position);
         peerHolder.mUsername.setText(peerToShow.getUserName());
         peerHolder.mStatus.setText(peerToShow.getStatusMessage());
         peerHolder.mProfilePicture.setImageBitmap(

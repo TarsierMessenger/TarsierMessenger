@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.ui.adapter.PeerAdapter;
@@ -26,7 +29,8 @@ public class NearbyPeerFragment extends Fragment {
     }
 
     private void updatePeerAdapter() {
-        mPeerAdapter = new PeerAdapter(mActivity,R.layout.row_nearby_peer_list,getTablePeers());
+        mPeerAdapter = new PeerAdapter(mActivity,R.layout.row_nearby_peer_list);
+        mPeerAdapter.setPeerList(getListPeers());
     }
 
     @Override
@@ -44,14 +48,14 @@ public class NearbyPeerFragment extends Fragment {
         return rowView;
     }
 
-    private Peer[] getTablePeers() {
+    private List<Peer> getListPeers() {
         //TODO get the peers in the right way
-        Peer[] peers = new Peer[5];
-        peers[0] = new Peer("Ben","J'aime les cacahuetes");
-        peers[1] = new Peer("gluthier","J'aime les fraises");
-        peers[2] = new Peer("amirezza","J'aime les patates");
-        peers[3] = new Peer("Marin","J'aime les petits pois");
-        peers[4] = new Peer("Fred","J'aime les pommes");
+        List<Peer> peers = new ArrayList<Peer>();
+        peers.add(new Peer("Ben","J'aime les cacahuetes"));
+        peers.add(new Peer("gluthier","J'aime les fraises"));
+        peers.add(new Peer("amirezza","J'aime les patates"));
+        peers.add(new Peer("Marin","J'aime les petits pois"));
+        peers.add(new Peer("Fred","J'aime les pommes"));
         return peers;
     }
 }
