@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.ui.activity;
+package ch.tarsier.tarsier.ui.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;

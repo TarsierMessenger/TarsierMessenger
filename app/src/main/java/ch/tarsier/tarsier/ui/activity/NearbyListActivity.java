@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.ui.fragment.NearbyChatListFragment;
+import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
 
 public class NearbyListActivity extends Activity {
 
