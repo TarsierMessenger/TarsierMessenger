@@ -17,7 +17,7 @@ import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
-import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
 
@@ -78,8 +78,10 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         MessageRepository messageRepository = Tarsier.app().getMessageRepository();
         Message lastMessage = null;
         try {
-            lastMessage = messageRepository.getLastMessage();
+            lastMessage = messageRepository.getLastMessageOf(chat);
         } catch (NoSuchModelException e) {
+            e.printStackTrace();
+        } catch (InvalidModelException e) {
             e.printStackTrace();
         }
 

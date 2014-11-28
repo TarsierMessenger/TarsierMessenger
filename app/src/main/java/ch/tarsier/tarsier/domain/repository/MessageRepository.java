@@ -201,10 +201,22 @@ public class MessageRepository extends AbstractRepository {
         return msgs;
     }
 
-    public Message getLastMessage() throws NoSuchModelException {
+    public Message getLastMessageOf(Chat chat) throws NoSuchModelException, InvalidModelException {
+        if (chat == null) {
+            throw new InvalidModelException("Chat is null.");
+        }
+
+        if (chat.getId() < 0) {
+            throw new IllegalArgumentException("Chat ID is invalid.");
+        }
+
+        String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
+
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
-                null, null, null, null, null,
+                null,
+                whereClause,
+                null, null, null,
                 DATETIME_DESCEND,
                 null
         );

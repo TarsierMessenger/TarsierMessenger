@@ -41,14 +41,14 @@ public class ChatListActivity extends Activity implements EndlessListener {
         mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
         mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list);
 
-        //mEndlessChatListView.setLoadingView(R.layout.loading_layout);
-        //mEndlessChatListView.setChatListAdapter(mChatListAdapter);
-        //mEndlessChatListView.setEndlessListener(this);
+        mEndlessChatListView.setLoadingView(R.layout.loading_layout);
+        mEndlessChatListView.setChatListAdapter(mChatListAdapter);
+        mEndlessChatListView.setEndlessListener(this);
 
         this.loadData();
 
         mEndlessChatListView.setChatListAdapter(mChatListAdapter);
-/*
+
         mEndlessChatListView.setOnClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -59,7 +59,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
                 startActivity(chatIdIntent);
             }
         });
-*/
+
         // FIXME: Handle potential NullPointerException
         getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setDisplayShowHomeEnabled(false);
@@ -123,14 +123,11 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
         @Override
         protected void onPostExecute(List<Chat> chatList) {
-            super.onPostExecute(chatList);
-            //mEndlessChatListView.addNewData(chatList);
+            //super.onPostExecute(chatList);
 
             if (chatList != null) {
-                mChatListAdapter.addAllChats(chatList);
-                //mChatListAdapter.notifyDataSetChanged();
-            } else {
-                // database is empty
+                mEndlessChatListView.addNewData(chatList);
+                //mChatListAdapter.addAllChats(chatList);
             }
         }
     }

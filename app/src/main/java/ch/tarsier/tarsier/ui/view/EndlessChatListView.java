@@ -75,11 +75,11 @@ public class EndlessChatListView extends ListView implements AbsListView.OnScrol
     }
 
     public void setLoadingView(int resId) {
-/*
+
         LayoutInflater inflater = (LayoutInflater) super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mFooter = (View) inflater.inflate(resId, null);
         this.addFooterView(mFooter);
-*/
+
     }
 
     public void addNewData(List<Chat> data) {
@@ -87,7 +87,7 @@ public class EndlessChatListView extends ListView implements AbsListView.OnScrol
         this.removeFooterView(mFooter);
 
         if (data != null) {
-            mChatListAdapter.addAll(data);
+            mChatListAdapter.addAllChats(data);
             mChatListAdapter.notifyDataSetChanged();
         }
     }
