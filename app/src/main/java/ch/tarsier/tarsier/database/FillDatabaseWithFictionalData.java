@@ -146,42 +146,42 @@ public class FillDatabaseWithFictionalData {
 
         Chat chat2 = new Chat();
         chat2.setHost(marin);
-        chat1.setPrivate(true);
+        chat2.setPrivate(true);
 
         Chat chat3 = new Chat();
         chat3.setHost(frederic);
         chat3.setTitle("SwEng");
-        chat1.setPrivate(false);
+        chat3.setPrivate(false);
 
         Chat chat4 = new Chat();
         chat4.setHost(romain);
-        chat1.setPrivate(true);
+        chat4.setPrivate(true);
 
         Chat chat5 = new Chat();
         chat5.setHost(amirreza);
-        chat1.setPrivate(true);
+        chat5.setPrivate(true);
 
         Chat chat6 = new Chat();
         chat6.setHost(xavier);
-        chat1.setPrivate(true);
+        chat6.setPrivate(true);
 
         Chat chat7 = new Chat();
         chat7.setHost(yann);
-        chat1.setPrivate(true);
+        chat7.setPrivate(true);
 
         Chat chat8 = new Chat();
         chat8.setHost(romain);
         chat8.setTitle("Git helpdesk");
-        chat1.setPrivate(false);
+        chat8.setPrivate(false);
 
         Chat chat9 = new Chat();
         chat9.setHost(benjamin);
-        chat1.setPrivate(true);
+        chat9.setPrivate(true);
 
         Chat chat10 = new Chat();
         chat10.setHost(gabriel);
         chat10.setTitle("Saaaaat");
-        chat1.setPrivate(false);
+        chat10.setPrivate(false);
 
         try {
             chatRepository.insert(chat1);
@@ -349,7 +349,7 @@ public class FillDatabaseWithFictionalData {
         time4 += random.nextInt(oneMinute);
         messagesChat4.add(new Message(chat4Id, "stop spam", romainId, time4));
         time4 += random.nextInt(oneMinute);
-        messagesChat4.add(new Message(chat4Id, "ok", gabrielId, time4));
+        messagesChat4.add(new Message(chat4Id, "si tu insistes...", gabrielId, time4));
 
         try {
             for (Message m : messagesChat4) {
@@ -368,19 +368,19 @@ public class FillDatabaseWithFictionalData {
 
         messagesChat5.add(new Message(chat5Id, "la fête?", amirrezaId, time5));
         time5 += random.nextInt(oneHour);
-        messagesChat5.add(new Message(chat5Id, "oui", gabrielId, time5));
+        messagesChat5.add(new Message(chat5Id, "toujours", gabrielId, time5));
         time5 += random.nextInt(oneHour);
         messagesChat5.add(new Message(chat5Id, "La fête?", gabrielId, time5));
         time5 += random.nextInt(oneHour);
-        messagesChat5.add(new Message(chat5Id, "oui", amirrezaId, time5));
+        messagesChat5.add(new Message(chat5Id, "toujours", amirrezaId, time5));
         time5 += random.nextInt(oneHour);
         messagesChat5.add(new Message(chat5Id, "La fête?", amirrezaId, time5));
         time5 += random.nextInt(oneHour);
-        messagesChat5.add(new Message(chat5Id, "oui", gabrielId, time5));
+        messagesChat5.add(new Message(chat5Id, "toujours", gabrielId, time5));
         time5 += random.nextInt(oneHour);
         messagesChat5.add(new Message(chat5Id, "La fête?", gabrielId, time5));
         time5 += random.nextInt(oneHour);
-        messagesChat5.add(new Message(chat5Id, "oui", amirrezaId, time5));
+        messagesChat5.add(new Message(chat5Id, "toujours", amirrezaId, time5));
 
         try {
             for (Message m : messagesChat5) {

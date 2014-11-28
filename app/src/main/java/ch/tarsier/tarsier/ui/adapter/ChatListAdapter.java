@@ -26,6 +26,8 @@ import ch.tarsier.tarsier.util.DateUtil;
  */
 public class ChatListAdapter extends ArrayAdapter<Chat> {
 
+    private static final String INTRO_TEXT = ">";
+
     private Context mContext;
     private int mLayoutResourceId;
     private List<Chat> mChatList;
@@ -87,7 +89,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
 
         holder.mAvatarSrc.setImageResource(chat.getAvatarRessourceId());
         holder.mTitle.setText(chat.getTitle());
-        holder.mLastMessage.setText(lastMessage.getText());
+        holder.mLastMessage.setText(INTRO_TEXT + lastMessage.getText());
         holder.mHumanTime.setText(DateUtil.computeDateSeparator(lastMessage.getDateTime()));
 
         return row;
