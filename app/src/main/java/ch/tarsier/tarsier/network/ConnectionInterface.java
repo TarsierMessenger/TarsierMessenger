@@ -6,6 +6,8 @@ import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 
 /**
+ * Abstracts the network connection (typically implemented by ClientConnection and ServerConnection).
+ * This connection interface is to be used in the messaging manager.
  * @author amirezza
  */
 public interface ConnectionInterface {

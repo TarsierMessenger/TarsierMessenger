@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.network.server;
+package ch.tarsier.tarsier.network;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -31,6 +31,7 @@ import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.MessageHandler;
 import ch.tarsier.tarsier.network.MessagingInterface;
+import ch.tarsier.tarsier.network.server.ServerConnection;
 import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.messages.MessageType;
 

@@ -13,7 +13,7 @@ import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.domain.repository.UserRepository;
 import ch.tarsier.tarsier.event.MainThreadBus;
-import ch.tarsier.tarsier.network.server.MessagingManager;
+import ch.tarsier.tarsier.network.MessagingManager;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 
 /**
