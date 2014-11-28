@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.ui.fragment.NearbyChatListFragment;
@@ -35,16 +36,28 @@ public class NearbyListActivity extends Activity {
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 if (tab.getPosition() == 0) {
-                    //ft.attach(mNearbyChatList);
-                    ft.replace(R.id.inside_nearby, mNearbyChatList);
+
+                    ft.attach(mNearbyChatList);
+                    View menuNewChat = findViewById(R.id.create_new_chat_from_nearby);
+                    if (menuNewChat != null) {
+                        menuNewChat.setVisibility(View.VISIBLE);
+                    }
+                    //ft.replace(R.id.inside_nearby, mNearbyChatList);
                 } else if (tab.getPosition() == 1) {
-                    //ft.attach(mNearbyPeer);
-                    ft.replace(R.id.inside_nearby, mNearbyPeer);
+                    ft.attach(mNearbyPeer);
+                    View menuNewChat = findViewById(R.id.create_new_chat_from_nearby);
+                    if (menuNewChat != null) {
+                        menuNewChat.setVisibility(View.GONE);
+                    }
+                    //ft.replace(R.id.inside_nearby, mNearbyPeer);
                 }
             }
-
             public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
+                if (tab.getPosition() == 0) {
+                    ft.detach(mNearbyChatList);
+                } else if (tab.getPosition() == 1) {
+                    ft.detach(mNearbyPeer);
+                }
             }
 
             public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
