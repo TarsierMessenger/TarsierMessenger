@@ -3,6 +3,7 @@ package ch.tarsier.tarsier.ui.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,10 +36,10 @@ public class NearbyListActivity extends Activity {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 if (tab.getPosition() == 0) {
                     //ft.attach(mNearbyChatList);
-                    ft.replace(R.id.inside_nearby,mNearbyChatList);
+                    ft.replace(R.id.inside_nearby, mNearbyChatList);
                 } else if (tab.getPosition() == 1) {
                     //ft.attach(mNearbyPeer);
-                    ft.replace(R.id.inside_nearby,mNearbyPeer);
+                    ft.replace(R.id.inside_nearby, mNearbyPeer);
                 }
             }
 
@@ -50,8 +51,8 @@ public class NearbyListActivity extends Activity {
 
             }
         };
-        actionBar.addTab(actionBar.newTab().setText("Chat rooms").setTabListener(tabListener));
-        actionBar.addTab(actionBar.newTab().setText("Peers").setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_chatroom_name)).setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_peer_name)).setTabListener(tabListener));
 
     }
 
@@ -71,6 +72,9 @@ public class NearbyListActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.create_new_chat_from_nearby) {
+            Intent newChat = new Intent(this, NewChatRoomActivity.class);
+            startActivity(newChat);
         }
         return super.onOptionsItemSelected(item);
     }

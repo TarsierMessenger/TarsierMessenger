@@ -34,6 +34,11 @@ public class PeerAdapter extends ArrayAdapter<Peer> {
 
     }
 
+    @Override
+    public void clear() {
+        mPeerList.clear();
+    }
+
     public void setPeerList(List<Peer> newListPeer) {
         mPeerList = newListPeer;
     }
