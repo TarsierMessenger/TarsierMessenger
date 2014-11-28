@@ -19,5 +19,6 @@
 
     <!-- Network -->
     <string name="create_group_string">Create Group</string>
+    <string name="tab_peer_name">Peers</string>
 
 </resources>
