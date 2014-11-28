@@ -28,7 +28,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
     private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
 
-    private EndlessChatListView mEndlessChatListView;
+    //private EndlessChatListView mEndlessChatListView;
     private ChatListAdapter mChatListAdapter;
 
     @Override
@@ -38,12 +38,12 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
         FillDatabaseWithFictionalData.populate();
 
-        mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
+        //mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
         mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list);
 
-        mEndlessChatListView.setLoadingView(R.layout.loading_layout);
-        mEndlessChatListView.setChatListAdapter(mChatListAdapter);
-        mEndlessChatListView.setEndlessListener(this);
+        //mEndlessChatListView.setLoadingView(R.layout.loading_layout);
+        //mEndlessChatListView.setChatListAdapter(mChatListAdapter);
+        //mEndlessChatListView.setEndlessListener(this);
 
         this.loadData();
 /*
@@ -120,7 +120,12 @@ public class ChatListActivity extends Activity implements EndlessListener {
         @Override
         protected void onPostExecute(List<Chat> chatList) {
             super.onPostExecute(chatList);
-            mEndlessChatListView.addNewData(chatList);
+            //mEndlessChatListView.addNewData(chatList);
+
+            if (chatList != null) {
+                mChatListAdapter.addAll(chatList);
+                mChatListAdapter.notifyDataSetChanged();
+            }
         }
     }
 }

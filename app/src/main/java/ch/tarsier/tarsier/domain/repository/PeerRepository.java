@@ -69,7 +69,7 @@ public class PeerRepository extends AbstractRepository {
             throw new IllegalArgumentException("PublicKey is null.");
         }
 
-        String whereClause = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = " + publicKey;
+        String whereClause = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = \"" + publicKey.getBytes().toString() + "\"";
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
