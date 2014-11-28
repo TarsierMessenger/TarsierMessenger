@@ -91,6 +91,12 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         return row;
     }
 
+    public void addAllChats(List<Chat> chatList) {
+        this.addAll(chatList);
+        mChatList = chatList;
+        this.setNotifyOnChange(true);
+    }
+
     /**
      * DiscussionSummaryHolder is the class containing the discussion's information
      */

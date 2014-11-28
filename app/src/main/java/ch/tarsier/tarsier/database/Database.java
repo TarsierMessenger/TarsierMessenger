@@ -2,8 +2,6 @@ package ch.tarsier.tarsier.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.os.AsyncTask;
 
 /**
  * @author McMoudi
@@ -26,6 +24,8 @@ public class Database {
 
         mReadable = mDatabaseHelper.getReadableDatabase();
         mWritable = mDatabaseHelper.getWritableDatabase();
+
+        mIsReady = true;
     }
 
     public SQLiteDatabase getReadable() {

@@ -15,7 +15,9 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.ui.view.EndlessChatListView;
@@ -28,7 +30,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
     private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
 
-    //private EndlessChatListView mEndlessChatListView;
+    private EndlessChatListView mEndlessChatListView;
     private ChatListAdapter mChatListAdapter;
 
     @Override
@@ -36,9 +38,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
-        FillDatabaseWithFictionalData.populate();
-
-        //mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
+        mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
         mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list);
 
         //mEndlessChatListView.setLoadingView(R.layout.loading_layout);
@@ -46,6 +46,8 @@ public class ChatListActivity extends Activity implements EndlessListener {
         //mEndlessChatListView.setEndlessListener(this);
 
         this.loadData();
+
+        mEndlessChatListView.setChatListAdapter(mChatListAdapter);
 /*
         mEndlessChatListView.setOnClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -105,6 +107,8 @@ public class ChatListActivity extends Activity implements EndlessListener {
         protected List<Chat> doInBackground(Void... voids) {
             while (!Tarsier.app().getDatabase().isReady()) { }
 
+            FillDatabaseWithFictionalData.populate();
+
             ChatRepository chatRepository = Tarsier.app().getChatRepository();
 
             List<Chat> chatList = null;
@@ -123,8 +127,10 @@ public class ChatListActivity extends Activity implements EndlessListener {
             //mEndlessChatListView.addNewData(chatList);
 
             if (chatList != null) {
-                mChatListAdapter.addAll(chatList);
-                mChatListAdapter.notifyDataSetChanged();
+                mChatListAdapter.addAllChats(chatList);
+                //mChatListAdapter.notifyDataSetChanged();
+            } else {
+                // database is empty
             }
         }
     }
