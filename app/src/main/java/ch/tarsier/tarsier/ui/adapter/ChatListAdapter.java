@@ -55,7 +55,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ChatHolder holder = null;
+        ChatHolder holder;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();

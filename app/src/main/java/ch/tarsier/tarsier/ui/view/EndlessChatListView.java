@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 
@@ -55,7 +56,7 @@ public class EndlessChatListView extends ListView implements AbsListView.OnScrol
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
+/*
         if (getAdapter() ==  null) {
             return;
         }
@@ -70,19 +71,25 @@ public class EndlessChatListView extends ListView implements AbsListView.OnScrol
             mIsLoading = true;
             mEndlessListener.loadData();
         }
+*/
     }
 
     public void setLoadingView(int resId) {
+/*
         LayoutInflater inflater = (LayoutInflater) super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mFooter = (View) inflater.inflate(resId, null);
         this.addFooterView(mFooter);
+*/
     }
 
     public void addNewData(List<Chat> data) {
-        this.removeFooterView(mFooter);
-        mChatListAdapter.addAll(data);
-        mChatListAdapter.notifyDataSetChanged();
         mIsLoading = false;
+        this.removeFooterView(mFooter);
+
+        if (data != null) {
+            mChatListAdapter.addAll(data);
+            mChatListAdapter.notifyDataSetChanged();
+        }
     }
 
     public void setOnClickListener(OnItemClickListener onItemClickListener) {

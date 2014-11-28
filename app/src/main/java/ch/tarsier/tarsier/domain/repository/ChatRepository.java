@@ -149,7 +149,8 @@ public class ChatRepository extends AbstractRepository {
         List<Chat> chatList = new ArrayList<Chat>();
 
         if (!cursor.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+            // if the repository is empty, we return null
+            return null;
         }
 
         do {

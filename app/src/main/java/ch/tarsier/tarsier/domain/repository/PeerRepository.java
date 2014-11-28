@@ -173,7 +173,8 @@ public class PeerRepository extends AbstractRepository {
         List<Peer> peerList = new ArrayList<Peer>();
 
         if(!cursor.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+            // if the repository is empty, we return null
+            return null;
         }
 
         do {

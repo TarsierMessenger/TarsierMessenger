@@ -47,7 +47,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
         mEndlessChatListView.setEndlessListener(this);
 
         this.loadData();
-
+/*
         mEndlessChatListView.setOnClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -58,7 +58,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
                 startActivity(chatIdIntent);
             }
         });
-
+*/
         // FIXME: Handle potential NullPointerException
         getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setDisplayShowHomeEnabled(false);
@@ -68,6 +68,12 @@ public class ChatListActivity extends Activity implements EndlessListener {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.chat_list, menu);
         return true;
+    }
+
+    @Override
+    public void loadData() {
+        ChatLoader chatLoader = new ChatLoader();
+        chatLoader.execute();
     }
 
     @Override
@@ -94,16 +100,12 @@ public class ChatListActivity extends Activity implements EndlessListener {
         startActivity(openSettingsIntent);
     }
 
-    @Override
-    public void loadData() {
-        ChatLoader chatLoader = new ChatLoader();
-        chatLoader.execute();
-    }
-
     private class ChatLoader extends AsyncTask<Void, Void, List<Chat>> {
 
         @Override
         protected List<Chat> doInBackground(Void... voids) {
+            while (!Tarsier.app().getDatabase().isReady()) { }
+
             ChatRepository chatRepository = Tarsier.app().getChatRepository();
 
             List<Chat> chatList = null;
@@ -118,9 +120,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
         @Override
         protected void onPostExecute(List<Chat> chatList) {
-            if (chatList == null) {
-                throw new IllegalArgumentException("ChatList is null.");
-            }
             super.onPostExecute(chatList);
             mEndlessChatListView.addNewData(chatList);
         }

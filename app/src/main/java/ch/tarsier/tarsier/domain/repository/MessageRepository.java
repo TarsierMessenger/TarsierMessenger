@@ -234,7 +234,8 @@ public class MessageRepository extends AbstractRepository {
         List<Message> messageList = new ArrayList<Message>();
 
         if (!cursor.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+            // if the repository is empty, we return null
+            return null;
         }
 
         do {
