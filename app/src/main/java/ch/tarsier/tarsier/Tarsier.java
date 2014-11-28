@@ -146,16 +146,4 @@ public class Tarsier extends Application {
 
         return mUserRepository;
     }
-
-    // Reset the Tarsier.app() singleton [for testing purpose only]
-    public void reset() {
-        /*setUserPreferences(null);
-        setDatabase(null);
-
-        setPeerRepository(null);
-        setChatRepository(null);
-        setMessageRepository(null);
-
-        Tarsier.app().onCreate();*/
-    }
 }
