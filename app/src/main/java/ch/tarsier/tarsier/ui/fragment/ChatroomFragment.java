@@ -15,14 +15,14 @@ import java.util.List;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.network.MessagingInterface;
+import ch.tarsier.tarsier.network.MessagingManager;
 
 /**
  * @author amirezza
  */
 public class ChatroomFragment extends Fragment {
 
-    private MessagingInterface mMessengerDelegate;
+    private MessagingManager mMessengerDelegate;
 
     private View mView;
 
@@ -34,7 +34,7 @@ public class ChatroomFragment extends Fragment {
 
     private List<String> mItems = new ArrayList<String>();
 
-    public void setMessengerDelegate(MessagingInterface messagingInterface) {
+    public void setMessengerDelegate(MessagingManager messagingInterface) {
         mMessengerDelegate = messagingInterface;
     }
 

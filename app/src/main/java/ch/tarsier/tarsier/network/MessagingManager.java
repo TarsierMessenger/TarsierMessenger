@@ -30,7 +30,6 @@ import ch.tarsier.tarsier.exception.DomainException;
 import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.MessageHandler;
-import ch.tarsier.tarsier.network.MessagingInterface;
 import ch.tarsier.tarsier.network.server.ServerConnection;
 import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.messages.MessageType;
@@ -40,14 +39,14 @@ import static ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPubli
 /**
  * @author FredericJacobs
  */
-public class MessagingManager extends BroadcastReceiver implements MessagingInterface,
-        ConnectionInfoListener,
+public class MessagingManager extends BroadcastReceiver implements ConnectionInfoListener,
         Handler.Callback,
         MessageHandler {
 
     private static final String NETWORK_LAYER_TAG = "TarsierMessagingManager";
 
     private static final String WIFI_DIRECT_TAG = "WiFiDirect";
+    private static int SERVER_PORT = 8888;
 
     private WifiP2pManager mManager;
 
@@ -201,7 +200,6 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
         });
     }
 
-    @Override
     public List<Peer> getPeersList() {
         if (mConnection == null) {
             return new ArrayList<Peer>();
@@ -210,17 +208,14 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
         return mConnection.getPeersList();
     }
 
-    @Override
     public void broadcastMessage(String message) {
         mConnection.broadcastMessage(message.getBytes());
     }
 
-    @Override
     public void sendMessage(Peer peer, String message) {
         mConnection.sendMessage(peer, message.getBytes());
     }
 
-    @Override
     public void setEventBus(Bus eventBus) {
         if (eventBus == null) {
             throw new IllegalArgumentException("Event bus cannot be null");
