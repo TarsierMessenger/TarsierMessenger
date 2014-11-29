@@ -234,6 +234,7 @@ public class MessageRepository extends AbstractRepository {
         }
     }
 
+    // return null if there are no chats in the database
     public List<Message> fetchAllMessages() throws InvalidCursorException {
 
         Cursor cursor = getReadableDatabase().query(

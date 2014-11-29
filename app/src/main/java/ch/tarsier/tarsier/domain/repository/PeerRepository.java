@@ -161,6 +161,7 @@ public class PeerRepository extends AbstractRepository {
         peer.setId(-1);
     }
 
+    // return null if there are no chats in the database
     public List<Peer> fetchAllPeers() throws InvalidCursorException {
 
         Cursor cursor = getReadableDatabase().query(

@@ -105,8 +105,12 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
         @Override
         protected List<Chat> doInBackground(Void... voids) {
+            //TODO delete for develop
+            Tarsier.app().reset();
+
             while (!Tarsier.app().getDatabase().isReady()) { }
 
+            //TODO delete for develop
             FillDatabaseWithFictionalData.populate();
 
             ChatRepository chatRepository = Tarsier.app().getChatRepository();

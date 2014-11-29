@@ -137,6 +137,7 @@ public class ChatRepository extends AbstractRepository {
         chat.setId(-1);
     }
 
+    // return null if there are no chats in the database
     public List<Chat> fetchAllChats() throws InvalidCursorException {
 
         Cursor cursor = getReadableDatabase().query(
@@ -179,6 +180,11 @@ public class ChatRepository extends AbstractRepository {
             long hostId = c.getLong(c.getColumnIndexOrThrow(Columns.Chat.COLUMN_NAME_HOST_ID));
             boolean isPrivate = c.getInt(c.getColumnIndexOrThrow(
                     Columns.Chat.COLUMN_NAME_IS_PRIVATE)) != 0;
+
+            // if the hostId is invalid, we discard the chat
+            if (hostId < 0) {
+                return null;
+            }
 
             Peer host = mPeerRepository.findById(hostId);
 
