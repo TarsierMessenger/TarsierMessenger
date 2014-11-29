@@ -139,7 +139,7 @@ public class ChatRepository extends AbstractRepository {
     }
 
     // return null if there are no chats in the database
-    public List<Chat> fetchAllChats() throws InvalidCursorException {
+    public List<Chat> fetchAllChatsDescending() throws InvalidCursorException {
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,

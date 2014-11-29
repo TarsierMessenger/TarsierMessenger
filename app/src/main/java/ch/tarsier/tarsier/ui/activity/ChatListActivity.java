@@ -48,7 +48,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
         mChatListView.setChatListAdapter(mChatListAdapter);
 
-        mChatListView.setClickable(true);
         mChatListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -117,7 +116,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
             List<Chat> chatList = null;
             try {
-                chatList = chatRepository.fetchAllChats();
+                chatList = chatRepository.fetchAllChatsDescending();
             } catch (InvalidCursorException e) {
                 e.printStackTrace();
             }

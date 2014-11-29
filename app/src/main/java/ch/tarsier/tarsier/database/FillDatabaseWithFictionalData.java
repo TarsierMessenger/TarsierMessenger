@@ -1,7 +1,6 @@
 package ch.tarsier.tarsier.database;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -18,6 +17,7 @@ import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
+import ch.tarsier.tarsier.util.DateUtil;
 
 /**
  * @author gluthier
@@ -34,8 +34,8 @@ public class FillDatabaseWithFictionalData {
         List<Peer> peerList = null;
 
         try {
-            chatList = chatRepository.fetchAllChats();
-            messageList = messageRepository.fetchAllMessages();
+            chatList = chatRepository.fetchAllChatsDescending();
+            messageList = messageRepository.fetchAllMessagesDescending();
             peerList = peerRepository.fetchAllPeers();
         } catch (InvalidCursorException e) {
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class FillDatabaseWithFictionalData {
         MessageRepository messageRepository = Tarsier.app().getMessageRepository();
 
         // Variables to simulate the time
-        int time = (int) new Date().getTime();
+        long time = DateUtil.getNowTimestamp();
         int oneMinute = 60000; /* in milliseconds */
         int oneHour = 3600000; /* in milliseconds */
         int oneDay = 86400000; /* in milliseconds */
@@ -202,7 +202,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the first chat
         ArrayList<Message> messagesChat1 = new ArrayList<Message>(12);
-        int time1 = time - oneDay;
+        long time1 = time - oneDay;
         long chat1Id = chat1.getId();
 
         messagesChat1.add(new Message(chat1Id, "Yo ça va?", gabrielId, time1));
@@ -241,7 +241,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the second chat
         ArrayList<Message> messagesChat2 = new ArrayList<Message>(8);
-        long time2 = time - oneDay;
+        long time2 = time1 - oneDay;
         long chat2Id = chat2.getId();
 
         messagesChat2.add(new Message(chat2Id, "yo", marinId, time2));
@@ -272,7 +272,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the third chat
         ArrayList<Message> messagesChat3 = new ArrayList<Message>(18);
-        long time3 = time - oneDay;
+        long time3 = time2 - oneDay;
         long chat3Id = chat3.getId();
 
         messagesChat3.add(new Message(chat3Id, "Salut les gars, ça vous dit d'aller prendre une bière à sat?", amirrezaId, time3));
@@ -324,7 +324,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the fourth chat
         ArrayList<Message> messagesChat4 = new ArrayList<Message>(12);
-        long time4 = time - oneDay;
+        long time4 = time3 - oneDay;
         long chat4Id = chat4.getId();
 
         messagesChat4.add(new Message(chat4Id, "yoyo", gabrielId, time4));
@@ -363,7 +363,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the fifth chat
         ArrayList<Message> messagesChat5 = new ArrayList<Message>(8);
-        long time5 = time - oneDay;
+        long time5 = time4 - oneDay;
         long chat5Id = chat5.getId();
 
         messagesChat5.add(new Message(chat5Id, "la fête?", amirrezaId, time5));
@@ -394,7 +394,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the sixth chat
         ArrayList<Message> messagesChat6 = new ArrayList<Message>(12);
-        long time6 = time - oneDay;
+        long time6 = time5 - oneDay;
         long chat6Id = chat6.getId();
 
         messagesChat6.add(new Message(chat6Id, "Yo, tu peux m'envoyer pleins de messages pour tester l'affichage de l'app stp?", xavierId, time6));
@@ -438,7 +438,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the seventh chat
         ArrayList<Message> messagesChat7 = new ArrayList<Message>(10);
-        long time7 = time - oneDay;
+        long time7 = time6 - oneDay;
         long chat7Id = chat7.getId();
 
         messagesChat7.add(new Message(chat7Id, "t'es là?", gabrielId, time7));
@@ -473,7 +473,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the eighth chat
         ArrayList<Message> messagesChat8 = new ArrayList<Message>(10);
-        long time8 = time - oneDay;
+        long time8 = time7 - oneDay;
         long chat8Id = chat8.getId();
 
         messagesChat8.add(new Message(chat8Id, "git rebase", romainId, time8));
@@ -508,7 +508,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the ninth chat
         ArrayList<Message> messagesChat9 = new ArrayList<Message>(8);
-        long time9 = time - oneDay;
+        long time9 = time8 - oneDay;
         long chat9Id = chat9.getId();
 
         messagesChat9.add(new Message(chat9Id, "salut", benjaminId, time9));
@@ -539,7 +539,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the tenth chat
         ArrayList<Message> messagesChat10 = new ArrayList<Message>(24);
-        long time10 = time - oneDay;
+        long time10 = time9 - oneDay;
         long chat10Id = chat10.getId();
 
         messagesChat10.add(new Message(chat10Id, "Quel est le meilleur bar?", gabrielId, time10));

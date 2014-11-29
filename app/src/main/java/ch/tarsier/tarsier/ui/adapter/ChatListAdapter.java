@@ -91,6 +91,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         holder.mTitle.setText(chat.getTitle());
         holder.mLastMessage.setText(INTRO_TEXT + lastMessage.getText());
         holder.mHumanTime.setText(DateUtil.computeDateSeparator(lastMessage.getDateTime()));
+        //holder.mHumanTime.setText(String.valueOf(lastMessage.getDateTime()));
 
         return row;
     }

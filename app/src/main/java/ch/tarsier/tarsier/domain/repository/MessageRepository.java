@@ -26,10 +26,7 @@ import ch.tarsier.tarsier.exception.UpdateException;
 public class MessageRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
-    private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + " ASC";
     private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + " DESC";
-    private static final String ID_DESCEND = Columns.Message._ID + " DESC";
-
 
     public MessageRepository(Database database) {
         super(database);
@@ -236,12 +233,12 @@ public class MessageRepository extends AbstractRepository {
     }
 
     // return null if there are no chats in the database
-    public List<Message> fetchAllMessages() throws InvalidCursorException {
+    public List<Message> fetchAllMessagesDescending() throws InvalidCursorException {
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
                 null, null, null, null, null,
-                ID_DESCEND,
+                DATETIME_DESCEND,
                 null
         );
 
