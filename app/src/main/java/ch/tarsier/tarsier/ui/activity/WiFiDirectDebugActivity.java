@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.network.server.MessagingManager;
+import ch.tarsier.tarsier.network.MessagingManager;
 import ch.tarsier.tarsier.ui.fragment.WiFiDirectGroupList;
 
 // Important note: This is currently an activity, it will later be a ran as a service so that it
