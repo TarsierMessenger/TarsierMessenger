@@ -51,7 +51,8 @@ public class MessageRepository extends AbstractRepository {
         );
 
         if (!cursor.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+            // couldn't find a Message with this id
+            return null;
         }
 
         try {
@@ -247,13 +248,17 @@ public class MessageRepository extends AbstractRepository {
         List<Message> messageList = new ArrayList<Message>();
 
         if (!cursor.moveToFirst()) {
-            // if the repository is empty, we return null
-            return null;
+            // if the repository is empty, we return an empty list
+            cursor.close();
+            return messageList;
         }
 
         do {
             try {
-                messageList.add(buildFromCursor(cursor));
+                Message messageToBeAdded = buildFromCursor(cursor);
+                if (messageToBeAdded != null) {
+                    messageList.add(messageToBeAdded);
+                }
             } catch (InvalidCursorException e) {
                 e.printStackTrace();
             }

@@ -46,7 +46,8 @@ public class PeerRepository extends AbstractRepository {
         );
 
         if (!cursor.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+            // couldn't find a Message with this id
+            return null;
         }
 
         try {
@@ -174,13 +175,17 @@ public class PeerRepository extends AbstractRepository {
         List<Peer> peerList = new ArrayList<Peer>();
 
         if(!cursor.moveToFirst()) {
-            // if the repository is empty, we return null
-            return null;
+            // if the repository is empty, we return an empty list
+            cursor.close();
+            return peerList;
         }
 
         do {
             try {
-                peerList.add(buildFromCursor(cursor));
+                Peer peerToBeAdded = buildFromCursor(cursor);
+                if (peerToBeAdded != null) {
+                    peerList.add(peerToBeAdded);
+                }
             } catch (InvalidCursorException e) {
                 e.printStackTrace();
             } catch (NoSuchModelException e) {

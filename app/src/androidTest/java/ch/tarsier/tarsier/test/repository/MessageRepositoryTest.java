@@ -7,6 +7,7 @@ import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
@@ -44,6 +45,8 @@ public class MessageRepositoryTest extends AndroidTestCase {
                 assertEquals("Message ID is invalid.", e.getMessage());
             }catch (NoSuchModelException e) {
                 fail("Expecting IllegalArgumentException to be thrown first: " + e.getMessage());
+            } catch (InvalidCursorException e) {
+                fail("InvalidCursorException should not be thrown: " + e.getMessage());
             }
         }
     }
@@ -59,6 +62,8 @@ public class MessageRepositoryTest extends AndroidTestCase {
                 fail("IllegalArgumentException should not be thrown: " + e.getMessage());
             } catch (NoSuchModelException e) {
                 // good
+            } catch (InvalidCursorException e) {
+                fail("InvalidCursorException should not be thrown: " + e.getMessage());
             }
         }
     }
@@ -151,6 +156,8 @@ public class MessageRepositoryTest extends AndroidTestCase {
             fail("IllegalArgumentException should ne be thrown: " + e.getMessage());
         } catch (NoSuchModelException e) {
             fail("NoSuchModelException should not be thrown: " + e.getMessage());
+        } catch (InvalidCursorException e) {
+            fail("InvalidCursorException should not be thrown: " + e.getMessage());
         }
 
         assertNotNull(dummyMessageFromDb);
@@ -188,6 +195,8 @@ public class MessageRepositoryTest extends AndroidTestCase {
             fail("IllegalArgumentException should ne be thrown: " + e.getMessage());
         } catch (NoSuchModelException e) {
             fail("NoSuchModelException should not be thrown: " + e.getMessage());
+        } catch (InvalidCursorException e) {
+            fail("InvalidCursorException should not be thrown: " + e.getMessage());
         }
 
         assertNotNull(dummyMessageFromDb);
