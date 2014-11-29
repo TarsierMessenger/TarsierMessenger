@@ -202,17 +202,17 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the first chat
         ArrayList<Message> messagesChat1 = new ArrayList<Message>(12);
-        long time1 = time - oneDay;
+        long time1 = time - oneHour;
         long chat1Id = chat1.getId();
 
         messagesChat1.add(new Message(chat1Id, "Yo ça va?", gabrielId, time1));
         time1 += random.nextInt(oneMinute);
         messagesChat1.add(new Message(chat1Id, "ça avance le projet?", gabrielId, time1));
-        time1 += random.nextInt(oneHour);
+        time1 += random.nextInt(oneMinute);
         messagesChat1.add(new Message(chat1Id, "Oui ça avance bien, on a presque fini notre partie!", fredericId, time1));
-        time1 += random.nextInt(oneHour);
+        time1 += random.nextInt(oneMinute);
         messagesChat1.add(new Message(chat1Id, "Excellent :)", gabrielId, time1));
-        time1 += random.nextInt(oneHour);
+        time1 += random.nextInt(oneMinute);
         messagesChat1.add(new Message(chat1Id, "On va bosser à sat si jamais tu veux venir", fredericId, time1));
         time1 += random.nextInt(oneMinute);
         messagesChat1.add(new Message(chat1Id, "Volontiers!", gabrielId, time1));
@@ -241,7 +241,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the second chat
         ArrayList<Message> messagesChat2 = new ArrayList<Message>(8);
-        long time2 = time1 - oneDay;
+        long time2 = time1 - oneHour;
         long chat2Id = chat2.getId();
 
         messagesChat2.add(new Message(chat2Id, "yo", marinId, time2));
@@ -272,7 +272,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the third chat
         ArrayList<Message> messagesChat3 = new ArrayList<Message>(18);
-        long time3 = time2 - oneDay;
+        long time3 = time2 - oneHour;
         long chat3Id = chat3.getId();
 
         messagesChat3.add(new Message(chat3Id, "Salut les gars, ça vous dit d'aller prendre une bière à sat?", amirrezaId, time3));

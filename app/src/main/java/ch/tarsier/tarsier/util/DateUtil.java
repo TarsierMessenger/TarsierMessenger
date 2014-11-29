@@ -29,7 +29,7 @@ public class DateUtil {
 
         Format format;
         if (timestamp >= todayTimestamp) { // today
-            return "Today";
+            return computeHour(timestamp);
         } else if (timestamp >= yesterdayTimestamp) { // yesterday
             return "Yesterday";
         } else if (timestamp >= weekTimestamp) { // one week ago

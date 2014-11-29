@@ -18,9 +18,9 @@ public class ChatLastMessageDateSorter implements Comparator<Chat> {
         long timeChat2 = getTimeLastMessageOf(chat2);
 
         if (timeChat1 > timeChat2) {
-            return 1;
-        } else if (timeChat1 < timeChat2) {
             return -1;
+        } else if (timeChat1 < timeChat2) {
+            return 1;
         } else {
             return 0;
         }
