@@ -20,7 +20,7 @@ public class DateUtilTest extends AndroidTestCase {
         //Set the time to now
         long timestamp = DateUtil.getNowTimestamp();
         String dateSeparator = DateUtil.computeDateSeparator(timestamp);
-        assertEquals("Today", dateSeparator);
+        assertEquals(DateUtil.computeHour(timestamp), dateSeparator);
 
         // Set the time to yesterday
         Calendar calendar = Calendar.getInstance();

@@ -19,7 +19,7 @@
             android:layout_alignParentLeft="true"
             android:scaleType="fitCenter"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/placeholder"
+            android:src="@drawable/tarsier_placeholder"
             android:layout_marginRight="5dp" />
 
     </RelativeLayout>
