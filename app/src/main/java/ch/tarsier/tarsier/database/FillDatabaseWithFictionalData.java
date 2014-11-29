@@ -424,7 +424,7 @@ public class FillDatabaseWithFictionalData {
         time6 += random.nextInt(oneMinute);
         messagesChat6.add(new Message(chat6Id, "Dis moi si tu veux plus de trucs...", gabrielId, time6));
         time6 += random.nextInt(oneMinute);
-        messagesChat6.add(new Message(chat6Id, "J'ai pas trop d'inspirations^^", gabrielId, time6));
+        messagesChat6.add(new Message(chat6Id, "J'ai pas trop d'inspiration^^", gabrielId, time6));
 
         try {
             for (Message m : messagesChat6) {

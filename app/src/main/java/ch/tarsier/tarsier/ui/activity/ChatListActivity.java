@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -15,12 +16,10 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
-import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
-import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.ui.view.EndlessChatListView;
+import ch.tarsier.tarsier.ui.view.ChatListView;
 import ch.tarsier.tarsier.ui.view.EndlessListener;
 
 /**
@@ -30,7 +29,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
     private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
 
-    private EndlessChatListView mEndlessChatListView;
+    private ChatListView mChatListView;
     private ChatListAdapter mChatListAdapter;
 
     @Override
@@ -38,25 +37,26 @@ public class ChatListActivity extends Activity implements EndlessListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
-        mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
+        mChatListView = (ChatListView) findViewById(R.id.chat_list);
         mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list);
 
-        mEndlessChatListView.setLoadingView(R.layout.loading_layout);
-        mEndlessChatListView.setChatListAdapter(mChatListAdapter);
-        mEndlessChatListView.setEndlessListener(this);
+        mChatListView.setLoadingView(R.layout.loading_layout);
+        mChatListView.setChatListAdapter(mChatListAdapter);
+        mChatListView.setEndlessListener(this);
 
         this.loadData();
 
-        mEndlessChatListView.setChatListAdapter(mChatListAdapter);
+        mChatListView.setChatListAdapter(mChatListAdapter);
 
-        mEndlessChatListView.setOnClickListener(new AdapterView.OnItemClickListener() {
+        mChatListView.setClickable(true);
+        mChatListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent chatIdIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                chatIdIntent.putExtra(CHAT_MESSAGE, mChatListAdapter.getItemId(i));
+                chatIdIntent.putExtra(CHAT_MESSAGE, mChatListAdapter.getItemId(position));
 
-                startActivity(chatIdIntent);
+                Toast.makeText(getBaseContext(), "Chat id: " + mChatListAdapter.getItemId(position), Toast.LENGTH_SHORT).show();
+                //startActivity(chatIdIntent);
             }
         });
 
@@ -127,11 +127,10 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
         @Override
         protected void onPostExecute(List<Chat> chatList) {
-            //super.onPostExecute(chatList);
+            super.onPostExecute(chatList);
 
             if (chatList != null) {
-                mEndlessChatListView.addNewData(chatList);
-                //mChatListAdapter.addAllChats(chatList);
+                mChatListView.addNewData(chatList);
             }
         }
     }
