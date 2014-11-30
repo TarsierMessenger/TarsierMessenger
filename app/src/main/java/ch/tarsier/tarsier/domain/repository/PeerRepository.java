@@ -60,7 +60,7 @@ public class PeerRepository extends AbstractRepository {
     }
 
     public Peer findByPublicKey(byte[] publicKey)
-            throws IllegalArgumentException, NoSuchModelException {
+            throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
         if (publicKey == null) {
             throw new IllegalArgumentException("PublicKey is null.");
         }
@@ -69,7 +69,7 @@ public class PeerRepository extends AbstractRepository {
     }
 
     public Peer findByPublicKey(PublicKey publicKey)
-            throws IllegalArgumentException, NoSuchModelException {
+            throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
 
         if (publicKey == null) {
             throw new IllegalArgumentException("PublicKey is null.");
