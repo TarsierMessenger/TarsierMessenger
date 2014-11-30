@@ -78,6 +78,11 @@ public class ChatRepository extends AbstractRepository {
                 "1"
         );
 
+        if (!cursor.moveToFirst()) {
+            // couldn't find a Message with this id
+            return null;
+        }
+
         try {
             return buildFromCursor(cursor);
         } catch (InvalidCursorException e) {
