@@ -180,7 +180,7 @@ public class MessageRepository extends AbstractRepository {
                 null, null, null,
                 DATETIME_DESCEND);
 
-        if (cursor.getCount() <= 0) {
+        if (!cursor.moveToFirst()) {
             return new ArrayList<Message>();
         }
 
