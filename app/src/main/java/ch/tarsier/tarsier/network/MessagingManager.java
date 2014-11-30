@@ -3,6 +3,7 @@ package ch.tarsier.tarsier.network;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,6 +27,8 @@ import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ConnectedEvent;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
+import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
+import ch.tarsier.tarsier.event.RequestListNearbyPeerEvent;
 import ch.tarsier.tarsier.exception.DomainException;
 import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.network.ConnectionInterface;
@@ -202,12 +205,26 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     public List<Peer> getPeersList() {
         if (mConnection == null) {
-            return new ArrayList<Peer>();
+            //FIXME Testing to show something on NearbyListActivity.
+            Log.d("Connection","mConnection is null");
+            List<Peer> peerList = new ArrayList<Peer>();
+            peerList.add(new Peer("ben", "lalala"));
+            return peerList;
         }
 
         return mConnection.getPeersList();
     }
 
+    @Subscribe
+    public void onRecievedRequestListPeer(RequestListNearbyPeerEvent event) {
+        Log.d("RequestList", "List is requested");
+        if (mEventBus != null) {
+            mEventBus.post(new ReceivedNearbyPeersListEvent(getPeersList()));
+
+        }
+    }
+
+    @Override
     public void broadcastMessage(String message) {
         mConnection.broadcastMessage(message.getBytes());
     }

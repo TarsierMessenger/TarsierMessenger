@@ -84,18 +84,6 @@ public class NearbyListActivity extends Activity {
 
     }
 
-    @Subscribe
-    public void receivedNewPeersList(ReceivedNearbyPeersListEvent event) {
-        PeerAdapter peerAdapter = mNearbyPeer.getPeerAdapter();
-        peerAdapter.setPeerList(event.getPeers());
-        Log.d("EventOnNearbyActivity","size of list of peers :" + peerAdapter.getCount());
-        FragmentTransaction ft = mFragmentManager.beginTransaction();
-        ft.attach(mNearbyPeer);
-        ft.commit();
-        //mPeerAdapter.clear();
-        //mPeerAdapter.setPeerList(event.getPeers());
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

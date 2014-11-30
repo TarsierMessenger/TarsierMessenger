@@ -63,12 +63,6 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
         mEventBus.post(new ReceivedNearbyPeersListEvent(peerList));
         peerList.add(ben);
         mEventBus.post(new ReceivedNearbyPeersListEvent(peerList));
-
-
-        //onView(withText(R.string.tab_chatroom_name)).perform(click());
-        //onData(allOf(is(instanceOf(Peer.class)),);
-        //onData(allOf(is(instanceOf(Peer.class)), hasItem(ben))).perform(click());
-        //onView(withId(R.id.inside_nearby)).check(matches(withChild(withId(R.id.nearby_peer_list))));
     }
 
 }
