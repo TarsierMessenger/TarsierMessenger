@@ -28,21 +28,12 @@ public class NearbyPeerFragment extends Fragment {
 
     private Activity mActivity;
     private PeerAdapter mPeerAdapter;
-    private int count =0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Tarsier.app().getEventBus().register(this);
         mPeerAdapter = new PeerAdapter(mActivity,R.layout.row_nearby_peer_list);
         //debug
-    }
-
-    @Subscribe
-    public void receivedNewPeersList(ReceivedNearbyPeersListEvent event) {
-        mPeerAdapter.clear();
-        mPeerAdapter.setPeerList(event.getPeers());
-        Log.d("EventRecieved", "The event has been recieved");
     }
 
     @Override
@@ -62,14 +53,18 @@ public class NearbyPeerFragment extends Fragment {
         return rowView;
     }
 
+    public PeerAdapter getPeerAdapter() {
+        return mPeerAdapter;
+    }
+
     private List<Peer> getListPeers() {
         //TODO get the peers in the right way
         List<Peer> peers = new ArrayList<Peer>();
-        peers.add(new Peer("Ben", "J'aime les cacahuetes"));
-        peers.add(new Peer("gluthier", "J'aime les fraises"));
-        peers.add(new Peer("amirezza", "J'aime les patates"));
-        peers.add(new Peer("Marin", "J'aime les petits pois"));
-        peers.add(new Peer("Fred", "J'aime les pommes"));
+//        peers.add(new Peer("Ben", "J'aime les cacahuetes"));
+//        peers.add(new Peer("gluthier", "J'aime les fraises"));
+//        peers.add(new Peer("amirezza", "J'aime les patates"));
+//        peers.add(new Peer("Marin", "J'aime les petits pois"));
+//        peers.add(new Peer("Fred", "J'aime les pommes"));
 
 //            peers.add(new Peer("Benpac","I am immortal"));
 //            peers.add(new Peer("Romac", "Shut up ben"));
