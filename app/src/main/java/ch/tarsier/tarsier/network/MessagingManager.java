@@ -9,6 +9,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
+import android.net.wifi.WpsInfo;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
@@ -24,7 +26,9 @@ import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.event.ConnectToDeviceEvent;
 import ch.tarsier.tarsier.event.ConnectedEvent;
+import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
@@ -80,6 +84,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         Log.d(WIFI_DIRECT_TAG, "onConnectionInfoAvailable");
 
         if (mConnection == null) {
+
             if (p2pInfo.isGroupOwner) {
                 Log.d(WIFI_DIRECT_TAG, "Connected as group owner");
 
@@ -104,8 +109,40 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         }
     }
 
+    public void connectToDevice(WifiP2pDevice device) {
+        WifiP2pConfig config = new WifiP2pConfig();
+        config.deviceAddress = device.deviceAddress;
+        config.wps.setup = WpsInfo.PBC;
+        config.groupOwnerIntent = 15;
+
+        mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Log.d(NETWORK_LAYER_TAG, "Connecting to device");
+            }
+
+            @Override
+            public void onFailure(int errorCode) {
+                Log.d(NETWORK_LAYER_TAG, "Failed connecting to service");
+            }
+        });
+    }
+
+    public void createGroup() {
+        mManager.createGroup(mChannel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Log.d(NETWORK_LAYER_TAG, "Created a new group");
+            }
+
+            @Override
+            public void onFailure(int errorCode) {
+                Log.d(NETWORK_LAYER_TAG, "Failed to create a group");
+            }
+        });
+    }
+
     @Override
-    // BroadcastReceiver inherited method
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
@@ -151,7 +188,6 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
     }
 
     private void createPeerListener() {
-
         peerListListener = new WifiP2pManager.PeerListListener() {
             @Override
             public synchronized void onPeersAvailable(WifiP2pDeviceList peersList) {
@@ -293,6 +329,16 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         } else {
             Log.d(NETWORK_LAYER_TAG, "Cannot send message that is neither private nor public.");
         }
+    }
+
+    @Subscribe
+    public void onConnectToDeviceEvent(ConnectToDeviceEvent event) {
+        connectToDevice(event.getDevice());
+    }
+
+    @Subscribe
+    public void onCreateGroupEvent(CreateGroupEvent event) {
+        createGroup();
     }
 
     @Override
