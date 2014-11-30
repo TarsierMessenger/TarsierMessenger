@@ -2,14 +2,21 @@ package ch.tarsier.tarsier.ui.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.squareup.otto.Subscribe;
+
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
+import ch.tarsier.tarsier.ui.adapter.PeerAdapter;
 import ch.tarsier.tarsier.ui.fragment.NearbyChatListFragment;
 import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
 
@@ -18,11 +25,15 @@ public class NearbyListActivity extends Activity {
     private NearbyPeerFragment mNearbyPeer;
     private NearbyChatListFragment mNearbyChatList;
 
+    private FragmentManager mFragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final ActionBar actionBar = getActionBar();
         super.onCreate(savedInstanceState);
+        Tarsier.app().getEventBus().register(this);
         setContentView(R.layout.activity_nearby_list);
+        mFragmentManager = getFragmentManager();
 
         // Specify that tabs should be displayed in the action bar.
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -31,32 +42,36 @@ public class NearbyListActivity extends Activity {
         mNearbyPeer = new NearbyPeerFragment();
         mNearbyChatList = new NearbyChatListFragment();
 
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        ft.add(R.id.inside_nearby,mNearbyPeer,"peer");
+        ft.add(R.id.inside_nearby,mNearbyChatList,"chatList");
+
 
         // Create a tab listener that is called when the user changes tabs.
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 if (tab.getPosition() == 0) {
 
-                    ft.attach(mNearbyChatList);
+                    //ft.attach(mNearbyChatList);
                     View menuNewChat = findViewById(R.id.create_new_chat_from_nearby);
                     if (menuNewChat != null) {
                         menuNewChat.setVisibility(View.VISIBLE);
                     }
-                    //ft.replace(R.id.inside_nearby, mNearbyChatList);
+                    ft.replace(R.id.inside_nearby, mNearbyChatList);
                 } else if (tab.getPosition() == 1) {
-                    ft.attach(mNearbyPeer);
+                    //ft.attach(mNearbyPeer);
                     View menuNewChat = findViewById(R.id.create_new_chat_from_nearby);
                     if (menuNewChat != null) {
                         menuNewChat.setVisibility(View.GONE);
                     }
-                    //ft.replace(R.id.inside_nearby, mNearbyPeer);
+                    ft.replace(R.id.inside_nearby, mNearbyPeer);
                 }
             }
             public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
                 if (tab.getPosition() == 0) {
-                    ft.detach(mNearbyChatList);
+                    //ft.detach(mNearbyChatList);
                 } else if (tab.getPosition() == 1) {
-                    ft.detach(mNearbyPeer);
+                    //ft.detach(mNearbyPeer);
                 }
             }
 
@@ -67,6 +82,18 @@ public class NearbyListActivity extends Activity {
         actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_chatroom_name)).setTabListener(tabListener));
         actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_peer_name)).setTabListener(tabListener));
 
+    }
+
+    @Subscribe
+    public void receivedNewPeersList(ReceivedNearbyPeersListEvent event) {
+        PeerAdapter peerAdapter = mNearbyPeer.getPeerAdapter();
+        peerAdapter.setPeerList(event.getPeers());
+        Log.d("EventOnNearbyActivity","size of list of peers :" + peerAdapter.getCount());
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        ft.attach(mNearbyPeer);
+        ft.commit();
+        //mPeerAdapter.clear();
+        //mPeerAdapter.setPeerList(event.getPeers());
     }
 
 
