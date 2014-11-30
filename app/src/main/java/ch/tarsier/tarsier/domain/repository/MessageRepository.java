@@ -27,8 +27,8 @@ public class MessageRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
 
-    private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + "ASC";
-    private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + "DESC";
+    private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + " ASC";
+    private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + " DESC";
 
 
     public MessageRepository(Database database) {

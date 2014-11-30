@@ -13,13 +13,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
 import ch.tarsier.tarsier.exception.InsertException;
-import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
@@ -47,7 +45,7 @@ public class ChatActivity extends Activity implements EndlessListener {
     private static final String EXTRA_CHAT_ID = "chatId";
 
     private static Point windowSize;
-    private int mChatId;
+    private long mChatId;
     private BubbleAdapter mListViewAdapter;
     private EndlessListView mListView;
     private EditText mMessageToBeSend;
@@ -90,13 +88,6 @@ public class ChatActivity extends Activity implements EndlessListener {
         setContentView(R.layout.activity_chat);
         enableSendMessageImageButton(false);
 
-        Intent startingIntent = getIntent();
-        mChatId = startingIntent.getIntExtra(EXTRA_CHAT_ID, -1);
-
-        if (mChatId == -1) {
-            // FIXME: Handle this
-        }
-
         mListView = (EndlessListView) findViewById(R.id.list);
         mListView.setLoadingView(R.layout.loading_layout);
 
@@ -104,9 +95,11 @@ public class ChatActivity extends Activity implements EndlessListener {
         mListView.setBubbleAdapter(mListViewAdapter);
         mListView.setEndlessListener(this);
 
+        /*Intent startingIntent = getIntent();
+        mChatId = startingIntent.getIntExtra(EXTRA_CHAT_ID, -1);*/
+
         DatabaseLoader dbl = new DatabaseLoader();
-        List<Message> firstMessages = dbl.doInBackground();
-        dbl.onPostExecute(firstMessages);
+        dbl.execute();
 
         mMessageToBeSend = (EditText) findViewById(R.id.message_to_send);
 
@@ -124,6 +117,14 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         @Override
         protected List<Message> doInBackground(Void... params) {
+            while (!Tarsier.app().getDatabase().isReady()) { }
+
+            mChatId = FillDatabaseWithFictionalData.getChat10Id();
+
+            if (mChatId == -1) {
+                // FIXME: Handle this
+            }
+
             long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
 
             List<Message> newMessages = null;

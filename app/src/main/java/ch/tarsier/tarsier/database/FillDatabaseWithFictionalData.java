@@ -5,10 +5,12 @@ import java.util.Date;
 import java.util.Random;
 
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.crypto.EC25519;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.User;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
@@ -20,6 +22,8 @@ import ch.tarsier.tarsier.exception.InvalidModelException;
  */
 public class FillDatabaseWithFictionalData {
 
+    private static Chat mChat10;
+
     public static void populate() {
 
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
@@ -27,7 +31,7 @@ public class FillDatabaseWithFictionalData {
         MessageRepository messageRepository = Tarsier.app().getMessageRepository();
 
         // Variables to simulate the time
-        int time = (int) new Date().getTime();
+        long time = new Date().getTime();
         int oneMinute = 60000; /* in milliseconds */
         int oneHour = 3600000; /* in milliseconds */
         int oneDay = 86400000; /* in milliseconds */
@@ -36,28 +40,36 @@ public class FillDatabaseWithFictionalData {
         //Generate the user
         User gabriel = new User();
         gabriel.setUserName("Gabriel Luthier");
+        gabriel.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
 
         //Generate the peers
         Peer amirreza = new Peer();
         amirreza.setUserName("Amirreza Bahreini");
+        amirreza.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
 
         Peer benjamin = new Peer();
         benjamin.setUserName("Benjamin Paccaud");
+        benjamin.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
 
         Peer frederic = new Peer();
         frederic.setUserName("Frederic Jacobs");
+        frederic.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
 
         Peer marin = new Peer();
         marin.setUserName("Marin-Jerry Nicolini");
+        marin.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
 
         Peer romain = new Peer();
         romain.setUserName("Romain Ruetschi");
+        romain.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
 
         Peer xavier = new Peer();
         xavier.setUserName("Xavier Willemin");
+        xavier.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
 
         Peer yann = new Peer();
         yann.setUserName("Yann Mahmoudi");
+        yann.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
 
         byte[] amirrezaId = amirreza.getPublicKey().getBytes();
         byte[] benjaminId = benjamin.getPublicKey().getBytes();
@@ -122,9 +134,9 @@ public class FillDatabaseWithFictionalData {
         chat9.setHost(benjamin);
         chat1.setPrivate(true);
 
-        Chat chat10 = new Chat();
-        chat10.setHost(gabriel);
-        chat10.setTitle("Saaaaat");
+        mChat10 = new Chat();
+        mChat10.setHost(gabriel);
+        mChat10.setTitle("Saaaaat");
         chat1.setPrivate(false);
 
         try {
@@ -137,7 +149,7 @@ public class FillDatabaseWithFictionalData {
             chatRepository.insert(chat7);
             chatRepository.insert(chat8);
             chatRepository.insert(chat9);
-            chatRepository.insert(chat10);
+            chatRepository.insert(mChat10);
         } catch (InvalidModelException e) {
             e.printStackTrace();
         } catch (InsertException e) {
@@ -146,7 +158,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the messages for the first chat
         ArrayList<Message> messagesChat1 = new ArrayList<Message>(12);
-        int time1 = time - oneDay;
+        long time1 = time - oneDay;
         long chat1Id = chat1.getId();
 
         messagesChat1.add(new Message(chat1Id, "Yo ça va?", gabrielId, time1));
@@ -484,7 +496,7 @@ public class FillDatabaseWithFictionalData {
         //Generate the messages for the tenth chat
         ArrayList<Message> messagesChat10 = new ArrayList<Message>(24);
         long time10 = time - oneDay;
-        long chat10Id = chat10.getId();
+        long chat10Id = mChat10.getId();
 
         messagesChat10.add(new Message(chat10Id, "Quel est le meilleur bar?", gabrielId, time10));
         time10 += random.nextInt(oneMinute);
@@ -543,5 +555,9 @@ public class FillDatabaseWithFictionalData {
         } catch (InsertException e) {
             e.printStackTrace();
         }
+    }
+
+    public static long getChat10Id() {
+        return mChat10.getId();
     }
 }
