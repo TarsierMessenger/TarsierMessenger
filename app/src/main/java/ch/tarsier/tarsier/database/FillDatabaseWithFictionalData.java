@@ -648,7 +648,7 @@ public class FillDatabaseWithFictionalData {
         }
     }
 
-    public static long getChat10Id() {
-        return mChat10.getId();
+    public static Chat getChat10() {
+        return mChat10;
     }
 }

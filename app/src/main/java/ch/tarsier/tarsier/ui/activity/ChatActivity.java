@@ -1,7 +1,6 @@
 package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,10 +12,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import java.util.ArrayList;
+
 import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
+import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
@@ -40,20 +40,62 @@ import ch.tarsier.tarsier.validation.EditTextMessageValidator;
 public class ChatActivity extends Activity implements EndlessListener {
 
     private static final int NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE = 10;
+    private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
 
     // TODO: Store those IDs in their own class, so that they can be shared between classes
     //       while reducing the coupling a little.
     private static final String EXTRA_CHAT_ID = "chatId";
 
     private static Point windowSize;
-    private long mChatId;
+    private Chat mChat;
     private BubbleAdapter mListViewAdapter;
     private EndlessListView mListView;
     private EditText mMessageToBeSend;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chat);
+        enableSendMessageImageButton(false);
+
+        mListView = (EndlessListView) findViewById(R.id.list);
+        mListView.setLoadingView(R.layout.loading_layout);
+
+        mListViewAdapter = new BubbleAdapter(this, R.layout.message_row);
+        mListView.setBubbleAdapter(mListViewAdapter);
+        mListView.setEndlessListener(this);
+
+        //TODO Uncomment for production
+        //mChat = (Chat) getIntent().getSerializableExtra(CHAT_MESSAGE);
+        mChat = FillDatabaseWithFictionalData.getChat10();
+
+        if (mChat.getId() == -1) {
+            // FIXME: Handle this
+        }
+
+        DatabaseLoader dbl = new DatabaseLoader();
+        dbl.execute();
+
+        mMessageToBeSend = (EditText) findViewById(R.id.message_to_send);
+
+        mMessageToBeSend.addTextChangedListener(new EditTextWatcher());
+
+        /** Todo if we have time... Possibility to retrieve one message not yet sent but already
+         *  Todo typed
+         */
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.chat, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     public void onClickSendMessage(View view) {
         String messageText = ((TextView) findViewById(R.id.message_to_send)).getText().toString();
-        Message sentMessage = new Message(mChatId, messageText, DateUtil.getNowTimestamp());
+        Message sentMessage = new Message(mChat.getId(), messageText, DateUtil.getNowTimestamp());
 
 
         //Add the message to the ListView
@@ -75,42 +117,6 @@ public class ChatActivity extends Activity implements EndlessListener {
         dbl.execute();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.chat, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
-        enableSendMessageImageButton(false);
-
-        mListView = (EndlessListView) findViewById(R.id.list);
-        mListView.setLoadingView(R.layout.loading_layout);
-
-        mListViewAdapter = new BubbleAdapter(this, R.layout.message_row);
-        mListView.setBubbleAdapter(mListViewAdapter);
-        mListView.setEndlessListener(this);
-
-        /*Intent startingIntent = getIntent();
-        mChatId = startingIntent.getIntExtra(EXTRA_CHAT_ID, -1);*/
-
-        DatabaseLoader dbl = new DatabaseLoader();
-        dbl.execute();
-
-        mMessageToBeSend = (EditText) findViewById(R.id.message_to_send);
-
-        mMessageToBeSend.addTextChangedListener(new EditTextWatcher());
-
-        /** Todo if we have time... Possibility to retrieve one message not yet sent but already
-         *  Todo typed
-         */
-    }
-
     /**
      * Async Task for the loading of the messages from the database on another thread.
      */
@@ -120,24 +126,14 @@ public class ChatActivity extends Activity implements EndlessListener {
         protected List<Message> doInBackground(Void... params) {
             while (!Tarsier.app().getDatabase().isReady()) { }
 
-            mChatId = FillDatabaseWithFictionalData.getChat10Id();
-
-            if (mChatId == -1) {
-                // FIXME: Handle this
-            }
-
             long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
 
             List<Message> newMessages = null;
             try {
-                try {
-                    newMessages = Tarsier.app().getMessageRepository().findByChat(
-                            Tarsier.app().getChatRepository().findById(mChatId),
-                            lastMessageTimestamp,
-                            NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE);
-                } catch (InvalidCursorException e) {
-                    e.printStackTrace();
-                }
+                newMessages = Tarsier.app().getMessageRepository().findByChat(
+                        Tarsier.app().getChatRepository().findById(mChat.getId()),
+                        lastMessageTimestamp,
+                        NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE);
             } catch (NoSuchModelException e) {
                 e.printStackTrace();
             }
