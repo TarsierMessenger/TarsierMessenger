@@ -142,13 +142,7 @@ public class ChatActivity extends Activity implements EndlessListener {
                 e.printStackTrace();
             }
 
-            //Encapsulate messages into messageViewModels
-            ArrayList<Message> newMessageViewModels = new ArrayList<Message>();
-            for (Message message: newMessages) {
-                newMessageViewModels.add(message);
-            }
-
-            return newMessageViewModels;
+            return newMessages;
         }
 
         @Override
