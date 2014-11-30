@@ -54,9 +54,8 @@ public class ChatListActivity extends Activity implements EndlessListener {
                 Intent chatIdIntent = new Intent(getApplicationContext(), ChatActivity.class);
                 chatIdIntent.putExtra(CHAT_MESSAGE, mChatListAdapter.getItemId(position));
 
-                Toast.makeText(getBaseContext(), "Chat id: " + mChatListAdapter.getItemId(position), Toast.LENGTH_SHORT).show();
-                //TODO uncomment once ChatActivity is implemented
-                //startActivity(chatIdIntent);
+                Toast.makeText(getBaseContext(), "TODO: start ChatActivity", Toast.LENGTH_SHORT).show();
+                //TODO startActivity(chatIdIntent);
             }
         });
 
@@ -94,9 +93,9 @@ public class ChatListActivity extends Activity implements EndlessListener {
     }
 
     private void createNewPrivateChat() {
-        //TODO uncomment once NearbyListActivity is implemented
-        //Intent newPrivateChatIntent = new Intent(this, NearbyListActivity.class);
-        //startActivity(newPrivateChatIntent);
+        Toast.makeText(this, "TODO: start NearbyListActivity", Toast.LENGTH_SHORT).show();
+        //TODO Intent newPrivateChatIntent = new Intent(this, NearbyListActivity.class);
+        //TODO startActivity(newPrivateChatIntent);
     }
 
     private void createNewChatroom() {
