@@ -163,8 +163,6 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
                 Log.d(WIFI_DIRECT_TAG, "Peer list updated: " + mPeers.toString());
 
-                mEventBus.post(new ReceivedChatroomPeersListEvent(getPeersList()));
-
                 if (mPeers.size() == 0) {
                     Log.d(WIFI_DIRECT_TAG, "No devices found");
                 }
@@ -242,12 +240,18 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             case MessageType.MESSAGE_TYPE_HELLO:
                 Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_HELLO received.");
                 break;
+
             case MessageType.MESSAGE_TYPE_PEER_LIST:
                 Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PEER_LIST received.");
+
+                mEventBus.post(new ReceivedChatroomPeersListEvent(getPeersList()));
+
                 break;
+
             case MessageType.MESSAGE_TYPE_PRIVATE:
                 Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PRIVATE received.");
                 break;
+
             case MessageType.MESSAGE_TYPE_PUBLIC:
                 Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PUBLIC received.");
 
@@ -271,6 +275,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             default:
                 Log.d(NETWORK_LAYER_TAG, "Unknown message type");
         }
+
         return true;
     }
 
