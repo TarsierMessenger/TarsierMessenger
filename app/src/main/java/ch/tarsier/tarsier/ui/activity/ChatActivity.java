@@ -40,8 +40,9 @@ import ch.tarsier.tarsier.validation.EditTextMessageValidator;
  */
 public class ChatActivity extends Activity implements EndlessListener {
 
+    public final static String EXTRA_CHAT_MESSAGE_KEY = "ch.tarsier.tarsier.ui.activity.CHAT";
+
     private static final int NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE = 10;
-    private final static String EXTRA_CHAT_MESSAGE_KEY = "ch.tarsier.tarsier.ui.activity.CHAT";
 
     private Chat mChat;
     private BubbleAdapter mListViewAdapter;

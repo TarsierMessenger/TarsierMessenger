@@ -56,16 +56,19 @@ public class ChatListActivity extends Activity implements EndlessListener {
         mChatListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent chatIdIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                chatIdIntent.putExtra(CHAT_MESSAGE, mChatListAdapter.getItemId(position));
-
-                Toast.makeText(getBaseContext(), "TODO: start ChatActivity", Toast.LENGTH_SHORT).show();
-                //TODO startActivity(chatIdIntent);
+                Chat chat = mChatListAdapter.getItem(position);
+                displayChatActivity(chat);
             }
         });
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setDisplayShowHomeEnabled(false);
+    }
+
+    private void displayChatActivity(Chat chat) {
+        Intent chatIntent = new Intent(getApplicationContext(), ChatActivity.class);
+        chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, chat);
+        startActivity(chatIntent);
     }
 
     @Subscribe
