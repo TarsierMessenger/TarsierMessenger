@@ -139,7 +139,7 @@ public class ChatroomPeersActivity extends ListActivity {
             if (convertView == null) {
                 convertView = mInflater.inflate(LAYOUT, parent, false);
                 convertView.setTag(R.id.name, convertView.findViewById(R.id.name));
-                convertView.setTag(R.id.status_message, convertView.findViewById(R.id.status_message));
+                convertView.setTag(R.id.status_message_profile_activity, convertView.findViewById(R.id.status_message_profile_activity));
                 convertView.setTag(R.id.icon, convertView.findViewById(R.id.icon));
                 convertView.setTag(R.id.badge, convertView.findViewById(R.id.badge));
             }
@@ -147,7 +147,7 @@ public class ChatroomPeersActivity extends ListActivity {
             View rowView = convertView;
 
             TextView nameView = (TextView) convertView.getTag(R.id.name);
-            TextView statusView = (TextView) convertView.getTag(R.id.status_message);
+            TextView statusView = (TextView) convertView.getTag(R.id.status_message_profile_activity);
             ImageView imageView = (ImageView) convertView.getTag(R.id.icon);
             TextView badgeView = (TextView) convertView.getTag(R.id.badge);
 

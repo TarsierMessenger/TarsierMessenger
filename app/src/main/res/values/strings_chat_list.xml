@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_chatlist">Search</string>
+    <string name="new_private_chat">New private chat</string>
+    <string name="new_chatroom">New chatroom</string>
+    <string name="goto_profile_activity">Profile</string>
+</resources>

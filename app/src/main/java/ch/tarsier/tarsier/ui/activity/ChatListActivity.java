@@ -79,8 +79,17 @@ public class ChatListActivity extends Activity implements EndlessListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.create_new_chat:
+            case R.id.search_button_chatlist:
+                search();
+                return true;
+            case R.id.create_private_chat:
+                createNewPrivateChat();
+                return true;
+            case R.id.create_new_chatroom:
                 createNewChatroom();
+                return true;
+            case R.id.goto_profile_activity:
+                openProfile();
                 return true;
             case R.id.action_settings:
                 openSettings();
@@ -90,9 +99,24 @@ public class ChatListActivity extends Activity implements EndlessListener {
         }
     }
 
+    private void search() {
+
+    }
+
+    private void createNewPrivateChat() {
+        //TODO uncomment once NearbyListActivity is implemented
+        //Intent newPrivateChatIntent = new Intent(this, NearbyListActivity.class);
+        //startActivity(newPrivateChatIntent);
+    }
+
     private void createNewChatroom() {
         Intent newChatroomIntent = new Intent(this, NewChatRoomActivity.class);
         startActivity(newChatroomIntent);
+    }
+
+    private void openProfile() {
+        Intent openProfileIntent = new Intent(this, ProfileActivity.class);
+        startActivity(openProfileIntent);
     }
 
     private void openSettings() {
