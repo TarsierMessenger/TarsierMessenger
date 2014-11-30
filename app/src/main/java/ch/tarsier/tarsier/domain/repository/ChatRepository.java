@@ -58,8 +58,7 @@ public class ChatRepository extends AbstractRepository {
         );
 
         if (!cursor.moveToFirst()) {
-            // couldn't find a Message with this id
-            return null;
+            throw new NoSuchModelException("Couldn't find a Message with id " + id);
         }
 
         try {
