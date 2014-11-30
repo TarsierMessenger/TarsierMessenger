@@ -123,14 +123,14 @@ public class ChatActivity extends Activity implements EndlessListener {
         protected List<Message> doInBackground(Void... params) {
             while (!Tarsier.app().getDatabase().isReady()) { }
 
-            long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
+            // long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
 
-            List<Message> newMessages = null;
+            List<Message> newMessages = new ArrayList<Message>();
             try {
                 newMessages.addAll(Tarsier.app().getMessageRepository().findByChat(
-                        mChat,
-                        lastMessageTimestamp,
-                        NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE));
+                    mChat,
+                    // lastMessageTimestamp,
+                    NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE);
             } catch (NoSuchModelException e) {
                 e.printStackTrace();
             }
