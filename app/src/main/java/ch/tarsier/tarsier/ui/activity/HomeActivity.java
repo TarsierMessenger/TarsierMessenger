@@ -182,7 +182,7 @@ public class HomeActivity extends Activity {
 
         // check existence of picture profile. put default if non existent.
         String filePath = mUserPreferences.getPicturePath();
-        Bitmap profilePicture = BitmapFromPath.getBitmapFromPath(this,filePath);
+        Bitmap profilePicture = BitmapFromPath.getBitmapFromPath(this, filePath);
         mProfilePicture.setImageBitmap(profilePicture);
 
         validateFields();
