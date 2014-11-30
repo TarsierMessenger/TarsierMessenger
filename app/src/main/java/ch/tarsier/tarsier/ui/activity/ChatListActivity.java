@@ -129,7 +129,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
             while (!Tarsier.app().getDatabase().isReady()) { }
 
             //TODO delete for the demo
-            FillDatabaseWithFictionalData.populate();
+            // FillDatabaseWithFictionalData.populate();
 
             ChatRepository chatRepository = Tarsier.app().getChatRepository();
 

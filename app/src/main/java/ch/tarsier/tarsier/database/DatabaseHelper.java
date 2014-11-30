@@ -90,6 +90,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.d(TAG, SQL_CREATE_MESSAGES);
                 Log.d(TAG, SQL_CREATE_PEER);
                 Log.d(TAG, "===================================");
+
+
+                Log.d(TAG, "===================================");
+                Log.d(TAG, "Fill database with fictional data:");
+                FillDatabaseWithFictionalData.populate();
+                Log.d(TAG, "===================================");
             }
 
             db.setTransactionSuccessful();
