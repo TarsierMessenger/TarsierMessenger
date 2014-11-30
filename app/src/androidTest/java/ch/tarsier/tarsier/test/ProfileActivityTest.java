@@ -3,16 +3,16 @@ package ch.tarsier.tarsier.test;
 import android.test.ActivityInstrumentationTestCase2;
 
 import ch.tarsier.tarsier.ui.activity.ProfileActivity;
-// import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.R;
 
-// import static ch.tarsier.tarsier.test.matchers.HasErrorMatcher.hasError;
-// import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
-// import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.clearText;
-// import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
-// import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.closeSoftKeyboard;
-// import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.typeText;
-// import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
-// import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
+import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
+import static ch.tarsier.tarsier.test.matchers.HasErrorMatcher.hasError;
+import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
+import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.clearText;
+import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
+import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.closeSoftKeyboard;
+import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.typeText;
+import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
 
 /**
  * @author romac
@@ -30,7 +30,7 @@ public class ProfileActivityTest extends
         getActivity();
     }
 
-    /*public void testUsernameRejectedIfTooShort() {
+    public void testUsernameRejectedIfTooShort() {
         onView(withId(R.id.username))
             .perform(click(), clearText(), closeSoftKeyboard());
 
@@ -59,13 +59,13 @@ public class ProfileActivityTest extends
         onView(withId(R.id.username))
                 .perform(click(), typeText("romac"), closeSoftKeyboard());
 
-        onView(withId(R.id.status_message))
+        onView(withId(R.id.status_message_profile_activity))
                 .perform(click(), clearText(), closeSoftKeyboard());
 
         onView(withId(R.id.action_save_profile))
                 .perform(click());
 
-        onView(withId(R.id.status_message))
+        onView(withId(R.id.status_message_profile_activity))
                 .check(matches(hasError(R.string.error_status_message_length)));
     }
 
@@ -76,15 +76,15 @@ public class ProfileActivityTest extends
         onView(withId(R.id.username))
                 .perform(click(), typeText("romac"), closeSoftKeyboard());
 
-        onView(withId(R.id.status_message))
+        onView(withId(R.id.status_message_profile_activity))
                 .perform(click(), clearText())
                 .perform(typeText(text), closeSoftKeyboard());
 
         onView(withId(R.id.action_save_profile))
                 .perform(click());
 
-        onView(withId(R.id.status_message))
+        onView(withId(R.id.status_message_profile_activity))
                 .check(matches(hasError(R.string.error_status_message_length)));
-    }*/
+    }
 
 }
