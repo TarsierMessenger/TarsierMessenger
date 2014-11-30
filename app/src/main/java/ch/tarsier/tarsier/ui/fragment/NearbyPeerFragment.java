@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.ui.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +20,12 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
+import ch.tarsier.tarsier.event.RequestListNearbyPeerEvent;
 import ch.tarsier.tarsier.ui.adapter.PeerAdapter;
 
 /**
- * Created by benjamin on 25/11/14.
+ * @author benpac
+ * @author marinnicolini
  */
 public class NearbyPeerFragment extends Fragment {
 
@@ -32,17 +35,18 @@ public class NearbyPeerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPeerAdapter = new PeerAdapter(mActivity,R.layout.row_nearby_peer_list);
+        mPeerAdapter = new PeerAdapter(mActivity, R.layout.row_nearby_peer_list);
+        //Register to event bus and request the list of nearby peer
+        Tarsier.app().getEventBus().register(this);
+        Tarsier.app().getEventBus().post(new RequestListNearbyPeerEvent());
         //debug
+
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
-        //updatePeerAdapter();
-        //List<Peer> peerList = getListPeers();
-        //Tarsier.app().getEventBus().post(new ReceivedNearbyPeersListEvent(peerList));
     }
 
     @Override
@@ -51,6 +55,11 @@ public class NearbyPeerFragment extends Fragment {
         ListView lv = (ListView) rowView.findViewById(R.id.nearby_peer_list);
         lv.setAdapter(mPeerAdapter);
         return rowView;
+    }
+
+    @Subscribe
+    public void receivedNewPeersList(ReceivedNearbyPeersListEvent event) {
+        mPeerAdapter.setPeerList(event.getPeers());
     }
 
     public PeerAdapter getPeerAdapter() {
