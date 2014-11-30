@@ -27,7 +27,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        // Tarsier.app().reset();
+        Tarsier.app().setUserPreferences(null);
         mMessageRepository = Tarsier.app().getMessageRepository();
         mUserPublicKey = Tarsier.app().getUserPreferences().getKeyPair().getPublicKey();
         mDummyMessage = new Message(1, "test", mUserPublicKey, 1000);
