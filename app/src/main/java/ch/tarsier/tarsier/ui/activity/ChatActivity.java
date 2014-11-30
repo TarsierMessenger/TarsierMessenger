@@ -130,7 +130,7 @@ public class ChatActivity extends Activity implements EndlessListener {
                 newMessages.addAll(Tarsier.app().getMessageRepository().findByChat(
                     mChat,
                     // lastMessageTimestamp,
-                    NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE);
+                    NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE));
             } catch (NoSuchModelException e) {
                 e.printStackTrace();
             }
