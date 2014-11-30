@@ -20,6 +20,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
     private MessageRepository mMessageRepository;
     private Message mDummyMessage;
+    private byte[] mUserPublicKey;
 
     @Override
     protected void setUp() throws Exception {
@@ -27,7 +28,8 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         // Tarsier.app().reset();
         mMessageRepository = Tarsier.app().getMessageRepository();
-        mDummyMessage = new Message(1, "test", USER_PUBLIC_KEY, 1000);
+        mUserPublicKey = Tarsier.app().getUserPreferences().getKeyPair().getPublicKey();
+        mDummyMessage = new Message(1, "test", mUserPublicKey, 1000);
     }
 
 
@@ -214,7 +216,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
     private void insertDummyMessage() {
         // makes sure that mDummyMessage is "clean"
-        mDummyMessage = new Message(1, "test", USER_PUBLIC_KEY, 1000);
+        mDummyMessage = new Message(1, "test", mUserPublicKey, 1000);
 
         try {
             mMessageRepository.insert(mDummyMessage);

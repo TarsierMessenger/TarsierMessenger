@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import ch.tarsier.tarsier.Tarsier;
 
@@ -11,6 +12,8 @@ import ch.tarsier.tarsier.Tarsier;
  * @author McMoudi
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+    private static final String TAG = "DatabaseHelper";
 
     public static final String DATABASE_NAME = "tarsier.db";
     public static final int DATABASE_VERSION = 1;
@@ -23,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATETIME_TYPE = "DATETIME";
     private static final String COMMA_SEP = ",";
 
-    private static final String CREATE_TABLE = "CREATE TABLE";
+    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS";
 
     private static final String SQL_CREATE_CHAT = CREATE_TABLE + " " + Columns.Chat.TABLE_NAME + " ("
             + Columns.Chat._ID + " " + PRIMARY_KEY_TYPE + COMMA_SEP + " "
@@ -62,12 +65,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             boolean isDebuggable = 0 != (Tarsier.app().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE);
 
             if (isDebuggable) {
-                System.out.println("===================================");
-                System.out.println("SQLiteDatabase onCreate generates :");
-                System.out.println(SQL_CREATE_CHAT);
-                System.out.println(SQL_CREATE_MESSAGES);
-                System.out.println(SQL_CREATE_PEER);
-                System.out.println("===================================");
+                Log.d(TAG, "===================================");
+                Log.d(TAG, "SQLiteDatabase onCreate generates :");
+                Log.d(TAG, SQL_CREATE_CHAT);
+                Log.d(TAG, SQL_CREATE_MESSAGES);
+                Log.d(TAG, SQL_CREATE_PEER);
+                Log.d(TAG, "===================================");
             }
 
             db.setTransactionSuccessful();
