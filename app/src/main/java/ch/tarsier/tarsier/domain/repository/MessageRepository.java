@@ -27,15 +27,13 @@ public class MessageRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
 
-    private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + " ASC";
     private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + " DESC";
-
 
     public MessageRepository(Database database) {
         super(database);
     }
 
-    public Message findById(long id) throws IllegalArgumentException, NoSuchModelException {
+    public Message findById(long id) throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
         if (id < 0) {
             throw new IllegalArgumentException("Message ID is invalid.");
         }
@@ -49,6 +47,11 @@ public class MessageRepository extends AbstractRepository {
                 null, null, null, null,
                 "1"
         );
+
+        if (!cursor.moveToFirst()) {
+            // couldn't find a Message with this id
+            return null;
+        }
 
         try {
             return buildFromCursor(cursor);
@@ -197,13 +200,76 @@ public class MessageRepository extends AbstractRepository {
         return msgs;
     }
 
+    public Message getLastMessageOf(Chat chat) throws NoSuchModelException, InvalidModelException {
+        if (chat == null) {
+            throw new InvalidModelException("Chat is null.");
+        }
+
+        if (chat.getId() < 0) {
+            throw new IllegalArgumentException("Chat ID is invalid.");
+        }
+
+        String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId();
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null,
+                whereClause,
+                null, null, null,
+                DATETIME_DESCEND,
+                null
+        );
+
+        if (!cursor.moveToFirst()) {
+            throw new NoSuchModelException("Cannot move to first element of the cursor.");
+        }
+
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
+        }
+    }
+
+    // return null if there are no chats in the database
+    public List<Message> fetchAllMessagesDescending() throws InvalidCursorException {
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null, null, null, null, null,
+                DATETIME_DESCEND,
+                null
+        );
+
+        List<Message> messageList = new ArrayList<Message>();
+
+        if (!cursor.moveToFirst()) {
+            // if the repository is empty, we return an empty list
+            cursor.close();
+            return messageList;
+        }
+
+        do {
+            try {
+                Message messageToBeAdded = buildFromCursor(cursor);
+                if (messageToBeAdded != null) {
+                    messageList.add(messageToBeAdded);
+                }
+            } catch (InvalidCursorException e) {
+                e.printStackTrace();
+            }
+        } while (cursor.moveToNext());
+
+        cursor.close();
+
+        return messageList;
+    }
+
     private Message buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
             throw new InvalidCursorException("Cursor is null.");
-        }
-
-        if (!c.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
         }
 
         try {

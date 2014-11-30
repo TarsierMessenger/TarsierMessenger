@@ -8,13 +8,17 @@ import java.io.Serializable;
  */
 public class Chat implements Serializable {
 
+    private static String DEFAULT_TITLE = "Chatroom of ";
+
     private long mId;
     private String mTitle;
     private Peer mHost;
     private boolean mPrivate;
+    private int mAvatarRessourceId;
 
     public Chat() {
         mId = -1;
+        mAvatarRessourceId = -1;
     }
 
     public long getId() {
@@ -29,7 +33,15 @@ public class Chat implements Serializable {
      * @return the other peer in a private chat or the name of the chatroom in a chatroom.
      */
     public String getTitle() {
-        return isPrivate() ? getHost().getUserName() : mTitle;
+        if (isPrivate()) {
+            return getHost().getUserName();
+        } else {
+            if (mTitle != null) {
+                return mTitle;
+            } else {
+                return DEFAULT_TITLE + getHost().getUserName();
+            }
+        }
     }
 
     public void setTitle(String title) {
@@ -59,5 +71,13 @@ public class Chat implements Serializable {
         } else {
             return false;
         }
+    }
+
+    public int getAvatarRessourceId() {
+        return mAvatarRessourceId;
+    }
+
+    public void setAvatarRessourceId(int id) {
+        mAvatarRessourceId = id;
     }
 }

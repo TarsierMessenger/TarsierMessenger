@@ -17,6 +17,7 @@ import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
 import ch.tarsier.tarsier.domain.model.Message;
@@ -81,6 +82,8 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
             sender = Tarsier.app().getPeerRepository().findByPublicKey(new PublicKey(message.getSenderPublicKey()));
         } catch (NoSuchModelException e) {
             //TODO : handle this case
+        } catch (InvalidCursorException e) {
+            e.printStackTrace();
         }
 
         ViewHolder holder;

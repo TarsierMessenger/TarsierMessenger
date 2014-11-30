@@ -18,6 +18,7 @@ import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
 import ch.tarsier.tarsier.exception.InsertException;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
@@ -129,10 +130,14 @@ public class ChatActivity extends Activity implements EndlessListener {
 
             List<Message> newMessages = null;
             try {
-                newMessages = Tarsier.app().getMessageRepository().findByChat(
-                        Tarsier.app().getChatRepository().findById(mChatId),
-                        lastMessageTimestamp,
-                        NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE);
+                try {
+                    newMessages = Tarsier.app().getMessageRepository().findByChat(
+                            Tarsier.app().getChatRepository().findById(mChatId),
+                            lastMessageTimestamp,
+                            NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE);
+                } catch (InvalidCursorException e) {
+                    e.printStackTrace();
+                }
             } catch (NoSuchModelException e) {
                 e.printStackTrace();
             }

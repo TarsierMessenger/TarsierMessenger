@@ -36,7 +36,7 @@ public class ProfileActivity extends Activity {
         mUserPreferences = Tarsier.app().getUserPreferences();
 
         mUsername = (EditText) findViewById(R.id.username);
-        mStatusMessage = (EditText) findViewById(R.id.status_message);
+        mStatusMessage = (EditText) findViewById(R.id.status_message_profile_activity);
         mProfilePicture = (ImageView) findViewById(R.id.add_picture_button);
 
         refreshFields();

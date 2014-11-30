@@ -2,65 +2,75 @@ package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.Toast;
 
-import ch.tarsier.tarsier.domain.model.DiscussionSummary;
-import ch.tarsier.tarsier.ui.adapter.DiscussionsAdapter;
+import com.squareup.otto.Subscribe;
+
+import java.util.List;
+
+import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
+import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.event.ReceivedMessageEvent;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.ui.view.ChatListView;
+import ch.tarsier.tarsier.ui.view.EndlessListener;
 
 /**
  * @author gluthier
  */
-public class ChatListActivity extends Activity {
-    private final static String ID_CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.ID_CHAT";
+public class ChatListActivity extends Activity implements EndlessListener {
+
+    private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
+
+    private ChatListView mChatListView;
+    private ChatListAdapter mChatListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
-        DiscussionSummary[] discussionsArray = {
-            new DiscussionSummary(7, "placeholder", "1", "SwEng", "A fond, mais je bosse dur, aussi!",
-                    "Just now", "37", DiscussionSummary.TypeConversation.PRIVATE_CHAT),
-            new DiscussionSummary(6, "placeholder", "3", "Romain Ruetschi", "Typing...",
-                    "13:10", "1",  DiscussionSummary.TypeConversation.PUBLIC_ROOM),
-            new DiscussionSummary(5, "placeholder", "0", "Yann Mahmoudi", "That's because C just has no class!",
-                    "Yesterday", "1", DiscussionSummary.TypeConversation.PUBLIC_ROOM),
-            new DiscussionSummary(4, "placeholder", "0", "Marin-Jerry Nicolini", "Ouais, pas de problème pour vendredi.",
-                    "Sunday", "1", DiscussionSummary.TypeConversation.PUBLIC_ROOM),
-            new DiscussionSummary(3, "placeholder", "0", "Hong Kong's umbrella movement", "Everybody to Civic Square! Ta...",
-                    "Friday", "1254", DiscussionSummary.TypeConversation.PRIVATE_CHAT),
-            new DiscussionSummary(2 ,"placeholder", "9", "Benjamin Paccaud", "Oui, tous les tests passent sans problème.",
-                    "Friday", "1", DiscussionSummary.TypeConversation.PUBLIC_ROOM),
-            new DiscussionSummary(1 ,"placeholder", "10", "TA meeting 1", "Non, Romain n'a toujours pas fait...",
-                    "Wednesday", "8", DiscussionSummary.TypeConversation.PRIVATE_CHAT)
-        };
+        Tarsier.app().getEventBus().register(this);
 
-        final ListView discussionsList = (ListView) findViewById(R.id.chat_list);
-        DiscussionsAdapter adapter = new DiscussionsAdapter(this, R.layout.row_chat_list, discussionsArray);
+        mChatListView = (ChatListView) findViewById(R.id.chat_list);
+        mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list);
 
-        discussionsList.setAdapter(adapter);
+        mChatListView.setLoadingView(R.layout.loading_layout);
+        mChatListView.setChatListAdapter(mChatListAdapter);
+        mChatListView.setEndlessListener(this);
 
-        discussionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.loadData();
+
+        mChatListView.setChatListAdapter(mChatListAdapter);
+
+        mChatListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                DiscussionSummary discussion = (DiscussionSummary) discussionsList.getItemAtPosition(i);
-                // TODO check if getApplicationContext() is right
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent chatIdIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                // FIXME discussion.getId() is just a filler for now, you can expect to get the id of the Chat clicked
-                chatIdIntent.putExtra(ID_CHAT_MESSAGE, discussion.getId());
-                startActivity(chatIdIntent);
+                chatIdIntent.putExtra(CHAT_MESSAGE, mChatListAdapter.getItemId(position));
+
+                Toast.makeText(getBaseContext(), "TODO: start ChatActivity", Toast.LENGTH_SHORT).show();
+                //TODO startActivity(chatIdIntent);
             }
         });
 
-        // FIXME: Handle potential NullPointerException
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setDisplayShowHomeEnabled(false);
+    }
+
+    @Subscribe
+    public void receivedNewMessagesList(ReceivedMessageEvent event) {
+        //TODO
     }
 
     @Override
@@ -70,25 +80,73 @@ public class ChatListActivity extends Activity {
     }
 
     @Override
+    public void loadData() {
+        ChatLoader chatLoader = new ChatLoader();
+        chatLoader.execute();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.create_new_chat:
+            case R.id.create_private_chat:
+                createNewPrivateChat();
+                return true;
+            case R.id.create_new_chatroom:
                 createNewChatroom();
                 return true;
-            case R.id.action_settings:
-                openSettings();
+            case R.id.goto_profile_activity:
+                openProfile();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private void createNewPrivateChat() {
+        Toast.makeText(this, "TODO: start NearbyListActivity", Toast.LENGTH_SHORT).show();
+        //TODO Intent newPrivateChatIntent = new Intent(this, NearbyListActivity.class);
+        //TODO startActivity(newPrivateChatIntent);
+    }
+
     private void createNewChatroom() {
         Intent newChatroomIntent = new Intent(this, NewChatRoomActivity.class);
         startActivity(newChatroomIntent);
     }
-    private void openSettings() {
-        Intent openSettingsIntent = new Intent(this, PreferencesActivity.class);
-        startActivity(openSettingsIntent);
+
+    private void openProfile() {
+        Intent openProfileIntent = new Intent(this, ProfileActivity.class);
+        startActivity(openProfileIntent);
+    }
+
+
+    private class ChatLoader extends AsyncTask<Void, Void, List<Chat>> {
+
+        @Override
+        protected List<Chat> doInBackground(Void... voids) {
+            while (!Tarsier.app().getDatabase().isReady()) { }
+
+            //TODO delete for the demo
+            FillDatabaseWithFictionalData.populate();
+
+            ChatRepository chatRepository = Tarsier.app().getChatRepository();
+
+            List<Chat> chatList = null;
+            try {
+                chatList = chatRepository.fetchAllChatsDescending();
+            } catch (InvalidCursorException e) {
+                e.printStackTrace();
+            }
+
+            return chatList;
+        }
+
+        @Override
+        protected void onPostExecute(List<Chat> chatList) {
+            super.onPostExecute(chatList);
+
+            if (chatList != null) {
+                mChatListView.addNewData(chatList);
+            }
+        }
     }
 }

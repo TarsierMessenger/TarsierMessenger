@@ -8,19 +8,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import android.widget.EditText;
+import android.widget.Toast;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
-import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
-import ch.tarsier.tarsier.domain.repository.PeerRepository;
+import ch.tarsier.tarsier.domain.repository.UserRepository;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
-import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.validation.ChatroomNameValidator;
 
 /**
@@ -28,7 +26,7 @@ import ch.tarsier.tarsier.validation.ChatroomNameValidator;
  */
 public class NewChatRoomActivity extends Activity {
 
-    private final static String ID_NEW_CHATROOM_MESSAGE = "ch.tarsier.tarsier.ui.activity.ID_NEW_CHATROOM";
+    private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
 
     private EditText mChatroomName;
 
@@ -75,22 +73,20 @@ public class NewChatRoomActivity extends Activity {
 
         if (validateChatRoomName()) {
             ChatRepository chatRepository = Tarsier.app().getChatRepository();
-            PeerRepository peerRepository = Tarsier.app().getPeerRepository();
-            UserPreferences userPreferences= Tarsier.app().getUserPreferences();
-
-            Peer user = peerRepository.findByPublicKey(
-                    new PublicKey(userPreferences.getKeyPair().getPublicKey()));
+            UserRepository userRepository = Tarsier.app().getUserRepository();
 
             Chat newChatroom = new Chat();
             newChatroom.setPrivate(false);
             newChatroom.setTitle(mChatroomName.getText().toString());
-            newChatroom.setHost(user);
+            newChatroom.setHost(userRepository.getUser());
 
             chatRepository.insert(newChatroom);
 
             Intent newChatroomIntent = new Intent(this, ChatActivity.class);
-            newChatroomIntent.putExtra(ID_NEW_CHATROOM_MESSAGE, newChatroom.getId());
-            startActivity(newChatroomIntent);
+            newChatroomIntent.putExtra(CHAT_MESSAGE, newChatroom);
+
+            Toast.makeText(this, "TODO: start ChatActivity", Toast.LENGTH_SHORT).show();
+            //TODO startActivity(newChatroomIntent);
         }
     }
 

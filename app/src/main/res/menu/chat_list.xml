@@ -4,14 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".DiscussionsActivity" >
 
-    <item android:id="@+id/create_new_chat"
-        android:title="@string/create_new_discussion"
+    <item android:id="@+id/create_private_chat"
+        android:title="@string/new_private_chat"
         android:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_new" />
+        android:icon="@drawable/new_private_chat" />
 
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
+    <item android:id="@+id/create_new_chatroom"
+        android:title="@string/new_chatroom"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_add_group" />
+
+    <item android:id="@+id/goto_profile_activity"
+        android:title="@string/goto_profile_activity"
+        android:showAsAction="never"
+        android:orderInCategory="100" />
 
 </menu>

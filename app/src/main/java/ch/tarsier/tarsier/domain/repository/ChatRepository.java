@@ -5,6 +5,13 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
@@ -16,6 +23,7 @@ import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
+import ch.tarsier.tarsier.util.ChatLastMessageDateSorter;
 
 /**
  * @author romac
@@ -24,6 +32,7 @@ import ch.tarsier.tarsier.exception.UpdateException;
 public class ChatRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Chat.TABLE_NAME;
+    private static final String ID_DESCEND = Columns.Chat._ID + " DESC";
 
     private PeerRepository mPeerRepository;
 
@@ -33,7 +42,7 @@ public class ChatRepository extends AbstractRepository {
         mPeerRepository = Tarsier.app().getPeerRepository();
     }
 
-    public Chat findById(long id) throws IllegalArgumentException, NoSuchModelException {
+    public Chat findById(long id) throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
         if (id < 0) {
             throw new IllegalArgumentException("Chat ID is invalid.");
         }
@@ -47,6 +56,11 @@ public class ChatRepository extends AbstractRepository {
                 null, null, null, null,
                 "1"
         );
+
+        if (!cursor.moveToFirst()) {
+            // couldn't find a Message with this id
+            return null;
+        }
 
         try {
             return buildFromCursor(cursor);
@@ -126,13 +140,47 @@ public class ChatRepository extends AbstractRepository {
         chat.setId(-1);
     }
 
+    // return null if there are no chats in the database
+    public List<Chat> fetchAllChatsDescending() throws InvalidCursorException {
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null, null, null, null, null,
+                ID_DESCEND,
+                null
+        );
+
+        List<Chat> chatList = new ArrayList<Chat>();
+
+        if (!cursor.moveToFirst()) {
+            // if the repository is empty, we return an empty list
+            cursor.close();
+            return chatList;
+        }
+
+        do {
+            try {
+                Chat chatToBeAdded = buildFromCursor(cursor);
+                if (chatToBeAdded != null) {
+                    chatList.add(chatToBeAdded);
+                }
+            } catch (InvalidCursorException e) {
+                e.printStackTrace();
+            } catch (NoSuchModelException e) {
+                e.printStackTrace();
+            }
+        } while (cursor.moveToNext());
+
+        cursor.close();
+
+        Collections.sort(chatList, new ChatLastMessageDateSorter());
+
+        return chatList;
+    }
+
     private Chat buildFromCursor(Cursor c) throws InvalidCursorException, NoSuchModelException {
         if (c == null) {
             throw new InvalidCursorException("Cursor is null.");
-        }
-
-        if (!c.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
         }
 
         try {
@@ -141,6 +189,11 @@ public class ChatRepository extends AbstractRepository {
             long hostId = c.getLong(c.getColumnIndexOrThrow(Columns.Chat.COLUMN_NAME_HOST_ID));
             boolean isPrivate = c.getInt(c.getColumnIndexOrThrow(
                     Columns.Chat.COLUMN_NAME_IS_PRIVATE)) != 0;
+
+            // if the hostId is invalid, we discard the chat
+            if (hostId < 0) {
+                return null;
+            }
 
             Peer host = mPeerRepository.findById(hostId);
 

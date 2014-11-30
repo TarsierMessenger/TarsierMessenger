@@ -67,10 +67,6 @@
             android:label="@string/title_activity_chat_room_participants" >
         </activity>
         <activity
-            android:name="ch.tarsier.tarsier.ui.activity.PreferencesActivity"
-            android:label="@string/title_activity_preferences" >
-        </activity>
-        <activity
             android:name="ch.tarsier.tarsier.ui.activity.ChatListActivity"
             android:label="@string/title_activity_chat_list"
             android:theme="@style/CustomActionBarTheme" >

@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Peer;
@@ -21,12 +24,13 @@ import ch.tarsier.tarsier.exception.UpdateException;
 public class PeerRepository extends AbstractRepository {
 
     private static final String TABLE_NAME = Columns.Peer.TABLE_NAME;
+    private static final String ID_DESCEND = Columns.Peer._ID + " DESC";
 
     public PeerRepository(Database database) {
         super(database);
     }
 
-    public Peer findById(long id) throws IllegalArgumentException, NoSuchModelException {
+    public Peer findById(long id) throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
         if (id < 0) {
             throw new IllegalArgumentException("Peer ID is invalid.");
         }
@@ -40,6 +44,11 @@ public class PeerRepository extends AbstractRepository {
                 null, null, null, null,
                 "1"
         );
+
+        if (!cursor.moveToFirst()) {
+            // couldn't find a Message with this id
+            return null;
+        }
 
         try {
             return buildFromCursor(cursor);
@@ -55,13 +64,13 @@ public class PeerRepository extends AbstractRepository {
     }
 
     public Peer findByPublicKey(PublicKey publicKey)
-            throws IllegalArgumentException, NoSuchModelException {
+            throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
 
         if (publicKey == null) {
             throw new IllegalArgumentException("PublicKey is null.");
         }
 
-        String whereClause = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = " + publicKey;
+        String whereClause = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = \"" + publicKey.getBytes().toString() + "\"";
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -70,6 +79,10 @@ public class PeerRepository extends AbstractRepository {
                 null, null, null, null,
                 "1"
         );
+
+        if (!cursor.moveToFirst()) {
+            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+        }
 
         try {
             return buildFromCursor(cursor);
@@ -149,13 +162,45 @@ public class PeerRepository extends AbstractRepository {
         peer.setId(-1);
     }
 
+    // return null if there are no chats in the database
+    public List<Peer> fetchAllPeers() throws InvalidCursorException {
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null, null, null, null, null,
+                ID_DESCEND,
+                null
+        );
+
+        List<Peer> peerList = new ArrayList<Peer>();
+
+        if(!cursor.moveToFirst()) {
+            // if the repository is empty, we return an empty list
+            cursor.close();
+            return peerList;
+        }
+
+        do {
+            try {
+                Peer peerToBeAdded = buildFromCursor(cursor);
+                if (peerToBeAdded != null) {
+                    peerList.add(peerToBeAdded);
+                }
+            } catch (InvalidCursorException e) {
+                e.printStackTrace();
+            } catch (NoSuchModelException e) {
+                e.printStackTrace();
+            }
+        } while (cursor.moveToNext());
+
+        cursor.close();
+
+        return peerList;
+    }
+
     private Peer buildFromCursor(Cursor c) throws InvalidCursorException, NoSuchModelException {
         if (c == null) {
             throw new InvalidCursorException("Cursor is null.");
-        }
-
-        if (!c.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
         }
 
         try {

@@ -5,6 +5,7 @@ import android.test.AndroidTestCase;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import ch.tarsier.tarsier.util.DateUtil;
 
@@ -20,7 +21,7 @@ public class DateUtilTest extends AndroidTestCase {
         //Set the time to now
         long timestamp = DateUtil.getNowTimestamp();
         String dateSeparator = DateUtil.computeDateSeparator(timestamp);
-        assertEquals("Today", dateSeparator);
+        assertEquals(DateUtil.computeHour(timestamp), dateSeparator);
 
         // Set the time to yesterday
         Calendar calendar = Calendar.getInstance();
@@ -30,7 +31,7 @@ public class DateUtilTest extends AndroidTestCase {
 
         //Set time to the day before yesterday
         calendar.add(Calendar.DAY_OF_MONTH,-1);
-        Format format = new SimpleDateFormat("E");
+        Format format = new SimpleDateFormat("EEEE", Locale.ENGLISH);
         dateSeparator = DateUtil.computeDateSeparator(calendar.getTimeInMillis());
         assertEquals(format.format(calendar.getTimeInMillis()), dateSeparator);
 

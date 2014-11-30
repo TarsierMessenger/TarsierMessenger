@@ -2,9 +2,6 @@ package ch.tarsier.tarsier.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.os.AsyncTask;
-import android.util.Log;
 
 /**
  * @author McMoudi
