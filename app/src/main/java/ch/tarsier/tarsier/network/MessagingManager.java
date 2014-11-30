@@ -242,16 +242,6 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         return mConnection.getPeersList();
     }
 
-    @Subscribe
-    public void onRecievedRequestListPeer(RequestListNearbyPeerEvent event) {
-        Log.d("RequestList", "List is requested");
-        if (mEventBus != null) {
-            mEventBus.post(new ReceivedNearbyPeersListEvent(getPeersList()));
-
-        }
-    }
-
-    @Override
     public void broadcastMessage(String message) {
         mConnection.broadcastMessage(message.getBytes());
     }
@@ -339,6 +329,15 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
     @Subscribe
     public void onCreateGroupEvent(CreateGroupEvent event) {
         createGroup();
+    }
+
+    @Subscribe
+    public void onRequestNearbyPeersListEvent(RequestNearbyPeersListEvent event) {
+        Log.d("RequestList", "List is requested");
+
+        if (mEventBus != null) {
+            mEventBus.post(new ReceivedNearbyPeersListEvent(getPeersList()));
+        }
     }
 
     @Override
