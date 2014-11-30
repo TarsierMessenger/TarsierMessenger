@@ -29,6 +29,7 @@ import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
+import ch.tarsier.tarsier.event.SendMessageEvent;
 import ch.tarsier.tarsier.exception.DomainException;
 import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.network.server.ServerConnection;
@@ -278,6 +279,19 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             e.printStackTrace();
         } catch (DomainException e) {
             Log.d(NETWORK_LAYER_TAG, "Could not find peer in database for received message.");
+        }
+    }
+
+    @Subscribe
+    public void onSendMessageEvent(SendMessageEvent event) {
+        if (event.isPublic()) {
+            Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a public message.");
+            broadcastMessage(event.getMessage());
+        } else if (event.isPrivate()) {
+            Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a private message.");
+            sendMessage(event.getPeer(), event.getMessage());
+        } else {
+            Log.d(NETWORK_LAYER_TAG, "Cannot send message that is neither private nor public.");
         }
     }
 

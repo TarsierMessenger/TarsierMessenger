@@ -11,21 +11,21 @@ public class SendMessageEvent {
 
     private final Chat mChat;
     private final Peer mPeer;
-    private final Message mMessage;
+    private final String mMessage;
 
-    public SendMessageEvent(Chat chat, Message message) {
+    public SendMessageEvent(Chat chat, String message) {
         mPeer = null;
         mChat = chat;
         mMessage = message;
     }
 
-    public SendMessageEvent(Peer peer, Message message) {
+    public SendMessageEvent(Peer peer, String message) {
         mChat = null;
         mPeer = peer;
         mMessage = message;
     }
 
-    public Message getMessage() {
+    public String getMessage() {
         return mMessage;
     }
 
