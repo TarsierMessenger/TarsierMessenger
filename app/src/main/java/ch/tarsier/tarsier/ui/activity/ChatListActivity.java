@@ -91,9 +91,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
             case R.id.goto_profile_activity:
                 openProfile();
                 return true;
-            case R.id.action_settings:
-                openSettings();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -117,11 +114,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
     private void openProfile() {
         Intent openProfileIntent = new Intent(this, ProfileActivity.class);
         startActivity(openProfileIntent);
-    }
-
-    private void openSettings() {
-        Intent openSettingsIntent = new Intent(this, PreferencesActivity.class);
-        startActivity(openSettingsIntent);
     }
 
     private class ChatLoader extends AsyncTask<Void, Void, List<Chat>> {
