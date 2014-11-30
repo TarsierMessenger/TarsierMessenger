@@ -46,11 +46,6 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
     }
 
     @Override
-    public void addAll(Collection<? extends Message> collection) {
-        super.addAll(collection);
-    }
-
-    @Override
     public int getCount() {
         return mMessages.size();
     }
