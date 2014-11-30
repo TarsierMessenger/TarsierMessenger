@@ -31,8 +31,6 @@ import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
 import ch.tarsier.tarsier.exception.DomainException;
 import ch.tarsier.tarsier.network.client.ClientConnection;
-import ch.tarsier.tarsier.network.ConnectionInterface;
-import ch.tarsier.tarsier.network.MessageHandler;
 import ch.tarsier.tarsier.network.server.ServerConnection;
 import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.messages.MessageType;
@@ -49,7 +47,6 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
     private static final String NETWORK_LAYER_TAG = "TarsierMessagingManager";
 
     private static final String WIFI_DIRECT_TAG = "WiFiDirect";
-    private static int SERVER_PORT = 8888;
 
     private WifiP2pManager mManager;
 
@@ -63,13 +60,9 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     private Handler mHandler = new Handler(this);
 
-    private Runnable mConnectionHandler;
-
     private Bus mEventBus;
 
     public MessagingManager(WifiP2pManager wifiManager, WifiP2pManager.Channel channel) {
-
-        mConnectionHandler = null;
         mManager = wifiManager;
         mChannel = channel;
 
@@ -85,12 +78,12 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         // client socket for every client.
         Log.d(WIFI_DIRECT_TAG, "onConnectionInfoAvailable");
 
-        if (mConnectionHandler == null) {
+        if (mConnection == null) {
             if (p2pInfo.isGroupOwner) {
                 Log.d(WIFI_DIRECT_TAG, "Connected as group owner");
 
                 try {
-                    mConnectionHandler = new ServerConnection(getConnectionHandler());
+                    mConnection = new ServerConnection(getConnectionHandler());
                 } catch (IOException e) {
                     Log.d(WIFI_DIRECT_TAG, "Failed to create a server thread - " + e.getMessage());
                     return;
@@ -101,14 +94,13 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             } else {
                 Log.d(WIFI_DIRECT_TAG, "Connected as peer");
 
-                mConnectionHandler = new ClientConnection(
+                mConnection = new ClientConnection(
                     getConnectionHandler(),
                     p2pInfo.groupOwnerAddress);
 
                 mEventBus.post(new ConnectedEvent(false));
             }
         }
-        mConnection = (ConnectionInterface) mConnectionHandler;
     }
 
     @Override
