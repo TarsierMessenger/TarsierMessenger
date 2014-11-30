@@ -11,9 +11,12 @@ public class ReceivedMessageEvent {
 
     private final Peer mSender;
 
-    public ReceivedMessageEvent(String message, Peer sender) {
+    private final boolean mIsPrivate;
+
+    public ReceivedMessageEvent(String message, Peer sender, boolean isPrivate) {
         mMessage = message;
         mSender = sender;
+        mIsPrivate = isPrivate;
     }
 
     public String getMessage() {
@@ -22,5 +25,13 @@ public class ReceivedMessageEvent {
 
     public Peer getSender() {
         return mSender;
+    }
+
+    public boolean isPrivate() {
+        return mIsPrivate;
+    }
+
+    public boolean isPublic() {
+        return !isPrivate();
     }
 }

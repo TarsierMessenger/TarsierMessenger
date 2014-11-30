@@ -243,33 +243,17 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
             case MessageType.MESSAGE_TYPE_PEER_LIST:
                 Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PEER_LIST received.");
-
                 mEventBus.post(new ReceivedChatroomPeersListEvent(getPeersList()));
-
                 break;
 
             case MessageType.MESSAGE_TYPE_PRIVATE:
                 Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PRIVATE received.");
+                postReceivedMessageEvent(message);
                 break;
 
             case MessageType.MESSAGE_TYPE_PUBLIC:
                 Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PUBLIC received.");
-
-                try {
-                    TarsierPublicMessage msg = TarsierPublicMessage.parseFrom((byte[]) message.obj);
-
-                    byte[] publicKey = msg.getSenderPublicKey().toByteArray();
-                    String contents = msg.getPlainText().toString();
-
-                    Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
-                    mEventBus.post(new ReceivedMessageEvent(contents, sender));
-
-                } catch (InvalidProtocolBufferException e) {
-                     e.printStackTrace();
-                } catch (DomainException e) {
-                    Log.d(NETWORK_LAYER_TAG, "Could not find peer in database for received message.");
-                }
-
+                postReceivedMessageEvent(message);
                 break;
 
             default:
@@ -277,6 +261,24 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         }
 
         return true;
+    }
+
+    private void postReceivedMessageEvent(Message message) {
+        try {
+            TarsierPublicMessage msg = TarsierPublicMessage.parseFrom((byte[]) message.obj);
+
+            byte[] publicKey = msg.getSenderPublicKey().toByteArray();
+            String contents = msg.getPlainText().toString();
+            Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
+            boolean isPrivate = message.what == MessageType.MESSAGE_TYPE_PRIVATE;
+
+            mEventBus.post(new ReceivedMessageEvent(contents, sender, isPrivate));
+
+        } catch (InvalidProtocolBufferException e) {
+            e.printStackTrace();
+        } catch (DomainException e) {
+            Log.d(NETWORK_LAYER_TAG, "Could not find peer in database for received message.");
+        }
     }
 
     @Override
