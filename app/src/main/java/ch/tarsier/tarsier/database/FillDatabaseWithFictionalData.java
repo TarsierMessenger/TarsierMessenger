@@ -258,7 +258,8 @@ public class FillDatabaseWithFictionalData {
         time2 += random.nextInt(oneMinute);
         messagesChat2.add(new Message(chat2Id, "ok top", gabrielId, time2));
         time2 += random.nextInt(oneMinute);
-        messagesChat2.add(new Message(chat2Id, "j'arrive dans 5 min", gabrielId, time2));
+        messagesChat2.add(new Message(chat2Id, "j'arrive dans 5 min. "
+                + "UI testing: phrase de deux lignes for the win.", gabrielId, time2));
 
         try {
             for (Message m : messagesChat2) {
@@ -403,11 +404,11 @@ public class FillDatabaseWithFictionalData {
         time6 += random.nextInt(oneMinute);
         messagesChat6.add(new Message(chat6Id, "On va commencer avec une très long message:", gabrielId, time6));
         time6 += random.nextInt(oneMinute);
-        messagesChat6.add(new Message(chat6Id, "Quel est votre secret ?"
-                + "Pour faire une bonne purée ce qui est pas mal quand on cuit les pommes de terre"
-                + "C'est de mettre du laurier et du thym pour parfumer en amont"
-                + "Après tu peux ajouter n'importe quel épice"
-                + "Tu peux mettre du safran, du curcuma, du gingembre"
+        messagesChat6.add(new Message(chat6Id, "Quel est votre secret ? "
+                + "Pour faire une bonne purée ce qui est pas mal quand on cuit les pommes de terre "
+                + "C'est de mettre du laurier et du thym pour parfumer en amont "
+                + "Après tu peux ajouter n'importe quel épice "
+                + "Tu peux mettre du safran, du curcuma, du gingembre "
                 + "Ou une gousse d'ail une fois que les patates sont pétries", gabrielId, time6));
         time6 += random.nextInt(oneMinute);
         messagesChat6.add(new Message(chat6Id, "Salut c'est cool en force!", gabrielId, time6));
@@ -424,7 +425,9 @@ public class FillDatabaseWithFictionalData {
         time6 += random.nextInt(oneMinute);
         messagesChat6.add(new Message(chat6Id, "Dis moi si tu veux plus de trucs...", gabrielId, time6));
         time6 += random.nextInt(oneMinute);
-        messagesChat6.add(new Message(chat6Id, "J'ai pas trop d'inspiration^^", gabrielId, time6));
+        messagesChat6.add(new Message(chat6Id, "J'ai pas trop d'inspiration^^ "
+                + "Mais je vais quand même finir avec une longue phrase pour voir "
+                + "comment la ChatListActivity gère ça!!!", gabrielId, time6));
 
         try {
             for (Message m : messagesChat6) {

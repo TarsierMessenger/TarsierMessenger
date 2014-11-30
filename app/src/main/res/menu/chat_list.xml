@@ -4,11 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".DiscussionsActivity" >
 
-    <item android:id="@+id/search_button_chatlist"
-        android:title="@string/search_chatlist"
-        android:showAsAction="always"
-        android:icon="@drawable/ic_action_search" />
-
     <item android:id="@+id/create_private_chat"
         android:title="@string/new_private_chat"
         android:showAsAction="ifRoom"

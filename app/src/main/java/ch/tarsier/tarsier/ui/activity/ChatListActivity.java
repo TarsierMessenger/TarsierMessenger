@@ -79,9 +79,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.search_button_chatlist:
-                search();
-                return true;
             case R.id.create_private_chat:
                 createNewPrivateChat();
                 return true;
@@ -94,10 +91,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void search() {
-
     }
 
     private void createNewPrivateChat() {

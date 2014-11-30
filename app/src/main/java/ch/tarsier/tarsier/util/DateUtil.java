@@ -33,7 +33,7 @@ public class DateUtil {
         } else if (timestamp >= yesterdayTimestamp) { // yesterday
             return "Yesterday";
         } else if (timestamp >= weekTimestamp) { // one week ago
-            format = new SimpleDateFormat("E");
+            format = new SimpleDateFormat("EEEE");
             return format.format(timestamp);
         } else { // further
             format = new SimpleDateFormat("dd.MM.yyyy");
