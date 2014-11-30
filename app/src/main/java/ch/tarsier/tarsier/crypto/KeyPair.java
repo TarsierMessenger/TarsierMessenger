@@ -1,7 +1,9 @@
 package ch.tarsier.tarsier.crypto;
 
+import android.util.Base64;
+
 /**
- * Created by FredericJacobs on 17/11/14.
+ * @author FredericJacobs
  */
 public class KeyPair {
     private byte[] mPublicKey;
@@ -17,11 +19,24 @@ public class KeyPair {
         mPrivateKey = privateKey;
     }
 
+    public KeyPair(String publicKey, String privateKey) {
+        this(Base64.decode(publicKey, Base64.DEFAULT),
+             Base64.decode(privateKey, Base64.DEFAULT));
+    }
+
     public byte[] getPublicKey() {
-        return this.mPublicKey;
+        return mPublicKey;
     }
 
     public byte[] getPrivateKey() {
-        return this.mPrivateKey;
+        return mPrivateKey;
+    }
+
+    public String getBase64EncodedPublicKey() {
+        return Base64.encodeToString(mPublicKey, Base64.DEFAULT);
+    }
+
+    public String getBase64EncodedPrivateKey() {
+        return Base64.encodeToString(mPrivateKey, Base64.DEFAULT);
     }
 }
