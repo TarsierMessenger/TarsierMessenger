@@ -6,20 +6,23 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.squareup.otto.Subscribe;
-
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
-import ch.tarsier.tarsier.ui.adapter.PeerAdapter;
 import ch.tarsier.tarsier.ui.fragment.NearbyChatListFragment;
 import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
 
+/**
+ * @author benpac
+ * @author marinnicolini
+ *
+ * This Activity shows a list of either nearby peers to connect with or a list of
+ * chatrooms active nearby.
+ *
+ */
 public class NearbyListActivity extends Activity {
 
     private NearbyPeerFragment mNearbyPeer;
@@ -42,9 +45,9 @@ public class NearbyListActivity extends Activity {
         mNearbyPeer = new NearbyPeerFragment();
         mNearbyChatList = new NearbyChatListFragment();
 
-        FragmentTransaction ft = mFragmentManager.beginTransaction();
-        ft.add(R.id.inside_nearby,mNearbyPeer,"peer");
-        ft.add(R.id.inside_nearby,mNearbyChatList,"chatList");
+//        FragmentTransaction ft = mFragmentManager.beginTransaction();
+//        ft.add(R.id.inside_nearby, mNearbyPeer, "peer");
+//        ft.add(R.id.inside_nearby, mNearbyChatList, "chatList");
 
 
         // Create a tab listener that is called when the user changes tabs.

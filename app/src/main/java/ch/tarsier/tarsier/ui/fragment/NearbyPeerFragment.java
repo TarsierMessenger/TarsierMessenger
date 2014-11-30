@@ -2,11 +2,14 @@ package ch.tarsier.tarsier.ui.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.squareup.otto.Subscribe;
 
@@ -18,6 +21,7 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
+import ch.tarsier.tarsier.ui.activity.ChatActivity;
 import ch.tarsier.tarsier.ui.adapter.PeerAdapter;
 
 /**
@@ -28,6 +32,7 @@ public class NearbyPeerFragment extends Fragment {
 
     private Activity mActivity;
     private PeerAdapter mPeerAdapter;
+    private static final String CHAT = "NearbyChat";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,20 @@ public class NearbyPeerFragment extends Fragment {
         View rowView = inflater.inflate(R.layout.fragment_nearby_peer, container, false);
         ListView lv = (ListView) rowView.findViewById(R.id.nearby_peer_list);
         lv.setAdapter(mPeerAdapter);
+        //set on click listener
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent chatIntent = new Intent(mActivity, ChatActivity.class);
+                chatIntent.putExtra(CHAT, (Peer) adapterView.getItemAtPosition(position));
+
+                Toast.makeText(mActivity,
+                        "peer id is " + ((Peer) adapterView.getItemAtPosition(position)).getId(),
+                        Toast.LENGTH_SHORT).show();
+                // TODO decomment when it is ok
+                //startActivity(chatIntent);
+            }
+        });
         return rowView;
     }
 
