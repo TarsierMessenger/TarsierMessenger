@@ -8,13 +8,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.ChatSummary;
+import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.ui.view.EndlessChatListView;
@@ -26,9 +27,10 @@ import ch.tarsier.tarsier.ui.view.EndlessListener;
 public class ChatListActivity extends Activity implements EndlessListener {
 
     private final static String ID_CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.ID_CHAT";
-    private final static  int ITEM_PER_REQUEST = 15;
+    private final static int NUMBER_OF_CHATS_TO_FETCH_AT_ONCE = 15;
 
     private EndlessChatListView mEndlessChatListView;
+    private ChatListAdapter mChatListAdapter;
     private int mult = 1;
 
     @Override
@@ -37,21 +39,20 @@ public class ChatListActivity extends Activity implements EndlessListener {
         setContentView(R.layout.activity_chat_list);
 
         mEndlessChatListView = (EndlessChatListView) findViewById(R.id.chat_list);
-        ChatListAdapter chatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list, createItems(mult));
+        mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list, createItems(mult));
 
         mEndlessChatListView.setLoadingView(R.layout.loading_layout);
-        mEndlessChatListView.setAdapter(chatListAdapter);
+        mEndlessChatListView.setAdapter(mChatListAdapter);
         mEndlessChatListView.setListener(this);
 
         mEndlessChatListView.setOnClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                /*
                 // TODO check if getApplicationContext() is right
                 Intent chatIdIntent = new Intent(getApplicationContext(), ConversationActivity.class);
                 // FIXME discussion.getId() is just a filler for now, you can expect to get the id of the Chat clicked
                 chatIdIntent.putExtra(ID_CHAT_MESSAGE, discussion.getId());
-                startActivity(chatIdIntent);*/
+                startActivity(chatIdIntent);
             }
         });
 
@@ -111,7 +112,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
     private List<ChatSummary> createItems(int mult) {
         List<ChatSummary> chatSummaryList = new ArrayList<ChatSummary>();
 
-        for (int i = 0; i < ITEM_PER_REQUEST; ++i) {
+        for (int i = 0; i < NUMBER_OF_CHATS_TO_FETCH_AT_ONCE; ++i) {
             //chatSummaryList.add();
         }
 
@@ -120,13 +121,29 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
     @Override
     public void loadData() {
-
+        mult += 10;
+        ChatLoader chatLoader = new ChatLoader();
+        chatLoader.execute();
     }
 
-    private class ChatItemsLoader extends AsyncTask<Void, Void, List<ChatSummary>> {
+    private class ChatLoader extends AsyncTask<Void, Void, List<ChatSummary>> {
 
         @Override
         protected List<ChatSummary> doInBackground(Void... voids) {
+            ChatRepository chatRepository = Tarsier.app().getChatRepository();
+
+            List<Chat> chatList = chatRepository.getChats(
+                NUMBER_OF_CHATS_TO_FETCH_AT_ONCE,
+                1
+            );
+
+            //Encapsulate chats
+            ArrayList<ChatSummary> chatSummaryArrayList = new ArrayList<ChatSummary>();
+            for (Chat chat : chatList) {
+                chatSummaryArrayList.add(new ChatSummary(chat));
+            }
+
+
             return null;
         }
 

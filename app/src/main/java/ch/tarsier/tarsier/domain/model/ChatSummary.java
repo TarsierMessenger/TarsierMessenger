@@ -5,14 +5,20 @@ package ch.tarsier.tarsier.domain.model;
  */
 public class ChatSummary {
     private long mId;
-    private String mAvatar;
+    private String mAvatarSrc;
     private String mName;
     private String mLastMessage;
     private String mHumanTime;
 
-    public ChatSummary(long id, String avatar, String name, String lastMessage, String humanTime) {
+    public ChatSummary(Chat chat) {
+        mId = chat.getId();
+        mAvatarSrc = chat.getAvatarRessourceId();
+        Peer host = chat.getHost();
+        mName = host.getUserName();
+
+
         mId = id;
-        mAvatar = avatar;
+        mAvatarSrc = avatar;
         mName = name;
         mLastMessage = lastMessage;
         mHumanTime = humanTime;
@@ -23,7 +29,7 @@ public class ChatSummary {
     }
 
     public String getAvatar() {
-        return mAvatar;
+        return mAvatarSrc;
     }
 
     public String getName() {

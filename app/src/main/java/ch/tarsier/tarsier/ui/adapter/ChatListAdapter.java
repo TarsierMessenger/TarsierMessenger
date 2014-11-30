@@ -11,69 +11,81 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.ChatSummary;
 import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.domain.model.Message;
+import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.domain.repository.MessageRepository;
+import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
+import ch.tarsier.tarsier.util.DateUtil;
 
 /**
  * @author gluthier
  */
-public class ChatListAdapter extends ArrayAdapter<ChatSummary> {
+public class ChatListAdapter extends ArrayAdapter<Chat> {
 
-    private List<ChatSummary> mChatSummaryList;
+    private List<Chat> mChatList;
     private Context mContext;
     private int mLayoutResourceId;
 
-    public ChatListAdapter(Context context, int layoutResourceId, List<ChatSummary> chatSummaryList) {
-        super(context, layoutResourceId, chatSummaryList);
+    public ChatListAdapter(Context context, int layoutResourceId, List<Chat> chatList) {
+        super(context, layoutResourceId, chatList);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
-        mChatSummaryList = chatSummaryList;
+        mChatList = chatList;
     }
 
     @Override
     public int getCount() {
-        return mChatSummaryList.size();
-    }
-
-    @Override
-    public ChatSummary getItem(int position) {
-        return mChatSummaryList.get(position);
+        return mChatList.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return mChatSummaryList.get(position).hashCode();
+        return mChatList.get(position).hashCode();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ChatSummaryHolder holder = null;
+        ChatHolder holder = null;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             row = inflater.inflate(mLayoutResourceId, parent, false);
 
-            holder = new ChatSummaryHolder();
+            holder = new ChatHolder();
 
-            holder.mAvatar = (ImageView) row.findViewById(R.id.avatar);
-            holder.mName = (TextView) row.findViewById(R.id.name);
+            holder.mAvatarSrc = (ImageView) row.findViewById(R.id.avatar);
+            holder.mTitle = (TextView) row.findViewById(R.id.name);
             holder.mLastMessage = (TextView) row.findViewById(R.id.lastMessage);
             holder.mHumanTime = (TextView) row.findViewById(R.id.humanTime);
 
             row.setTag(holder);
         } else {
-            holder = (ChatSummaryHolder) row.getTag();
+            holder = (ChatHolder) row.getTag();
         }
 
-        ChatSummary chatSummary = mChatSummaryList.get(position);
+        Chat chat = mChatList.get(position);
 
-        holder.mId = chatSummary.getId();
-        //TODO:
-        //holder.mAvatar.setImageResource(discussionSummary.getAvatar());
-        holder.mName.setText(chatSummary.getName());
-        holder.mLastMessage.setText(chatSummary.getLastMessage());
-        holder.mHumanTime.setText(chatSummary.getHumanTime());
+        MessageRepository messageRepository = Tarsier.app().getMessageRepository();
+        Message lastMessage = null;
+        try {
+            lastMessage = messageRepository.getLastMessageOf(chat);
+        } catch (NoSuchModelException e) {
+            e.printStackTrace();
+        } catch (InvalidCursorException e) {
+            e.printStackTrace();
+        }
+
+        holder.mId = chat.getId();
+        holder.mAvatarSrc.setImageResource(chat.getAvatarRessourceId());
+        holder.mTitle.setText(chat.getTitle());
+        holder.mLastMessage.setText(lastMessage.getText());
+        holder.mHumanTime.setText(DateUtil.computeDateSeparator(lastMessage.getDateTime()));
 
         return row;
     }
@@ -81,10 +93,10 @@ public class ChatListAdapter extends ArrayAdapter<ChatSummary> {
     /**
      * DiscussionSummaryHolder is the class containing the discussion's information
      */
-    private class ChatSummaryHolder {
+    private class ChatHolder {
         private long mId;
-        private ImageView mAvatar;
-        private TextView mName;
+        private ImageView mAvatarSrc;
+        private TextView mTitle;
         private TextView mLastMessage;
         private TextView mHumanTime;
     }
