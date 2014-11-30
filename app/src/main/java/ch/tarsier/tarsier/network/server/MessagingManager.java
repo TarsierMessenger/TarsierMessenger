@@ -206,7 +206,7 @@ public class MessagingManager extends BroadcastReceiver implements MessagingInte
     @Override
     public List<Peer> getPeersList() {
         if (mConnection == null) {
-            //FIXME Testing to show something on NearbyListActivity.
+            //FIXME Tests to show something on NearbyListActivity.
             Log.d("Connection","mConnection is null");
             List<Peer> peerList = new ArrayList<Peer>();
             peerList.add(new Peer("ben", "lalala"));
