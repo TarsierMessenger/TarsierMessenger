@@ -1,6 +1,7 @@
 package ch.tarsier.tarsier.domain.model;
 
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
 
 /**
  * @author McMoudi
@@ -10,7 +11,7 @@ public class Message {
 
     private long mChatId;
     private String mText;
-    private byte[] mSenderPublicKey;
+    private PublicKey mSenderPublicKey;
     private long mDateTime;
     private boolean mIsSentByUser;
     // mId is set to a value > 0 when the Message is inserted into the database
@@ -25,6 +26,10 @@ public class Message {
      * @param dateTime the timestamp at which the message has been sent
      */
     public Message(long chatId, String text, byte[] senderPublicKey, long dateTime) {
+        this(chatId, text, new PublicKey(senderPublicKey), dateTime);
+    }
+
+    public Message(long chatId, String text, PublicKey senderPublicKey, long dateTime) {
         mChatId = chatId;
         mText = text;
         mSenderPublicKey = senderPublicKey;
@@ -43,7 +48,7 @@ public class Message {
     public Message(long chatId, String text, long dateTime) {
         mChatId = chatId;
         mText = text;
-        mSenderPublicKey = Tarsier.app().getUserPreferences().getKeyPair().getPublicKey();
+        mSenderPublicKey = new PublicKey(Tarsier.app().getUserPreferences().getKeyPair().getPublicKey());
         mIsSentByUser = true;
         mDateTime = dateTime;
         mId = -1;
@@ -57,7 +62,7 @@ public class Message {
         return mChatId;
     }
 
-    public byte[] getSenderPublicKey() {
+    public PublicKey getSenderPublicKey() {
         return mSenderPublicKey;
     }
 

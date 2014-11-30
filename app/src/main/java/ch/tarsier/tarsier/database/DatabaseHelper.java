@@ -21,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String PRIMARY_KEY_TYPE = "INTEGER PRIMARY KEY AUTOINCREMENT";
     private static final String ID_TYPE = "INTEGER";
     private static final String TEXT_TYPE = "TEXT";
-    private static final String PUBLIC_KEY_TYPE = "BLOB";
+    private static final String PUBLIC_KEY_TYPE = "TEXT";
     private static final String BOOLEAN_TYPE = "INTEGER"; // SQLite doesn't have a boolean type
     private static final String DATETIME_TYPE = "DATETIME";
     private static final String COMMA_SEP = ",";

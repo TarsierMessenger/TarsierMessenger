@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -36,12 +37,17 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
     private List<Message> mMessages;
     private int mLayoutId;
 
-    public BubbleAdapter(Context context, int layoutId) {
-        super(context, layoutId);
+    public BubbleAdapter(Context context, int layoutId, List<Message> messages) {
+        super(context, layoutId, messages);
 
         this.mContext = context;
         this.mLayoutId = layoutId;
-        this.mMessages = new ArrayList<Message>();
+        this.mMessages = messages;
+    }
+
+    @Override
+    public void addAll(Collection<? extends Message> collection) {
+        super.addAll(collection);
     }
 
     @Override
@@ -79,7 +85,7 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
 
         Peer sender = null;
         try {
-            sender = Tarsier.app().getPeerRepository().findByPublicKey(new PublicKey(message.getSenderPublicKey()));
+            sender = Tarsier.app().getPeerRepository().findByPublicKey(message.getSenderPublicKey());
         } catch (NoSuchModelException e) {
             //TODO : handle this case
         } catch (InvalidCursorException e) {

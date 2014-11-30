@@ -12,6 +12,7 @@ import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
@@ -179,8 +180,8 @@ public class MessageRepository extends AbstractRepository {
                 null, null, null,
                 DATETIME_DESCEND);
 
-        if (!cursor.moveToFirst()) {
-            throw new NoSuchModelException("Cannot move to first element of the cursor.");
+        if (cursor.getCount() <= 0) {
+            return new ArrayList<Message>();
         }
 
         long cTime;
@@ -275,10 +276,10 @@ public class MessageRepository extends AbstractRepository {
         try {
             int chatId = c.getInt(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_CHAT_ID));
             String text = c.getString(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_MSG));
-            byte[] senderPublicKey = c.getBlob(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_SENDER_PUBLIC_KEY));
+            String base64PublicKey = c.getString(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_SENDER_PUBLIC_KEY));
             long dateTime = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_DATETIME));
 
-            Message message = new Message(chatId, text, senderPublicKey, dateTime);
+            Message message = new Message(chatId, text, new PublicKey(base64PublicKey), dateTime);
             message.setId(c.getLong(c.getColumnIndexOrThrow(Columns.Message._ID)));
 
             return message;
@@ -310,7 +311,7 @@ public class MessageRepository extends AbstractRepository {
 
         values.put(Columns.Message.COLUMN_NAME_CHAT_ID, message.getChatId());
         values.put(Columns.Message.COLUMN_NAME_MSG, message.getText());
-        values.put(Columns.Message.COLUMN_NAME_SENDER_PUBLIC_KEY, message.getSenderPublicKey());
+        values.put(Columns.Message.COLUMN_NAME_SENDER_PUBLIC_KEY, message.getSenderPublicKey().base64Encoded());
         values.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());
 
         return values;

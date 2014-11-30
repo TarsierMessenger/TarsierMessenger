@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
@@ -40,13 +41,8 @@ import ch.tarsier.tarsier.validation.EditTextMessageValidator;
 public class ChatActivity extends Activity implements EndlessListener {
 
     private static final int NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE = 10;
-    private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
+    private final static String EXTRA_CHAT_MESSAGE_KEY = "ch.tarsier.tarsier.ui.activity.CHAT";
 
-    // TODO: Store those IDs in their own class, so that they can be shared between classes
-    //       while reducing the coupling a little.
-    private static final String EXTRA_CHAT_ID = "chatId";
-
-    private static Point windowSize;
     private Chat mChat;
     private BubbleAdapter mListViewAdapter;
     private EndlessListView mListView;
@@ -61,13 +57,17 @@ public class ChatActivity extends Activity implements EndlessListener {
         mListView = (EndlessListView) findViewById(R.id.list);
         mListView.setLoadingView(R.layout.loading_layout);
 
-        mListViewAdapter = new BubbleAdapter(this, R.layout.message_row);
+        mListViewAdapter = new BubbleAdapter(this, R.layout.message_row, new ArrayList<Message>());
         mListView.setBubbleAdapter(mListViewAdapter);
         mListView.setEndlessListener(this);
 
         //TODO Uncomment for production
-        //mChat = (Chat) getIntent().getSerializableExtra(CHAT_MESSAGE);
-        mChat = FillDatabaseWithFictionalData.getChat10();
+        //mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
+        try {
+            mChat = Tarsier.app().getChatRepository().getRandomChat();
+        } catch (NoSuchModelException e) {
+            e.printStackTrace();
+        }
 
         if (mChat.getId() == -1) {
             // FIXME: Handle this
@@ -131,7 +131,7 @@ public class ChatActivity extends Activity implements EndlessListener {
             List<Message> newMessages = null;
             try {
                 newMessages = Tarsier.app().getMessageRepository().findByChat(
-                        Tarsier.app().getChatRepository().findById(mChat.getId()),
+                        mChat,
                         lastMessageTimestamp,
                         NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE);
             } catch (NoSuchModelException e) {
@@ -144,7 +144,9 @@ public class ChatActivity extends Activity implements EndlessListener {
         @Override
         protected void onPostExecute(List<Message> result) {
             super.onPostExecute(result);
-            mListView.addNewData(result);
+            if (result.size() > 0) {
+                mListView.addNewData(result);
+            }
 
             // Tell the ListView to stop retrieving messages since there all loaded in it.
             if (result.size() < NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE) {

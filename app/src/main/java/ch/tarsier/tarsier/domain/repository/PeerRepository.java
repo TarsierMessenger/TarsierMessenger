@@ -59,18 +59,23 @@ public class PeerRepository extends AbstractRepository {
         }
     }
 
-    public Peer findByPublicKey(byte[] publicKey) throws NoSuchModelException, InvalidCursorException {
+    public Peer findByPublicKey(byte[] publicKey)
+            throws IllegalArgumentException, NoSuchModelException {
+        if (publicKey == null) {
+            throw new IllegalArgumentException("PublicKey is null.");
+        }
+
         return findByPublicKey(new PublicKey(publicKey));
     }
 
     public Peer findByPublicKey(PublicKey publicKey)
-            throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
+            throws IllegalArgumentException, NoSuchModelException {
 
         if (publicKey == null) {
             throw new IllegalArgumentException("PublicKey is null.");
         }
 
-        String whereClause = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = \"" + publicKey.getBytes().toString() + "\"";
+        String whereClause = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = '" + publicKey.base64Encoded() + "'";
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -206,7 +211,6 @@ public class PeerRepository extends AbstractRepository {
         try {
             long id = c.getLong(c.getColumnIndexOrThrow(Columns.Peer._ID));
             byte[] publicKeyBytes = c.getBlob(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
-            PublicKey publicKey = new PublicKey(publicKeyBytes);
             String userName = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_USERNAME));
             String statusMessage = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_STATUS_MESSAGE));
             String picturePath = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_PICTURE_PATH));
@@ -214,7 +218,7 @@ public class PeerRepository extends AbstractRepository {
 
             Peer peer = new Peer();
             peer.setId(id);
-            peer.setPublicKey(publicKey);
+            peer.setPublicKey(new PublicKey(publicKeyBytes));
             peer.setUserName(userName);
             peer.setStatusMessage(statusMessage);
             peer.setPicturePath(picturePath);

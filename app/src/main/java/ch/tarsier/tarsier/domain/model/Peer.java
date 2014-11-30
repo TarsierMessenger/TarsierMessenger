@@ -25,7 +25,6 @@ public class Peer implements ByteArraySerializable, Serializable {
     private boolean mOnline;
 
     public Peer() {
-        mPicturePath = Tarsier.app().getUserPreferences().getPicturePath();
         mId = -1;
     }
 
@@ -96,6 +95,9 @@ public class Peer implements ByteArraySerializable, Serializable {
     }
 
     public String getPicturePath() {
+        if (mPicturePath == null) {
+            mPicturePath = Tarsier.app().getUserPreferences().getPicturePath();
+        }
         return mPicturePath;
     }
 

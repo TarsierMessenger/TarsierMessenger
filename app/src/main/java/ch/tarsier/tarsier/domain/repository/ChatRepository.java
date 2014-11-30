@@ -71,6 +71,22 @@ public class ChatRepository extends AbstractRepository {
         }
     }
 
+    public Chat getRandomChat() throws NoSuchModelException {
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null, null, null, null, null, null,
+                "1"
+        );
+
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
+        }
+    }
+
     public void insert(Chat chat) throws InvalidModelException, InsertException {
         if (chat == null) {
             throw new InvalidModelException("Chat is null.");
