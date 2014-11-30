@@ -28,7 +28,7 @@ import ch.tarsier.tarsier.event.ConnectedEvent;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
-import ch.tarsier.tarsier.event.RequestListNearbyPeerEvent;
+import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
 import ch.tarsier.tarsier.exception.DomainException;
 import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.network.ConnectionInterface;
