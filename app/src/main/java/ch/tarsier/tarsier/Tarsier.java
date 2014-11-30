@@ -146,21 +146,4 @@ public class Tarsier extends Application {
 
         return mUserRepository;
     }
-
-    public void setUserRepository(UserRepository userRepository) {
-        mUserRepository = userRepository;
-    }
-
-    // reset Tarsier singleton
-    public void reset() {
-        this.setPeerRepository(null);
-        this.setChatRepository(null);
-        this.setMessageRepository(null);
-        this.setUserRepository(null);
-
-        this.setUserPreferences(null);
-        this.setDatabase(null);
-
-        this.initDatabase();
-    }
 }

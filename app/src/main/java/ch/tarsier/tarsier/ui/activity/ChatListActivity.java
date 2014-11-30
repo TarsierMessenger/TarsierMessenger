@@ -55,11 +55,11 @@ public class ChatListActivity extends Activity implements EndlessListener {
                 chatIdIntent.putExtra(CHAT_MESSAGE, mChatListAdapter.getItemId(position));
 
                 Toast.makeText(getBaseContext(), "Chat id: " + mChatListAdapter.getItemId(position), Toast.LENGTH_SHORT).show();
+                //TODO uncomment once ChatActivity is implemented
                 //startActivity(chatIdIntent);
             }
         });
 
-        // FIXME: Handle potential NullPointerException
         getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setDisplayShowHomeEnabled(false);
     }
@@ -116,16 +116,14 @@ public class ChatListActivity extends Activity implements EndlessListener {
         startActivity(openProfileIntent);
     }
 
+
     private class ChatLoader extends AsyncTask<Void, Void, List<Chat>> {
 
         @Override
         protected List<Chat> doInBackground(Void... voids) {
-            //TODO delete for develop
-            Tarsier.app().reset();
-
             while (!Tarsier.app().getDatabase().isReady()) { }
 
-            //TODO delete for develop
+            //TODO delete for the demo
             FillDatabaseWithFictionalData.populate();
 
             ChatRepository chatRepository = Tarsier.app().getChatRepository();
