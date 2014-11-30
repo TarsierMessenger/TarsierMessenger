@@ -26,8 +26,8 @@ public class UserPreferences extends AbstractPreferences {
 
     public KeyPair getKeyPair() {
         if (mKeyPair == null) {
-            if (getString(R.string.personnal_file_public_key) == null) {
-                this.setKeyPair();
+            if (!hasPublicKey()) {
+                generateKeyPair();
             } else {
                 byte[] publicKey = getString(R.string.personnal_file_public_key).getBytes();
                 byte[] privateKey = getString(R.string.personnal_file_private_key).getBytes();
@@ -40,14 +40,14 @@ public class UserPreferences extends AbstractPreferences {
     /**
      * Generate a KeyPair and store it in the user preferences
      */
-    public void setKeyPair() {
-        if (getString(R.string.personnal_file_public_key) == null) {
-            mKeyPair = EC25519.generateKeyPair();
-            setString(R.string.personnal_file_public_key, new String(mKeyPair.getPublicKey()));
-            setString(R.string.personnal_file_private_key, new String(mKeyPair.getPrivateKey()));
-        } else {
-            //TODO : throw exception because we can't regenerate a new keyPair
-        }
+    private void generateKeyPair() {
+        mKeyPair = EC25519.generateKeyPair();
+        setString(R.string.personnal_file_public_key, new String(mKeyPair.getPublicKey()));
+        setString(R.string.personnal_file_private_key, new String(mKeyPair.getPrivateKey()));
+    }
+
+    private boolean hasPublicKey() {
+        return getString(R.string.personnal_file_public_key) != null;
     }
 
     public String getUsername() {
