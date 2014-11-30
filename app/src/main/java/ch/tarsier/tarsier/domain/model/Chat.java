@@ -18,6 +18,7 @@ public class Chat implements Serializable {
 
     public Chat() {
         mId = -1;
+        mAvatarRessourceId = -1;
     }
 
     public long getId() {

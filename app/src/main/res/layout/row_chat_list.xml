@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:padding="10dp">
 
@@ -14,47 +14,56 @@
 
         <ImageView
             android:id="@+id/avatar"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignParentLeft="true"
             android:scaleType="fitCenter"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/tarsier_placeholder"
-            android:layout_marginRight="5dp" />
+            android:layout_gravity="center_horizontal" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/icons">
+        android:layout_toRightOf="@id/icons"
+        android:layout_centerVertical="true">
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/tarsier_font" />
+            android:id="@+id/name_and_time"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/tarsier_font"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/humanTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/tarsier_font_secondary"
+                android:layout_weight="0"
+                android:layout_gravity="right"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/lastMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/name"
-            android:textColor="@color/tarsier_font_secondary" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true">
-
-        <TextView
-            android:id="@+id/humanTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/tarsier_font_secondary" />
+            android:layout_below="@id/name_and_time"
+            android:textColor="@color/tarsier_font_secondary"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 

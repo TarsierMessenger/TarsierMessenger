@@ -87,11 +87,18 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             e.printStackTrace();
         }
 
+        if (chat.getAvatarRessourceId() == -1) {
+            if (chat.isPrivate()) {
+                chat.setAvatarRessourceId(R.drawable.tarsier_placeholder);
+            } else {
+                chat.setAvatarRessourceId(R.drawable.tarsier_group_placeholder);
+            }
+        }
+
         holder.mAvatarSrc.setImageResource(chat.getAvatarRessourceId());
         holder.mTitle.setText(chat.getTitle());
         holder.mLastMessage.setText(INTRO_TEXT + lastMessage.getText());
         holder.mHumanTime.setText(DateUtil.computeDateSeparator(lastMessage.getDateTime()));
-        //holder.mHumanTime.setText(String.valueOf(lastMessage.getDateTime()));
 
         return row;
     }

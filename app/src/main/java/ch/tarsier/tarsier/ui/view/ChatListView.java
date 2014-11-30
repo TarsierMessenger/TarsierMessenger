@@ -54,6 +54,8 @@ public class ChatListView extends ListView {
         if (data != null) {
             mChatListAdapter.addAllChats(data);
             mChatListAdapter.notifyDataSetChanged();
+        } else {
+            //TODO show message to start a new private chat or chatroom
         }
     }
 }

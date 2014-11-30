@@ -81,7 +81,7 @@ public class FillDatabaseWithFictionalData {
 
         //Generate the peers
         Peer amirreza = new Peer();
-        amirreza.setUserName("Amirreza Bahreini");
+        amirreza.setUserName("Amirreza Bahreini long username!!!!!");
         amirreza.setPublicKey(new PublicKey(new byte[]{1, 1}));
         amirreza.setStatusMessage("la patate");
 
@@ -111,7 +111,7 @@ public class FillDatabaseWithFictionalData {
         xavier.setStatusMessage("salut");
 
         Peer yann = new Peer();
-        yann.setUserName("Yann Mahmoudi");
+        yann.setUserName("Mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
         yann.setPublicKey(new PublicKey(new byte[]{7, 7}));
         yann.setStatusMessage("oui");
 
@@ -180,7 +180,7 @@ public class FillDatabaseWithFictionalData {
 
         Chat chat10 = new Chat();
         chat10.setHost(gabriel);
-        chat10.setTitle("Saaaaat");
+        chat10.setTitle("Saaaaat!!!!!!!!!!!!!!!!!!!!!!!!");
         chat10.setPrivate(false);
 
         try {

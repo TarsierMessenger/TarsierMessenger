@@ -10,12 +10,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.squareup.otto.Subscribe;
+
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
@@ -36,6 +39,8 @@ public class ChatListActivity extends Activity implements EndlessListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
+
+        Tarsier.app().getEventBus().register(this);
 
         mChatListView = (ChatListView) findViewById(R.id.chat_list);
         mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list);
@@ -61,6 +66,11 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setDisplayShowHomeEnabled(false);
+    }
+
+    @Subscribe
+    public void receivedNewMessagesList(ReceivedMessageEvent event) {
+        //TODO
     }
 
     @Override
