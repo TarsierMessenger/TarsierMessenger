@@ -47,7 +47,9 @@ public class UserPreferences extends AbstractPreferences {
     }
 
     private boolean hasPublicKey() {
-        return getString(R.string.pref_public_key) != null;
+        String publicKey = getString(R.string.pref_public_key);
+
+        return publicKey != null && !publicKey.equals("");
     }
 
     public String getUsername() {
