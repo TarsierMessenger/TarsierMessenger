@@ -151,10 +151,17 @@ public class MessageRepository extends AbstractRepository {
                 null, null, null, null
         );
 
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return new ArrayList<Message>();
+        }
+
         try {
             return buildListFromCursor(cursor, number);
         } catch (InvalidCursorException e) {
             throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
         }
     }
 
@@ -181,6 +188,7 @@ public class MessageRepository extends AbstractRepository {
                 DATETIME_DESCEND);
 
         if (!cursor.moveToFirst()) {
+            cursor.close();
             return new ArrayList<Message>();
         }
 
@@ -195,6 +203,8 @@ public class MessageRepository extends AbstractRepository {
             msgs = buildListFromCursor(cursor, number);
         } catch (InvalidCursorException e) {
             throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
         }
 
         Collections.reverse(msgs);
@@ -222,6 +232,7 @@ public class MessageRepository extends AbstractRepository {
         );
 
         if (!cursor.moveToFirst()) {
+            cursor.close();
             throw new NoSuchModelException("Cannot move to first element of the cursor.");
         }
 
