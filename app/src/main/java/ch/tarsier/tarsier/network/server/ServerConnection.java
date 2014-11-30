@@ -234,6 +234,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                                     peer = helloMessage.getPeer();
                                     serverConnection.addPeer(peer, this);
                                     serverConnection.broadcastUpdatedPeerList();
+                                    mHandler.obtainMessage(MessageType.MESSAGE_TYPE_PEER_LIST);
                                     break;
                                 case MessageType.MESSAGE_TYPE_PEER_LIST:
                                     Log.e(TAG, "Server shouldn't be receiving this");
