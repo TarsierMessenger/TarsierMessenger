@@ -4,6 +4,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author xawill and marinnicolini
@@ -33,7 +34,7 @@ public class DateUtil {
         } else if (timestamp >= yesterdayTimestamp) { // yesterday
             return "Yesterday";
         } else if (timestamp >= weekTimestamp) { // one week ago
-            format = new SimpleDateFormat("EEEE");
+            format = new SimpleDateFormat("EEEE", Locale.ENGLISH);
             return format.format(timestamp);
         } else { // further
             format = new SimpleDateFormat("dd.MM.yyyy");
