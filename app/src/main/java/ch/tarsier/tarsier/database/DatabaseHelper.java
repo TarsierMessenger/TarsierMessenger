@@ -2,8 +2,12 @@ package ch.tarsier.tarsier.database;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
+import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQuery;
 import android.util.Log;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -50,7 +54,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + Columns.Peer.COLUMN_NAME_IS_ONLINE + " " +  BOOLEAN_TYPE + ")";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, getCursorFactory(), DATABASE_VERSION);
+    }
+
+    private static SQLiteDatabase.CursorFactory getCursorFactory() {
+        return new SQLiteDatabase.CursorFactory() {
+            @Override
+            public Cursor newCursor(SQLiteDatabase database,
+                                    SQLiteCursorDriver driver,
+                                    String editTable,
+                                    SQLiteQuery query) {
+
+                Log.d(TAG, "Query: " + query.toString());
+
+                return new SQLiteCursor(driver, editTable, query);
+            }
+        };
     }
 
     @Override
