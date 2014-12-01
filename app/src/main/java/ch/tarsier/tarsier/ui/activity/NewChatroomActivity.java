@@ -28,7 +28,7 @@ import ch.tarsier.tarsier.validation.ChatroomNameValidator;
 /**
  * @author gluthier
  */
-public class NewChatRoomActivity extends Activity {
+public class NewChatroomActivity extends Activity {
 
     private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
 
@@ -41,7 +41,7 @@ public class NewChatRoomActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_chatroom);
 
-        mChatroomName = (EditText) findViewById(R.id.chat_room_name);
+        mChatroomName = (EditText) findViewById(R.id.chatroom_name);
         mEventBus = Tarsier.app().getEventBus();
 
         ActionBar actionBar = getActionBar();

@@ -122,7 +122,7 @@ public class NearbyListActivity extends Activity {
     }
 
     private void displayNewChatroomActivity() {
-        Intent newChat = new Intent(this, NewChatRoomActivity.class);
+        Intent newChat = new Intent(this, NewChatroomActivity.class);
         startActivity(newChat);
     }
 

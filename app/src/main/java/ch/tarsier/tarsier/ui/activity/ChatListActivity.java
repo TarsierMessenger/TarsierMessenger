@@ -19,7 +19,6 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
-import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
@@ -113,7 +112,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
     }
 
     private void createNewChatroom() {
-        Intent newChatroomIntent = new Intent(this, NewChatRoomActivity.class);
+        Intent newChatroomIntent = new Intent(this, NewChatroomActivity.class);
         startActivity(newChatroomIntent);
     }
 
