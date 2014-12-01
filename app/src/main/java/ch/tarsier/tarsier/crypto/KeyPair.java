@@ -20,8 +20,8 @@ public class KeyPair {
     }
 
     public KeyPair(String publicKey, String privateKey) {
-        this(Base64.decode(publicKey, Base64.DEFAULT),
-             Base64.decode(privateKey, Base64.DEFAULT));
+        this(Base64.decode(publicKey, Base64.NO_WRAP),
+             Base64.decode(privateKey, Base64.NO_WRAP));
     }
 
     public byte[] getPublicKey() {
@@ -33,10 +33,10 @@ public class KeyPair {
     }
 
     public String getBase64EncodedPublicKey() {
-        return Base64.encodeToString(mPublicKey, Base64.DEFAULT);
+        return Base64.encodeToString(mPublicKey, Base64.NO_WRAP);
     }
 
     public String getBase64EncodedPrivateKey() {
-        return Base64.encodeToString(mPrivateKey, Base64.DEFAULT);
+        return Base64.encodeToString(mPrivateKey, Base64.NO_WRAP);
     }
 }

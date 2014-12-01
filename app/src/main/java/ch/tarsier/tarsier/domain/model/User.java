@@ -1,5 +1,7 @@
 package ch.tarsier.tarsier.domain.model;
 
+import ch.tarsier.tarsier.Tarsier;
+
 /**
  * @author romac
  */

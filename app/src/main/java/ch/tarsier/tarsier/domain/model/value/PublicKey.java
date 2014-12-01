@@ -19,7 +19,7 @@ public class PublicKey implements Serializable, ByteArraySerializable {
     }
 
     public PublicKey(String base64Encoded) {
-        mBytes = Base64.decode(base64Encoded, Base64.DEFAULT);
+        mBytes = Base64.decode(base64Encoded, Base64.NO_WRAP);
     }
 
     public byte[] getBytes() {
@@ -49,7 +49,7 @@ public class PublicKey implements Serializable, ByteArraySerializable {
     }
 
     public String base64Encoded() {
-        return Base64.encodeToString(mBytes, Base64.DEFAULT);
+        return Base64.encodeToString(mBytes, Base64.NO_WRAP);
     }
 
     public String toString() {

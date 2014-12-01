@@ -210,7 +210,7 @@ public class PeerRepository extends AbstractRepository {
 
         try {
             long id = c.getLong(c.getColumnIndexOrThrow(Columns.Peer._ID));
-            byte[] publicKeyBytes = c.getBlob(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
+            String base64PublicKey = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
             String userName = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_USERNAME));
             String statusMessage = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_STATUS_MESSAGE));
             String picturePath = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_PICTURE_PATH));
@@ -218,7 +218,7 @@ public class PeerRepository extends AbstractRepository {
 
             Peer peer = new Peer();
             peer.setId(id);
-            peer.setPublicKey(new PublicKey(publicKeyBytes));
+            peer.setPublicKey(new PublicKey(base64PublicKey));
             peer.setUserName(userName);
             peer.setStatusMessage(statusMessage);
             peer.setPicturePath(picturePath);
@@ -234,7 +234,7 @@ public class PeerRepository extends AbstractRepository {
     private ContentValues getPeerValues(Peer peer) {
         ContentValues values = new ContentValues();
 
-        values.put(Columns.Peer.COLUMN_NAME_PUBLIC_KEY, peer.getPublicKey().getBytes());
+        values.put(Columns.Peer.COLUMN_NAME_PUBLIC_KEY, peer.getPublicKey().base64Encoded());
         values.put(Columns.Peer.COLUMN_NAME_USERNAME, peer.getUserName());
         values.put(Columns.Peer.COLUMN_NAME_STATUS_MESSAGE, peer.getStatusMessage());
         values.put(Columns.Peer.COLUMN_NAME_PICTURE_PATH, peer.getPicturePath());
