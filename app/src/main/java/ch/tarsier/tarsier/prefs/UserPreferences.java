@@ -21,7 +21,7 @@ public class UserPreferences extends AbstractPreferences {
 
     @Override
     protected String getPreferencesFile() {
-        return Tarsier.app().getString(R.string.personnal_file_key);
+        return Tarsier.app().getString(R.string.pref_filename);
     }
 
     public KeyPair getKeyPair() {
@@ -29,8 +29,8 @@ public class UserPreferences extends AbstractPreferences {
             if (!hasPublicKey()) {
                 generateKeyPair();
             } else {
-                byte[] publicKey = getString(R.string.personnal_file_public_key).getBytes();
-                byte[] privateKey = getString(R.string.personnal_file_private_key).getBytes();
+                byte[] publicKey = getString(R.string.pref_public_key).getBytes();
+                byte[] privateKey = getString(R.string.pref_private_key).getBytes();
                 mKeyPair = new KeyPair(publicKey, privateKey);
             }
         }
@@ -42,40 +42,28 @@ public class UserPreferences extends AbstractPreferences {
      */
     private void generateKeyPair() {
         mKeyPair = EC25519.generateKeyPair();
-        setString(R.string.personnal_file_public_key, new String(mKeyPair.getPublicKey()));
-        setString(R.string.personnal_file_private_key, new String(mKeyPair.getPrivateKey()));
+        setString(R.string.pref_public_key, new String(mKeyPair.getPublicKey()));
+        setString(R.string.pref_private_key, new String(mKeyPair.getPrivateKey()));
     }
 
     private boolean hasPublicKey() {
-        return getString(R.string.personnal_file_public_key) != null;
+        return getString(R.string.pref_public_key) != null;
     }
 
     public String getUsername() {
-        return getString(R.string.personnal_file_key_myusername);
+        return getString(R.string.pref_username);
     }
 
     public void setUsername(String username) {
-        setString(R.string.personnal_file_key_myusername, username);
+        setString(R.string.pref_username, username);
     }
 
     public String getStatusMessage() {
-        return getString(R.string.personnal_file_key_mymood);
+        return getString(R.string.pref_status_message);
     }
 
     public void setStatusMessage(String statusMessage) {
-        setString(R.string.personnal_file_key_mymood, statusMessage);
-    }
-
-    public String getBackground() {
-        return getString(R.string.preferences_file_key_background);
-    }
-
-    public String getSound() {
-        return getString(R.string.preferences_file_key_sound);
-    }
-
-    public String getVibration() {
-        return getString(R.string.preferences_file_key_vibration);
+        setString(R.string.pref_status_message, statusMessage);
     }
 
     public String getPicturePath() {
