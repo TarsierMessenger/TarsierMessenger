@@ -85,4 +85,12 @@ public class UserPreferences extends AbstractPreferences {
     public Uri getPictureUri() {
         return Uri.parse(getPicturePath());
     }
+
+    public boolean isDatabaseEmpty() {
+        return getBoolean(R.string.pref_database_filled, true);
+    }
+
+    public void setIsDatabaseEmpty(boolean isDatabaseEmpty) {
+        setBoolean(R.string.pref_database_filled, isDatabaseEmpty);
+    }
 }

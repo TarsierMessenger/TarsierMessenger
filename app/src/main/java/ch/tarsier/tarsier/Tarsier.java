@@ -157,7 +157,10 @@ public class Tarsier extends Application {
         protected Void doInBackground(Void... params) {
             while (!Tarsier.app().getDatabase().isReady()) { }
 
-            FillDatabaseWithFictionalData.populate();
+            if (getUserPreferences().isDatabaseEmpty()) {
+                FillDatabaseWithFictionalData.populate();
+                getUserPreferences().setIsDatabaseEmpty(false);
+            }
 
             return null;
         }

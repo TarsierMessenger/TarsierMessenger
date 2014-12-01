@@ -5,4 +5,5 @@
     <string name="pref_private_key">private_key</string>
     <string name="pref_username">username</string>
     <string name="pref_status_message">status_message</string>
+    <string name="pref_database_filled">database_filled</string>
 </resources>
