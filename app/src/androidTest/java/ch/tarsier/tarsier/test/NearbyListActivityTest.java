@@ -1,5 +1,6 @@
 package ch.tarsier.tarsier.test;
 
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.squareup.otto.Bus;
@@ -28,9 +29,11 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 /**
- * Created by benjamin on 28/11/14.
+ * @author benpac
  */
 public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<NearbyListActivity> {
+
+    private static final long SLEEP_TIME = 5000;
 
     private  Bus mEventBus;
 
@@ -46,18 +49,29 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
     }
 
     public void testEventSend() {
-        List<Peer> peerList = new ArrayList<Peer>();
-        Peer ben  =new Peer("Benpac","I am immortal");
+        List<WifiP2pDevice> peerList = new ArrayList<WifiP2pDevice>();
+
+        WifiP2pDevice ben  = new WifiP2pDevice();
+        ben.deviceName = "ben";
+        ben.status = WifiP2pDevice.AVAILABLE;
         peerList.add(ben);
-        peerList.add(new Peer("Romac", "Shut up ben"));
+
+        WifiP2pDevice romac = new WifiP2pDevice();
+        romac.deviceName = "romac";
+        romac.status = WifiP2pDevice.FAILED;
+        peerList.add(romac);
+
         onView(withText(R.string.tab_peer_name)).perform(click());
         mEventBus.post(new ReceivedNearbyPeersListEvent(peerList));
+
         peerList.add(ben);
+
         try {
-            Thread.sleep(5000,0);
+            Thread.sleep(SLEEP_TIME, 0);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         mEventBus.post(new ReceivedNearbyPeersListEvent(peerList));
         peerList.add(ben);
         mEventBus.post(new ReceivedNearbyPeersListEvent(peerList));

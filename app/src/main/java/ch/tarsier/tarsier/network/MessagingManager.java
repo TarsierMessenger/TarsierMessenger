@@ -32,6 +32,7 @@ import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
+import ch.tarsier.tarsier.event.RequestChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.SendMessageEvent;
 import ch.tarsier.tarsier.exception.DomainException;
@@ -61,7 +62,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     private WifiP2pManager.PeerListListener peerListListener;
 
-    private final ArrayList<WifiP2pDevice> mPeers = new ArrayList<WifiP2pDevice>();
+    private final ArrayList<WifiP2pDevice> mP2pDevices = new ArrayList<WifiP2pDevice>();
 
     private Handler mHandler = new Handler(this);
 
@@ -191,16 +192,16 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         peerListListener = new WifiP2pManager.PeerListListener() {
             @Override
             public synchronized void onPeersAvailable(WifiP2pDeviceList peersList) {
-                mPeers.clear();
-                mPeers.addAll(peersList.getDeviceList());
+                mP2pDevices.clear();
+                mP2pDevices.addAll(peersList.getDeviceList());
 
                 // If an AdapterView is backed by this data, notify it
                 // of the change.  For instance, if you have a ListView of available
                 // peers, trigger an update.
 
-                Log.d(WIFI_DIRECT_TAG, "Peer list updated: " + mPeers.toString());
+                Log.d(WIFI_DIRECT_TAG, "Peer list updated: " + mP2pDevices.toString());
 
-                if (mPeers.size() == 0) {
+                if (mP2pDevices.size() == 0) {
                     Log.d(WIFI_DIRECT_TAG, "No devices found");
                 }
             }
@@ -230,16 +231,21 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         });
     }
 
-    public List<Peer> getPeersList() {
+    public List<Peer> getChatroomPeersList() {
         if (mConnection == null) {
-            //FIXME Tests to show something on NearbyListActivity.
-            Log.d("Connection","mConnection is null");
+            // FIXME Tests to show something on NearbyListActivity.
+            Log.d("Connection", "mConnection is null");
             List<Peer> peerList = new ArrayList<Peer>();
             peerList.add(new Peer("ben", "lalala"));
+
             return peerList;
         }
 
         return mConnection.getPeersList();
+    }
+
+    private List<WifiP2pDevice> getNearbyPeersList() {
+        return mP2pDevices;
     }
 
     public void broadcastMessage(String message) {
@@ -270,7 +276,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
             case MessageType.MESSAGE_TYPE_PEER_LIST:
                 Log.d(NETWORK_LAYER_TAG, "MESSAGE_TYPE_PEER_LIST received.");
-                mEventBus.post(new ReceivedChatroomPeersListEvent(getPeersList()));
+                mEventBus.post(new ReceivedChatroomPeersListEvent(getChatroomPeersList()));
                 break;
 
             case MessageType.MESSAGE_TYPE_PRIVATE:
@@ -333,10 +339,19 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     @Subscribe
     public void onRequestNearbyPeersListEvent(RequestNearbyPeersListEvent event) {
-        Log.d("RequestList", "List is requested");
+        Log.d(NETWORK_LAYER_TAG, "Got RequestNearbyPeersListEvent");
 
         if (mEventBus != null) {
-            mEventBus.post(new ReceivedNearbyPeersListEvent(getPeersList()));
+            mEventBus.post(new ReceivedNearbyPeersListEvent(getNearbyPeersList()));
+        }
+    }
+
+    @Subscribe
+    public void onRequestChatroomPeersListEvent(RequestChatroomPeersListEvent event) {
+        Log.d(NETWORK_LAYER_TAG, "Got RequestChatroomPeersListEvent");
+
+        if (mEventBus != null) {
+            mEventBus.post(new ReceivedChatroomPeersListEvent(getChatroomPeersList()));
         }
     }
 
