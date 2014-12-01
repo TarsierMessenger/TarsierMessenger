@@ -55,6 +55,8 @@ public class Tarsier extends Application {
 
     private void initDatabase() {
         mDatabase = new Database(getApplicationContext());
+
+        new FillDatabase().execute();
     }
 
     public void initNetwork() {
@@ -149,4 +151,15 @@ public class Tarsier extends Application {
         return mUserRepository;
     }
 
+    private class FillDatabase extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            while (!Tarsier.app().getDatabase().isReady()) { }
+
+            FillDatabaseWithFictionalData.populate();
+
+            return null;
+        }
+    }
 }

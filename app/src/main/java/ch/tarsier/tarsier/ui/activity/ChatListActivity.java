@@ -15,7 +15,6 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
@@ -127,9 +126,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
         @Override
         protected List<Chat> doInBackground(Void... voids) {
             while (!Tarsier.app().getDatabase().isReady()) { }
-
-            //TODO delete for the demo
-            // FillDatabaseWithFictionalData.populate();
 
             ChatRepository chatRepository = Tarsier.app().getChatRepository();
 
