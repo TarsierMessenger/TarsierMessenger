@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
+
+import java.util.Collections;
 import java.util.List;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
@@ -41,6 +43,8 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
     public void addNewData(List<Message> data) {
         this.removeHeaderView(mHeader);
 
+        Collections.reverse(data);
+
         mBubbleAdapter.addAll(data);
         mBubbleAdapter.notifyDataSetChanged();
         isLoading = false;
@@ -53,7 +57,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
 
     public void setLoadingView(int resId) {
         LayoutInflater inflater = (LayoutInflater) super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mHeader = (View) inflater.inflate(resId, null);
+        mHeader = inflater.inflate(resId, null);
         this.addHeaderView(mHeader);
     }
 
@@ -72,12 +76,12 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem + visibleItemCount >= totalItemCount && !isLoading
+        /*if (firstVisibleItem + visibleItemCount >= totalItemCount && !isLoading
                 && !mAllMessagesLoaded && mEndlessListener != null) {
-                this.addHeaderView(mHeader);
+            this.addHeaderView(mHeader);
             isLoading = true;
             mEndlessListener.loadData();
-        }
+        }*/
     }
 
     @Override

@@ -151,25 +151,16 @@ public class Tarsier extends Application {
         return mUserRepository;
     }
 
-    // Reset the Tarsier.app() singleton [for testing purpose only]
-    public void reset() {
-        /*setUserPreferences(null);
-        setDatabase(null);
-
-        setPeerRepository(null);
-        setChatRepository(null);
-        setMessageRepository(null);
-
-        Tarsier.app().onCreate();*/
-    }
-
     private class FillDatabase extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             while (!Tarsier.app().getDatabase().isReady()) { }
 
-            FillDatabaseWithFictionalData.populate();
+            if (getUserPreferences().isDatabaseEmpty()) {
+                FillDatabaseWithFictionalData.populate();
+                getUserPreferences().setIsDatabaseEmpty(false);
+            }
 
             return null;
         }

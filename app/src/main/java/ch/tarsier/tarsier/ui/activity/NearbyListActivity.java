@@ -97,16 +97,42 @@ public class NearbyListActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.create_new_chat_from_nearby) {
-            Intent newChat = new Intent(this, NewChatRoomActivity.class);
-            startActivity(newChat);
+
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+
+            case R.id.create_new_chat_from_nearby:
+                displayNewChatroomActivity();
+                return true;
+
+            case R.id.action_profile:
+                displayProfileActivity();
+                return true;
+
+            case R.id.action_chats_list:
+                displayChatsListActivity();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    private void displayNewChatroomActivity() {
+        Intent newChat = new Intent(this, NewChatRoomActivity.class);
+        startActivity(newChat);
+    }
+
+    private void displayProfileActivity() {
+        Intent displayProfileIntent = new Intent(this, ProfileActivity.class);
+        startActivity(displayProfileIntent);
+    }
+
+    private void displayChatsListActivity() {
+        Intent chatsListActivity = new Intent(this, ChatListActivity.class);
+        startActivity(chatsListActivity);
     }
 }

@@ -12,14 +12,15 @@ import android.widget.Toast;
 
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.ui.view.ChatListView;
@@ -56,16 +57,19 @@ public class ChatListActivity extends Activity implements EndlessListener {
         mChatListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent chatIdIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                chatIdIntent.putExtra(CHAT_MESSAGE, mChatListAdapter.getItemId(position));
-
-                Toast.makeText(getBaseContext(), "TODO: start ChatActivity", Toast.LENGTH_SHORT).show();
-                //TODO startActivity(chatIdIntent);
+                Chat chat = mChatListAdapter.getItem(position);
+                displayChatActivity(chat);
             }
         });
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setDisplayShowHomeEnabled(false);
+    }
+
+    private void displayChatActivity(Chat chat) {
+        Intent chatIntent = new Intent(getApplicationContext(), ChatActivity.class);
+        chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, chat);
+        startActivity(chatIntent);
     }
 
     @Subscribe
@@ -125,19 +129,14 @@ public class ChatListActivity extends Activity implements EndlessListener {
         protected List<Chat> doInBackground(Void... voids) {
             while (!Tarsier.app().getDatabase().isReady()) { }
 
-            //TODO delete for the demo
-            FillDatabaseWithFictionalData.populate();
-
             ChatRepository chatRepository = Tarsier.app().getChatRepository();
 
-            List<Chat> chatList = null;
             try {
-                chatList = chatRepository.fetchAllChatsDescending();
-            } catch (InvalidCursorException e) {
+               return chatRepository.findAll();
+            } catch (NoSuchModelException e) {
                 e.printStackTrace();
+                return new ArrayList<Chat>();
             }
-
-            return chatList;
         }
 
         @Override

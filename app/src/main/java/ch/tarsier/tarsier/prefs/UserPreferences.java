@@ -27,27 +27,38 @@ public class UserPreferences extends AbstractPreferences {
     public KeyPair getKeyPair() {
         if (mKeyPair == null) {
             if (!hasPublicKey()) {
-                generateKeyPair();
+                mKeyPair = generateKeyPair();
             } else {
-                byte[] publicKey = getString(R.string.pref_public_key).getBytes();
-                byte[] privateKey = getString(R.string.pref_private_key).getBytes();
-                mKeyPair = new KeyPair(publicKey, privateKey);
+                mKeyPair = fetchKeyPair();
             }
         }
+
         return mKeyPair;
     }
 
     /**
      * Generate a KeyPair and store it in the user preferences
      */
-    private void generateKeyPair() {
-        mKeyPair = EC25519.generateKeyPair();
-        setString(R.string.pref_public_key, new String(mKeyPair.getPublicKey()));
-        setString(R.string.pref_private_key, new String(mKeyPair.getPrivateKey()));
+    private KeyPair generateKeyPair() {
+        KeyPair keyPair = EC25519.generateKeyPair();
+
+        setString(R.string.pref_public_key, keyPair.getBase64EncodedPublicKey());
+        setString(R.string.pref_private_key, keyPair.getBase64EncodedPrivateKey());
+
+        return keyPair;
+    }
+
+    private KeyPair fetchKeyPair() {
+        String publicKey = getString(R.string.pref_public_key);
+        String privateKey = getString(R.string.pref_private_key);
+
+        return new KeyPair(publicKey, privateKey);
     }
 
     private boolean hasPublicKey() {
-        return getString(R.string.pref_public_key) != null;
+        String publicKey = getString(R.string.pref_public_key);
+
+        return publicKey != null && !publicKey.equals("");
     }
 
     public String getUsername() {
@@ -73,5 +84,13 @@ public class UserPreferences extends AbstractPreferences {
 
     public Uri getPictureUri() {
         return Uri.parse(getPicturePath());
+    }
+
+    public boolean isDatabaseEmpty() {
+        return getBoolean(R.string.pref_database_filled, true);
+    }
+
+    public void setIsDatabaseEmpty(boolean isDatabaseEmpty) {
+        setBoolean(R.string.pref_database_filled, isDatabaseEmpty);
     }
 }

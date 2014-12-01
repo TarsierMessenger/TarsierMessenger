@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -36,12 +38,12 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
     private List<Message> mMessages;
     private int mLayoutId;
 
-    public BubbleAdapter(Context context, int layoutId) {
-        super(context, layoutId);
+    public BubbleAdapter(Context context, int layoutId, List<Message> messages) {
+        super(context, layoutId, messages);
 
         this.mContext = context;
         this.mLayoutId = layoutId;
-        this.mMessages = new ArrayList<Message>();
+        this.mMessages = messages;
     }
 
     @Override
@@ -77,13 +79,12 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Message message = this.getItem(position);
 
-        Peer sender = null;
+        Peer sender;
         try {
-            sender = Tarsier.app().getPeerRepository().findByPublicKey(new PublicKey(message.getSenderPublicKey()));
+            sender = Tarsier.app().getPeerRepository().findByPublicKey(message.getSenderPublicKey());
         } catch (NoSuchModelException e) {
-            //TODO : handle this case
-        } catch (InvalidCursorException e) {
             e.printStackTrace();
+            return convertView;
         }
 
         ViewHolder holder;
@@ -92,6 +93,7 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
             convertView = LayoutInflater.from(mContext).inflate(mLayoutId, parent, false);
             holder.dateSeparator = (TextView) convertView.findViewById(R.id.dateSeparator);
             holder.picture = (ImageView) convertView.findViewById(R.id.picture);
+            holder.bubble = (LinearLayout) convertView.findViewById(R.id.bubble);
             holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.message = (TextView) convertView.findViewById(R.id.message);
             holder.hour = (TextView) convertView.findViewById(R.id.hour);
@@ -101,7 +103,7 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
         }
 
         holder.dateSeparator.setText(DateUtil.computeDateSeparator(message.getDateTime()));
-        Bitmap profilePicture = BitmapFactory.decodeFile(sender.getPicturePath());
+        Bitmap profilePicture = sender.getPicture();
         holder.picture.setImageBitmap(profilePicture);
         holder.name.setText(sender.getUserName());
         holder.message.setText(message.getText());
@@ -110,10 +112,10 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
         LayoutParams lp = (LayoutParams) holder.message.getLayoutParams();
 
         if (message.isSentByUser()) {
-            holder.message.setBackgroundResource(R.drawable.bubble_text_right);
+            holder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
             lp.gravity = Gravity.RIGHT;
         } else {
-            holder.message.setBackgroundResource(R.drawable.bubble_text_left);
+            holder.bubble.setBackgroundResource(R.drawable.bubble_text_left);
             lp.gravity = Gravity.LEFT;
         }
 
@@ -128,6 +130,7 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
     static class ViewHolder {
         private TextView dateSeparator;
         private ImageView picture;
+        private LinearLayout bubble;
         private TextView name;
         private TextView message;
         private TextView hour;

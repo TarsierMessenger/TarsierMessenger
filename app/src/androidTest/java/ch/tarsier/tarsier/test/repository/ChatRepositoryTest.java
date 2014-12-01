@@ -53,8 +53,6 @@ public class ChatRepositoryTest extends AndroidTestCase {
                 assertEquals("Chat ID is invalid.", e.getMessage());
             } catch (NoSuchModelException e) {
                 fail("NoSuchModelException should not be thrown: " + e.getMessage());
-            } catch (InvalidCursorException e) {
-                fail("InvalidCursorException should not be thrown: " + e.getMessage());
             }
         }
     }
@@ -70,8 +68,6 @@ public class ChatRepositoryTest extends AndroidTestCase {
                 fail("IllegalArgumentException should not be thrown: " + e.getMessage());
             } catch (NoSuchModelException e) {
                 // good
-            } catch (InvalidCursorException e) {
-                fail("InvalidCursorException should not be thrown: " + e.getMessage());
             }
         }
     }
@@ -164,9 +160,8 @@ public class ChatRepositoryTest extends AndroidTestCase {
             fail("IllegalArgumentException should ne be thrown: " + e.getMessage());
         } catch (NoSuchModelException e) {
             fail("NoSuchModelException should not be thrown: " + e.getMessage());
-        } catch (InvalidCursorException e) {
-            fail("InvalidCursorException should not be thrown: " + e.getMessage());
         }
+
         assertNotNull(dummyChatFormDb);
 
         assertEquals("Quentin", dummyChatFormDb.getHost().getUserName());
@@ -212,9 +207,8 @@ public class ChatRepositoryTest extends AndroidTestCase {
             fail("IllegalArgumentException should ne be thrown: " + e.getMessage());
         } catch (NoSuchModelException e) {
             fail("NoSuchModelException should not be thrown: " + e.getMessage());
-        } catch (InvalidCursorException e) {
-            fail("InvalidCursorException should not be thrown: " + e.getMessage());
         }
+
         assertNotNull(dummyChatFormDb);
 
         assertEquals("Jean", dummyChatFormDb.getHost().getUserName());

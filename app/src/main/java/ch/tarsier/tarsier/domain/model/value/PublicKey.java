@@ -1,5 +1,7 @@
 package ch.tarsier.tarsier.domain.model.value;
 
+import android.util.Base64;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -14,6 +16,10 @@ public class PublicKey implements Serializable, ByteArraySerializable {
 
     public PublicKey(byte[] bytes) {
         mBytes = bytes;
+    }
+
+    public PublicKey(String base64Encoded) {
+        mBytes = Base64.decode(base64Encoded, Base64.NO_WRAP);
     }
 
     public byte[] getBytes() {
@@ -42,8 +48,12 @@ public class PublicKey implements Serializable, ByteArraySerializable {
         return Arrays.hashCode(mBytes);
     }
 
+    public String base64Encoded() {
+        return Base64.encodeToString(mBytes, Base64.NO_WRAP);
+    }
+
     public String toString() {
-        return new String(getBytes());
+        return base64Encoded();
     }
 
 }

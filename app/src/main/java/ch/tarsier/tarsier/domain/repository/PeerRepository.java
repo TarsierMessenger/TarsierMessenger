@@ -7,6 +7,7 @@ import android.database.CursorIndexOutOfBoundsException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Peer;
@@ -21,7 +22,7 @@ import ch.tarsier.tarsier.exception.UpdateException;
 /**
  * @author xawill
  */
-public class PeerRepository extends AbstractRepository {
+public class PeerRepository extends AbstractRepository<Peer> {
 
     private static final String TABLE_NAME = Columns.Peer.TABLE_NAME;
     private static final String ID_DESCEND = Columns.Peer._ID + " DESC";
@@ -30,7 +31,7 @@ public class PeerRepository extends AbstractRepository {
         super(database);
     }
 
-    public Peer findById(long id) throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
+    public Peer findById(long id) throws IllegalArgumentException, NoSuchModelException {
         if (id < 0) {
             throw new IllegalArgumentException("Peer ID is invalid.");
         }
@@ -46,8 +47,7 @@ public class PeerRepository extends AbstractRepository {
         );
 
         if (!cursor.moveToFirst()) {
-            // couldn't find a Message with this id
-            return null;
+            throw new NoSuchModelException("Could not find Peer with id " + id);
         }
 
         try {
@@ -59,18 +59,23 @@ public class PeerRepository extends AbstractRepository {
         }
     }
 
-    public Peer findByPublicKey(byte[] publicKey) throws NoSuchModelException, InvalidCursorException {
+    public Peer findByPublicKey(byte[] publicKey)
+            throws IllegalArgumentException, NoSuchModelException {
+        if (publicKey == null) {
+            throw new IllegalArgumentException("PublicKey is null.");
+        }
+
         return findByPublicKey(new PublicKey(publicKey));
     }
 
     public Peer findByPublicKey(PublicKey publicKey)
-            throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
+            throws IllegalArgumentException, NoSuchModelException {
 
         if (publicKey == null) {
             throw new IllegalArgumentException("PublicKey is null.");
         }
 
-        String whereClause = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = \"" + publicKey.getBytes().toString() + "\"";
+        String whereClause = Columns.Peer.COLUMN_NAME_PUBLIC_KEY + " = '" + publicKey.base64Encoded() + "'";
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -81,7 +86,9 @@ public class PeerRepository extends AbstractRepository {
         );
 
         if (!cursor.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+            throw new NoSuchModelException(
+                "Cannot find a peer with public key " + publicKey.base64Encoded() +
+                "\n user publicKey : " + new PublicKey(Tarsier.app().getUserPreferences().getKeyPair().getPublicKey()).base64Encoded());
         }
 
         try {
@@ -163,7 +170,7 @@ public class PeerRepository extends AbstractRepository {
     }
 
     // return null if there are no chats in the database
-    public List<Peer> fetchAllPeers() throws InvalidCursorException {
+    public List<Peer> findAll() throws NoSuchModelException {
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -172,41 +179,32 @@ public class PeerRepository extends AbstractRepository {
                 null
         );
 
-        List<Peer> peerList = new ArrayList<Peer>();
-
-        if(!cursor.moveToFirst()) {
-            // if the repository is empty, we return an empty list
+        try {
+            return buildListFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
             cursor.close();
-            return peerList;
         }
-
-        do {
-            try {
-                Peer peerToBeAdded = buildFromCursor(cursor);
-                if (peerToBeAdded != null) {
-                    peerList.add(peerToBeAdded);
-                }
-            } catch (InvalidCursorException e) {
-                e.printStackTrace();
-            } catch (NoSuchModelException e) {
-                e.printStackTrace();
-            }
-        } while (cursor.moveToNext());
-
-        cursor.close();
-
-        return peerList;
     }
 
-    private Peer buildFromCursor(Cursor c) throws InvalidCursorException, NoSuchModelException {
+    @Override
+    protected Peer buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
             throw new InvalidCursorException("Cursor is null.");
         }
 
+        if (c.isAfterLast()) {
+            throw new InvalidCursorException("Cursor is after last row.");
+        }
+
+        if (c.isBeforeFirst()) {
+            c.moveToFirst();
+        }
+
         try {
             long id = c.getLong(c.getColumnIndexOrThrow(Columns.Peer._ID));
-            byte[] publicKeyBytes = c.getBlob(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
-            PublicKey publicKey = new PublicKey(publicKeyBytes);
+            String base64PublicKey = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_PUBLIC_KEY));
             String userName = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_USERNAME));
             String statusMessage = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_STATUS_MESSAGE));
             String picturePath = c.getString(c.getColumnIndexOrThrow(Columns.Peer.COLUMN_NAME_PICTURE_PATH));
@@ -214,7 +212,7 @@ public class PeerRepository extends AbstractRepository {
 
             Peer peer = new Peer();
             peer.setId(id);
-            peer.setPublicKey(publicKey);
+            peer.setPublicKey(new PublicKey(base64PublicKey));
             peer.setUserName(userName);
             peer.setStatusMessage(statusMessage);
             peer.setPicturePath(picturePath);
@@ -230,7 +228,7 @@ public class PeerRepository extends AbstractRepository {
     private ContentValues getPeerValues(Peer peer) {
         ContentValues values = new ContentValues();
 
-        values.put(Columns.Peer.COLUMN_NAME_PUBLIC_KEY, peer.getPublicKey().getBytes());
+        values.put(Columns.Peer.COLUMN_NAME_PUBLIC_KEY, peer.getPublicKey().base64Encoded());
         values.put(Columns.Peer.COLUMN_NAME_USERNAME, peer.getUserName());
         values.put(Columns.Peer.COLUMN_NAME_STATUS_MESSAGE, peer.getStatusMessage());
         values.put(Columns.Peer.COLUMN_NAME_PICTURE_PATH, peer.getPicturePath());

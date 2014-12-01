@@ -37,9 +37,14 @@ public abstract class AbstractPreferences {
         editor.apply();
     }
 
-    protected long getLong(int key, long defaultValue) {
-        String keyString = mApp.getString(key);
-        return mShared.getLong(keyString, defaultValue);
+    protected boolean getBoolean(int key, boolean defaultValue) {
+        return mShared.getBoolean(mApp.getString(key), defaultValue);
+    }
+
+    protected void setBoolean(int key, boolean value) {
+        SharedPreferences.Editor editor = mShared.edit();
+        editor.putBoolean(mApp.getString(key), value);
+        editor.apply();
     }
 
 }
