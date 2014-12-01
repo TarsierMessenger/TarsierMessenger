@@ -58,13 +58,7 @@ public class ChatActivity extends Activity implements EndlessListener {
         mListView.setBubbleAdapter(mListViewAdapter);
         mListView.setEndlessListener(this);
 
-        //TODO Uncomment for production
-        //mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
-        try {
-            mChat = Tarsier.app().getChatRepository().getRandomChat();
-        } catch (NoSuchModelException e) {
-            e.printStackTrace();
-        }
+        mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
 
         if (mChat.getId() == -1) {
             // FIXME: Handle this
