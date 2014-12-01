@@ -1,5 +1,6 @@
 package ch.tarsier.tarsier.ui.activity;
 
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import android.app.ListActivity;
@@ -16,12 +17,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.domain.model.User;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
+import ch.tarsier.tarsier.event.RequestNearbyChatListEvent;
 
 /**
  * @author romac
@@ -39,11 +42,12 @@ public class ChatroomPeersActivity extends ListActivity {
 
         setUpData();
 
-        Tarsier.app().getEventBus().register(this);
+        Bus eventBus = Tarsier.app().getEventBus();
+        eventBus.register(this);
     }
 
     @Subscribe
-    public void receivedNewPeersList(ReceivedChatroomPeersListEvent event) {
+    public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
         mAdapter.clear();
         mAdapter.addAll(event.getPeers());
     }
@@ -58,9 +62,10 @@ public class ChatroomPeersActivity extends ListActivity {
         }
 
         Chat chat = (Chat) extras.getSerializable(EXTRAS_CHAT_KEY);
-        Peer[] peers = (User[]) extras.getSerializable(EXTRAS_PEERS_KEY);
+        Peer[] peers = (Peer[]) extras.getSerializable(EXTRAS_PEERS_KEY);
 
-        setAdapter(new ChatroomPeersArrayAdapter(this, chat, peers));
+        mAdapter = new ChatroomPeersArrayAdapter(this, chat, peers);
+        setAdapter(mAdapter);
     }
 
     private void setUpWithTestData() {
@@ -120,17 +125,17 @@ public class ChatroomPeersActivity extends ListActivity {
     class ChatroomPeersArrayAdapter extends ArrayAdapter<Peer> {
         private final static int LAYOUT = R.layout.chatroom_peer;
 
-        private final Context mContext;
         private final LayoutInflater mInflater;
-        private final Peer[] mPeers;
         private final Chat mChat;
+
+        ChatroomPeersArrayAdapter(Context context, Chat chat) {
+            this(context, chat, new Peer[] {});
+        }
 
         ChatroomPeersArrayAdapter(Context context, Chat chat, Peer[] peers) {
             super(context, LAYOUT, peers);
 
-            mContext = context;
             mInflater = getLayoutInflater();
-            mPeers = peers;
             mChat = chat;
         }
 
