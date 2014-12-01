@@ -35,6 +35,7 @@ import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.SendMessageEvent;
 import ch.tarsier.tarsier.exception.DomainException;
+import ch.tarsier.tarsier.exception.PeerCipherException;
 import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.network.server.ServerConnection;
 import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
@@ -46,8 +47,7 @@ import static ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPubli
  * @author FredericJacobs
  */
 public class MessagingManager extends BroadcastReceiver implements ConnectionInfoListener,
-        Handler.Callback,
-        MessageHandler {
+        Handler.Callback{
 
     private static final String NETWORK_LAYER_TAG = "TarsierMessagingManager";
 
@@ -246,7 +246,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         mConnection.broadcastMessage(message.getBytes());
     }
 
-    public void sendMessage(Peer peer, String message) {
+    public void sendMessage(Peer peer, String message) throws PeerCipherException {
         mConnection.sendMessage(peer, message.getBytes());
     }
 
@@ -315,7 +315,11 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             broadcastMessage(event.getMessage());
         } else if (event.isPrivate()) {
             Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a private message.");
-            sendMessage(event.getPeer(), event.getMessage());
+            try {
+                sendMessage(event.getPeer(), event.getMessage());
+            } catch (PeerCipherException e) {
+                Log.e(NETWORK_LAYER_TAG, "Cannot send message, encountered issue encrypting");
+            }
         } else {
             Log.d(NETWORK_LAYER_TAG, "Cannot send message that is neither private nor public.");
         }
@@ -340,7 +344,6 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         }
     }
 
-    @Override
     public Handler getConnectionHandler() {
         return mHandler;
     }
