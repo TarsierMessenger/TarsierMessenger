@@ -17,14 +17,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
-
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
-import ch.tarsier.tarsier.event.RequestNearbyChatListEvent;
+import ch.tarsier.tarsier.event.RequestChatroomPeersListEvent;
 
 /**
  * @author romac
@@ -41,9 +39,13 @@ public class ChatroomPeersActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         setUpData();
+        setUpEvent();
+    }
 
+    private void setUpEvent() {
         Bus eventBus = Tarsier.app().getEventBus();
         eventBus.register(this);
+        eventBus.post(new RequestChatroomPeersListEvent());
     }
 
     @Subscribe
