@@ -2,4 +2,5 @@
 <resources>
     <string name="chatroom_peers_image_desc">Participant\'s profile picture</string>
     <string name="chatroom_peers_online">Online</string>
+    <string name="chatroom_peers_owner">Owner</string>
 </resources>

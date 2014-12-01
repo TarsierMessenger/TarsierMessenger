@@ -65,12 +65,11 @@ public class Chat implements Serializable {
     }
 
     public boolean isHost(Peer peer) {
-        if (peer != null && getHost() != null) {
-            // TODO: Replace with Peer.equals() once we have it.
-            return getHost().getId() == peer.getId();
-        } else {
+        if (peer == null || getHost() == null) {
             return false;
         }
+
+        return getHost().getId() == peer.getId();
     }
 
     public int getAvatarRessourceId() {
