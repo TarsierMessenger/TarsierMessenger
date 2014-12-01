@@ -4,6 +4,10 @@ apply plugin: "jacoco"
 
 android {
     compileSdkVersion 18
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
     buildToolsVersion "21.1.1"
     defaultConfig {
         applicationId "ch.tarsier.tarsier"
