@@ -22,7 +22,7 @@ import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
 import ch.tarsier.tarsier.ui.activity.ChatActivity;
-import ch.tarsier.tarsier.ui.adapter.PeerAdapter;
+import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
 
 /**
  * @author benpac
@@ -31,13 +31,13 @@ import ch.tarsier.tarsier.ui.adapter.PeerAdapter;
 public class NearbyPeerFragment extends Fragment {
 
     private Activity mActivity;
-    private PeerAdapter mPeerAdapter;
+    private NearbyPeerAdapter mNearbyPeerAdapter;
     private static final String CHAT = "NearbyChat";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPeerAdapter = new PeerAdapter(mActivity, R.layout.row_nearby_peer_list);
+        mNearbyPeerAdapter = new NearbyPeerAdapter(mActivity, R.layout.row_nearby_peer_list);
         //Register to event bus and request the list of nearby peer
         Tarsier.app().getEventBus().register(this);
         Tarsier.app().getEventBus().post(new RequestNearbyPeersListEvent());
@@ -55,7 +55,7 @@ public class NearbyPeerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rowView = inflater.inflate(R.layout.fragment_nearby_peer, container, false);
         ListView lv = (ListView) rowView.findViewById(R.id.nearby_peer_list);
-        lv.setAdapter(mPeerAdapter);
+        lv.setAdapter(mNearbyPeerAdapter);
         //set on click listener
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -75,12 +75,12 @@ public class NearbyPeerFragment extends Fragment {
 
     @Subscribe
     public void receivedNewPeersList(ReceivedNearbyPeersListEvent event) {
-        mPeerAdapter.setPeerList(event.getPeers());
+        mNearbyPeerAdapter.setPeerList(event.getPeers());
     }
 
     //FIXME should maybe removed
-    public PeerAdapter getPeerAdapter() {
-        return mPeerAdapter;
+    public NearbyPeerAdapter getNearbyPeerAdapter() {
+        return mNearbyPeerAdapter;
     }
 
     private List<Peer> getListPeers() {

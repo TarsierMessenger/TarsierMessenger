@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-    
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,13 +22,13 @@ import ch.tarsier.tarsier.domain.model.Peer;
 /**
  * @author benpac
  */
-public class PeerAdapter extends ArrayAdapter<WifiP2pDevice> {
+public class NearbyPeerAdapter extends ArrayAdapter<WifiP2pDevice> {
 
     private List<WifiP2pDevice> mPeerList;
     private Context mContext;
     private int mRowLayoutId;
 
-    public PeerAdapter(Context context, int resource) {
+    public NearbyPeerAdapter(Context context, int resource) {
         super(context, resource);
         mPeerList = new ArrayList<WifiP2pDevice>();
         mContext = context;
@@ -61,6 +61,7 @@ public class PeerAdapter extends ArrayAdapter<WifiP2pDevice> {
         PeerHolder peerHolder = null;
 
         Log.d("PeerAdapter", "mContext is : " + ((Activity) mContext).getLocalClassName());
+
         if (row == null) {
             //create row
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
@@ -77,9 +78,10 @@ public class PeerAdapter extends ArrayAdapter<WifiP2pDevice> {
             // recover the information
             peerHolder = (PeerHolder) row.getTag();
         }
+
         WifiP2pDevice peerToShow = getItem(position);
         peerHolder.mUsername.setText(peerToShow.deviceName);
-        peerHolder.mStatus.setText(peerToShow.deviceAddress);
+        peerHolder.mStatus.setText(getDeviceStatus(peerToShow.status));
         peerHolder.mProfilePicture.setImageBitmap(
             BitmapFactory.decodeResource(
                     Tarsier.app().getResources(),
@@ -90,7 +92,22 @@ public class PeerAdapter extends ArrayAdapter<WifiP2pDevice> {
         return row;
     }
 
-
+    private String getDeviceStatus(int statusCode) {
+        switch (statusCode) {
+            case WifiP2pDevice.CONNECTED:
+                return mContext.getString(R.string.device_status_connected);
+            case WifiP2pDevice.INVITED:
+                return mContext.getString(R.string.ifi_device_status_invited);
+            case WifiP2pDevice.FAILED:
+                return mContext.getString(R.string.wifi_device_status_failed);
+            case WifiP2pDevice.AVAILABLE:
+                return mContext.getString(R.string.wifi_device_status_available);
+            case WifiP2pDevice.UNAVAILABLE:
+                return mContext.getString(R.string.wifi_device_status_unavailable);
+            default:
+                return mContext.getString(R.string.wifi_device_status_unknown);
+        }
+    }
 
     private class PeerHolder {
         TextView mUsername;
