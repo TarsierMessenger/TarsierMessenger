@@ -20,6 +20,7 @@ import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
 
 /**
@@ -41,11 +42,12 @@ public class FillDatabaseWithFictionalData {
         List<Peer> peerList = null;
 
         try {
-            chatList = chatRepository.fetchAllChatsDescending();
-            messageList = messageRepository.fetchAllMessagesDescending();
-            peerList = peerRepository.fetchAllPeers();
-        } catch (InvalidCursorException e) {
-            e.printStackTrace();
+            chatList = chatRepository.findAll();
+            messageList = messageRepository.findAll();
+            peerList = peerRepository.findAll();
+        } catch (NoSuchModelException e) {
+            Log.d(TAG, "An error occurred: " + e.toString());
+            return;
         }
 
         try {

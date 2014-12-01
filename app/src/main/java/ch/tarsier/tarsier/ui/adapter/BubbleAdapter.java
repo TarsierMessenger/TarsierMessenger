@@ -84,9 +84,6 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
         } catch (NoSuchModelException e) {
             e.printStackTrace();
             return convertView;
-        } catch (InvalidCursorException e) {
-            e.printStackTrace();
-            return convertView;
         }
 
         ViewHolder holder;

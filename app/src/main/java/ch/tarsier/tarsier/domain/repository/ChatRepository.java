@@ -29,7 +29,7 @@ import ch.tarsier.tarsier.util.ChatLastMessageDateSorter;
  * @author romac
  * @author McMoudi
  */
-public class ChatRepository extends AbstractRepository {
+public class ChatRepository extends AbstractRepository<Chat> {
 
     private static final String TABLE_NAME = Columns.Chat.TABLE_NAME;
     private static final String ID_DESCEND = Columns.Chat._ID + " DESC";
@@ -40,55 +40,6 @@ public class ChatRepository extends AbstractRepository {
         super(database);
 
         mPeerRepository = Tarsier.app().getPeerRepository();
-    }
-
-    public Chat findById(long id) throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
-        if (id < 0) {
-            throw new IllegalArgumentException("Chat ID is invalid.");
-        }
-
-        String whereClause = Columns.Chat._ID + " = " + id;
-
-        Cursor cursor = getReadableDatabase().query(
-                TABLE_NAME,
-                null,
-                whereClause,
-                null, null, null, null,
-                "1"
-        );
-
-        if (!cursor.moveToFirst()) {
-            throw new NoSuchModelException("Couldn't find a Message with id " + id);
-        }
-
-        try {
-            return buildFromCursor(cursor);
-        } catch (InvalidCursorException e) {
-            throw new NoSuchModelException(e);
-        } finally {
-            cursor.close();
-        }
-    }
-
-    public Chat getRandomChat() throws NoSuchModelException {
-        Cursor cursor = getReadableDatabase().query(
-                TABLE_NAME,
-                null, null, null, null, null, null,
-                "1"
-        );
-
-        if (!cursor.moveToFirst()) {
-            // couldn't find a Message with this id
-            return null;
-        }
-
-        try {
-            return buildFromCursor(cursor);
-        } catch (InvalidCursorException e) {
-            throw new NoSuchModelException(e);
-        } finally {
-            cursor.close();
-        }
     }
 
     public void insert(Chat chat) throws InvalidModelException, InsertException {
@@ -160,8 +111,7 @@ public class ChatRepository extends AbstractRepository {
         chat.setId(-1);
     }
 
-    // return null if there are no chats in the database
-    public List<Chat> fetchAllChatsDescending() throws InvalidCursorException {
+    public List<Chat> findAll() throws NoSuchModelException {
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -170,37 +120,75 @@ public class ChatRepository extends AbstractRepository {
                 null
         );
 
-        List<Chat> chatList = new ArrayList<Chat>();
-
-        if (!cursor.moveToFirst()) {
-            // if the repository is empty, we return an empty list
+        try {
+            return buildListFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
             cursor.close();
-            return chatList;
         }
-
-        do {
-            try {
-                Chat chatToBeAdded = buildFromCursor(cursor);
-                if (chatToBeAdded != null) {
-                    chatList.add(chatToBeAdded);
-                }
-            } catch (InvalidCursorException e) {
-                e.printStackTrace();
-            } catch (NoSuchModelException e) {
-                e.printStackTrace();
-            }
-        } while (cursor.moveToNext());
-
-        cursor.close();
-
-        Collections.sort(chatList, new ChatLastMessageDateSorter());
-
-        return chatList;
     }
 
-    private Chat buildFromCursor(Cursor c) throws InvalidCursorException, NoSuchModelException {
+    public Chat findById(long id) throws IllegalArgumentException, NoSuchModelException {
+        if (id < 0) {
+            throw new IllegalArgumentException("Chat ID is invalid.");
+        }
+
+        String whereClause = Columns.Chat._ID + " = " + id;
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null,
+                whereClause,
+                null, null, null, null,
+                "1"
+        );
+
+        if (!cursor.moveToFirst()) {
+            throw new NoSuchModelException("Couldn't find a Chat with id " + id);
+        }
+
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public Chat getRandomChat() throws NoSuchModelException {
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null, null, null, null, null, null,
+                "1"
+        );
+
+        if (!cursor.moveToFirst()) {
+            throw new NoSuchModelException("Couldn't find a random Chat");
+        }
+
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
+        }
+    }
+
+    @Override
+    protected Chat buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
             throw new InvalidCursorException("Cursor is null.");
+        }
+
+        if (c.isAfterLast()) {
+            throw new InvalidCursorException("Cursor is after last row.");
+        }
+
+        if (c.isBeforeFirst()) {
+            c.moveToFirst();
         }
 
         try {
@@ -226,6 +214,8 @@ public class ChatRepository extends AbstractRepository {
             return chat;
 
         } catch (CursorIndexOutOfBoundsException e) {
+            throw new InvalidCursorException(e);
+        } catch (NoSuchModelException e) {
             throw new InvalidCursorException(e);
         }
     }

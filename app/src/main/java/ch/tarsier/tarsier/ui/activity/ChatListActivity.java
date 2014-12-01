@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -19,6 +20,7 @@ import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.ui.view.ChatListView;
@@ -129,14 +131,12 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
             ChatRepository chatRepository = Tarsier.app().getChatRepository();
 
-            List<Chat> chatList = null;
             try {
-                chatList = chatRepository.fetchAllChatsDescending();
-            } catch (InvalidCursorException e) {
+               return chatRepository.findAll();
+            } catch (NoSuchModelException e) {
                 e.printStackTrace();
+                return new ArrayList<Chat>();
             }
-
-            return chatList;
         }
 
         @Override

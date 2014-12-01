@@ -21,7 +21,7 @@ import ch.tarsier.tarsier.exception.UpdateException;
 /**
  * @author xawill
  */
-public class PeerRepository extends AbstractRepository {
+public class PeerRepository extends AbstractRepository<Peer> {
 
     private static final String TABLE_NAME = Columns.Peer.TABLE_NAME;
     private static final String ID_DESCEND = Columns.Peer._ID + " DESC";
@@ -30,7 +30,7 @@ public class PeerRepository extends AbstractRepository {
         super(database);
     }
 
-    public Peer findById(long id) throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
+    public Peer findById(long id) throws IllegalArgumentException, NoSuchModelException {
         if (id < 0) {
             throw new IllegalArgumentException("Peer ID is invalid.");
         }
@@ -46,8 +46,7 @@ public class PeerRepository extends AbstractRepository {
         );
 
         if (!cursor.moveToFirst()) {
-            // couldn't find a Message with this id
-            return null;
+            throw new NoSuchModelException("Could not find Peer with id " + id);
         }
 
         try {
@@ -60,7 +59,7 @@ public class PeerRepository extends AbstractRepository {
     }
 
     public Peer findByPublicKey(byte[] publicKey)
-            throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
+            throws IllegalArgumentException, NoSuchModelException {
         if (publicKey == null) {
             throw new IllegalArgumentException("PublicKey is null.");
         }
@@ -69,7 +68,7 @@ public class PeerRepository extends AbstractRepository {
     }
 
     public Peer findByPublicKey(PublicKey publicKey)
-            throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
+            throws IllegalArgumentException, NoSuchModelException {
 
         if (publicKey == null) {
             throw new IllegalArgumentException("PublicKey is null.");
@@ -86,7 +85,8 @@ public class PeerRepository extends AbstractRepository {
         );
 
         if (!cursor.moveToFirst()) {
-            throw new InvalidCursorException("Cannot move to first element of the cursor.");
+            throw new NoSuchModelException(
+                "Cannot find a peer with public key " + publicKey.base64Encoded());
         }
 
         try {
@@ -168,7 +168,7 @@ public class PeerRepository extends AbstractRepository {
     }
 
     // return null if there are no chats in the database
-    public List<Peer> fetchAllPeers() throws InvalidCursorException {
+    public List<Peer> findAll() throws NoSuchModelException {
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -177,35 +177,27 @@ public class PeerRepository extends AbstractRepository {
                 null
         );
 
-        List<Peer> peerList = new ArrayList<Peer>();
-
-        if(!cursor.moveToFirst()) {
-            // if the repository is empty, we return an empty list
+        try {
+            return buildListFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
             cursor.close();
-            return peerList;
         }
-
-        do {
-            try {
-                Peer peerToBeAdded = buildFromCursor(cursor);
-                if (peerToBeAdded != null) {
-                    peerList.add(peerToBeAdded);
-                }
-            } catch (InvalidCursorException e) {
-                e.printStackTrace();
-            } catch (NoSuchModelException e) {
-                e.printStackTrace();
-            }
-        } while (cursor.moveToNext());
-
-        cursor.close();
-
-        return peerList;
     }
 
-    private Peer buildFromCursor(Cursor c) throws InvalidCursorException, NoSuchModelException {
+    @Override
+    protected Peer buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
             throw new InvalidCursorException("Cursor is null.");
+        }
+
+        if (c.isAfterLast()) {
+            throw new InvalidCursorException("Cursor is after last row.");
+        }
+
+        if (c.isBeforeFirst()) {
+            c.moveToFirst();
         }
 
         try {
