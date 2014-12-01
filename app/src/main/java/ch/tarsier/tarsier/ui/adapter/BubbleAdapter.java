@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -92,6 +93,7 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
             convertView = LayoutInflater.from(mContext).inflate(mLayoutId, parent, false);
             holder.dateSeparator = (TextView) convertView.findViewById(R.id.dateSeparator);
             holder.picture = (ImageView) convertView.findViewById(R.id.picture);
+            holder.bubble = (LinearLayout) convertView.findViewById(R.id.bubble);
             holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.message = (TextView) convertView.findViewById(R.id.message);
             holder.hour = (TextView) convertView.findViewById(R.id.hour);
@@ -110,10 +112,10 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
         LayoutParams lp = (LayoutParams) holder.message.getLayoutParams();
 
         if (message.isSentByUser()) {
-            holder.message.setBackgroundResource(R.drawable.bubble_text_right);
+            holder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
             lp.gravity = Gravity.RIGHT;
         } else {
-            holder.message.setBackgroundResource(R.drawable.bubble_text_left);
+            holder.bubble.setBackgroundResource(R.drawable.bubble_text_left);
             lp.gravity = Gravity.LEFT;
         }
 
@@ -128,6 +130,7 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
     static class ViewHolder {
         private TextView dateSeparator;
         private ImageView picture;
+        private LinearLayout bubble;
         private TextView name;
         private TextView message;
         private TextView hour;

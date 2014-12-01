@@ -18,7 +18,6 @@ import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
-import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
@@ -29,8 +28,6 @@ import ch.tarsier.tarsier.util.DateUtil;
 public class FillDatabaseWithFictionalData {
 
     private static final String TAG = "FillDatabaseWithFictionalData";
-
-    private static Chat mChat10;
 
     private static void clear() {
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
@@ -190,9 +187,9 @@ public class FillDatabaseWithFictionalData {
         chat9.setHost(benjamin);
         chat9.setPrivate(true);
 
-        mChat10 = new Chat();
-        mChat10.setHost(gabriel);
-        mChat10.setTitle("Saaaaat");
+        Chat chat10 = new Chat();
+        chat10.setHost(gabriel);
+        chat10.setTitle("Saaaaat");
         chat1.setPrivate(false);
 
         try {
@@ -206,7 +203,7 @@ public class FillDatabaseWithFictionalData {
             chatRepository.insert(chat7);
             chatRepository.insert(chat8);
             chatRepository.insert(chat9);
-            chatRepository.insert(mChat10);
+            chatRepository.insert(chat10);
         } catch (InvalidModelException e) {
             Log.d(TAG, "An error occurred while creating chats: " + e.toString());
             e.printStackTrace();
@@ -328,7 +325,7 @@ public class FillDatabaseWithFictionalData {
         time3 += random.nextInt(oneMinute);
         messagesChat3.add(new Message(chat3Id, "pareil", benjaminId, time3));
         time3 += random.nextInt(oneMinute);
-        messagesChat3.add(new Message(chat3Id, "Je vais prendre un Kwak si t'arrives", xavierId, time3));
+        messagesChat3.add(new Message(chat3Id, "Je vais prendre un Kwak si t'arrives", time3));
         time3 += random.nextInt(oneMinute);
         messagesChat3.add(new Message(chat3Id, "Ok ça marche", gabrielId, time3));
         time3 += random.nextInt(oneMinute);
@@ -429,7 +426,7 @@ public class FillDatabaseWithFictionalData {
         long time6 = time5 - oneDay;
         long chat6Id = chat6.getId();
 
-        messagesChat6.add(new Message(chat6Id, "Yo, tu peux m'envoyer pleins de messages pour tester l'affichage de l'app stp?", xavierId, time6));
+        messagesChat6.add(new Message(chat6Id, "Yo, tu peux m'envoyer pleins de messages pour tester l'affichage de l'app stp?", time6));
         time6 += random.nextInt(oneHour);
         messagesChat6.add(new Message(chat6Id, "Ok!", gabrielId, time6));
         time6 += random.nextInt(oneMinute);
@@ -586,7 +583,7 @@ public class FillDatabaseWithFictionalData {
         //Generate the messages for the tenth chat
         ArrayList<Message> messagesChat10 = new ArrayList<Message>(24);
         long time10 = time9 - oneDay;
-        long chat10Id = mChat10.getId();
+        long chat10Id = chat10.getId();
 
         messagesChat10.add(new Message(chat10Id, "Quel est le meilleur bar?", gabrielId, time10));
         time10 += random.nextInt(oneMinute);
@@ -600,7 +597,7 @@ public class FillDatabaseWithFictionalData {
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "sat", romainId, time10));
         time10 += random.nextInt(oneMinute);
-        messagesChat10.add(new Message(chat10Id, "sat", xavierId, time10));
+        messagesChat10.add(new Message(chat10Id, "sat", time10));
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "sat", yannId, time10));
         time10 += random.nextInt(oneMinute);
@@ -616,7 +613,7 @@ public class FillDatabaseWithFictionalData {
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "à sat", romainId, time10));
         time10 += random.nextInt(oneMinute);
-        messagesChat10.add(new Message(chat10Id, "à sat", xavierId, time10));
+        messagesChat10.add(new Message(chat10Id, "à sat", time10));
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "à sat", yannId, time10));
         time10 += random.nextInt(oneMinute);
@@ -632,7 +629,7 @@ public class FillDatabaseWithFictionalData {
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "à sat", romainId, time10));
         time10 += random.nextInt(oneMinute);
-        messagesChat10.add(new Message(chat10Id, "à sat", xavierId, time10));
+        messagesChat10.add(new Message(chat10Id, "à sat", time10));
         time10 += random.nextInt(oneMinute);
         messagesChat10.add(new Message(chat10Id, "à sat", yannId, time10));
 
@@ -648,9 +645,4 @@ public class FillDatabaseWithFictionalData {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
-    }
-
-    public static Chat getChat10() {
-        return mChat10;
-    }
-}
+    }}

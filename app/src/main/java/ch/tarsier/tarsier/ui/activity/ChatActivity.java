@@ -71,8 +71,7 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         mMessageToBeSend.addTextChangedListener(new EditTextWatcher());
 
-        /** Todo if we have time... Possibility to retrieve one message not yet sent but already
-         *  Todo typed
+        /** Todo if we have time... Possibility to retrieve one message not yet sent but already typed
          */
     }
 
@@ -95,6 +94,10 @@ public class ChatActivity extends Activity implements EndlessListener {
 
             //Add the message to the database
             Tarsier.app().getMessageRepository().insert(sentMessage);
+
+            //TODO : send it over the network
+
+            mListView.setSelection(mListViewAdapter.getCount() - 1);
         } catch (InsertException e) {
             e.printStackTrace();
         } catch (InvalidModelException e) {
@@ -117,14 +120,14 @@ public class ChatActivity extends Activity implements EndlessListener {
         protected List<Message> doInBackground(Void... params) {
             while (!Tarsier.app().getDatabase().isReady()) { }
 
-            // long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
+            long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
 
             List<Message> newMessages = new ArrayList<Message>();
             try {
-                newMessages.addAll(Tarsier.app().getMessageRepository().findByChat(
-                    mChat,
-                    // lastMessageTimestamp,
-                    NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE));
+                newMessages.addAll(Tarsier.app().getMessageRepository().findByChatUntil(
+                        mChat,
+                        lastMessageTimestamp,
+                        NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE));
             } catch (NoSuchModelException e) {
                 e.printStackTrace();
             }
@@ -135,6 +138,12 @@ public class ChatActivity extends Activity implements EndlessListener {
         @Override
         protected void onPostExecute(List<Message> result) {
             super.onPostExecute(result);
+
+            boolean hasToScrollDown = false;
+            if (mListViewAdapter.getCount() == 0) {
+                hasToScrollDown = true;
+            }
+
             if (result.size() > 0) {
                 mListView.addNewData(result);
             }
@@ -142,6 +151,10 @@ public class ChatActivity extends Activity implements EndlessListener {
             // Tell the ListView to stop retrieving messages since there all loaded in it.
             if (result.size() < NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE) {
                 mListView.setAllMessagesLoaded(true);
+            }
+
+            if (hasToScrollDown) {
+                mListView.setSelection(mListViewAdapter.getCount() - 1);
             }
         }
     }
