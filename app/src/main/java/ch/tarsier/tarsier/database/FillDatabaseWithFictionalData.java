@@ -127,7 +127,6 @@ public class FillDatabaseWithFictionalData {
         byte[] gabrielId = gabriel.getPublicKey().getBytes();
         byte[] marinId = marin.getPublicKey().getBytes();
         byte[] romainId = romain.getPublicKey().getBytes();
-        byte[] xavierId = xavier.getPublicKey().getBytes();
         byte[] yannId = yann.getPublicKey().getBytes();
 
         try {

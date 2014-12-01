@@ -279,10 +279,18 @@ public class MessageRepository extends AbstractRepository<Message> {
         try {
             int chatId = c.getInt(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_CHAT_ID));
             String text = c.getString(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_MSG));
-            String base64PublicKey = c.getString(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_SENDER_PUBLIC_KEY));
+            String base64PublicKey = c.getString(
+                    c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_SENDER_PUBLIC_KEY));
+            boolean isSentByUser = c.getInt(c.getColumnIndexOrThrow(
+                    Columns.Message.COLUMN_NAME_SENT_BY_USER)) != 0;
             long dateTime = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_DATETIME));
 
-            Message message = new Message(chatId, text, new PublicKey(base64PublicKey), dateTime);
+            Message message = null;
+            if (isSentByUser) {
+                message = new Message(chatId, text, dateTime);
+            } else {
+                message = new Message(chatId, text, new PublicKey(base64PublicKey), dateTime);
+            }
             message.setId(c.getLong(c.getColumnIndexOrThrow(Columns.Message._ID)));
 
             return message;
@@ -298,6 +306,7 @@ public class MessageRepository extends AbstractRepository<Message> {
         values.put(Columns.Message.COLUMN_NAME_CHAT_ID, message.getChatId());
         values.put(Columns.Message.COLUMN_NAME_MSG, message.getText());
         values.put(Columns.Message.COLUMN_NAME_SENDER_PUBLIC_KEY, message.getSenderPublicKey().base64Encoded());
+        values.put(Columns.Message.COLUMN_NAME_SENT_BY_USER, message.isSentByUser());
         values.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());
 
         return values;

@@ -43,6 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + Columns.Message.COLUMN_NAME_MSG + " " + TEXT_TYPE + COMMA_SEP + " "
             + Columns.Message.COLUMN_NAME_DATETIME + " " + DATETIME_TYPE + COMMA_SEP + " "
             + Columns.Message.COLUMN_NAME_SENDER_PUBLIC_KEY + " " + PUBLIC_KEY_TYPE + COMMA_SEP + " "
+            + Columns.Message.COLUMN_NAME_SENT_BY_USER + " " + BOOLEAN_TYPE + COMMA_SEP + " "
             + Columns.Message.COLUMN_NAME_CHAT_ID + " " + ID_TYPE + ")";
 
     private static final String SQL_CREATE_PEER = CREATE_TABLE + " " + Columns.Peer.TABLE_NAME + " ("
