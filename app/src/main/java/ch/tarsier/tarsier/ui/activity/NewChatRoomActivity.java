@@ -1,5 +1,8 @@
 package ch.tarsier.tarsier.ui.activity;
 
+import com.squareup.otto.Bus;
+
+import android.app.ActionBar;
 import android.app.Activity;
 
 import android.content.Intent;
@@ -15,6 +18,7 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.UserRepository;
+import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
@@ -30,15 +34,21 @@ public class NewChatRoomActivity extends Activity {
 
     private EditText mChatroomName;
 
+    private Bus mEventBus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_chatroom);
 
         mChatroomName = (EditText) findViewById(R.id.chat_room_name);
+        mEventBus = Tarsier.app().getEventBus();
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setDisplayShowHomeEnabled(false);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
     }
 
     @Override
@@ -71,23 +81,27 @@ public class NewChatRoomActivity extends Activity {
     private void createChatroom()
             throws InvalidCursorException, NoSuchModelException, InvalidModelException, InsertException {
 
-        if (validateChatRoomName()) {
-            ChatRepository chatRepository = Tarsier.app().getChatRepository();
-            UserRepository userRepository = Tarsier.app().getUserRepository();
-
-            Chat newChatroom = new Chat();
-            newChatroom.setPrivate(false);
-            newChatroom.setTitle(mChatroomName.getText().toString());
-            newChatroom.setHost(userRepository.getUser());
-
-            chatRepository.insert(newChatroom);
-
-            Intent newChatroomIntent = new Intent(this, ChatActivity.class);
-            newChatroomIntent.putExtra(CHAT_MESSAGE, newChatroom);
-
-            Toast.makeText(this, "TODO: start ChatActivity", Toast.LENGTH_SHORT).show();
-            //TODO startActivity(newChatroomIntent);
+        if (!validateChatRoomName()) {
+            Toast.makeText(this, "The chatroom name is invalid.", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        ChatRepository chatRepository = Tarsier.app().getChatRepository();
+        UserRepository userRepository = Tarsier.app().getUserRepository();
+
+        Chat newChatroom = new Chat();
+        newChatroom.setPrivate(false);
+        newChatroom.setTitle(mChatroomName.getText().toString());
+        newChatroom.setHost(userRepository.getUser());
+
+        chatRepository.insert(newChatroom);
+
+        mEventBus.post(new CreateGroupEvent(newChatroom));
+
+        Intent newChatroomIntent = new Intent(this, ChatActivity.class);
+        newChatroomIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, newChatroom);
+
+        startActivity(newChatroomIntent);
     }
 
     private boolean validateChatRoomName() {
