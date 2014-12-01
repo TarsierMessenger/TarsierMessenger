@@ -78,13 +78,15 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Message message = this.getItem(position);
 
-        Peer sender = null;
+        Peer sender;
         try {
             sender = Tarsier.app().getPeerRepository().findByPublicKey(message.getSenderPublicKey());
         } catch (NoSuchModelException e) {
-            //TODO : handle this case
+            e.printStackTrace();
+            return convertView;
         } catch (InvalidCursorException e) {
             e.printStackTrace();
+            return convertView;
         }
 
         ViewHolder holder;
@@ -102,7 +104,7 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
         }
 
         holder.dateSeparator.setText(DateUtil.computeDateSeparator(message.getDateTime()));
-        Bitmap profilePicture = BitmapFactory.decodeFile(sender.getPicturePath());
+        Bitmap profilePicture = sender.getPicture();
         holder.picture.setImageBitmap(profilePicture);
         holder.name.setText(sender.getUserName());
         holder.message.setText(message.getText());

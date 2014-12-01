@@ -12,4 +12,13 @@ public final class User extends Peer {
         return true;
     }
 
+    @Override
+    public String getPicturePath() {
+        if (super.getPicturePath() == null) {
+            setPicturePath(Tarsier.app().getUserPreferences().getPicturePath());
+        }
+
+        return super.getPicturePath();
+    }
+
 }

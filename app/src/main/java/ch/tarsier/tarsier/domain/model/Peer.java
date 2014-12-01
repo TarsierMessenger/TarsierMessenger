@@ -3,8 +3,12 @@ package ch.tarsier.tarsier.domain.model;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.Serializable;
 
+import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.data.ByteArraySerializable;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
@@ -92,6 +96,14 @@ public class Peer implements ByteArraySerializable, Serializable {
 
     public boolean isOnline() {
         return mOnline;
+    }
+
+    public Bitmap getPicture() {
+        if (getPicturePath() != null) {
+            return BitmapFactory.decodeFile(getPicturePath());
+        }
+
+        return BitmapFactory.decodeResource(Tarsier.app().getResources(), R.drawable.tarsier_placeholder);
     }
 
     public String getPicturePath() {
