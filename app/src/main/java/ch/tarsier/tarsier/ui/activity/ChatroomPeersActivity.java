@@ -98,7 +98,7 @@ public class ChatroomPeersActivity extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.chat_room_peers, menu);
+        getMenuInflater().inflate(R.menu.chatroom_peers, menu);
         return true;
     }
 
