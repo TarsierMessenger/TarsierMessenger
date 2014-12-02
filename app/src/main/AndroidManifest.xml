@@ -74,8 +74,8 @@
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.ChatActivity"
-            android:label="@string/title_activity_conversation"
             android:parentActivityName=".ui.activity.ChatListActivity">
+            android:label="@string/title_activity_chat" >
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.NearbyListActivity"
