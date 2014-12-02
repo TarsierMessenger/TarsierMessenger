@@ -2,12 +2,14 @@ package ch.tarsier.tarsier.ui.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -88,6 +90,22 @@ public class ChatActivity extends Activity implements EndlessListener {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.chat, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.goto_profile_activity:
+                openProfile();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void openProfile() {
+        Intent openProfileIntent = new Intent(this, ProfileActivity.class);
+        startActivity(openProfileIntent);
     }
 
     public void onClickSendMessage(View view) {

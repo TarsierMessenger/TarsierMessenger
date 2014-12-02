@@ -12,13 +12,8 @@
           android:orderInCategory="100"
           android:showAsAction="never" />
 
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
-
     <item android:id="@+id/create_new_chat_from_nearby"
         android:title="@string/new_chatroom"
         android:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_chat" />
+        android:icon="@drawable/ic_action_add_group" />
 </menu>

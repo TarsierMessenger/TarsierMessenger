@@ -61,15 +61,7 @@ public class ProfileActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.action_settings:
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -80,10 +72,6 @@ public class ProfileActivity extends Activity {
     public void onClickAddPicture(View view) {
         Intent pictureIntent = new Intent(this, AddProfilePictureActivity.class);
         startActivity(pictureIntent);
-    }
-
-    public void onClickCancel(MenuItem item) {
-        finish();
     }
 
     public void onClickSave(MenuItem item) {

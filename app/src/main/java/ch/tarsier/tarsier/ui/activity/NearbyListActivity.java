@@ -104,9 +104,6 @@ public class NearbyListActivity extends Activity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_settings:
-                return true;
-
             case R.id.create_new_chat_from_nearby:
                 displayNewChatroomActivity();
                 return true;
