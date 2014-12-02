@@ -26,69 +26,70 @@ import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
 public class NearbyListActivity extends Activity {
 
     private NearbyPeerFragment mNearbyPeer;
-    private NearbyChatListFragment mNearbyChatList;
+    //private NearbyChatListFragment mNearbyChatList;
 
     private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final ActionBar actionBar = getActionBar();
+        //final ActionBar actionBar = getActionBar();
         super.onCreate(savedInstanceState);
         Tarsier.app().getEventBus().register(this);
         setContentView(R.layout.activity_nearby_list);
         mFragmentManager = getFragmentManager();
 
         // Specify that tabs should be displayed in the action bar.
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setTitle(getString(R.string.action_bar_title));
+        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        //actionBar.setTitle(getString(R.string.action_bar_title));
 
         mNearbyPeer = new NearbyPeerFragment();
-        mNearbyChatList = new NearbyChatListFragment();
+//        mNearbyChatList = new NearbyChatListFragment();
 
-//        FragmentTransaction ft = mFragmentManager.beginTransaction();
-//        ft.add(R.id.inside_nearby, mNearbyPeer, "peer");
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        ft.replace(R.id.inside_nearby, mNearbyPeer, "peer");
+        //FIXME useless tab stuff to be removed
 //        ft.add(R.id.inside_nearby, mNearbyChatList, "chatList");
 
 
         // Create a tab listener that is called when the user changes tabs.
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-                if (tab.getPosition() == 0) {
-
-                    //ft.attach(mNearbyChatList);
-                    View menuNewChat = findViewById(R.id.create_new_chat_from_nearby);
-                    if (menuNewChat != null) {
-                        menuNewChat.setVisibility(View.VISIBLE);
-                    }
-                    ft.replace(R.id.inside_nearby, mNearbyChatList);
-                } else if (tab.getPosition() == 1) {
-                    //ft.attach(mNearbyPeer);
-                    View menuNewChat = findViewById(R.id.create_new_chat_from_nearby);
-                    if (menuNewChat != null) {
-                        menuNewChat.setVisibility(View.GONE);
-                    }
-                    ft.replace(R.id.inside_nearby, mNearbyPeer);
-                }
-            }
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                if (tab.getPosition() == 0) {
-                    //ft.detach(mNearbyChatList);
-                } else if (tab.getPosition() == 1) {
-                    //ft.detach(mNearbyPeer);
-                }
-            }
-
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-            }
-        };
-        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_chatroom_name)).setTabListener(tabListener));
-        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_peer_name)).setTabListener(tabListener));
-
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(false);
-        }
+//        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+//            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+//                if (tab.getPosition() == 0) {
+//
+//                    //ft.attach(mNearbyChatList);
+//                    View menuNewChat = findViewById(R.id.create_new_chat_from_nearby);
+//                    if (menuNewChat != null) {
+//                        menuNewChat.setVisibility(View.VISIBLE);
+//                    }
+//                    ft.replace(R.id.inside_nearby, mNearbyChatList);
+//                } else if (tab.getPosition() == 1) {
+//                    //ft.attach(mNearbyPeer);
+//                    View menuNewChat = findViewById(R.id.create_new_chat_from_nearby);
+//                    if (menuNewChat != null) {
+//                        menuNewChat.setVisibility(View.GONE);
+//                    }
+//                    ft.replace(R.id.inside_nearby, mNearbyPeer);
+//                }
+//            }
+//            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+//                if (tab.getPosition() == 0) {
+//                    //ft.detach(mNearbyChatList);
+//                } else if (tab.getPosition() == 1) {
+//                    //ft.detach(mNearbyPeer);
+//                }
+//            }
+//
+//            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+//
+//            }
+//        };
+//        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_chatroom_name)).setTabListener(tabListener));
+//        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_peer_name)).setTabListener(tabListener));
+//
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setDisplayShowHomeEnabled(false);
+//        }
     }
 
 

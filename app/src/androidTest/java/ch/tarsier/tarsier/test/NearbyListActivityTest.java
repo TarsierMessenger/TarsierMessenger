@@ -61,9 +61,7 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
         romac.status = WifiP2pDevice.FAILED;
         peerList.add(romac);
 
-        onView(withText(R.string.tab_peer_name)).perform(click());
         mEventBus.post(new ReceivedNearbyPeersListEvent(peerList));
-
         peerList.add(ben);
 
         try {

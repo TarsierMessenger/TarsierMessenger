@@ -62,11 +62,11 @@ public class NearbyPeerFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent chatIntent = new Intent(mActivity, ChatActivity.class);
-                chatIntent.putExtra(CHAT, (Peer) adapterView.getItemAtPosition(position));
+                //chatIntent.putExtra(CHAT, (Peer) adapterView.getItemAtPosition(position));
 
-                Toast.makeText(mActivity,
-                        "peer id is " + ((Peer) adapterView.getItemAtPosition(position)).getId(),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mActivity,
+//                        "peer id is " + ((Peer) adapterView.getItemAtPosition(position)).getId(),
+//                        Toast.LENGTH_SHORT).show();
                 // TODO decomment when it is ok
                 //startActivity(chatIntent);
             }
@@ -85,9 +85,4 @@ public class NearbyPeerFragment extends Fragment {
         return mNearbyPeerAdapter;
     }
 
-    private List<Peer> getListPeers() {
-        List<Peer> peers = new ArrayList<Peer>();
-
-        return peers;
-    }
 }
