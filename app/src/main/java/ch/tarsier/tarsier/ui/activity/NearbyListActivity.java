@@ -85,6 +85,10 @@ public class NearbyListActivity extends Activity {
         actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_chatroom_name)).setTabListener(tabListener));
         actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_peer_name)).setTabListener(tabListener));
 
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
     }
 
 

@@ -1,5 +1,6 @@
 package ch.tarsier.tarsier.ui.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,6 +41,12 @@ public class ProfileActivity extends Activity {
         mProfilePicture = (ImageView) findViewById(R.id.add_picture_button);
 
         refreshFields();
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
     }
 
     @Override

@@ -60,11 +60,12 @@
         <activity
             android:name=".ui.activity.NewChatroomActivity"
             android:label="@string/title_activity_new_chatrooom"
-            android:parentActivityName="ch.tarsier.tarsier.ui.activity.ChatListActivity" >
+            android:parentActivityName=".ui.activity.NearbyListActivity">
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.ChatroomPeersActivity"
-            android:label="@string/title_activity_chat_room_participants" >
+            android:label="@string/title_activity_chat_room_participants"
+            android:parentActivityName=".ui.activity.ChatActivity">
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.ChatListActivity"
@@ -73,11 +74,13 @@
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.ChatActivity"
-            android:label="@string/title_activity_conversation" >
+            android:label="@string/title_activity_conversation"
+            android:parentActivityName=".ui.activity.ChatListActivity">
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.NearbyListActivity"
-            android:label="@string/title_activity_nearby_list">
+            android:label="@string/title_activity_nearby_list"
+            android:parentActivityName=".ui.activity.ChatListActivity">
         </activity>
     </application>
 

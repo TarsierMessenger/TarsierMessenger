@@ -1,5 +1,6 @@
 package ch.tarsier.tarsier.ui.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -73,6 +74,12 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         /** Todo if we have time... Possibility to retrieve one message not yet sent but already typed
          */
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
     }
 
     @Override

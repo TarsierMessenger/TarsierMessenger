@@ -1,5 +1,6 @@
 package ch.tarsier.tarsier.ui.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -52,6 +53,12 @@ public class AddProfilePictureActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_profile_picture);
         mImageView = (ImageView) findViewById(R.id.preview_profile_picture);
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
     }
 
     /**

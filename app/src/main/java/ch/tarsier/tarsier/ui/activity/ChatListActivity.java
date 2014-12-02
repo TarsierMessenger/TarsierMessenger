@@ -1,5 +1,6 @@
 package ch.tarsier.tarsier.ui.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -61,8 +62,11 @@ public class ChatListActivity extends Activity implements EndlessListener {
             }
         });
 
-        getActionBar().setDisplayHomeAsUpEnabled(false);
-        getActionBar().setDisplayShowHomeEnabled(false);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
     }
 
     private void displayChatActivity(Chat chat) {
@@ -91,11 +95,8 @@ public class ChatListActivity extends Activity implements EndlessListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.create_private_chat:
-                createNewPrivateChat();
-                return true;
-            case R.id.create_new_chatroom:
-                createNewChatroom();
+            case R.id.create_chat_from_chat_list_activity:
+                createNewChat();
                 return true;
             case R.id.goto_profile_activity:
                 openProfile();
@@ -105,15 +106,9 @@ public class ChatListActivity extends Activity implements EndlessListener {
         }
     }
 
-    private void createNewPrivateChat() {
-        Toast.makeText(this, "TODO: start NearbyListActivity", Toast.LENGTH_SHORT).show();
-        //TODO Intent newPrivateChatIntent = new Intent(this, NearbyListActivity.class);
-        //TODO startActivity(newPrivateChatIntent);
-    }
-
-    private void createNewChatroom() {
-        Intent newChatroomIntent = new Intent(this, NewChatroomActivity.class);
-        startActivity(newChatroomIntent);
+    private void createNewChat() {
+        Intent newPrivateChatIntent = new Intent(this, NearbyListActivity.class);
+        startActivity(newPrivateChatIntent);
     }
 
     private void openProfile() {

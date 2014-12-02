@@ -3,6 +3,7 @@ package ch.tarsier.tarsier.ui.activity;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -40,6 +41,12 @@ public class ChatroomPeersActivity extends ListActivity {
 
         setUpData();
         setUpEvent();
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
     }
 
     private void setUpEvent() {
