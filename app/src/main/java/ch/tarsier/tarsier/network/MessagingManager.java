@@ -185,8 +185,6 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             }
 
             Log.d(WIFI_DIRECT_TAG, "P2P peers changed");
-
-            mEventBus.post(new ReceivedNearbyPeersListEvent(getNearbyPeersList()));
         }
     }
 
@@ -202,6 +200,8 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
                 // peers, trigger an update.
 
                 Log.d(WIFI_DIRECT_TAG, "Peer list updated: " + mP2pDevices.toString());
+
+                mEventBus.post(new ReceivedNearbyPeersListEvent(mP2pDevices));
 
                 if (mP2pDevices.size() == 0) {
                     Log.d(WIFI_DIRECT_TAG, "No devices found");
