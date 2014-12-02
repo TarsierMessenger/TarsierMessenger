@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,8 @@ import ch.tarsier.tarsier.R;
  * and https://github.com/survivingwithandroid/Surviving-with-android/tree/master/EndlessAdapter
  */
 public class BubbleAdapter extends ArrayAdapter<Message> {
+    private static final String TAG = "BubbleAdapter";
+
     private Context mContext;
     private List<Message> mMessages;
     private int mLayoutId;
@@ -57,7 +60,7 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
      */
     @Override
     public Message getItem(int position) {
-        return mMessages.get(mMessages.size()-1-position);
+        return super.getItem(getCount() - 1 - position);
     }
 
     @Override
@@ -76,6 +79,8 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d(TAG, "getView " + position + " " + convertView);
+
         Message message = this.getItem(position);
 
         String messageSenderPublicKey = message.getSenderPublicKey().base64Encoded();
