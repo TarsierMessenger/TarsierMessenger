@@ -24,7 +24,7 @@ import ch.tarsier.tarsier.ui.view.EndlessListView;
 import ch.tarsier.tarsier.ui.view.EndlessListener;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Message;
-import ch.tarsier.tarsier.validation.EditTextMessageValidator;
+import ch.tarsier.tarsier.validation.MessageValidator;
 
 /**
  * @author marinnicolini and xawill (extreme programming)
@@ -49,7 +49,6 @@ public class ChatActivity extends Activity implements EndlessListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        enableSendMessageImageButton(false);
 
         mListView = (EndlessListView) findViewById(R.id.list);
         mListView.setLoadingView(R.layout.loading_layout);
@@ -69,8 +68,6 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         mMessageToBeSend = (EditText) findViewById(R.id.message_to_send);
 
-        mMessageToBeSend.addTextChangedListener(new EditTextWatcher());
-
         /** Todo if we have time... Possibility to retrieve one message not yet sent but already typed
          */
     }
@@ -83,25 +80,38 @@ public class ChatActivity extends Activity implements EndlessListener {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Should not be called if message is empty (button should be disabled)
+     * @param view
+     */
     public void onClickSendMessage(View view) {
-        String messageText = ((TextView) findViewById(R.id.message_to_send)).getText().toString();
+        TextView messageView = (TextView) findViewById(R.id.message_to_send);
+        String messageText = messageView.getText().toString();
         Message sentMessage = new Message(mChat.getId(), messageText, DateUtil.getNowTimestamp());
 
+        if (!messageText.isEmpty()) {
+            //Add the message to the ListView
+            try {
+                mListView.addNewData(sentMessage);
 
-        //Add the message to the ListView
-        try {
-            mListView.addNewData(sentMessage);
+                //Add the message to the database
+                Tarsier.app().getMessageRepository().insert(sentMessage);
 
-            //Add the message to the database
-            Tarsier.app().getMessageRepository().insert(sentMessage);
+                //TODO : send it over the network
 
-            //TODO : send it over the network
+                mListView.setSelection(mListViewAdapter.getCount() - 1);
+            } catch (InsertException e) {
+                e.printStackTrace();
+            } catch (InvalidModelException e) {
+                e.printStackTrace();
+            }
 
+            messageView.setText("");
+
+            //Scroll down to most recent message
             mListView.setSelection(mListViewAdapter.getCount() - 1);
-        } catch (InsertException e) {
-            e.printStackTrace();
-        } catch (InvalidModelException e) {
-            e.printStackTrace();
+        } else {
+            messageView.setError("No message to send!");
         }
     }
 
@@ -118,7 +128,8 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         @Override
         protected List<Message> doInBackground(Void... params) {
-            while (!Tarsier.app().getDatabase().isReady()) { }
+            while (!Tarsier.app().getDatabase().isReady()) {
+            }
 
             long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
 
@@ -139,9 +150,9 @@ public class ChatActivity extends Activity implements EndlessListener {
         protected void onPostExecute(List<Message> result) {
             super.onPostExecute(result);
 
-            boolean hasToScrollDown = false;
+            boolean willHaveToScrollDown = false;
             if (mListViewAdapter.getCount() == 0) {
-                hasToScrollDown = true;
+                willHaveToScrollDown = true;
             }
 
             if (result.size() > 0) {
@@ -153,49 +164,9 @@ public class ChatActivity extends Activity implements EndlessListener {
                 mListView.setAllMessagesLoaded(true);
             }
 
-            if (hasToScrollDown) {
+            if (willHaveToScrollDown) {
                 mListView.setSelection(mListViewAdapter.getCount() - 1);
             }
         }
     }
-
-    /**
-     * Toggle the clickable property of the lets_chat Button
-     * @param enable true makes the Button clickable.
-     */
-    private void enableSendMessageImageButton(boolean enable) {
-        ImageButton send = (ImageButton) findViewById(R.id.sendImageButton);
-        send.setClickable(enable);
-    }
-
-    /**
-     * Verify that we can enable the Button that can send the message to the listView and to the
-     * Storage by checking the EditText of the Activity
-     */
-    private final class EditTextWatcher implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-            enableSendMessageImageButton(sendMessageImageButtonCanBeEnabled());
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-
-        }
-    }
-
-    private boolean sendMessageImageButtonCanBeEnabled() {
-        return validateSendMessage();
-    }
-
-    private boolean validateSendMessage() {
-        return new EditTextMessageValidator("No message to send!").validate(mMessageToBeSend);
-    }
-
 }
