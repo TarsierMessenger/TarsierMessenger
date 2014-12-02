@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.List;
@@ -123,6 +122,11 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
         holder.message.setLayoutParams(messageLp);
 
         return convertView;
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return false;
     }
 
     /**
