@@ -185,6 +185,8 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             }
 
             Log.d(WIFI_DIRECT_TAG, "P2P peers changed");
+
+            mEventBus.post(new ReceivedNearbyPeersListEvent(getNearbyPeersList()));
         }
     }
 
@@ -342,6 +344,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         Log.d(NETWORK_LAYER_TAG, "Got RequestNearbyPeersListEvent");
 
         if (mEventBus != null) {
+            Log.d(NETWORK_LAYER_TAG, "Sending ReceivedNearbyPeersListEvent");
             mEventBus.post(new ReceivedNearbyPeersListEvent(getNearbyPeersList()));
         }
     }
@@ -351,6 +354,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         Log.d(NETWORK_LAYER_TAG, "Got RequestChatroomPeersListEvent");
 
         if (mEventBus != null) {
+            Log.d(NETWORK_LAYER_TAG, "Sending ReceivedChatroomPeersListEvent");
             mEventBus.post(new ReceivedChatroomPeersListEvent(getChatroomPeersList()));
         }
     }
