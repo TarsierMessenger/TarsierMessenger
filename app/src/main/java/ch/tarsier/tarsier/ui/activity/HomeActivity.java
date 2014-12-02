@@ -55,9 +55,9 @@ public class HomeActivity extends Activity {
         if (!mUserPreferences.getUsername().equals("")
             && !mUserPreferences.getStatusMessage().equals("")) {
 
-            Intent chatListIntent = new Intent(this, ChatListActivity.class);
-            startActivity(chatListIntent);
-            this.finish();
+            Intent nearbyListActivity = new Intent(this, NearbyListActivity.class);
+            startActivity(nearbyListActivity);
+            finish();
         }
 
         refreshFields();
