@@ -2,7 +2,6 @@ package ch.tarsier.tarsier.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.domain.model.value.PublicKey;
-import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
 import ch.tarsier.tarsier.domain.model.Message;
@@ -109,17 +104,23 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
         holder.message.setText(message.getText());
         holder.hour.setText(DateUtil.computeHour(message.getDateTime()));
 
-        LayoutParams lp = (LayoutParams) holder.message.getLayoutParams();
+        RelativeLayout.LayoutParams pictureLp = (RelativeLayout.LayoutParams) holder.picture.getLayoutParams();
+        RelativeLayout.LayoutParams bubbleLp = (RelativeLayout.LayoutParams) holder.bubble.getLayoutParams();
+        LinearLayout.LayoutParams messageLp = (LinearLayout.LayoutParams) holder.message.getLayoutParams();
 
         if (message.isSentByUser()) {
             holder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
-            lp.gravity = Gravity.RIGHT;
+            pictureLp.addRule(RelativeLayout.ALIGN_PARENT_END);
+            bubbleLp.addRule(RelativeLayout.LEFT_OF, holder.picture.getId());
+            messageLp.gravity = Gravity.RIGHT;
         } else {
             holder.bubble.setBackgroundResource(R.drawable.bubble_text_left);
-            lp.gravity = Gravity.LEFT;
+            bubbleLp.addRule(RelativeLayout.RIGHT_OF, holder.picture.getId());
         }
 
-        holder.message.setLayoutParams(lp);
+        holder.picture.setLayoutParams(pictureLp);
+        holder.bubble.setLayoutParams(bubbleLp);
+        holder.message.setLayoutParams(messageLp);
 
         return convertView;
     }
