@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -25,6 +26,7 @@ import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.ui.view.ChatListView;
 import ch.tarsier.tarsier.ui.view.EndlessListener;
+import ch.tarsier.tarsier.util.ChatLastMessageDateSorter;
 
 /**
  * @author gluthier
@@ -126,7 +128,10 @@ public class ChatListActivity extends Activity implements EndlessListener {
             ChatRepository chatRepository = Tarsier.app().getChatRepository();
 
             try {
-               return chatRepository.findAll();
+                List<Chat> sortedChats = chatRepository.findAll();
+                Collections.sort(sortedChats, new ChatLastMessageDateSorter());
+                //return the sorted list of all chats
+                return sortedChats;
             } catch (NoSuchModelException e) {
                 e.printStackTrace();
                 return new ArrayList<Chat>();
