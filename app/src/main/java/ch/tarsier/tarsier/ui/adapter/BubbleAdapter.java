@@ -120,6 +120,7 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
         LinearLayout.LayoutParams messageLp = (LinearLayout.LayoutParams) holder.message.getLayoutParams();
 
         if (message.isSentByUser()) {
+            holder.name.setVisibility(View.GONE);
             holder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
             pictureLp.addRule(RelativeLayout.ALIGN_PARENT_END);
             bubbleLp.addRule(RelativeLayout.LEFT_OF, holder.picture.getId());
