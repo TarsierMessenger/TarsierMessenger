@@ -47,6 +47,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
 
         mBubbleAdapter.addAll(data);
         mBubbleAdapter.notifyDataSetChanged();
+
         isLoading = false;
     }
 
@@ -76,12 +77,12 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem + visibleItemCount >= totalItemCount && !isLoading
+        /*if (firstVisibleItem + visibleItemCount >= totalItemCount && !isLoading
                 && !mAllMessagesLoaded && mEndlessListener != null) {
             this.addHeaderView(mHeader);
             isLoading = true;
             mEndlessListener.loadData();
-        }
+        }*/
     }
 
     @Override
