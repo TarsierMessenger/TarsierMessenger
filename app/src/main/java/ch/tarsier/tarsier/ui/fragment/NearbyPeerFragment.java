@@ -33,15 +33,19 @@ public class NearbyPeerFragment extends Fragment {
 
     private Activity mActivity;
     private NearbyPeerAdapter mNearbyPeerAdapter;
-    private static final String CHAT = "NearbyChat";
+    private static final String TAG = "NearbyPeerFragment";
+
+    public NearbyPeerFragment() {
+       // mActivity = activity;
+        mNearbyPeerAdapter = new NearbyPeerAdapter(mActivity, R.layout.row_nearby_peer_list);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNearbyPeerAdapter = new NearbyPeerAdapter(mActivity, R.layout.row_nearby_peer_list);
+        Log.d(TAG,"onCreate Fragment");
         //Register to event bus and request the list of nearby peer
         Tarsier.app().getEventBus().register(this);
-        Tarsier.app().getEventBus().post(new RequestNearbyPeersListEvent());
         //debug
 
     }
@@ -49,11 +53,16 @@ public class NearbyPeerFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = activity;
+        //mActivity = activity;
+        Log.d(TAG,"onAttach Fragment");
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView Fragment");
+        Log.d(TAG, "onCreateView Fragment size list peers : " + mNearbyPeerAdapter.getCount());
+
         View rowView = inflater.inflate(R.layout.fragment_nearby_peer, container, false);
         ListView lv = (ListView) rowView.findViewById(R.id.nearby_peer_list);
         lv.setAdapter(mNearbyPeerAdapter);
@@ -74,11 +83,6 @@ public class NearbyPeerFragment extends Fragment {
         return rowView;
     }
 
-    @Subscribe
-    public void receivedNewPeersList(ReceivedNearbyPeersListEvent event) {
-        Log.d("NearbyPeersList", "Got ReceivedNearbyPeersListEvent");
-        mNearbyPeerAdapter.setPeerList(event.getPeers());
-    }
 
     //FIXME should maybe removed
     public NearbyPeerAdapter getNearbyPeerAdapter() {
