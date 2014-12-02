@@ -11,9 +11,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.HashMap;
 import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
 import ch.tarsier.tarsier.domain.model.Message;
@@ -31,13 +34,15 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
     private Context mContext;
     private List<Message> mMessages;
     private int mLayoutId;
+    private HashMap<String, Peer> mPeers;
 
     public BubbleAdapter(Context context, int layoutId, List<Message> messages) {
         super(context, layoutId, messages);
 
-        this.mContext = context;
-        this.mLayoutId = layoutId;
-        this.mMessages = messages;
+        mContext = context;
+        mLayoutId = layoutId;
+        mMessages = messages;
+        mPeers = new HashMap<String, Peer>();
     }
 
     @Override
@@ -73,12 +78,19 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Message message = this.getItem(position);
 
+        String messageSenderPublicKey = message.getSenderPublicKey().base64Encoded();
         Peer sender;
-        try {
-            sender = Tarsier.app().getPeerRepository().findByPublicKey(message.getSenderPublicKey());
-        } catch (NoSuchModelException e) {
-            e.printStackTrace();
-            return convertView;
+        if (mPeers.containsKey(messageSenderPublicKey)) {
+            sender = mPeers.get(messageSenderPublicKey);
+        } else {
+            try {
+                sender = Tarsier.app().getPeerRepository().findByPublicKey(message.getSenderPublicKey());
+            } catch (NoSuchModelException e) {
+                e.printStackTrace();
+                return convertView;
+            }
+
+            mPeers.put(messageSenderPublicKey, sender);
         }
 
         ViewHolder holder;
