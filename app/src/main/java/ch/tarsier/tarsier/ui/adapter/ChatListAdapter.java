@@ -51,7 +51,11 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
 
     @Override
     public long getItemId(int position) {
-        return mChatList.get(position).getId();
+        if (mChatList.get(position) != null) {
+            return mChatList.get(position).getId();
+        }
+
+        return 0;
     }
 
     @Override
@@ -104,6 +108,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
     }
 
     public void addAllChats(List<Chat> chatList) {
+        this.clear();
         this.addAll(chatList);
         mChatList = chatList;
         this.setNotifyOnChange(true);
