@@ -58,7 +58,7 @@
             android:label="@string/title_activity_wifidirectdebug">
         </activity>
         <activity
-            android:name="ch.tarsier.tarsier.ui.activity.NewChatRoomActivity"
+            android:name=".ui.activity.NewChatroomActivity"
             android:label="@string/title_activity_new_chatrooom"
             android:parentActivityName="ch.tarsier.tarsier.ui.activity.ChatListActivity" >
         </activity>

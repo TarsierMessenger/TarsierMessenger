@@ -1,5 +1,6 @@
 package ch.tarsier.tarsier.ui.activity;
 
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import android.app.ListActivity;
@@ -20,8 +21,8 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.domain.model.User;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
+import ch.tarsier.tarsier.event.RequestChatroomPeersListEvent;
 
 /**
  * @author romac
@@ -38,12 +39,17 @@ public class ChatroomPeersActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         setUpData();
+        setUpEvent();
+    }
 
-        Tarsier.app().getEventBus().register(this);
+    private void setUpEvent() {
+        Bus eventBus = Tarsier.app().getEventBus();
+        eventBus.register(this);
+        eventBus.post(new RequestChatroomPeersListEvent());
     }
 
     @Subscribe
-    public void receivedNewPeersList(ReceivedChatroomPeersListEvent event) {
+    public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
         mAdapter.clear();
         mAdapter.addAll(event.getPeers());
     }
@@ -58,9 +64,10 @@ public class ChatroomPeersActivity extends ListActivity {
         }
 
         Chat chat = (Chat) extras.getSerializable(EXTRAS_CHAT_KEY);
-        Peer[] peers = (User[]) extras.getSerializable(EXTRAS_PEERS_KEY);
+        Peer[] peers = (Peer[]) extras.getSerializable(EXTRAS_PEERS_KEY);
 
-        setAdapter(new ChatroomPeersArrayAdapter(this, chat, peers));
+        mAdapter = new ChatroomPeersArrayAdapter(this, chat, peers);
+        setAdapter(mAdapter);
     }
 
     private void setUpWithTestData() {
@@ -98,7 +105,7 @@ public class ChatroomPeersActivity extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.chat_room_peers, menu);
+        getMenuInflater().inflate(R.menu.chatroom_peers, menu);
         return true;
     }
 
@@ -120,17 +127,17 @@ public class ChatroomPeersActivity extends ListActivity {
     class ChatroomPeersArrayAdapter extends ArrayAdapter<Peer> {
         private final static int LAYOUT = R.layout.chatroom_peer;
 
-        private final Context mContext;
         private final LayoutInflater mInflater;
-        private final Peer[] mPeers;
         private final Chat mChat;
+
+        ChatroomPeersArrayAdapter(Context context, Chat chat) {
+            this(context, chat, new Peer[] {});
+        }
 
         ChatroomPeersArrayAdapter(Context context, Chat chat, Peer[] peers) {
             super(context, LAYOUT, peers);
 
-            mContext = context;
             mInflater = getLayoutInflater();
-            mPeers = peers;
             mChat = chat;
         }
 

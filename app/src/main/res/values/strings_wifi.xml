@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="device_status_connected">Connected</string>
+    <string name="ifi_device_status_invited">Invited</string>
+    <string name="wifi_device_status_failed">Failed</string>
+    <string name="wifi_device_status_available">Available</string>
+    <string name="wifi_device_status_unavailable">Unavailable</string>
+    <string name="wifi_device_status_unknown">Unknown</string>
+</resources>

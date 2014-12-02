@@ -2,7 +2,7 @@ package ch.tarsier.tarsier.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import ch.tarsier.tarsier.ui.activity.NewChatRoomActivity;
+import ch.tarsier.tarsier.ui.activity.NewChatroomActivity;
 import ch.tarsier.tarsier.R;
 
 import static ch.tarsier.tarsier.test.matchers.HasErrorMatcher.hasError;
@@ -13,7 +13,6 @@ import static com.google.android.apps.common.testing.ui.espresso.action.ViewActi
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.typeText;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.closeSoftKeyboard;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isChecked;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isClickable;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withText;
@@ -21,10 +20,10 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 /**
  * @author gluthier
  */
-public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<NewChatRoomActivity> {
+public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<NewChatroomActivity> {
 
     public NewChatroomActivityTest() {
-        super(NewChatRoomActivity.class);
+        super(NewChatroomActivity.class);
     }
 
     @Override
@@ -39,27 +38,27 @@ public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<Ne
     }
 
     public void testChatRoomNameRejectedIfTooShort() {
-        onView(withId(R.id.chat_room_name))
+        onView(withId(R.id.chatroom_name))
                 .perform(click(), clearText(), closeSoftKeyboard());
 
         onView(withId(R.id.create_chatroom))
                 .perform(click());
 
-        onView(withId(R.id.chat_room_name))
+        onView(withId(R.id.chatroom_name))
                 .check(matches(hasError(R.string.error_chat_room_name_length)));
     }
 
     public void testChatRoomNameRejectedIfTooLong() {
         String text = "This chat room name is longer than 36 characters";
 
-        onView(withId(R.id.chat_room_name))
+        onView(withId(R.id.chatroom_name))
                 .perform(click(), clearText())
                 .perform(typeText(text), closeSoftKeyboard());
 
         onView(withId(R.id.create_chatroom))
                 .perform(click());
 
-        onView(withId(R.id.chat_room_name))
+        onView(withId(R.id.chatroom_name))
                 .check(matches(hasError(R.string.error_chat_room_name_length)));
     }
 }

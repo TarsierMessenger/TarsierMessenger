@@ -3,7 +3,6 @@ package ch.tarsier.tarsier.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -40,7 +39,7 @@ public class HomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        enableStartButton(false);
+        toggleStartButton(false);
 
         mUserPreferences = Tarsier.app().getUserPreferences();
 
@@ -67,7 +66,7 @@ public class HomeActivity extends Activity {
      * Toggle the clickable property of the lets_chat Button
      * @param enable true makes the Button clickable.
      */
-    private void enableStartButton(boolean enable) {
+    private void toggleStartButton(boolean enable) {
         Button start = (Button) findViewById(R.id.lets_chat);
         start.setClickable(enable);
     }
@@ -209,7 +208,12 @@ public class HomeActivity extends Activity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            enableStartButton(validateFields());
+            if (validateFields()) {
+                saveProfileInfos();
+                toggleStartButton(true);
+            } else {
+                toggleStartButton(false);
+            }
         }
     }
 

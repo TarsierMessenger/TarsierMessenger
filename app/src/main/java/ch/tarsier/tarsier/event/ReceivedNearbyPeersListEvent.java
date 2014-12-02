@@ -1,21 +1,21 @@
 package ch.tarsier.tarsier.event;
 
-import java.util.List;
+import android.net.wifi.p2p.WifiP2pDevice;
 
-import ch.tarsier.tarsier.domain.model.Peer;
+import java.util.List;
 
 /**
  * @author romac
  */
 public class ReceivedNearbyPeersListEvent {
 
-    private final List<Peer> mPeers;
+    private final List<WifiP2pDevice> mPeers;
 
-    public ReceivedNearbyPeersListEvent(List<Peer> peers) {
+    public ReceivedNearbyPeersListEvent(List<WifiP2pDevice> peers) {
         mPeers = peers;
     }
 
-    public List<Peer> getPeers() {
+    public List<WifiP2pDevice> getPeers() {
         return mPeers;
     }
 
