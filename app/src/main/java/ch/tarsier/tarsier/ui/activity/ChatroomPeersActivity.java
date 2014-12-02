@@ -39,6 +39,10 @@ public class ChatroomPeersActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (getActionBar() != null) {
+            getActionBar().setHomeButtonEnabled(true);
+        }
+
         setUpData();
         setUpEvent();
 
@@ -79,6 +83,7 @@ public class ChatroomPeersActivity extends ListActivity {
 
     private void setUpWithTestData() {
         Peer host = new Peer("Amirezza Bahreini", "At Sat', come join me !");
+        host.setId(1);
 
         Chat chat = new Chat();
         chat.setHost(host);
@@ -94,7 +99,7 @@ public class ChatroomPeersActivity extends ListActivity {
         };
 
         peers[0].setOnline(true);
-        peers[4].setOnline(true);
+        peers[3].setOnline(true);
 
         setAdapter(new ChatroomPeersArrayAdapter(this, chat, peers));
     }
@@ -118,21 +123,22 @@ public class ChatroomPeersActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     /**
      * @author romac
      */
     class ChatroomPeersArrayAdapter extends ArrayAdapter<Peer> {
-        private final static int LAYOUT = R.layout.chatroom_peer;
+        private final static int LAYOUT = R.layout.row_chatroom_peer;
 
         private final LayoutInflater mInflater;
         private final Chat mChat;
@@ -153,9 +159,11 @@ public class ChatroomPeersActivity extends ListActivity {
             if (convertView == null) {
                 convertView = mInflater.inflate(LAYOUT, parent, false);
                 convertView.setTag(R.id.name, convertView.findViewById(R.id.name));
-                convertView.setTag(R.id.status_message_profile_activity, convertView.findViewById(R.id.status_message_profile_activity));
                 convertView.setTag(R.id.icon, convertView.findViewById(R.id.icon));
-                convertView.setTag(R.id.badge, convertView.findViewById(R.id.badge));
+                convertView.setTag(R.id.online_badge, convertView.findViewById(R.id.online_badge));
+                convertView.setTag(R.id.owner_badge, convertView.findViewById(R.id.owner_badge));
+                convertView.setTag(R.id.status_message_profile_activity,
+                                   convertView.findViewById(R.id.status_message_profile_activity));
             }
 
             View rowView = convertView;
@@ -163,7 +171,8 @@ public class ChatroomPeersActivity extends ListActivity {
             TextView nameView = (TextView) convertView.getTag(R.id.name);
             TextView statusView = (TextView) convertView.getTag(R.id.status_message_profile_activity);
             ImageView imageView = (ImageView) convertView.getTag(R.id.icon);
-            TextView badgeView = (TextView) convertView.getTag(R.id.badge);
+            TextView onlineBadgeView = (TextView) convertView.getTag(R.id.online_badge);
+            TextView ownerBadgeView = (TextView) convertView.getTag(R.id.owner_badge);
 
             Peer p = getItem(position);
 
@@ -171,10 +180,8 @@ public class ChatroomPeersActivity extends ListActivity {
             statusView.setText(p.getStatusMessage());
             imageView.setImageURI(Uri.parse(p.getPicturePath()));
             imageView.setImageResource(R.drawable.ic_launcher);
-            badgeView.setVisibility((p.isOnline()) ? View.VISIBLE : View.INVISIBLE);
-
-            // TODO: Show group owner badge instead of online badge.
-            badgeView.setVisibility((mChat.isHost(p)) ? View.VISIBLE : View.INVISIBLE);
+            onlineBadgeView.setVisibility((p.isOnline()) ? View.VISIBLE : View.INVISIBLE);
+            ownerBadgeView.setVisibility((mChat.isHost(p)) ? View.VISIBLE : View.INVISIBLE);
 
             return rowView;
         }

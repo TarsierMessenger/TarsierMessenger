@@ -9,7 +9,7 @@
     <string name="title_activity_nearby_list">Nearby</string>
     <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
     <string name="title_activity_preferences">Settings</string>
-    <string name="title_activity_chat_room_participants">Chat Room Participants</string>
+    <string name="title_activity_chatroom_peers">Chatroom Peers</string>
     <string name="title_activity_conversation">Conversation</string>
     <string name="title_activity_new_chatrooom">New Chatroom</string>
     <string name="title_activity_chat_list">Chats</string>
