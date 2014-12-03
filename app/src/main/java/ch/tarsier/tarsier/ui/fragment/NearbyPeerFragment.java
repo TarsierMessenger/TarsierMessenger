@@ -35,10 +35,6 @@ public class NearbyPeerFragment extends Fragment {
     private NearbyPeerAdapter mNearbyPeerAdapter;
     private static final String TAG = "NearbyPeerFragment";
 
-    public NearbyPeerFragment() {
-       // mActivity = activity;
-        mNearbyPeerAdapter = new NearbyPeerAdapter(mActivity, R.layout.row_nearby_peer_list);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +49,7 @@ public class NearbyPeerFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //mActivity = activity;
+        mActivity = activity;
         Log.d(TAG,"onAttach Fragment");
 
     }
@@ -89,4 +85,8 @@ public class NearbyPeerFragment extends Fragment {
         return mNearbyPeerAdapter;
     }
 
+    public void setUp(Activity activty) {
+        mActivity=activty;
+        mNearbyPeerAdapter = new NearbyPeerAdapter(mActivity, R.layout.row_nearby_peer_list);
+    }
 }

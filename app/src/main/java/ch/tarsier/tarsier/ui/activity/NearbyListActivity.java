@@ -45,7 +45,8 @@ public class NearbyListActivity extends Activity {
         setContentView(R.layout.activity_nearby_list);
         mFragmentManager = getFragmentManager();
 
-        mNearbyPeer = new NearbyPeerFragment(this);
+        mNearbyPeer = new NearbyPeerFragment();
+        mNearbyPeer.setUp(this);
         Log.d(TAG, "instanciate nearbyPeerFragment");
 //        mNearbyChatList = new NearbyChatListFragment();
 
@@ -53,6 +54,7 @@ public class NearbyListActivity extends Activity {
         //ft.replace(R.id.inside_nearby, mNearbyPeer, "peer");
         FragmentTransaction ft = mFragmentManager.beginTransaction();
         Log.d(TAG, "before attach");
+        ft.add(R.id.inside_nearby,mNearbyPeer);
         ft.attach(mNearbyPeer);
         ft.commit();
         Log.d(TAG, "after commit");

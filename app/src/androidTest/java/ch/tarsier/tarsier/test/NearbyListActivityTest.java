@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.is;
  */
 public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<NearbyListActivity> {
 
-    private static final long SLEEP_TIME = 5000;
+    private static final long SLEEP_TIME = 1000;
 
     private  Bus mEventBus;
 
@@ -61,20 +61,23 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
         romac.status = WifiP2pDevice.FAILED;
         peerList.add(romac);
 
-        mEventBus.post(new ReceivedNearbyPeersListEvent(peerList));
+        postAndWait(peerList);
         peerList.add(ben);
 
+        postAndWait(peerList);
+        peerList.add(ben);
+
+
+        peerList.add(ben);
+        postAndWait(peerList);
+    }
+
+    private void postAndWait(List<WifiP2pDevice> peers) {
+        mEventBus.post(new ReceivedNearbyPeersListEvent(peers));
         try {
             Thread.sleep(SLEEP_TIME, 0);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        mEventBus.post(new ReceivedNearbyPeersListEvent(peerList));
-        peerList.add(ben);
-        mEventBus.post(new ReceivedNearbyPeersListEvent(peerList));
-        peerList.add(ben);
-        mEventBus.post(new ReceivedNearbyPeersListEvent(peerList));
     }
-
 }
