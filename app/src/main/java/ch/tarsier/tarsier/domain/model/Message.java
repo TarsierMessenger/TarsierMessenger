@@ -2,12 +2,13 @@ package ch.tarsier.tarsier.domain.model;
 
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
+import ch.tarsier.tarsier.ui.view.BubbleListViewItem;
 
 /**
  * @author McMoudi
  * @author gluthier
  */
-public class Message {
+public class Message implements BubbleListViewItem {
 
     private long mChatId;
     private String mText;
@@ -70,6 +71,7 @@ public class Message {
         return mDateTime;
     }
 
+    @Override
     public long getId() {
         return mId;
     }
@@ -92,5 +94,10 @@ public class Message {
 
     public void setDateTime(long newTime) {
         mDateTime = newTime;
+    }
+
+    @Override
+    public boolean isSeparator() {
+        return false;
     }
 }
