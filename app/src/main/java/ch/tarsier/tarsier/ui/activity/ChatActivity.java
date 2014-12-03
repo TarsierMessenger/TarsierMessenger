@@ -46,7 +46,8 @@ public class ChatActivity extends Activity implements EndlessListener {
     private Chat mChat;
     private BubbleAdapter mListViewAdapter;
     private EndlessListView mListView;
-    private EditText mMessageToBeSend;
+
+    private boolean mActivityJustStarted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class ChatActivity extends Activity implements EndlessListener {
         DatabaseLoader dbl = new DatabaseLoader();
         dbl.execute();
 
-        mMessageToBeSend = (EditText) findViewById(R.id.message_to_send);
+        mActivityJustStarted = true;
 
         /** Todo if we have time... Possibility to retrieve one message not yet sent but already typed
          */
@@ -124,7 +125,7 @@ public class ChatActivity extends Activity implements EndlessListener {
 
                 //TODO : send it over the network
 
-                mListView.setSelection(mListViewAdapter.getCount() - 1);
+                mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
             } catch (InsertException e) {
                 e.printStackTrace();
             } catch (InvalidModelException e) {
@@ -156,13 +157,11 @@ public class ChatActivity extends Activity implements EndlessListener {
             while (!Tarsier.app().getDatabase().isReady()) {
             }
 
-            long lastMessageTimestamp = mListViewAdapter.getLastMessageTimestamp();
-
             List<Message> newMessages = new ArrayList<Message>();
             try {
                 newMessages.addAll(Tarsier.app().getMessageRepository().findByChatUntil(
                         mChat,
-                        lastMessageTimestamp,
+                        mListViewAdapter.getLastMessageTimestamp(),
                         NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE));
             } catch (NoSuchModelException e) {
                 e.printStackTrace();
@@ -175,11 +174,6 @@ public class ChatActivity extends Activity implements EndlessListener {
         protected void onPostExecute(List<Message> result) {
             super.onPostExecute(result);
 
-            boolean willHaveToScrollDown = false;
-            if (mListViewAdapter.getCount() == 0) {
-                willHaveToScrollDown = true;
-            }
-
             if (result.size() > 0) {
                 mListView.addNewData(result);
             }
@@ -189,9 +183,10 @@ public class ChatActivity extends Activity implements EndlessListener {
                 mListView.setAllMessagesLoaded(true);
             }
 
-            if (willHaveToScrollDown) {
+            if (mActivityJustStarted) {
                 mListView.setSelection(mListViewAdapter.getCount() - 1);
             }
+            mActivityJustStarted = false;
         }
     }
 }

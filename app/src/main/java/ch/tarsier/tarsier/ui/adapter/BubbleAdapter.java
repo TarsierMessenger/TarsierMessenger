@@ -24,7 +24,7 @@ import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.R;
 
 /**
- * @author marinnicolini and xawill (extreme programming)
+ * @author xawill
  *
  * Custom class to display the bubbles in the ChatActivity ListView
  *
@@ -33,6 +33,11 @@ import ch.tarsier.tarsier.R;
  */
 public class BubbleAdapter extends ArrayAdapter<Message> {
     private static final String TAG = "BubbleAdapter";
+
+    private static final int TYPE_BUBBLE_LEFT = 0;
+    private static final int TYPE_BUBBLE_RIGHT = 1;
+    //private static final int TYPE_DATE_SEPARATOR = 2;
+    private static final int TYPE_MAX_COUNT = 2;
 
     private Context mContext;
     private List<Message> mMessages;
@@ -46,6 +51,14 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
         mLayoutId = layoutId;
         mMessages = messages;
         mPeers = new HashMap<String, Peer>();
+    }
+
+    public long getLastMessageTimestamp() {
+        if (mMessages.size() > 0) {
+            return mMessages.get(getCount() - 1).getDateTime();
+        } else {
+            return DateUtil.getNowTimestamp();
+        }
     }
 
     @Override
@@ -65,16 +78,17 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
 
     @Override
     public long getItemId(int position) {
-        //TODO : implement with database ID ?
-        return position;
+        return getItem(getCount() - 1 - position).getId();
     }
 
-    public long getLastMessageTimestamp() {
-        if (mMessages.size() > 0) {
-            return mMessages.get(mMessages.size()-1).getDateTime();
-        } else {
-            return DateUtil.getNowTimestamp();
-        }
+    @Override
+    public int getItemViewType(int position) {
+        return getItem(position).isSentByUser() ? TYPE_BUBBLE_RIGHT : TYPE_BUBBLE_LEFT;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return TYPE_MAX_COUNT;
     }
 
     @Override
@@ -102,7 +116,6 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(mLayoutId, parent, false);
-            holder.dateSeparator = (TextView) convertView.findViewById(R.id.dateSeparator);
             holder.picture = (ImageView) convertView.findViewById(R.id.picture);
             holder.bubble = (LinearLayout) convertView.findViewById(R.id.bubble);
             holder.name = (TextView) convertView.findViewById(R.id.name);
@@ -113,7 +126,6 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.dateSeparator.setText(DateUtil.computeDateSeparator(message.getDateTime()));
         Bitmap profilePicture = sender.getPicture();
         holder.picture.setImageBitmap(profilePicture);
         holder.name.setText(sender.getUserName());
@@ -124,15 +136,19 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
         RelativeLayout.LayoutParams bubbleLp = (RelativeLayout.LayoutParams) holder.bubble.getLayoutParams();
         LinearLayout.LayoutParams messageLp = (LinearLayout.LayoutParams) holder.message.getLayoutParams();
 
-        if (message.isSentByUser()) {
-            holder.name.setVisibility(View.GONE);
-            holder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
-            pictureLp.addRule(RelativeLayout.ALIGN_PARENT_END);
-            bubbleLp.addRule(RelativeLayout.LEFT_OF, holder.picture.getId());
-            messageLp.gravity = Gravity.RIGHT;
-        } else {
-            holder.bubble.setBackgroundResource(R.drawable.bubble_text_left);
-            bubbleLp.addRule(RelativeLayout.RIGHT_OF, holder.picture.getId());
+        int type = getItemViewType(position);
+        switch (type) {
+            case TYPE_BUBBLE_LEFT :
+                holder.bubble.setBackgroundResource(R.drawable.bubble_text_left);
+                bubbleLp.addRule(RelativeLayout.RIGHT_OF, holder.picture.getId());
+                break;
+            case TYPE_BUBBLE_RIGHT :
+                holder.name.setVisibility(View.GONE);
+                holder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
+                pictureLp.addRule(RelativeLayout.ALIGN_PARENT_END);
+                bubbleLp.addRule(RelativeLayout.LEFT_OF, holder.picture.getId());
+                messageLp.gravity = Gravity.END;
+                break;
         }
 
         holder.picture.setLayoutParams(pictureLp);
@@ -151,7 +167,6 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
      * Class encapsulating ListView row in a view from the message_row XML
      */
     static class ViewHolder {
-        private TextView dateSeparator;
         private ImageView picture;
         private LinearLayout bubble;
         private TextView name;

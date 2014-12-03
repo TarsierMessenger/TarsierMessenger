@@ -28,7 +28,6 @@ public class MessageRepository extends AbstractRepository<Message> {
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
 
     private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + " DESC";
-
     private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + " ASC";
 
     public static final int ALL = Integer.MIN_VALUE;
@@ -145,41 +144,7 @@ public class MessageRepository extends AbstractRepository<Message> {
     public List<Message> findByChat(Chat chat, int max)
             throws IllegalArgumentException, NoSuchModelException {
 
-        return findByChatSince(chat, 0, max);
-    }
-
-    /**
-     * @param chat   the chat from which the messages shall be retrieved
-     * @param since  retrieve messages newer than this timestamp
-     * @param max    number of messages to retrieve
-     *
-     * @return a list of message, sorted by older first
-     */
-    public List<Message> findByChatSince(Chat chat, long since, int max)
-            throws IllegalArgumentException, NoSuchModelException {
-
-        if (chat.getId() < 0) {
-            throw new IllegalArgumentException("Chat ID is invalid.");
-        }
-
-        String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId()
-                 + " AND " + Columns.Message.COLUMN_NAME_DATETIME + " > " + since;
-
-        Cursor cursor = getReadableDatabase().query(
-                TABLE_NAME,
-                null,
-                whereClause,
-                null, null, null,
-                DATETIME_ASCEND,
-                Integer.toString(max));
-
-        try {
-            return buildListFromCursor(cursor);
-        } catch (InvalidCursorException e) {
-            throw new NoSuchModelException(e);
-        } finally {
-            cursor.close();
-        }
+        return findByChatUntil(chat, 0, max);
     }
 
     /**
@@ -203,7 +168,7 @@ public class MessageRepository extends AbstractRepository<Message> {
                 null,
                 whereClause,
                 null, null, null,
-                DATETIME_ASCEND,
+                DATETIME_DESCEND,
                 Integer.toString(max));
 
         try {
