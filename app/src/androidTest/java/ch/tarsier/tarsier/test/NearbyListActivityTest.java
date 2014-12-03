@@ -70,6 +70,14 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
 
         peerList.add(ben);
         postAndWait(peerList);
+
+        List<WifiP2pDevice> peerList2 = new ArrayList<WifiP2pDevice>();
+        peerList2.add(ben);
+        peerList2.add(romac);
+        peerList2.add(ben);
+        peerList2.add(romac);
+
+        postAndWait(peerList2);
     }
 
     private void postAndWait(List<WifiP2pDevice> peers) {
