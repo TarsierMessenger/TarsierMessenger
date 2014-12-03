@@ -93,8 +93,6 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d(TAG, "getView " + position + " " + convertView);
-
         Message message = this.getItem(position);
 
         String messageSenderPublicKey = message.getSenderPublicKey().base64Encoded();
