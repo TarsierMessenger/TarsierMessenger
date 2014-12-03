@@ -27,13 +27,14 @@ public class NearbyPeerAdapter extends ArrayAdapter<WifiP2pDevice> {
     private List<WifiP2pDevice> mPeerList;
     private Context mContext;
     private int mRowLayoutId;
+    private final static String TAG = "NearbyPeerAdapter";
 
     public NearbyPeerAdapter(Context context, int resource) {
         super(context, resource);
         mPeerList = new ArrayList<WifiP2pDevice>();
         mContext = context;
         mRowLayoutId = resource;
-
+        Log.d(TAG,"Nearby Peer Adapter created");
     }
 
     @Override
@@ -60,7 +61,7 @@ public class NearbyPeerAdapter extends ArrayAdapter<WifiP2pDevice> {
         View row = convertView;
         PeerHolder peerHolder = null;
 
-        Log.d("PeerAdapter", "mContext is : " + ((Activity) mContext).getLocalClassName());
+        //Log.d("PeerAdapter", "mContext is : " + ((Activity) mContext).getLocalClassName());
 
         if (row == null) {
             //create row

@@ -6,7 +6,7 @@
     <!-- Activity Titles -->
     <string name="title_activity_add_profile_picture">Add a profile picture</string>
     <string name="title_activity_profile">Profile</string>
-    <string name="title_activity_nearby_list">Nearby</string>
+    <string name="title_activity_nearby_list">Users around you</string>
     <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
     <string name="title_activity_preferences">Settings</string>
     <string name="title_activity_chatroom_peers">Chatroom Peers</string>
