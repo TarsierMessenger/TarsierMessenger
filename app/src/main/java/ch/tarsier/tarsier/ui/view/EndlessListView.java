@@ -49,7 +49,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
     }
 
     public void addNewData(Message data) {
-        mBubbleAdapter.add(data);
+        mBubbleAdapter.insert(data, 0);
         mBubbleAdapter.notifyDataSetChanged();
     }
 
