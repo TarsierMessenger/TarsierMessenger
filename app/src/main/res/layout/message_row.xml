@@ -5,12 +5,6 @@
     android:paddingStart="@dimen/row_padding"
     android:paddingEnd="@dimen/row_padding">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:id="@+id/dateSeparator"/>
-
     <ImageView
         android:layout_width="@dimen/chat_picture_size"
         android:layout_height="@dimen/chat_picture_size"
