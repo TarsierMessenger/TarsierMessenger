@@ -13,7 +13,7 @@ import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 
 /**
- * @author xawill
+ * @author marinnicolini and xawill (extreme programming)
  */
 public class EndlessListView extends ListView implements AbsListView.OnScrollListener {
     private EndlessListener mEndlessListener;
@@ -41,18 +41,15 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
     }
 
     public void addNewData(List<Message> data) {
-        this.removeHeaderView(mHeader);
-
-        Collections.reverse(data);
-
         mBubbleAdapter.addAll(data);
         mBubbleAdapter.notifyDataSetChanged();
 
+        this.removeHeaderView(mHeader);
         isLoading = false;
     }
 
     public void addNewData(Message data) {
-        mBubbleAdapter.insert(data, 0);
+        mBubbleAdapter.add(data);
         mBubbleAdapter.notifyDataSetChanged();
     }
 
@@ -77,14 +74,16 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        /*if (firstVisibleItem + visibleItemCount >= totalItemCount && !isLoading
+
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == SCROLL_STATE_IDLE && getFirstVisiblePosition() == 0 && !isLoading
                 && !mAllMessagesLoaded && mEndlessListener != null) {
             this.addHeaderView(mHeader);
             isLoading = true;
             mEndlessListener.loadData();
-        }*/
+        }
     }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) { }
 }
