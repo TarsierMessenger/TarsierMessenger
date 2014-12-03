@@ -19,6 +19,7 @@ import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
+import ch.tarsier.tarsier.ui.view.BubbleListViewItem;
 import ch.tarsier.tarsier.util.DateUtil;
 import ch.tarsier.tarsier.ui.view.EndlessListView;
 import ch.tarsier.tarsier.ui.view.EndlessListener;
@@ -54,7 +55,7 @@ public class ChatActivity extends Activity implements EndlessListener {
         mListView = (EndlessListView) findViewById(R.id.list);
         mListView.setLoadingView(R.layout.loading_layout);
 
-        mListViewAdapter = new BubbleAdapter(this, R.layout.message_row, new ArrayList<Message>());
+        mListViewAdapter = new BubbleAdapter(this, new ArrayList<BubbleListViewItem>());
         mListView.setBubbleAdapter(mListViewAdapter);
         mListView.setEndlessListener(this);
 

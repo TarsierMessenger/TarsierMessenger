@@ -2,7 +2,6 @@ package ch.tarsier.tarsier.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
+import ch.tarsier.tarsier.ui.view.BubbleListViewItem;
+import ch.tarsier.tarsier.ui.view.DateSeparator;
 import ch.tarsier.tarsier.util.DateUtil;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.R;
@@ -31,24 +31,22 @@ import ch.tarsier.tarsier.R;
  * Inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
  * and https://github.com/survivingwithandroid/Surviving-with-android/tree/master/EndlessAdapter
  */
-public class BubbleAdapter extends ArrayAdapter<Message> {
+public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
     private static final String TAG = "BubbleAdapter";
 
     private static final int TYPE_BUBBLE_LEFT = 0;
     private static final int TYPE_BUBBLE_RIGHT = 1;
-    //private static final int TYPE_DATE_SEPARATOR = 2;
-    private static final int TYPE_MAX_COUNT = 2;
+    private static final int TYPE_DATE_SEPARATOR = 2;
+    private static final int TYPE_MAX_COUNT = 3;
 
     private Context mContext;
-    private List<Message> mMessages;
-    private int mLayoutId;
+    private List<BubbleListViewItem> mMessages;
     private HashMap<String, Peer> mPeers;
 
-    public BubbleAdapter(Context context, int layoutId, List<Message> messages) {
-        super(context, layoutId, messages);
+    public BubbleAdapter(Context context, List<BubbleListViewItem> messages) {
+        super(context, 0, messages);
 
         mContext = context;
-        mLayoutId = layoutId;
         mMessages = messages;
         mPeers = new HashMap<String, Peer>();
     }
@@ -72,18 +70,24 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
      * @return The element at the given position (reverse order)
      */
     @Override
-    public Message getItem(int position) {
+    public BubbleListViewItem getItem(int position) {
         return super.getItem(getCount() - 1 - position);
     }
 
     @Override
     public long getItemId(int position) {
-        return getItem(getCount() - 1 - position).getId();
+        return getItem(position).getId();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return getItem(position).isSentByUser() ? TYPE_BUBBLE_RIGHT : TYPE_BUBBLE_LEFT;
+        BubbleListViewItem listViewItem = getItem(position);
+
+        if (!listViewItem.isSeparator()) {
+            return ((Message) listViewItem).isSentByUser() ? TYPE_BUBBLE_RIGHT : TYPE_BUBBLE_LEFT;
+        } else {
+            return TYPE_DATE_SEPARATOR;
+        }
     }
 
     @Override
@@ -93,67 +97,94 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Message message = this.getItem(position);
+        BubbleListViewItem listViewItem = this.getItem(position);
 
+        int itemType = getItemViewType(position);
+        switch (itemType) {
+            case TYPE_BUBBLE_LEFT:
+            case TYPE_BUBBLE_RIGHT:
+                BubbleViewHolder bubbleViewHolder;
+                if (convertView == null) {
+                    bubbleViewHolder = new BubbleViewHolder();
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.bubble, parent, false);
+                    bubbleViewHolder.picture = (ImageView) convertView.findViewById(R.id.picture);
+                    bubbleViewHolder.bubble = (LinearLayout) convertView.findViewById(R.id.bubble);
+                    bubbleViewHolder.name = (TextView) convertView.findViewById(R.id.name);
+                    bubbleViewHolder.message = (TextView) convertView.findViewById(R.id.message);
+                    bubbleViewHolder.hour = (TextView) convertView.findViewById(R.id.hour);
+                    convertView.setTag(bubbleViewHolder);
+                } else {
+                    bubbleViewHolder = (BubbleViewHolder) convertView.getTag();
+                }
+
+                try {
+                    inflateMessageRow(bubbleViewHolder, (Message) listViewItem, itemType);
+                } catch (NoSuchModelException e) {
+                    e.printStackTrace();
+                    return convertView;
+                }
+                break;
+            case TYPE_DATE_SEPARATOR:
+                DateSeparatorViewHolder dateSeparatorViewHolder;
+                if (convertView == null) {
+                    dateSeparatorViewHolder = new DateSeparatorViewHolder();
+                    convertView = LayoutInflater.from(mContext).inflate(R.layout.date_separator, parent, false);
+                    convertView.setTag(dateSeparatorViewHolder);
+                } else {
+                    dateSeparatorViewHolder = (DateSeparatorViewHolder) convertView.getTag();
+                }
+
+                inflateDateSeparator(dateSeparatorViewHolder, (DateSeparator) listViewItem);
+                break;
+        }
+
+        return convertView;
+    }
+
+    private BubbleViewHolder inflateMessageRow(BubbleViewHolder viewHolder, Message message, int type) throws NoSuchModelException {
         String messageSenderPublicKey = message.getSenderPublicKey().base64Encoded();
         Peer sender;
         if (mPeers.containsKey(messageSenderPublicKey)) {
             sender = mPeers.get(messageSenderPublicKey);
         } else {
-            try {
-                sender = Tarsier.app().getPeerRepository().findByPublicKey(message.getSenderPublicKey());
-            } catch (NoSuchModelException e) {
-                e.printStackTrace();
-                return convertView;
-            }
-
+            sender = Tarsier.app().getPeerRepository().findByPublicKey(message.getSenderPublicKey());
             mPeers.put(messageSenderPublicKey, sender);
         }
 
-        ViewHolder holder;
-        if (convertView == null) {
-            holder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(mLayoutId, parent, false);
-            holder.picture = (ImageView) convertView.findViewById(R.id.picture);
-            holder.bubble = (LinearLayout) convertView.findViewById(R.id.bubble);
-            holder.name = (TextView) convertView.findViewById(R.id.name);
-            holder.message = (TextView) convertView.findViewById(R.id.message);
-            holder.hour = (TextView) convertView.findViewById(R.id.hour);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
         Bitmap profilePicture = sender.getPicture();
-        holder.picture.setImageBitmap(profilePicture);
-        holder.name.setText(sender.getUserName());
-        holder.message.setText(message.getText());
-        holder.hour.setText(DateUtil.computeHour(message.getDateTime()));
+        viewHolder.picture.setImageBitmap(profilePicture);
+        viewHolder.name.setText(sender.getUserName());
+        viewHolder.message.setText(message.getText());
+        viewHolder.hour.setText(DateUtil.computeHour(message.getDateTime()));
 
-        RelativeLayout.LayoutParams pictureLp = (RelativeLayout.LayoutParams) holder.picture.getLayoutParams();
-        RelativeLayout.LayoutParams bubbleLp = (RelativeLayout.LayoutParams) holder.bubble.getLayoutParams();
-        LinearLayout.LayoutParams messageLp = (LinearLayout.LayoutParams) holder.message.getLayoutParams();
+        RelativeLayout.LayoutParams pictureLp = (RelativeLayout.LayoutParams) viewHolder.picture.getLayoutParams();
+        RelativeLayout.LayoutParams bubbleLp = (RelativeLayout.LayoutParams) viewHolder.bubble.getLayoutParams();
+        LinearLayout.LayoutParams messageLp = (LinearLayout.LayoutParams) viewHolder.message.getLayoutParams();
 
-        int type = getItemViewType(position);
         switch (type) {
-            case TYPE_BUBBLE_LEFT :
-                holder.bubble.setBackgroundResource(R.drawable.bubble_text_left);
-                bubbleLp.addRule(RelativeLayout.RIGHT_OF, holder.picture.getId());
+            case TYPE_BUBBLE_LEFT:
+                viewHolder.bubble.setBackgroundResource(R.drawable.bubble_text_left);
+                bubbleLp.addRule(RelativeLayout.RIGHT_OF, viewHolder.picture.getId());
                 break;
-            case TYPE_BUBBLE_RIGHT :
-                holder.name.setVisibility(View.GONE);
-                holder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
+            case TYPE_BUBBLE_RIGHT:
+                viewHolder.name.setVisibility(View.GONE);
+                viewHolder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
                 pictureLp.addRule(RelativeLayout.ALIGN_PARENT_END);
-                bubbleLp.addRule(RelativeLayout.LEFT_OF, holder.picture.getId());
+                bubbleLp.addRule(RelativeLayout.LEFT_OF, viewHolder.picture.getId());
                 messageLp.gravity = Gravity.END;
                 break;
         }
 
-        holder.picture.setLayoutParams(pictureLp);
-        holder.bubble.setLayoutParams(bubbleLp);
-        holder.message.setLayoutParams(messageLp);
+        viewHolder.picture.setLayoutParams(pictureLp);
+        viewHolder.bubble.setLayoutParams(bubbleLp);
+        viewHolder.message.setLayoutParams(messageLp);
 
-        return convertView;
+        return viewHolder;
+    }
+
+    private DateSeparatorViewHolder inflateDateSeparator(DateSeparatorViewHolder viewHolder, DateSeparator dateSeparator) {
+        //TODO implement
+        return viewHolder;
     }
 
     @Override
@@ -162,13 +193,20 @@ public class BubbleAdapter extends ArrayAdapter<Message> {
     }
 
     /**
-     * Class encapsulating ListView row in a view from the message_row XML
+     * Wrapper of bubbles list item
      */
-    static class ViewHolder {
+    static class BubbleViewHolder {
         private ImageView picture;
         private LinearLayout bubble;
         private TextView name;
         private TextView message;
         private TextView hour;
+    }
+
+    /**
+     * Wrapper of date separators list item
+     */
+    static class DateSeparatorViewHolder {
+        private TextView date;
     }
 }
