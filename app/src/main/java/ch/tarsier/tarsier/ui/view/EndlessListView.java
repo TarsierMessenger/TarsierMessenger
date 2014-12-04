@@ -7,15 +7,20 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
+import ch.tarsier.tarsier.util.DateUtil;
 
 /**
  * @author marinnicolini and xawill (extreme programming)
  */
 public class EndlessListView extends ListView implements AbsListView.OnScrollListener {
+    private static final long MILLISECONDS_IN_DAY = 24*60*60*1000;
+
     private EndlessListener mEndlessListener;
     private BubbleAdapter mBubbleAdapter;
     private View mHeader;
@@ -40,17 +45,60 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
         mAllMessagesLoaded = false;
     }
 
-    public void addNewData(List<Message> data) {
-        mBubbleAdapter.addAll(data);
+    public void fetchOldMessages(List<Message> messages) {
+        if (messages.isEmpty()) {
+            removeHeaderView(mHeader);
+            isLoading = false;
+            return;
+        }
+
+        mBubbleAdapter.removeOldestSeparator();
+        mBubbleAdapter.addAll(addDateSeparators(messages));
         mBubbleAdapter.notifyDataSetChanged();
 
-        this.removeHeaderView(mHeader);
+        removeHeaderView(mHeader);
         isLoading = false;
     }
 
-    public void addNewData(Message data) {
-        mBubbleAdapter.insert(data, 0);
+    public void addNewMessage(Message message) {
+        long messageTimeStamp = message.getDateTime();
+        if (message.getDateTime() - mBubbleAdapter.getLastMessageTimestamp() > MILLISECONDS_IN_DAY
+                || mBubbleAdapter.isEmpty()) {
+            DateSeparator dateSeparator = new DateSeparator(messageTimeStamp);
+            mBubbleAdapter.insert(dateSeparator, 0);
+        }
+
+        mBubbleAdapter.insert(message, 0);
         mBubbleAdapter.notifyDataSetChanged();
+    }
+
+    private List<BubbleListViewItem> addDateSeparators(List<Message> data) {
+        ArrayList<BubbleListViewItem> newListItems = new ArrayList<BubbleListViewItem>();
+
+        Iterator<Message> i = data.iterator();
+        Message nextMessage = i.next(); //We already checked if data is empty
+        long currentMessageTimeStamp = DateUtil.getNowTimestamp();
+        long nextMessageTimeStamp = nextMessage.getDateTime();
+        while (i.hasNext()) { //Iterate over reverse chronological order
+            newListItems.add(nextMessage);
+
+            currentMessageTimeStamp = nextMessageTimeStamp;
+            nextMessage = i.next();
+            nextMessageTimeStamp = nextMessage.getDateTime();
+            if (currentMessageTimeStamp - nextMessageTimeStamp > MILLISECONDS_IN_DAY) {
+                DateSeparator dateSeparator = new DateSeparator(currentMessageTimeStamp);
+                newListItems.add(dateSeparator);
+            }
+        }
+        newListItems.add(nextMessage);
+
+        if (nextMessageTimeStamp - mBubbleAdapter.getLastMessageTimestamp() > MILLISECONDS_IN_DAY
+                || mBubbleAdapter.isEmpty() || mAllMessagesLoaded) {
+            DateSeparator dateSeparator = new DateSeparator(nextMessage.getDateTime());
+            newListItems.add(dateSeparator);
+        }
+
+        return newListItems;
     }
 
     public void setLoadingView(int resId) {
@@ -73,15 +121,13 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-    }
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == SCROLL_STATE_IDLE && getFirstVisiblePosition() == 0 && !isLoading
                 && !mAllMessagesLoaded && mEndlessListener != null) {
-            this.addHeaderView(mHeader);
+            addHeaderView(mHeader);
             isLoading = true;
             mEndlessListener.loadData();
         }
