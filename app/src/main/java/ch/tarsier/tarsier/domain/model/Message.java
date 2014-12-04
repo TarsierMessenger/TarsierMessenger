@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.domain.model;
 
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
+import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 import ch.tarsier.tarsier.ui.view.BubbleListViewItem;
 
 /**
@@ -9,7 +10,6 @@ import ch.tarsier.tarsier.ui.view.BubbleListViewItem;
  * @author gluthier
  */
 public class Message implements BubbleListViewItem {
-
     private long mChatId;
     private String mText;
     private PublicKey mSenderPublicKey;
@@ -71,11 +71,6 @@ public class Message implements BubbleListViewItem {
         return mDateTime;
     }
 
-    @Override
-    public long getId() {
-        return mId;
-    }
-
     public boolean isSentByUser() {
         return mIsSentByUser;
     }
@@ -97,7 +92,13 @@ public class Message implements BubbleListViewItem {
     }
 
     @Override
-    public boolean isSeparator() {
-        return false;
+    public BubbleAdapter.EndlessListViewType getEndlessListViewType() {
+        return mIsSentByUser ? BubbleAdapter.EndlessListViewType.BUBBLE_RIGHT
+                : BubbleAdapter.EndlessListViewType.BUBBLE_LEFT;
+    }
+
+    @Override
+    public long getId() {
+        return mId;
     }
 }

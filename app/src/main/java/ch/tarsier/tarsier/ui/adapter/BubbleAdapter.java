@@ -34,10 +34,13 @@ import ch.tarsier.tarsier.R;
 public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
     private static final String TAG = "BubbleAdapter";
 
-    private static final int TYPE_BUBBLE_LEFT = 0;
-    private static final int TYPE_BUBBLE_RIGHT = 1;
-    private static final int TYPE_DATE_SEPARATOR = 2;
-    private static final int TYPE_MAX_COUNT = 3;
+    /**
+     * Types of items in the EndlessListView
+     */
+    public enum EndlessListViewType {
+        BUBBLE_LEFT, BUBBLE_RIGHT, DATE_SEPARATOR
+    }
+    private static final int TYPE_MAX_COUNT = EndlessListViewType.values().length;
 
     private Context mContext;
     private List<BubbleListViewItem> mMessages;
@@ -53,7 +56,7 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
 
     public long getLastMessageTimestamp() {
         if (mMessages.size() > 0) {
-            return mMessages.get(getCount() - 1).getDateTime();
+            return mMessages.get(0).getDateTime();
         } else {
             return DateUtil.getNowTimestamp();
         }
@@ -82,12 +85,7 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
     @Override
     public int getItemViewType(int position) {
         BubbleListViewItem listViewItem = getItem(position);
-
-        if (!listViewItem.isSeparator()) {
-            return ((Message) listViewItem).isSentByUser() ? TYPE_BUBBLE_RIGHT : TYPE_BUBBLE_LEFT;
-        } else {
-            return TYPE_DATE_SEPARATOR;
-        }
+        return listViewItem.getEndlessListViewType().ordinal();
     }
 
     @Override
@@ -99,10 +97,10 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
     public View getView(int position, View convertView, ViewGroup parent) {
         BubbleListViewItem listViewItem = this.getItem(position);
 
-        int itemType = getItemViewType(position);
+        EndlessListViewType itemType = EndlessListViewType.values()[getItemViewType(position)];
         switch (itemType) {
-            case TYPE_BUBBLE_LEFT:
-            case TYPE_BUBBLE_RIGHT:
+            case BUBBLE_LEFT:
+            case BUBBLE_RIGHT:
                 BubbleViewHolder bubbleViewHolder;
                 if (convertView == null) {
                     bubbleViewHolder = new BubbleViewHolder();
@@ -124,16 +122,18 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
                     return convertView;
                 }
                 break;
-            case TYPE_DATE_SEPARATOR:
+            case DATE_SEPARATOR:
                 DateSeparatorViewHolder dateSeparatorViewHolder;
                 if (convertView == null) {
                     dateSeparatorViewHolder = new DateSeparatorViewHolder();
                     convertView = LayoutInflater.from(mContext).inflate(R.layout.date_separator, parent, false);
+                    dateSeparatorViewHolder.date = (TextView) convertView.findViewById(R.id.date);
                     convertView.setTag(dateSeparatorViewHolder);
                 } else {
                     dateSeparatorViewHolder = (DateSeparatorViewHolder) convertView.getTag();
                 }
 
+                //TODO /!\ Attention, vérifier que le computeDateSeparator est bien modifié tous les jours pour chaque date separator
                 inflateDateSeparator(dateSeparatorViewHolder, (DateSeparator) listViewItem);
                 break;
         }
@@ -141,7 +141,7 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
         return convertView;
     }
 
-    private BubbleViewHolder inflateMessageRow(BubbleViewHolder viewHolder, Message message, int type) throws NoSuchModelException {
+    private BubbleViewHolder inflateMessageRow(BubbleViewHolder viewHolder, Message message, EndlessListViewType type) throws NoSuchModelException {
         String messageSenderPublicKey = message.getSenderPublicKey().base64Encoded();
         Peer sender;
         if (mPeers.containsKey(messageSenderPublicKey)) {
@@ -162,16 +162,18 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
         LinearLayout.LayoutParams messageLp = (LinearLayout.LayoutParams) viewHolder.message.getLayoutParams();
 
         switch (type) {
-            case TYPE_BUBBLE_LEFT:
+            case BUBBLE_LEFT:
                 viewHolder.bubble.setBackgroundResource(R.drawable.bubble_text_left);
                 bubbleLp.addRule(RelativeLayout.RIGHT_OF, viewHolder.picture.getId());
                 break;
-            case TYPE_BUBBLE_RIGHT:
+            case BUBBLE_RIGHT:
                 viewHolder.name.setVisibility(View.GONE);
                 viewHolder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
                 pictureLp.addRule(RelativeLayout.ALIGN_PARENT_END);
                 bubbleLp.addRule(RelativeLayout.LEFT_OF, viewHolder.picture.getId());
                 messageLp.gravity = Gravity.END;
+                break;
+            default:
                 break;
         }
 
@@ -183,13 +185,31 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
     }
 
     private DateSeparatorViewHolder inflateDateSeparator(DateSeparatorViewHolder viewHolder, DateSeparator dateSeparator) {
-        //TODO implement
+        viewHolder.date.setText(DateUtil.computeDateSeparator(dateSeparator.getTimeStamp()));
         return viewHolder;
     }
 
     @Override
     public boolean isEnabled(int position) {
         return false;
+    }
+
+    /**
+     *
+     * @return if the removal has been successful
+     */
+    public boolean removeOldestSeparator() {
+        if (!isEmpty()) {
+            BubbleListViewItem oldestItem = mMessages.get(getCount()-1);
+
+            if (oldestItem.getEndlessListViewType() == EndlessListViewType.DATE_SEPARATOR) {
+                remove(oldestItem);
+            }
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

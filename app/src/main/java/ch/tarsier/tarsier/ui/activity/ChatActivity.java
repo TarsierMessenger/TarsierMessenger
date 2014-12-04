@@ -3,13 +3,9 @@ package ch.tarsier.tarsier.ui.activity;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +21,6 @@ import ch.tarsier.tarsier.ui.view.EndlessListView;
 import ch.tarsier.tarsier.ui.view.EndlessListener;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Message;
-import ch.tarsier.tarsier.validation.MessageValidator;
 
 /**
  * @author marinnicolini and xawill (extreme programming)
@@ -35,6 +30,7 @@ import ch.tarsier.tarsier.validation.MessageValidator;
  *
  * Bubble's layout is inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
  */
+//TODO control the layout with virtual keyboard
 public class ChatActivity extends Activity implements EndlessListener {
 
     public final static String EXTRA_CHAT_MESSAGE_KEY = "ch.tarsier.tarsier.ui.activity.CHAT";
@@ -70,6 +66,8 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         mActivityJustStarted = true;
 
+        //TODO detect [Enter] key while writing a message to send it
+
         /** Todo if we have time... Possibility to retrieve one message not yet sent but already typed
          */
     }
@@ -94,7 +92,7 @@ public class ChatActivity extends Activity implements EndlessListener {
         if (!messageText.isEmpty()) {
             //Add the message to the ListView
             try {
-                mListView.addNewData(sentMessage);
+                mListView.addNewMessage(sentMessage);
 
                 //Add the message to the database
                 Tarsier.app().getMessageRepository().insert(sentMessage);
@@ -150,13 +148,13 @@ public class ChatActivity extends Activity implements EndlessListener {
         protected void onPostExecute(List<Message> result) {
             super.onPostExecute(result);
 
-            if (result.size() > 0) {
-                mListView.addNewData(result);
-            }
-
             // Tell the ListView to stop retrieving messages since there all loaded in it.
             if (result.size() < NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE) {
                 mListView.setAllMessagesLoaded(true);
+            }
+
+            if (result.size() > 0) {
+                mListView.fetchOldMessages(result);
             }
 
             if (mActivityJustStarted) {

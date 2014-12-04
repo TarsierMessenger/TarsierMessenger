@@ -1,5 +1,7 @@
 package ch.tarsier.tarsier.ui.view;
 
+import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
+
 /**
  * @author xawill
  */
@@ -25,7 +27,7 @@ public class DateSeparator implements BubbleListViewItem {
     }
 
     @Override
-    public boolean isSeparator() {
-        return true;
+    public BubbleAdapter.EndlessListViewType getEndlessListViewType() {
+        return BubbleAdapter.EndlessListViewType.DATE_SEPARATOR;
     }
 }
