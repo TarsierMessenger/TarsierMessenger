@@ -1,12 +1,15 @@
 package ch.tarsier.tarsier.ui.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
@@ -57,14 +60,16 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
 
-        if (mChat.getId() == -1) {
-            // FIXME: Handle this
+        if (mChat.getId() > -1) {
+            DatabaseLoader dbl = new DatabaseLoader();
+            dbl.execute();
+
+            mActivityJustStarted = true;
+        } else {
+            Toast.makeText(this, "Error : This chat doesn't exists", Toast.LENGTH_LONG).show();
+            Intent goBackToChatList = new Intent(this, ChatListActivity.class);
+            startActivity(goBackToChatList);
         }
-
-        DatabaseLoader dbl = new DatabaseLoader();
-        dbl.execute();
-
-        mActivityJustStarted = true;
 
         //TODO detect [Enter] key while writing a message to send it
 
@@ -82,7 +87,7 @@ public class ChatActivity extends Activity implements EndlessListener {
 
     /**
      * Should not be called if message is empty (button should be disabled)
-     * @param view
+     * @param view the view that initiated the action. Here, the button to send the message
      */
     public void onClickSendMessage(View view) {
         TextView messageView = (TextView) findViewById(R.id.message_to_send);
@@ -128,8 +133,7 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         @Override
         protected List<Message> doInBackground(Void... params) {
-            while (!Tarsier.app().getDatabase().isReady()) {
-            }
+            while (!Tarsier.app().getDatabase().isReady()) { }
 
             List<Message> newMessages = new ArrayList<Message>();
             try {

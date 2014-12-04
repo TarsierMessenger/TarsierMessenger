@@ -6,14 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
-import ch.tarsier.tarsier.util.DateUtil;
 
 /**
  * @author marinnicolini and xawill (extreme programming)
@@ -77,7 +74,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
 
         Iterator<Message> i = data.iterator();
         Message nextMessage = i.next(); //We already checked if data is empty
-        long currentMessageTimeStamp = DateUtil.getNowTimestamp();
+        long currentMessageTimeStamp;
         long nextMessageTimeStamp = nextMessage.getDateTime();
         while (i.hasNext()) { //Iterate over reverse chronological order
             newListItems.add(nextMessage);
@@ -121,7 +118,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) { }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {

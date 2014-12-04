@@ -32,8 +32,6 @@ import ch.tarsier.tarsier.R;
  * and https://github.com/survivingwithandroid/Surviving-with-android/tree/master/EndlessAdapter
  */
 public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
-    private static final String TAG = "BubbleAdapter";
-
     /**
      * Types of items in the EndlessListView
      */
@@ -136,12 +134,15 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
                 //TODO /!\ Attention, vérifier que le computeDateSeparator est bien modifié tous les jours pour chaque date separator
                 inflateDateSeparator(dateSeparatorViewHolder, (DateSeparator) listViewItem);
                 break;
+            default:
+                break;
         }
 
         return convertView;
     }
 
-    private BubbleViewHolder inflateMessageRow(BubbleViewHolder viewHolder, Message message, EndlessListViewType type) throws NoSuchModelException {
+    private BubbleViewHolder inflateMessageRow(BubbleViewHolder viewHolder, Message message,
+            EndlessListViewType type) throws NoSuchModelException {
         String messageSenderPublicKey = message.getSenderPublicKey().base64Encoded();
         Peer sender;
         if (mPeers.containsKey(messageSenderPublicKey)) {
@@ -184,7 +185,8 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
         return viewHolder;
     }
 
-    private DateSeparatorViewHolder inflateDateSeparator(DateSeparatorViewHolder viewHolder, DateSeparator dateSeparator) {
+    private DateSeparatorViewHolder inflateDateSeparator(DateSeparatorViewHolder viewHolder,
+                                                         DateSeparator dateSeparator) {
         viewHolder.date.setText(DateUtil.computeDateSeparator(dateSeparator.getTimeStamp()));
         return viewHolder;
     }
