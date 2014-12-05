@@ -18,7 +18,6 @@ import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 public class ChatListView extends ListView {
 
     private View mFooter;
-    private EndlessListener mEndlessListener;
     private ChatListAdapter mChatListAdapter;
 
     public ChatListView(Context context) {
@@ -31,10 +30,6 @@ public class ChatListView extends ListView {
 
     public ChatListView(Context context, AttributeSet attributeSet, int defStyle) {
         super(context, attributeSet, defStyle);
-    }
-
-    public void setEndlessListener(EndlessListener listener) {
-        mEndlessListener = listener;
     }
 
     public void setChatListAdapter(ChatListAdapter chatListAdapter) {
@@ -54,8 +49,6 @@ public class ChatListView extends ListView {
         if (data != null) {
             mChatListAdapter.addAllChats(data);
             mChatListAdapter.notifyDataSetChanged();
-        } else {
-            //TODO show message to start a new private chat or chatroom
         }
     }
 }

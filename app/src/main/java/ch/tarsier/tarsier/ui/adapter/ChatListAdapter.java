@@ -36,7 +36,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         super(context, layoutResourceId);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
-        mChatList = new ArrayList<Chat>();
+        mChatList = new ArrayList<>();
     }
 
     @Override

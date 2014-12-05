@@ -46,7 +46,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
 
         mChatListView.setLoadingView(R.layout.loading_layout);
         mChatListView.setChatListAdapter(mChatListAdapter);
-        mChatListView.setEndlessListener(this);
 
         this.loadData();
 
@@ -121,11 +120,15 @@ public class ChatListActivity extends Activity implements EndlessListener {
             try {
                 List<Chat> sortedChats = chatRepository.findAll();
                 Collections.sort(sortedChats, new ChatLastMessageDateSorter());
+
                 //return the sorted list of all chats
                 return sortedChats;
+
             } catch (NoSuchModelException e) {
                 e.printStackTrace();
-                return new ArrayList<Chat>();
+
+                //return an empty list if the database is empty
+                return new ArrayList<>();
             }
         }
 
