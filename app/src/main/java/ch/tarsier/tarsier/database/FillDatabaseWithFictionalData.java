@@ -64,9 +64,14 @@ public class FillDatabaseWithFictionalData {
         }
     }
 
-    public static void populate() {
+    public static void populate(boolean force) {
+        boolean hasData = hasData();
 
-        clear();
+        if (hasData && force) {
+            clear();
+        } else if (hasData) {
+            return;
+        }
 
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
         PeerRepository peerRepository = Tarsier.app().getPeerRepository();
@@ -644,5 +649,24 @@ public class FillDatabaseWithFictionalData {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
+    }
+
+    private static boolean hasData() {
+        ChatRepository chatRepository = Tarsier.app().getChatRepository();
+        PeerRepository peerRepository = Tarsier.app().getPeerRepository();
+        MessageRepository messageRepository = Tarsier.app().getMessageRepository();
+
+        try {
+            if (chatRepository.findAll().size() > 0 ||
+                messageRepository.findAll().size() > 0 ||
+                peerRepository.findAll().size() > 0) {
+                return true;
+            }
+        } catch (NoSuchModelException e) {
+            Log.d(TAG, "An error occurred: " + e.toString());
+            return false;
+        }
+
+        return false;
     }
 }
