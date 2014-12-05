@@ -41,23 +41,19 @@ public class NearbyListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         //final ActionBar actionBar = getActionBar();
         super.onCreate(savedInstanceState);
-        Tarsier.app().getEventBus().register(this);
         setContentView(R.layout.activity_nearby_list);
         mFragmentManager = getFragmentManager();
 
         mNearbyPeer = new NearbyPeerFragment();
         mNearbyPeer.setUp(this);
-        Log.d(TAG, "instanciate nearbyPeerFragment");
 //        mNearbyChatList = new NearbyChatListFragment();
 
 
         //ft.replace(R.id.inside_nearby, mNearbyPeer, "peer");
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        Log.d(TAG, "before attach");
         ft.add(R.id.inside_nearby,mNearbyPeer);
         ft.attach(mNearbyPeer);
         ft.commit();
-        Log.d(TAG, "after commit");
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -71,26 +67,32 @@ public class NearbyListActivity extends Activity {
         Log.d(TAG, "Got ReceivedNearbyPeersListEvent");
         NearbyPeerAdapter peerAdapter = mNearbyPeer.getNearbyPeerAdapter();
         if (peerAdapter != null) {
-            Log.d(TAG, "update list peers of adapter");
             peerAdapter.setPeerList(event.getPeers());
         } else {
-            Log.d(TAG, "peerAdapter is null");
         }
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        Log.d(TAG, "before detach recieved event");
         ft.detach(mNearbyPeer);
-        Log.d(TAG, "before attach recieved event");
         ft.attach(mNearbyPeer);
         ft.commit();
-        Log.d(TAG, "after commit");
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG,"onResume");
+        Tarsier.app().getEventBus().register(this);
         Tarsier.app().getEventBus().post(new RequestNearbyPeersListEvent());
+    }
+
+    @Override
+    public void onPause() {
+        Tarsier.app().getEventBus().unregister(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

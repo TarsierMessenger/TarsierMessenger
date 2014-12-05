@@ -40,10 +40,6 @@ public class NearbyPeerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"onCreate Fragment");
-        //Register to event bus and request the list of nearby peer
-        Tarsier.app().getEventBus().register(this);
-        //debug
-
     }
 
     @Override
