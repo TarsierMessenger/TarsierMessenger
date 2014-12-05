@@ -30,8 +30,6 @@ import ch.tarsier.tarsier.validation.ChatroomNameValidator;
  */
 public class NewChatroomActivity extends Activity {
 
-    private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
-
     private EditText mChatroomName;
 
     private Bus mEventBus;

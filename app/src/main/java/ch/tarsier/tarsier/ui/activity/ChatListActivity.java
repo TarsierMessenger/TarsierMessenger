@@ -33,8 +33,6 @@ import ch.tarsier.tarsier.util.ChatLastMessageDateSorter;
  */
 public class ChatListActivity extends Activity implements EndlessListener {
 
-    private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
-
     private ChatListView mChatListView;
     private ChatListAdapter mChatListAdapter;
 
