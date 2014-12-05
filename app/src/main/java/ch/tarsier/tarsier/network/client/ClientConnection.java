@@ -2,8 +2,6 @@ package ch.tarsier.tarsier.network.client;
 
 import com.google.protobuf.ByteString;
 
-import com.squareup.otto.Bus;
-
 import android.os.Handler;
 import android.util.Log;
 
@@ -19,17 +17,18 @@ import java.util.List;
 import java.util.Set;
 
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.crypto.CBCEncryptionProduct;
+import ch.tarsier.tarsier.crypto.PeerCipher;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.User;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
+import ch.tarsier.tarsier.exception.PeerCipherException;
 import ch.tarsier.tarsier.util.ByteUtils;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
+import ch.tarsier.tarsier.util.TarsierMessageFactory;
 
-/**
- * @author amirreza
- */
 public class ClientConnection implements Runnable, ConnectionInterface {
 
     private static final String TAG = "TarsierClientConnection";
@@ -153,34 +152,19 @@ public class ClientConnection implements Runnable, ConnectionInterface {
 
     @Override
     public void broadcastMessage(byte[] message) {
-        broadcastMessage(mLocalUser.getPublicKey().getBytes(), message);
-    }
-
-    @Override
-    public void broadcastMessage(byte[] publicKey, byte[] message) {
-        TarsierWireProtos.TarsierPublicMessage.Builder publicMessage
-                = TarsierWireProtos.TarsierPublicMessage.newBuilder();
-        publicMessage.setSenderPublicKey(ByteString.copyFrom(mLocalUser.getPublicKey().getBytes()));
-        publicMessage.setPlainText(ByteString.copyFrom(message));
-        write(ByteUtils
-                .prependInt(MessageType.MESSAGE_TYPE_PUBLIC, publicMessage.build().toByteArray()));
+        byte[] wireMessage = TarsierMessageFactory.wirePublicProto(message);
+        write(wireMessage);
         Log.d(TAG, "A public message is sent.");
     }
 
     @Override
-    public void sendMessage(Peer peer, byte[] message) {
+    public void sendMessage(Peer peer, byte[] message) throws PeerCipherException{
         sendMessage(peer.getPublicKey(), message);
     }
 
-    private void sendMessage(PublicKey publicKey, byte[] message) {
-        TarsierWireProtos.TarsierPrivateMessage.Builder privateMessage
-                = TarsierWireProtos.TarsierPrivateMessage.newBuilder();
-        privateMessage.setReceiverPublicKey(ByteString.copyFrom(publicKey.getBytes()));
-        privateMessage.setSenderPublicKey(ByteString.copyFrom(mLocalUser.getPublicKey().getBytes()));
-        // TODO: is the msg already encrypted? what is setIV ?
-        privateMessage.setCipherText(ByteString.copyFrom(message));
-        write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE,
-                privateMessage.build().toByteArray()));
+    private void sendMessage(PublicKey publicKey, byte[] message) throws PeerCipherException {
+        byte[] wireMessage = TarsierMessageFactory.wirePrivateProto(publicKey.getBytes(), message);
+        write(wireMessage);
         Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey.getBytes())
                 .getUserName());
     }
@@ -228,5 +212,4 @@ public class ClientConnection implements Runnable, ConnectionInterface {
                 .prependInt(MessageType.MESSAGE_TYPE_HELLO, helloMessage.build().toByteArray()));
         Log.d(TAG, "Hello message sent successfully");
     }
-
 }

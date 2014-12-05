@@ -24,6 +24,7 @@ import ch.tarsier.tarsier.util.ByteUtils;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
+import ch.tarsier.tarsier.util.TarsierMessageFactory;
 
 /**
  * @author FredericJacobs
@@ -79,25 +80,18 @@ public class ServerConnection implements Runnable, ConnectionInterface {
         Log.d(TAG, "Peer " + peer.getName() + " is out: " + mPeersMap.values().toString());
     }
 
+    @Override
     public void broadcastMessage(byte[] message) {
-        broadcastMessage(mLocalUser.getPublicKey().getBytes(), message);
+        byte[] wireMessage = TarsierMessageFactory.wirePublicProto(message);
+        broadcastMessage(mLocalUser.getPublicKey().getBytes(), wireMessage);
     }
 
     //This sends all public messages.
-    @Override
-    public void broadcastMessage(byte[] publicKey, byte[] message) {
+    public void broadcastMessage(byte[] publicKey, byte[] wireMessage) {
         for (Peer peer : getPeersList()) {
             if (!peer.getPublicKey().equals(new PublicKey(publicKey))) {
                 ConnectionHandler connection = mConnectionMap.get(peer.getPublicKey().toString());
-
-                TarsierWireProtos.TarsierPublicMessage.Builder publicMessage
-                        = TarsierWireProtos.TarsierPublicMessage.newBuilder();
-
-                publicMessage.setSenderPublicKey(ByteString.copyFrom(publicKey));
-                publicMessage.setPlainText(ByteString.copyFrom(message));
-
-                connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PUBLIC,
-                        publicMessage.build().toByteArray()));
+                connection.write(wireMessage);
             }
         }
 
@@ -131,15 +125,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
     protected void sendMessage(byte[] publicKey, byte[] message) {
         ConnectionHandler connection = mConnectionMap.get(new String(publicKey));
         if (connection != null) {
-            TarsierWireProtos.TarsierPrivateMessage.Builder privateMessage
-                    = TarsierWireProtos.TarsierPrivateMessage.newBuilder();
-            privateMessage.setReceiverPublicKey(ByteString.copyFrom(publicKey));
-            privateMessage
-                    .setSenderPublicKey(ByteString.copyFrom(mLocalUser.getPublicKey().getBytes()));
-            //TODO: is the msg already encrypted? what is setIV ?
-            privateMessage.setCipherText(ByteString.copyFrom(message));
-            connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE,
-                    privateMessage.build().toByteArray()));
+
             Log.d(TAG,
                     "A private message is sent to " + peerWithPublicKey(publicKey).getUserName());
             connection.write(message);
@@ -297,7 +283,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
 
                                 mServerConnection.broadcastMessage(
                                         publicMessage.getSenderPublicKey().toByteArray(),
-                                        publicMessage.getPlainText().toByteArray());
+                                        typeAndMessage);
 
                                 mHandler.obtainMessage(MessageType.messageTypeFromData(buffer),
                                         serializedProtoBuffer).sendToTarget();
