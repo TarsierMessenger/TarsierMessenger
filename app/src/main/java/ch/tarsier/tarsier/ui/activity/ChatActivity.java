@@ -81,7 +81,9 @@ public class ChatActivity extends Activity implements EndlessListener {
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(false);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setTitle(mChat.getTitle());
+            actionBar.setIcon(mChat.getAvatarRessourceId());
         }
     }
 
