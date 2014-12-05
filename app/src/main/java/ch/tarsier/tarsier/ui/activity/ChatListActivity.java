@@ -41,8 +41,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
-        Tarsier.app().getEventBus().register(this);
-
         mChatListView = (ChatListView) findViewById(R.id.chat_list);
         mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list);
 
@@ -73,11 +71,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
         Intent chatIntent = new Intent(getApplicationContext(), ChatActivity.class);
         chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, chat);
         startActivity(chatIntent);
-    }
-
-    @Subscribe
-    public void receivedNewMessagesList(ReceivedMessageEvent event) {
-        //TODO
     }
 
     @Override
