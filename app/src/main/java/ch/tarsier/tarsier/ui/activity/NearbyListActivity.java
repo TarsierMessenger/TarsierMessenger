@@ -59,6 +59,11 @@ public class NearbyListActivity extends Activity {
         ft.commit();
         Log.d(TAG, "after commit");
 
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
     }
 
     @Subscribe

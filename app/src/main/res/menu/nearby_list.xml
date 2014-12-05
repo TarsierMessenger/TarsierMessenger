@@ -2,11 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ch.tarsier.tarsier.ui.activity.NearbyListActivity" >
 
-    <item android:id="@+id/action_chats_list"
-          android:title="@string/action_discussions"
-          android:orderInCategory="100"
-          android:showAsAction="never" />
-
     <item android:id="@+id/action_profile"
           android:title="@string/action_profile"
           android:orderInCategory="100"
@@ -15,5 +10,5 @@
     <item android:id="@+id/create_new_chat_from_nearby"
         android:title="@string/new_chatroom"
         android:showAsAction="ifRoom"
-        android:icon="@drawable/new_private_chat" />
+        android:icon="@drawable/ic_action_add_group" />
 </menu>

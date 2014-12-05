@@ -13,17 +13,18 @@
 
         <TextView
             android:id="@+id/nearbyChatRoomName"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/tarsier_font" />
+            android:textColor="@color/tarsier_font"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/nearbyChatRoomNbPeers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/nearbyChatRoomName"
-            android:textColor="@color/tarsier_font_secondary" />
+            android:textColor="@color/tarsier_font_secondary"
+            android:textSize="15sp" />
 
     </RelativeLayout>
 
