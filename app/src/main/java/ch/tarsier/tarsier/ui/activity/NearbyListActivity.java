@@ -41,7 +41,6 @@ public class NearbyListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         //final ActionBar actionBar = getActionBar();
         super.onCreate(savedInstanceState);
-        Tarsier.app().getEventBus().register(this);
         setContentView(R.layout.activity_nearby_list);
         mFragmentManager = getFragmentManager();
 
@@ -81,12 +80,18 @@ public class NearbyListActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        Tarsier.app().getEventBus().register(this);
         Tarsier.app().getEventBus().post(new RequestNearbyPeersListEvent());
     }
 
     @Override
-    public void onDestroy() {
+    public void onPause() {
         Tarsier.app().getEventBus().unregister(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
         super.onDestroy();
     }
 
