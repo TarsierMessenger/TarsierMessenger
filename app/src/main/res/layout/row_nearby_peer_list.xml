@@ -33,15 +33,16 @@
             android:id="@+id/nearbyPeerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="@color/tarsier_font" />
+            android:textColor="@color/tarsier_font"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/nearbyPeerStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/nearbyPeerName"
-            android:textColor="@color/tarsier_font_secondary" />
+            android:textColor="@color/tarsier_font_secondary"
+            android:textSize="15sp" />
 
     </RelativeLayout>
 

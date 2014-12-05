@@ -31,7 +31,7 @@
             android:id="@+id/sendImageButton"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/send_message_icon"
+            android:background="@drawable/ic_action_send_now"
             android:contentDescription="@string/send_message_image"
             android:layout_gravity="bottom"
             android:onClick="onClickSendMessage" />
