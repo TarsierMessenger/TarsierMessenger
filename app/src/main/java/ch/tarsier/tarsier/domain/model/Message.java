@@ -2,13 +2,14 @@ package ch.tarsier.tarsier.domain.model;
 
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
+import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
+import ch.tarsier.tarsier.ui.view.BubbleListViewItem;
 
 /**
  * @author McMoudi
  * @author gluthier
  */
-public class Message {
-
+public class Message implements BubbleListViewItem {
     private long mChatId;
     private String mText;
     private PublicKey mSenderPublicKey;
@@ -70,10 +71,6 @@ public class Message {
         return mDateTime;
     }
 
-    public long getId() {
-        return mId;
-    }
-
     public boolean isSentByUser() {
         return mIsSentByUser;
     }
@@ -92,5 +89,16 @@ public class Message {
 
     public void setDateTime(long newTime) {
         mDateTime = newTime;
+    }
+
+    @Override
+    public BubbleAdapter.EndlessListViewType getEndlessListViewType() {
+        return mIsSentByUser ? BubbleAdapter.EndlessListViewType.BUBBLE_RIGHT
+                : BubbleAdapter.EndlessListViewType.BUBBLE_LEFT;
+    }
+
+    @Override
+    public long getId() {
+        return mId;
     }
 }
