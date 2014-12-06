@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class Chat implements Serializable {
 
-    private static String DEFAULT_TITLE = "Chatroom of ";
+    private static String DEFAULT_TITLE = "'s chatroom";
 
     private long mId;
     private String mTitle;
@@ -39,7 +39,7 @@ public class Chat implements Serializable {
             if (mTitle != null) {
                 return mTitle;
             } else {
-                return DEFAULT_TITLE + getHost().getUserName();
+                return getHost().getUserName() + DEFAULT_TITLE;
             }
         }
     }
