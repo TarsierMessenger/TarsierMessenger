@@ -130,47 +130,6 @@ public class HomeActivity extends Activity {
         this.startActivity(picture);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.action_settings:
-                return true;
-
-            case R.id.action_profile:
-                displayProfileActivity();
-                return true;
-
-            case R.id.action_wifidirectdebug:
-                displayWifiDirectDebugActivity();
-                return true;
-
-            case R.id.action_chatroom_peers:
-                displayChatroomPeers();
-                return true;
-
-            case R.id.action_chats_list:
-                displayChatsListActivity();
-
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -222,26 +181,5 @@ public class HomeActivity extends Activity {
             }
         }
     }
-
-    public void displayProfileActivity() {
-        Intent displayProfileIntent = new Intent(this, ProfileActivity.class);
-        startActivity(displayProfileIntent);
-    }
-
-    private void displayWifiDirectDebugActivity() {
-        Intent displayWifiDirectDebugIntent = new Intent(this, WiFiDirectDebugActivity.class);
-        startActivity(displayWifiDirectDebugIntent);
-    }
-
-    private void displayChatsListActivity() {
-        Intent chatsListActivity = new Intent(this, ChatListActivity.class);
-        startActivity(chatsListActivity);
-    }
-
-    private void displayChatroomPeers() {
-        Intent displayChatroomPeers = new Intent(this, ChatroomPeersActivity.class);
-        startActivity(displayChatroomPeers);
-    }
-
 }
 

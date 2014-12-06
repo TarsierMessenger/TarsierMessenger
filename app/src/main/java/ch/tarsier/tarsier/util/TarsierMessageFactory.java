@@ -31,7 +31,7 @@ public class TarsierMessageFactory {
 
         byte[] messageProto = privateMessage.build().toByteArray();
 
-        return ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE, messageProto);;
+        return ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE, messageProto);
     }
 
     public static byte[] wirePublicProto(byte[] message) {

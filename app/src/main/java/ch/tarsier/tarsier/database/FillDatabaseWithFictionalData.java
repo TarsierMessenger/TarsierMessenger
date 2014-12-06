@@ -189,7 +189,7 @@ public class FillDatabaseWithFictionalData {
         Chat chat10 = new Chat();
         chat10.setHost(gabriel);
         chat10.setTitle("Saaaaat");
-        chat1.setPrivate(false);
+        chat10.setPrivate(false);
 
         try {
             Log.d(TAG, "Creating chats.");

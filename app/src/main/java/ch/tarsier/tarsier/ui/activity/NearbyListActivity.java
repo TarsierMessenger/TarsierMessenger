@@ -113,10 +113,6 @@ public class NearbyListActivity extends Activity {
                 displayProfileActivity();
                 return true;
 
-            case R.id.action_chats_list:
-                displayChatsListActivity();
-                return true;
-
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -131,11 +127,6 @@ public class NearbyListActivity extends Activity {
     private void displayProfileActivity() {
         Intent displayProfileIntent = new Intent(this, ProfileActivity.class);
         startActivity(displayProfileIntent);
-    }
-
-    private void displayChatsListActivity() {
-        Intent chatsListActivity = new Intent(this, ChatListActivity.class);
-        startActivity(chatsListActivity);
     }
 }
 
@@ -176,7 +167,7 @@ public class NearbyListActivity extends Activity {
 //            }
 //        };
 //        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_chatroom_name))
-//            .setTabListener(tabListener));
+//              .setTabListener(tabListener));
 //        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_peer_name)).setTabListener(tabListener));
 //
 //        if (actionBar != null) {

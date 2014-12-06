@@ -48,7 +48,8 @@
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity"
             android:label="@string/title_activity_add_profile_picture"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".ui.activity.HomeActivity">
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.ProfileActivity"
