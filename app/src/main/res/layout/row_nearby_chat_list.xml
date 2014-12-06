@@ -31,13 +31,13 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentEnd="true">
 
         <TextView
             android:id="@+id/nearbyChatRoomLastTimestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:textColor="@color/tarsier_font_secondary" />
 
     </RelativeLayout>
