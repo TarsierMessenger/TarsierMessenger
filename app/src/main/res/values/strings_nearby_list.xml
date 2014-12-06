@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="chatrooms">Chat rooms</string>
-    <string name="nearby_peers">Nearby Peers</string>
     <string name="action_bar_title">Users around you</string>
-    <string name="tab_chatroom_name">Chatrooms</string>
 </resources>
