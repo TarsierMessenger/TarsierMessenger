@@ -40,18 +40,18 @@ public class DateUtilTest extends AndroidTestCase {
         assertEquals(format.format(calendar.getTimeInMillis()), dateSeparator);
     }
 
-    public void testComputeHour(){
+    public void testComputeHour() {
         // Set the time to yesterday
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 3);
         calendar.set(Calendar.MINUTE, 55);
         String sentHour = DateUtil.computeHour(calendar.getTimeInMillis());
         Format format = new SimpleDateFormat("HH:mm");
-        assertEquals("03:55" ,sentHour);
+        assertEquals("03:55" , sentHour);
 
         calendar.set(Calendar.HOUR_OF_DAY, 15);
         calendar.set(Calendar.MINUTE, 3);
         sentHour=DateUtil.computeHour(calendar.getTimeInMillis());
-        assertEquals("15:03",sentHour);
+        assertEquals("15:03", sentHour);
     }
 }

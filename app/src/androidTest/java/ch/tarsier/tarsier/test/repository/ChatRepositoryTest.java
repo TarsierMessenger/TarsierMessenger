@@ -2,8 +2,6 @@ package ch.tarsier.tarsier.test.repository;
 
 import android.test.AndroidTestCase;
 
-import java.security.PrivateKey;
-
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;

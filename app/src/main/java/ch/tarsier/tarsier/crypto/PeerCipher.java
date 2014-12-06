@@ -18,13 +18,12 @@ import ch.tarsier.tarsier.exception.PeerCipherException;
 
 public class PeerCipher {
     private static final String TAG = "PeerCipher";
-    private byte[] mPeerPublicKey;
     private byte[] mPrecomputedSharedSecret;
 
     public PeerCipher(byte[] hisPublicKey) {
-        mPeerPublicKey = hisPublicKey;
+        byte[] mPeerPublicKey = hisPublicKey;
         mPrecomputedSharedSecret = EC25519.calculateCurve25519KeyAgreement(retreiveKeyPair().getPrivateKey(),
-                                                                           mPeerPublicKey);
+                mPeerPublicKey);
     }
 
     public CBCEncryptionProduct encrypt(byte[] plaintext) throws PeerCipherException {

@@ -644,4 +644,5 @@ public class FillDatabaseWithFictionalData {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
-    }}
+    }
+}

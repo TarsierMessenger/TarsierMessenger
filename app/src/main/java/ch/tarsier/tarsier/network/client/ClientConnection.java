@@ -35,15 +35,11 @@ public class ClientConnection implements Runnable, ConnectionInterface {
 
     private static final int TIMEOUT_SOCKET_LIMIT = 5000;
 
-    private Socket mSocket;
-
     private Handler mHandler;
 
     private LinkedHashMap<String, Peer> mPeersMap = new LinkedHashMap<String, Peer>();
 
     private User mLocalUser = Tarsier.app().getUserRepository().getUser();
-
-    private InputStream mIn;
 
     private OutputStream mOut;
 
@@ -60,13 +56,13 @@ public class ClientConnection implements Runnable, ConnectionInterface {
 
     @Override
     public void run() {
-        mSocket = new Socket();
+        Socket mSocket = new Socket();
         try {
             mSocket.bind(null);
             mSocket.connect(new InetSocketAddress(mAddress.getHostAddress(),
                     MessageType.SERVER_SOCKET), TIMEOUT_SOCKET_LIMIT);
 
-            mIn = mSocket.getInputStream();
+            InputStream mIn = mSocket.getInputStream();
             mOut = mSocket.getOutputStream();
             int bytes;
             byte[] buffer = new byte[CURRENT_MAX_MESSAGE_SIZE];

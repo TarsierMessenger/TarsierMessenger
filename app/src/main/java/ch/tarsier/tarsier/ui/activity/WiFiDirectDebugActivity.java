@@ -42,8 +42,6 @@ public class WiFiDirectDebugActivity
 
     private MessagingManager mReceiver;
 
-    private WiFiDirectGroupList groupList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +57,7 @@ public class WiFiDirectDebugActivity
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
 
-        groupList = new WiFiDirectGroupList();
+        WiFiDirectGroupList groupList = new WiFiDirectGroupList();
         getFragmentManager().beginTransaction()
                 .add(R.id.container, groupList, "groups").commit();
 

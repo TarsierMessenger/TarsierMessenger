@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class Database {
 
-    private volatile DatabaseHelper mDatabaseHelper;
     private volatile SQLiteDatabase mReadable;
     private volatile SQLiteDatabase mWritable;
 
@@ -20,7 +19,7 @@ public class Database {
     }
 
     public Database(DatabaseHelper databaseHelper) {
-        mDatabaseHelper = databaseHelper;
+        DatabaseHelper mDatabaseHelper = databaseHelper;
 
         mReadable = mDatabaseHelper.getReadableDatabase();
         mWritable = mDatabaseHelper.getWritableDatabase();

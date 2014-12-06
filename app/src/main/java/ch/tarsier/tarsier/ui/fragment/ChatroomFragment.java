@@ -23,11 +23,7 @@ public class ChatroomFragment extends Fragment {
 
     private MessagingManager mMessengerDelegate;
 
-    private View mView;
-
     private TextView mChatLine;
-
-    private ListView mListView;
 
     private ChatMessageAdapter mAdapter = null;
 
@@ -40,9 +36,9 @@ public class ChatroomFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.chat_room, container, false);
+        View mView = inflater.inflate(R.layout.chat_room, container, false);
         mChatLine = (TextView) mView.findViewById(R.id.txtChatLine);
-        mListView = (ListView) mView.findViewById(android.R.id.list);
+        ListView mListView = (ListView) mView.findViewById(android.R.id.list);
         mAdapter = new ChatMessageAdapter(getActivity(), android.R.id.text1,
                 mItems);
         mListView.setAdapter(mAdapter);

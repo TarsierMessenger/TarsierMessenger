@@ -33,10 +33,6 @@ public class Tarsier extends Application {
     private MessageRepository mMessageRepository;
     private UserRepository mUserRepository;
 
-    private WifiP2pManager mWifiP2pManager;
-    private WifiP2pManager.Channel mWifiP2pChannel;
-    private MessagingManager mMessagingManager;
-
     private Bus mEventBus;
 
     public static Tarsier app() {
@@ -60,8 +56,8 @@ public class Tarsier extends Application {
     }
 
     public void initNetwork() {
-        mWifiP2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        mWifiP2pChannel = mWifiP2pManager.initialize(this, getMainLooper(), null);
+        WifiP2pManager mWifiP2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        WifiP2pManager.Channel mWifiP2pChannel = mWifiP2pManager.initialize(this, getMainLooper(), null);
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -69,7 +65,7 @@ public class Tarsier extends Application {
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-        mMessagingManager = new MessagingManager(mWifiP2pManager, mWifiP2pChannel);
+        MessagingManager mMessagingManager = new MessagingManager(mWifiP2pManager, mWifiP2pChannel);
         mMessagingManager.setEventBus(getEventBus());
 
         registerReceiver(mMessagingManager, intentFilter);
