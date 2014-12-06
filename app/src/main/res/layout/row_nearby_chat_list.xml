@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:padding="10dp">
@@ -9,7 +9,9 @@
     <RelativeLayout
         android:id="@+id/chatinfo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true">
 
         <TextView
             android:id="@+id/nearbyChatRoomName"
@@ -38,7 +40,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:textColor="@color/tarsier_font_secondary" />
+            android:textColor="@color/tarsier_font_secondary"
+            android:textSize="15sp" />
 
     </RelativeLayout>
 
