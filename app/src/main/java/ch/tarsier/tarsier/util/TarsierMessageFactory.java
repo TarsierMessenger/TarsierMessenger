@@ -30,9 +30,8 @@ public class TarsierMessageFactory {
         privateMessage.setIV(ByteString.copyFrom(IV));
 
         byte[] messageProto = privateMessage.build().toByteArray();
-        byte[] wireMessage  = ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE, messageProto);
 
-        return wireMessage;
+        return ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE, messageProto);;
     }
 
     public static byte[] wirePublicProto(byte[] message) {
@@ -41,9 +40,8 @@ public class TarsierMessageFactory {
         publicMessage.setPlainText(ByteString.copyFrom(message));
 
         byte[] messageProto =  publicMessage.build().toByteArray();
-        byte[] wireMessage  =  ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PUBLIC, messageProto);
 
-        return wireMessage;
+        return ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PUBLIC, messageProto);
     }
 
     public static byte[] getPublicKey() {

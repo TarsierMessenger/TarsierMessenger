@@ -258,11 +258,10 @@ public class AddProfilePictureActivity extends Activity {
         int imageWidth  = rectangle.getWidth();
         int imageHeight = rectangle.getHeight();
         int size = (imageHeight < imageWidth) ? imageHeight : imageWidth;
-        Bitmap square = Bitmap.createBitmap(rectangle,
+        return Bitmap.createBitmap(rectangle,
                 imageWidth / 2 - size /2,
                 imageHeight / 2 - size / 2,
                 size, size);
-        return square;
     }
 
     /**

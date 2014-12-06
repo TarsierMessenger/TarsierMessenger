@@ -21,9 +21,8 @@ public class PeerCipher {
     private byte[] mPrecomputedSharedSecret;
 
     public PeerCipher(byte[] hisPublicKey) {
-        byte[] mPeerPublicKey = hisPublicKey;
         mPrecomputedSharedSecret = EC25519.calculateCurve25519KeyAgreement(retreiveKeyPair().getPrivateKey(),
-                mPeerPublicKey);
+                hisPublicKey);
     }
 
     public CBCEncryptionProduct encrypt(byte[] plaintext) throws PeerCipherException {
@@ -45,9 +44,8 @@ public class PeerCipher {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             SecretKeySpec k = new SecretKeySpec(mPrecomputedSharedSecret, "AES");
             cipher.init(Cipher.DECRYPT_MODE, k);
-            byte[] plainText = cipher.doFinal(ciphertext);
 
-            return plainText;
+            return cipher.doFinal(ciphertext);
         } catch (NoSuchPaddingException | RuntimeException | InvalidKeyException | IllegalBlockSizeException
                 | BadPaddingException | NoSuchAlgorithmException e) {
             throw new PeerCipherException();
