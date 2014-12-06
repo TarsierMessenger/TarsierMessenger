@@ -18,17 +18,17 @@ import ch.tarsier.tarsier.exception.PeerCipherException;
 
 public class PeerCipher {
     private static final String TAG = "PeerCipher";
-    byte[] mPeerPublicKey;
-    byte[] mPrecomputedSharedSecret;
+    private byte[] mPeerPublicKey;
+    private byte[] mPrecomputedSharedSecret;
 
-    public PeerCipher(byte[] hisPublicKey){
+    public PeerCipher(byte[] hisPublicKey) {
         mPeerPublicKey = hisPublicKey;
         mPrecomputedSharedSecret = EC25519.calculateCurve25519KeyAgreement(retreiveKeyPair().getPrivateKey(),
                                                                            mPeerPublicKey);
     }
 
     public CBCEncryptionProduct encrypt(byte[] plaintext) throws PeerCipherException {
-        try{
+        try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             SecretKeySpec k = new SecretKeySpec(mPrecomputedSharedSecret, "AES");
             cipher.init(Cipher.ENCRYPT_MODE, k);
@@ -40,7 +40,7 @@ public class PeerCipher {
         }
     }
 
-    public byte[] decrypt(byte[] ciphertext) throws PeerCipherException{
+    public byte[] decrypt(byte[] ciphertext) throws PeerCipherException {
 
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
@@ -55,7 +55,7 @@ public class PeerCipher {
         }
     }
 
-    private KeyPair retreiveKeyPair(){
+    private KeyPair retreiveKeyPair() {
         return Tarsier.app().getUserPreferences().getKeyPair();
     }
 }

@@ -56,12 +56,12 @@ public class WiFiDirectGroupList extends ListFragment {
 
     public class WiFiDevicesAdapter extends ArrayAdapter<WifiP2pDevice> {
 
-        private List<WifiP2pDevice> items;
+        private List<WifiP2pDevice> mItems;
 
         public WiFiDevicesAdapter(Context context, int resource,
                 int textViewResourceId, List<WifiP2pDevice> items) {
             super(context, resource, textViewResourceId, items);
-            this.items = items;
+            this.mItems = items;
         }
 
         @Override
@@ -72,7 +72,7 @@ public class WiFiDirectGroupList extends ListFragment {
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 v = vi.inflate(android.R.layout.simple_list_item_2, null);
             }
-            WifiP2pDevice device = items.get(position);
+            WifiP2pDevice device = mItems.get(position);
             if (device != null) {
                 TextView nameText = (TextView) v
                         .findViewById(android.R.id.text1);

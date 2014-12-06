@@ -79,7 +79,7 @@ public class NewChatroomActivity extends Activity {
     private void createChatroom()
             throws InvalidCursorException, NoSuchModelException, InvalidModelException, InsertException {
 
-        if (!validateChatRoomName()) {
+        if (!validateChatroomName()) {
             Toast.makeText(this, "The chatroom name is invalid.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -102,7 +102,7 @@ public class NewChatroomActivity extends Activity {
         startActivity(newChatroomIntent);
     }
 
-    private boolean validateChatRoomName() {
+    private boolean validateChatroomName() {
         return new ChatroomNameValidator().validate(mChatroomName);
     }
 }

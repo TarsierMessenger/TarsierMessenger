@@ -16,11 +16,19 @@ public class NearbyChatroomSummary {
         mNbPeers=nbPeers;
     }
 
-    public int getId(){ return mId; }
+    public int getId() {
+        return mId;
+    }
 
-    public String getChatroomName(){ return mNearbyChatroomName; }
+    public String getChatroomName() {
+        return mNearbyChatroomName;
+    }
 
-    public String getChatroomLastMessage(){ return mLastMessage; }
+    public String getChatroomLastMessage() {
+        return mLastMessage;
+    }
 
-    public int getNbPeers(){ return mNbPeers; }
+    public int getNbPeers() {
+        return mNbPeers;
+    }
 }

@@ -52,7 +52,7 @@ public class Peer implements ByteArraySerializable, Serializable {
         mId = -1;
     }
 
-    public Peer (byte[] data) throws InvalidProtocolBufferException {
+    public Peer(byte[] data) throws InvalidProtocolBufferException {
         TarsierWireProtos.Peer peer = TarsierWireProtos.Peer.parseFrom(data);
         mUserName = peer.getName();
         mPublicKey = new PublicKey(peer.getPublicKey().toByteArray());

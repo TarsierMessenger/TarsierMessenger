@@ -17,7 +17,6 @@ import java.util.List;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
  * @author benpac
@@ -34,7 +33,7 @@ public class NearbyPeerAdapter extends ArrayAdapter<WifiP2pDevice> {
         mPeerList = new ArrayList<WifiP2pDevice>();
         mContext = context;
         mRowLayoutId = resource;
-        Log.d(TAG,"Nearby Peer Adapter created");
+        Log.d(TAG, "Nearby Peer Adapter created");
     }
 
     @Override
@@ -111,8 +110,8 @@ public class NearbyPeerAdapter extends ArrayAdapter<WifiP2pDevice> {
     }
 
     private class PeerHolder {
-        TextView mUsername;
-        TextView mStatus;
-        ImageView mProfilePicture;
+        private TextView mUsername;
+        private TextView mStatus;
+        private ImageView mProfilePicture;
     }
 }

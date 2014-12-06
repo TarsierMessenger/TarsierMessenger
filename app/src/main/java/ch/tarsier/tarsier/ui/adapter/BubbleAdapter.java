@@ -131,7 +131,8 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
                     dateSeparatorViewHolder = (DateSeparatorViewHolder) convertView.getTag();
                 }
 
-                //TODO /!\ Attention, vérifier que le computeDateSeparator est bien modifié tous les jours pour chaque date separator
+                //TODO /!\ Attention, vérifier que le computeDateSeparator
+                //TODO est bien modifié tous les jours pour chaque date separator
                 inflateDateSeparator(dateSeparatorViewHolder, (DateSeparator) listViewItem);
                 break;
             default:

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.network.MessagingManager;
 
 /**
@@ -70,8 +69,6 @@ public class ChatroomFragment extends Fragment {
      * ArrayAdapter to manage chat messages.
      */
     public class ChatMessageAdapter extends ArrayAdapter<String> {
-
-        List<String> mMessages = null;
 
         public ChatMessageAdapter(Context context, int textViewResourceId,
                 List<String> items) {

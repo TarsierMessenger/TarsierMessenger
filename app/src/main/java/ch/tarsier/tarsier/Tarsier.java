@@ -151,6 +151,9 @@ public class Tarsier extends Application {
         return mUserRepository;
     }
 
+    /*
+     * FillDatabase is the class that fill the database with fictional data
+     */
     private class FillDatabase extends AsyncTask<Void, Void, Void> {
 
         @Override

@@ -3,7 +3,6 @@ package ch.tarsier.tarsier.network;
 import java.util.List;
 
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.exception.PeerCipherException;
 
 /**

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -87,8 +86,10 @@ public class PeerRepository extends AbstractRepository<Peer> {
 
         if (!cursor.moveToFirst()) {
             throw new NoSuchModelException(
-                "Cannot find a peer with public key " + publicKey.base64Encoded() +
-                "\n user publicKey : " + new PublicKey(Tarsier.app().getUserPreferences().getKeyPair().getPublicKey()).base64Encoded());
+                    "Cannot find a peer with public key "
+                    + publicKey.base64Encoded()
+                    + "\n user publicKey : "
+                    + new PublicKey(Tarsier.app().getUserPreferences().getKeyPair().getPublicKey()).base64Encoded());
         }
 
         try {
@@ -108,9 +109,9 @@ public class PeerRepository extends AbstractRepository<Peer> {
         ContentValues values = getPeerValues(peer);
 
         long rowId = getWritableDatabase().insert(
-            TABLE_NAME,
-            null,
-            values
+                TABLE_NAME,
+                null,
+                values
         );
 
         if (rowId == -1) {
@@ -134,10 +135,10 @@ public class PeerRepository extends AbstractRepository<Peer> {
         String whereClause = Columns.Peer._ID + " = " + peer.getId();
 
         long updatedRows = getWritableDatabase().update(
-            TABLE_NAME,
-            values,
-            whereClause,
-            null
+                TABLE_NAME,
+                values,
+                whereClause,
+                null
         );
 
         if (updatedRows == 0) {

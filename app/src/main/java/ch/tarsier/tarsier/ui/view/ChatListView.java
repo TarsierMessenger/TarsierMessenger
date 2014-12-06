@@ -12,6 +12,7 @@ import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 
 /*
+ * ChatListView is the class that controls the view of the ChatListActivity
  * @author gluthier
  */
 

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.squareup.otto.Subscribe;
 
@@ -18,7 +17,6 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
 import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
-import ch.tarsier.tarsier.ui.fragment.NearbyChatListFragment;
 import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
 
 /**
@@ -51,7 +49,7 @@ public class NearbyListActivity extends Activity {
 
         //ft.replace(R.id.inside_nearby, mNearbyPeer, "peer");
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        ft.add(R.id.inside_nearby,mNearbyPeer);
+        ft.add(R.id.inside_nearby, mNearbyPeer);
         ft.attach(mNearbyPeer);
         ft.commit();
 
@@ -177,7 +175,8 @@ public class NearbyListActivity extends Activity {
 //
 //            }
 //        };
-//        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_chatroom_name)).setTabListener(tabListener));
+//        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_chatroom_name))
+//            .setTabListener(tabListener));
 //        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_peer_name)).setTabListener(tabListener));
 //
 //        if (actionBar != null) {

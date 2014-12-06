@@ -2,8 +2,9 @@ package ch.tarsier.tarsier.test.repository;
 
 import android.test.AndroidTestCase;
 
+import java.security.PrivateKey;
+
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
@@ -11,7 +12,6 @@ import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
-import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
@@ -42,7 +42,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
 
     // test findById(long id) alone
     public void testFindIllegalIds() {
-        long[] illegalIds = {-1, -9001, Long.MIN_VALUE};
+        long[] illegalIds = {-1, -9000, Long.MIN_VALUE};
 
         for (long id : illegalIds) {
             try {
@@ -58,7 +58,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
     }
 
     public void testFindLegalIds() {
-        long[] legalIds = {0, 1, 9001, Long.MAX_VALUE};
+        long[] legalIds = {0, 1, 9000, Long.MAX_VALUE};
 
         for (long id : legalIds) {
             try {

@@ -120,7 +120,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
     }
 
     /**
-     * DiscussionSummaryHolder is the class containing the discussion's information
+     * ChatHolder is the class containing the chat's information
      */
     private class ChatHolder {
         private ImageView mAvatarSrc;

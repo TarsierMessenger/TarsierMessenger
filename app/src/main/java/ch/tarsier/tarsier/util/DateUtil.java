@@ -11,6 +11,7 @@ import java.util.Locale;
  */
 public class DateUtil {
     private static Calendar calendar = Calendar.getInstance();
+    private static final int NEGATIVE_FIVE = -5;
 
     public static String computeDateSeparator(long timestamp) {
         //Set calendar to Now
@@ -25,7 +26,7 @@ public class DateUtil {
         calendar.add(Calendar.DAY_OF_MONTH, -1); //Yesterday at 00:00
         long yesterdayTimestamp = calendar.getTimeInMillis();
 
-        calendar.add(Calendar.DAY_OF_MONTH, -5); //One week ago at 00:00
+        calendar.add(Calendar.DAY_OF_MONTH, NEGATIVE_FIVE); //One week ago at 00:00
         long weekTimestamp = calendar.getTimeInMillis();
 
         Format format;

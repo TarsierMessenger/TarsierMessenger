@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.crypto.CBCEncryptionProduct;
-import ch.tarsier.tarsier.crypto.PeerCipher;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.User;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
@@ -158,7 +156,7 @@ public class ClientConnection implements Runnable, ConnectionInterface {
     }
 
     @Override
-    public void sendMessage(Peer peer, byte[] message) throws PeerCipherException{
+    public void sendMessage(Peer peer, byte[] message) throws PeerCipherException {
         sendMessage(peer.getPublicKey(), message);
     }
 

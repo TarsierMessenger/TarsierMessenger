@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.database.Columns;

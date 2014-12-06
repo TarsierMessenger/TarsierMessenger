@@ -104,7 +104,9 @@ public class ChatListActivity extends Activity implements EndlessListener {
         startActivity(openProfileIntent);
     }
 
-
+    /**
+     * ChatLoader is the class that loads the list of chats
+     */
     private class ChatLoader extends AsyncTask<Void, Void, List<Chat>> {
 
         @Override
