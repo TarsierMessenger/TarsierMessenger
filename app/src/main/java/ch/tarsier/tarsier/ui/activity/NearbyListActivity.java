@@ -29,11 +29,13 @@ import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
  */
 public class NearbyListActivity extends Activity {
 
-    private NearbyPeerFragment mNearbyPeer;
-    private final static String TAG = "NearbyList";
-    //private NearbyChatListFragment mNearbyChatList;
+    public final static String EXTRA_FROM_HOME_KEY = "ch.tarsier.tarsier.ui.activity.NEARBY";
 
+    private final static String TAG = "NearbyList";
+
+    private NearbyPeerFragment mNearbyPeer;
     private FragmentManager mFragmentManager;
+    //private NearbyChatListFragment mNearbyChatList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,14 @@ public class NearbyListActivity extends Activity {
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            boolean comesFromHomeActivity = getIntent().getBooleanExtra(EXTRA_FROM_HOME_KEY, false);
+
+            if (comesFromHomeActivity) {
+                actionBar.setDisplayHomeAsUpEnabled(false);
+            } else {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+
             actionBar.setDisplayShowHomeEnabled(false);
         }
     }
@@ -89,8 +98,13 @@ public class NearbyListActivity extends Activity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override

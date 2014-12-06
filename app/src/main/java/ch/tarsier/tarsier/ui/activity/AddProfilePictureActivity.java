@@ -302,9 +302,11 @@ public class AddProfilePictureActivity extends Activity {
             out = new FileOutputStream(getTempUri().getPath());
             bitmap.compress(Bitmap.CompressFormat.PNG, PNG_QUALITY, out);
 
-            //return back to HomeActivity if no exception is thrown
+            //remove this activity from the stack.
+            this.finish();
             Intent backToHomeIntent = new Intent(this, HomeActivity.class);
             startActivity(backToHomeIntent);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             throw new AddProfilePictureException();

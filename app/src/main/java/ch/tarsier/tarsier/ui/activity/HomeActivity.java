@@ -45,9 +45,9 @@ public class HomeActivity extends Activity {
         if (!mUserPreferences.getUsername().equals("")
             && !mUserPreferences.getStatusMessage().equals("")) {
 
+            this.finish();
             Intent chatListIntent = new Intent(this, ChatListActivity.class);
             startActivity(chatListIntent);
-            this.finish();
         }
 
         Button start = (Button) findViewById(R.id.lets_chat);
@@ -73,6 +73,7 @@ public class HomeActivity extends Activity {
             //remove this activity from the stack.
             this.finish();
             Intent nearbyIntent = new Intent(this, NearbyListActivity.class);
+            nearbyIntent.putExtra(NearbyListActivity.EXTRA_FROM_HOME_KEY, true);
             startActivity(nearbyIntent);
         }
     }
