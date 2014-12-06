@@ -16,8 +16,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,6 +27,7 @@ import java.io.IOException;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.exception.AddProfilePictureException;
 
 /**
  * Activity to upload a profile picture, either from the Gallery or
@@ -165,7 +164,7 @@ public class AddProfilePictureActivity extends Activity {
             }
         } catch (AddProfilePictureException e) {
             e.printStackTrace();
-            Toast.makeText(this, getString(R.string.error_add_profile_picture), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.error_add_profile_picture), Toast.LENGTH_SHORT).show();
         }
     }
 
