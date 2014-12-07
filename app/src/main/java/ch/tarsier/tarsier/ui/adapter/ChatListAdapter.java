@@ -36,7 +36,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         super(context, layoutResourceId);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
-        mChatList = new ArrayList<Chat>();
+        mChatList = new ArrayList<>();
     }
 
     @Override
@@ -91,18 +91,23 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             e.printStackTrace();
         }
 
-        if (chat.getAvatarRessourceId() == -1) {
-            if (chat.isPrivate()) {
-                chat.setAvatarRessourceId(R.drawable.tarsier_placeholder);
-            } else {
-                chat.setAvatarRessourceId(R.drawable.tarsier_group_placeholder);
+        if (chat != null) {
+            if (chat.getAvatarRessourceId() == -1) {
+                if (chat.isPrivate()) {
+                    chat.setAvatarRessourceId(R.drawable.tarsier_placeholder);
+                } else {
+                    chat.setAvatarRessourceId(R.drawable.tarsier_group_placeholder);
+                }
+            }
+
+            holder.mAvatarSrc.setImageResource(chat.getAvatarRessourceId());
+            holder.mTitle.setText(chat.getTitle());
+
+            if (lastMessage != null) {
+                holder.mLastMessage.setText(INTRO_TEXT + lastMessage.getText());
+                holder.mHumanTime.setText(DateUtil.computeDateSeparator(lastMessage.getDateTime()));
             }
         }
-
-        holder.mAvatarSrc.setImageResource(chat.getAvatarRessourceId());
-        holder.mTitle.setText(chat.getTitle());
-        holder.mLastMessage.setText(INTRO_TEXT + lastMessage.getText());
-        holder.mHumanTime.setText(DateUtil.computeDateSeparator(lastMessage.getDateTime()));
 
         return row;
     }
@@ -115,7 +120,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
     }
 
     /**
-     * DiscussionSummaryHolder is the class containing the discussion's information
+     * ChatHolder is the class containing the chat's information
      */
     private class ChatHolder {
         private ImageView mAvatarSrc;

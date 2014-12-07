@@ -3,7 +3,6 @@
     <string name="add_from_existing">Add from your gallery</string>
     <string name="add_new_picture">Take a new picture</string>
     <string name="save_profile">Save</string>
-    <string name="cancel_profile">Cancel</string>
     <string name="status_message_placeholder">Enter a status message</string>
     <string name="content_description_add_profile_picture">Preview of Profile picture</string>
     <string name="error_username_length">Username should be between 1 and 36 chars long</string>

@@ -15,7 +15,6 @@ import static com.google.android.apps.common.testing.ui.espresso.action.ViewActi
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isClickable;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withText;
 
 /**
  * @author gluthier
@@ -37,7 +36,7 @@ public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<Ne
                 .check(matches(isClickable()));
     }
 
-    public void testChatRoomNameRejectedIfTooShort() {
+    public void testChatroomNameRejectedIfTooShort() {
         onView(withId(R.id.chatroom_name))
                 .perform(click(), clearText(), closeSoftKeyboard());
 
@@ -48,8 +47,8 @@ public class NewChatroomActivityTest extends ActivityInstrumentationTestCase2<Ne
                 .check(matches(hasError(R.string.error_chat_room_name_length)));
     }
 
-    public void testChatRoomNameRejectedIfTooLong() {
-        String text = "This chat room name is longer than 36 characters";
+    public void testChatroomNameRejectedIfTooLong() {
+        String text = "This chatroom name is longer than 36 characters";
 
         onView(withId(R.id.chatroom_name))
                 .perform(click(), clearText())

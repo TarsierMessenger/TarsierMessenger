@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.database.Columns;
@@ -28,7 +27,6 @@ public class MessageRepository extends AbstractRepository<Message> {
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
 
     private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + " DESC";
-    private static final String DATETIME_ASCEND = Columns.Message.COLUMN_NAME_DATETIME + " ASC";
 
     public static final int ALL = Integer.MIN_VALUE;
 

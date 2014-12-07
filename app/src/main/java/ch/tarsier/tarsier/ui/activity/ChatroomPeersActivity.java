@@ -91,11 +91,11 @@ public class ChatroomPeersActivity extends ListActivity {
         chat.setPrivate(false);
 
         Peer[] peers = new Peer[]{
-                host,
-                new Peer("Frederic Jacobs", "Tarsier will beat ISIS !"),
-                new Peer("Gabriel Luthier", "There's no place like 127.0.0.1"),
-                new Peer("Radu Banabic", "Happy coding !"),
-                new Peer("Romain Ruetschi", "Let me rewrite this in Haskell, please.")
+            host,
+            new Peer("Frederic Jacobs", "Tarsier will beat ISIS !"),
+            new Peer("Gabriel Luthier", "There's no place like 127.0.0.1"),
+            new Peer("Radu Banabic", "Happy coding !"),
+            new Peer("Romain Ruetschi", "Let me rewrite this in Haskell, please.")
         };
 
         peers[0].setOnline(true);
@@ -106,7 +106,7 @@ public class ChatroomPeersActivity extends ListActivity {
 
     private boolean hasExtrasData(Bundle extras) {
         return extras.containsKey(EXTRAS_CHAT_KEY)
-            && extras.containsKey(EXTRAS_PEERS_KEY);
+                && extras.containsKey(EXTRAS_PEERS_KEY);
     }
 
     private void setAdapter(ChatroomPeersArrayAdapter adapter) {
@@ -163,7 +163,7 @@ public class ChatroomPeersActivity extends ListActivity {
                 convertView.setTag(R.id.online_badge, convertView.findViewById(R.id.online_badge));
                 convertView.setTag(R.id.owner_badge, convertView.findViewById(R.id.owner_badge));
                 convertView.setTag(R.id.status_message_profile_activity,
-                                   convertView.findViewById(R.id.status_message_profile_activity));
+                        convertView.findViewById(R.id.status_message_profile_activity));
             }
 
             View rowView = convertView;

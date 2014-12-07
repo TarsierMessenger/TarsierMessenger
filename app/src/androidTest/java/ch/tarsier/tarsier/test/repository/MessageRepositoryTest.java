@@ -17,7 +17,7 @@ import ch.tarsier.tarsier.exception.UpdateException;
  */
 public class MessageRepositoryTest extends AndroidTestCase {
 
-    final private static byte[] USER_PUBLIC_KEY = new byte[] {1, 3, 3, 7};
+    private final static byte[] USER_PUBLIC_KEY = new byte[] {1, 3, 3, 7};
 
     private MessageRepository mMessageRepository;
     private Message mDummyMessage;
@@ -45,7 +45,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
             } catch (IllegalArgumentException e) {
                 // good
                 assertEquals("Message ID is invalid.", e.getMessage());
-            }catch (NoSuchModelException e) {
+            } catch (NoSuchModelException e) {
                 fail("Expecting IllegalArgumentException to be thrown first: " + e.getMessage());
             } catch (InvalidCursorException e) {
                 fail("InvalidCursorException should not be thrown: " + e.getMessage());

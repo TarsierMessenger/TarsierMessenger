@@ -7,7 +7,7 @@ import android.widget.EditText;
  */
 public class MessageValidator extends EditTextValidator {
 
-    public MessageValidator(String errorMessage){
+    public MessageValidator(String errorMessage) {
         setErrorMessage(errorMessage);
     }
 

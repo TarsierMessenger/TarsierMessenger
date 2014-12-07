@@ -7,13 +7,12 @@ import ch.tarsier.tarsier.crypto.CBCEncryptionProduct;
 import ch.tarsier.tarsier.crypto.PeerCipher;
 import ch.tarsier.tarsier.exception.PeerCipherException;
 import ch.tarsier.tarsier.network.messages.MessageType;
-import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPrivateMessage;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPublicMessage;
 
 public class TarsierMessageFactory {
 
-    public static byte[] wirePrivateProto (byte[] peerPublicKey, byte[] message)
+    public static byte[] wirePrivateProto(byte[] peerPublicKey, byte[] message)
                                                         throws PeerCipherException
     {
         byte[] myPublicKey = getPublicKey();
@@ -31,23 +30,21 @@ public class TarsierMessageFactory {
         privateMessage.setIV(ByteString.copyFrom(IV));
 
         byte[] messageProto = privateMessage.build().toByteArray();
-        byte[] wireMessage  = ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE,messageProto);
 
-        return wireMessage;
+        return ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PRIVATE, messageProto);
     }
 
-    public static byte[] wirePublicProto (byte[] message){
+    public static byte[] wirePublicProto(byte[] message) {
         TarsierPublicMessage.Builder publicMessage = TarsierPublicMessage.newBuilder();
         publicMessage.setSenderPublicKey(ByteString.copyFrom(getPublicKey()));
         publicMessage.setPlainText(ByteString.copyFrom(message));
 
         byte[] messageProto =  publicMessage.build().toByteArray();
-        byte[] wireMessage  =  ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PUBLIC, messageProto);
 
-        return wireMessage;
+        return ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PUBLIC, messageProto);
     }
 
-    public static byte[] getPublicKey (){
+    public static byte[] getPublicKey() {
         return Tarsier.app().getUserPreferences().getKeyPair().getPublicKey();
     }
 

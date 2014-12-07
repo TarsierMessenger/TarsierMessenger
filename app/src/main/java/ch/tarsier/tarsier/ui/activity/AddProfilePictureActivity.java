@@ -16,8 +16,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,6 +27,7 @@ import java.io.IOException;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.exception.AddProfilePictureException;
 
 /**
  * Activity to upload a profile picture, either from the Gallery or
@@ -56,7 +55,7 @@ public class AddProfilePictureActivity extends Activity {
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
         }
     }
@@ -101,7 +100,7 @@ public class AddProfilePictureActivity extends Activity {
         } catch (ActivityNotFoundException anfe) {
             // in case the intent is not supported by the device, do nothing. the image
             // is still to be stored and cropped. Toast should appear
-            Toast.makeText(this, getString(R.string.error_toast_no_crop),Toast.LENGTH_SHORT).show();;
+            Toast.makeText(this, getString(R.string.error_toast_no_crop), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -165,7 +164,7 @@ public class AddProfilePictureActivity extends Activity {
             }
         } catch (AddProfilePictureException e) {
             e.printStackTrace();
-            Toast.makeText(this, getString(R.string.error_add_profile_picture), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.error_add_profile_picture), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -258,11 +257,10 @@ public class AddProfilePictureActivity extends Activity {
         int imageWidth  = rectangle.getWidth();
         int imageHeight = rectangle.getHeight();
         int size = (imageHeight < imageWidth) ? imageHeight : imageWidth;
-        Bitmap square = Bitmap.createBitmap(rectangle,
+        return Bitmap.createBitmap(rectangle,
                 imageWidth / 2 - size /2,
                 imageHeight / 2 - size / 2,
                 size, size);
-        return square;
     }
 
     /**
@@ -288,7 +286,7 @@ public class AddProfilePictureActivity extends Activity {
         } catch (ActivityNotFoundException anfe) {
             // in case the intent is not supported by the device
             // do nothing. the image is still to be cropped in the center
-            Toast.makeText(this, getString(R.string.error_toast_no_crop),Toast.LENGTH_SHORT).show();;
+            Toast.makeText(this, getString(R.string.error_toast_no_crop), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -303,6 +301,12 @@ public class AddProfilePictureActivity extends Activity {
             Log.d("FilePathSave", getTempUri().getPath());
             out = new FileOutputStream(getTempUri().getPath());
             bitmap.compress(Bitmap.CompressFormat.PNG, PNG_QUALITY, out);
+
+            //remove this activity from the stack.
+            this.finish();
+            Intent backToHomeIntent = new Intent(this, HomeActivity.class);
+            startActivity(backToHomeIntent);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             throw new AddProfilePictureException();
@@ -315,24 +319,5 @@ public class AddProfilePictureActivity extends Activity {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.add_profile_picture, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

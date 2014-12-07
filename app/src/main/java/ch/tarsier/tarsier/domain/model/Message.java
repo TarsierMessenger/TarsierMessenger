@@ -15,7 +15,7 @@ public class Message implements BubbleListViewItem {
     private PublicKey mSenderPublicKey;
     private long mDateTime;
     private boolean mIsSentByUser;
-    // mId is set to a value > 0 when the Message is inserted into the database
+    // mId is set to a value >= 0 when the Message is inserted into the database
     private long mId;
 
     /**

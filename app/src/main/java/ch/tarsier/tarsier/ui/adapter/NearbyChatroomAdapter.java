@@ -16,8 +16,6 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
-import ch.tarsier.tarsier.exception.InvalidModelException;
-import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
 
 /**
@@ -89,7 +87,7 @@ public class NearbyChatroomAdapter extends ArrayAdapter<Chat> {
         holder.mName.setText(nearbyChatroom.getTitle());
         //FIXME Remove this when the TODO above is done.
         if (lastMessage == null) {
-             holder.mLastTimestamp.setText(DateUtil.computeDateSeparator(DateUtil.getNowTimestamp()));
+            holder.mLastTimestamp.setText(DateUtil.computeDateSeparator(DateUtil.getNowTimestamp()));
         } else {
             holder.mLastTimestamp.setText(DateUtil.computeDateSeparator(lastMessage.getDateTime()));
         }//holder.mNbPeers.setText("Participants : " + nearbyChatroom.getNbPeers());

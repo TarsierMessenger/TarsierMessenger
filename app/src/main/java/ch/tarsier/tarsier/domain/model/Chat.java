@@ -8,8 +8,6 @@ import java.io.Serializable;
  */
 public class Chat implements Serializable {
 
-    private static String DEFAULT_TITLE = "Chatroom of ";
-
     private long mId;
     private String mTitle;
     private Peer mHost;
@@ -39,7 +37,8 @@ public class Chat implements Serializable {
             if (mTitle != null) {
                 return mTitle;
             } else {
-                return DEFAULT_TITLE + getHost().getUserName();
+                String DEFAULT_TITLE = "'s chatroom";
+                return getHost().getUserName() + DEFAULT_TITLE;
             }
         }
     }
@@ -65,11 +64,8 @@ public class Chat implements Serializable {
     }
 
     public boolean isHost(Peer peer) {
-        if (peer == null || getHost() == null) {
-            return false;
-        }
+        return !(peer == null || getHost() == null) && getHost().getId() == peer.getId();
 
-        return getHost().getId() == peer.getId();
     }
 
     public int getAvatarRessourceId() {

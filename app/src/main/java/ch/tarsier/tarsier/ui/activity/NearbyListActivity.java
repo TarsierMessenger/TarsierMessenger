@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.squareup.otto.Subscribe;
 
@@ -18,7 +17,6 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
 import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
-import ch.tarsier.tarsier.ui.fragment.NearbyChatListFragment;
 import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
 
 /**
@@ -31,11 +29,13 @@ import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
  */
 public class NearbyListActivity extends Activity {
 
-    private NearbyPeerFragment mNearbyPeer;
-    private final static String TAG = "NearbyList";
-    //private NearbyChatListFragment mNearbyChatList;
+    public final static String EXTRA_FROM_HOME_KEY = "ch.tarsier.tarsier.ui.activity.NEARBY";
 
+    private final static String TAG = "NearbyList";
+
+    private NearbyPeerFragment mNearbyPeer;
     private FragmentManager mFragmentManager;
+    //private NearbyChatListFragment mNearbyChatList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +51,20 @@ public class NearbyListActivity extends Activity {
 
         //ft.replace(R.id.inside_nearby, mNearbyPeer, "peer");
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        ft.add(R.id.inside_nearby,mNearbyPeer);
+        ft.add(R.id.inside_nearby, mNearbyPeer);
         ft.attach(mNearbyPeer);
         ft.commit();
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            boolean comesFromHomeActivity = getIntent().getBooleanExtra(EXTRA_FROM_HOME_KEY, false);
+
+            if (comesFromHomeActivity) {
+                actionBar.setDisplayHomeAsUpEnabled(false);
+            } else {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+
             actionBar.setDisplayShowHomeEnabled(false);
         }
     }
@@ -91,8 +98,13 @@ public class NearbyListActivity extends Activity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -115,10 +127,6 @@ public class NearbyListActivity extends Activity {
                 displayProfileActivity();
                 return true;
 
-            case R.id.action_chats_list:
-                displayChatsListActivity();
-                return true;
-
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -133,11 +141,6 @@ public class NearbyListActivity extends Activity {
     private void displayProfileActivity() {
         Intent displayProfileIntent = new Intent(this, ProfileActivity.class);
         startActivity(displayProfileIntent);
-    }
-
-    private void displayChatsListActivity() {
-        Intent chatsListActivity = new Intent(this, ChatListActivity.class);
-        startActivity(chatsListActivity);
     }
 }
 
@@ -177,7 +180,8 @@ public class NearbyListActivity extends Activity {
 //
 //            }
 //        };
-//        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_chatroom_name)).setTabListener(tabListener));
+//        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_chatroom_name))
+//              .setTabListener(tabListener));
 //        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_peer_name)).setTabListener(tabListener));
 //
 //        if (actionBar != null) {

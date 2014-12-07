@@ -2,9 +2,7 @@
 <resources>
     <item name="tarsier_principal" type="color">#0BDA51</item>
     <item name="tarsier_principal_dark" type="color">#006723</item>
-    <item name="tarsier_principal_complementary" type="color">#119DCB</item>
     <item name="tarsier_secondary" type="color">#FF890D</item>
-    <item name="tarsier_secondary_complementary" type="color">#FF330D</item>
     <item name="tarsier_font" type="color">#4e4d4d</item>
     <item name="tarsier_font_complementary" type="color">#FFF</item>
     <item name="tarsier_font_secondary" type="color">#888</item>

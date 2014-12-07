@@ -5,5 +5,5 @@ package ch.tarsier.tarsier.event;
  * @author marinnicolini.
  */
 public class RequestNearbyPeersListEvent {
-    public RequestNearbyPeersListEvent() {}
+    public RequestNearbyPeersListEvent() { }
 }

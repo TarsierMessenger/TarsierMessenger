@@ -5,7 +5,6 @@
     <dimen name="add_picture">100dp</dimen>
     <dimen name="view_spacing">20dp</dimen>
     <dimen name="button_padding">20dp</dimen>
-    <dimen name="bubble_maximum_margin">40dp</dimen>
     <dimen name="lets_chat_size">14pt</dimen>
     <dimen name="chat_picture_size">50dp</dimen>
     <dimen name="row_padding">10dp</dimen>

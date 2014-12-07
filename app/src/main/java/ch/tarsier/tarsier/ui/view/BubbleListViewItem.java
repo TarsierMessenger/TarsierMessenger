@@ -6,7 +6,7 @@ import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
  * @author xawill
  */
 public interface BubbleListViewItem {
-    public long getId();
-    public long getDateTime();
-    public BubbleAdapter.EndlessListViewType getEndlessListViewType();
+    long getId();
+    long getDateTime();
+    BubbleAdapter.EndlessListViewType getEndlessListViewType();
 }

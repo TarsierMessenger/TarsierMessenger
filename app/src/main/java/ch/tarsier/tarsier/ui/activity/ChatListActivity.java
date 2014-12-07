@@ -9,9 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
-
-import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +17,6 @@ import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
-import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
@@ -33,8 +29,6 @@ import ch.tarsier.tarsier.util.ChatLastMessageDateSorter;
  */
 public class ChatListActivity extends Activity implements EndlessListener {
 
-    private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
-
     private ChatListView mChatListView;
     private ChatListAdapter mChatListAdapter;
 
@@ -43,14 +37,11 @@ public class ChatListActivity extends Activity implements EndlessListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
-        Tarsier.app().getEventBus().register(this);
-
         mChatListView = (ChatListView) findViewById(R.id.chat_list);
         mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list);
 
         mChatListView.setLoadingView(R.layout.loading_layout);
         mChatListView.setChatListAdapter(mChatListAdapter);
-        mChatListView.setEndlessListener(this);
 
         this.loadData();
 
@@ -75,11 +66,6 @@ public class ChatListActivity extends Activity implements EndlessListener {
         Intent chatIntent = new Intent(getApplicationContext(), ChatActivity.class);
         chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, chat);
         startActivity(chatIntent);
-    }
-
-    @Subscribe
-    public void receivedNewMessagesList(ReceivedMessageEvent event) {
-        //TODO
     }
 
     @Override
@@ -118,7 +104,9 @@ public class ChatListActivity extends Activity implements EndlessListener {
         startActivity(openProfileIntent);
     }
 
-
+    /**
+     * ChatLoader is the class that loads the list of chats
+     */
     private class ChatLoader extends AsyncTask<Void, Void, List<Chat>> {
 
         @Override
@@ -130,11 +118,15 @@ public class ChatListActivity extends Activity implements EndlessListener {
             try {
                 List<Chat> sortedChats = chatRepository.findAll();
                 Collections.sort(sortedChats, new ChatLastMessageDateSorter());
+
                 //return the sorted list of all chats
                 return sortedChats;
+
             } catch (NoSuchModelException e) {
                 e.printStackTrace();
-                return new ArrayList<Chat>();
+
+                //return an empty list if the database is empty
+                return new ArrayList<>();
             }
         }
 

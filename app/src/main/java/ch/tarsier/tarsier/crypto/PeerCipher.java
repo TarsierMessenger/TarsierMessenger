@@ -18,17 +18,15 @@ import ch.tarsier.tarsier.exception.PeerCipherException;
 
 public class PeerCipher {
     private static final String TAG = "PeerCipher";
-    byte[] mPeerPublicKey;
-    byte[] mPrecomputedSharedSecret;
+    private byte[] mPrecomputedSharedSecret;
 
-    public PeerCipher(byte[] hisPublicKey){
-        mPeerPublicKey = hisPublicKey;
+    public PeerCipher(byte[] hisPublicKey) {
         mPrecomputedSharedSecret = EC25519.calculateCurve25519KeyAgreement(retreiveKeyPair().getPrivateKey(),
-                                                                           mPeerPublicKey);
+                hisPublicKey);
     }
 
     public CBCEncryptionProduct encrypt(byte[] plaintext) throws PeerCipherException {
-        try{
+        try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             SecretKeySpec k = new SecretKeySpec(mPrecomputedSharedSecret, "AES");
             cipher.init(Cipher.ENCRYPT_MODE, k);
@@ -40,22 +38,21 @@ public class PeerCipher {
         }
     }
 
-    public byte[] decrypt(byte[] ciphertext) throws PeerCipherException{
+    public byte[] decrypt(byte[] ciphertext) throws PeerCipherException {
 
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             SecretKeySpec k = new SecretKeySpec(mPrecomputedSharedSecret, "AES");
             cipher.init(Cipher.DECRYPT_MODE, k);
-            byte[] plainText = cipher.doFinal(ciphertext);
 
-            return plainText;
+            return cipher.doFinal(ciphertext);
         } catch (NoSuchPaddingException | RuntimeException | InvalidKeyException | IllegalBlockSizeException
                 | BadPaddingException | NoSuchAlgorithmException e) {
             throw new PeerCipherException();
         }
     }
 
-    private KeyPair retreiveKeyPair(){
+    private KeyPair retreiveKeyPair() {
         return Tarsier.app().getUserPreferences().getKeyPair();
     }
 }

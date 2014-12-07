@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:padding="10dp">
 
@@ -10,30 +10,33 @@
         android:id="@+id/nearbyPeerIcons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp">
+        android:layout_marginEnd="10dp">
 
         <ImageView
             android:id="@+id/nearbyPeerPicture"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:scaleType="fitCenter"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/tarsier_placeholder"
-            android:layout_marginRight="5dp" />
+            android:contentDescription="@string/avatar_peer_description"/>
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/nearbyPeerIcons">
+        android:layout_toEndOf="@id/nearbyPeerIcons"
+        android:layout_centerVertical="true">
 
         <TextView
             android:id="@+id/nearbyPeerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/tarsier_font"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textSize="15sp" />
 
         <TextView
@@ -42,6 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/nearbyPeerName"
             android:textColor="@color/tarsier_font_secondary"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textSize="15sp" />
 
     </RelativeLayout>

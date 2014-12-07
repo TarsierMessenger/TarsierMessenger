@@ -30,8 +30,6 @@ import ch.tarsier.tarsier.validation.ChatroomNameValidator;
  */
 public class NewChatroomActivity extends Activity {
 
-    private final static String CHAT_MESSAGE = "ch.tarsier.tarsier.ui.activity.CHAT";
-
     private EditText mChatroomName;
 
     private Bus mEventBus;
@@ -81,7 +79,7 @@ public class NewChatroomActivity extends Activity {
     private void createChatroom()
             throws InvalidCursorException, NoSuchModelException, InvalidModelException, InsertException {
 
-        if (!validateChatRoomName()) {
+        if (!validateChatroomName()) {
             Toast.makeText(this, "The chatroom name is invalid.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -104,7 +102,7 @@ public class NewChatroomActivity extends Activity {
         startActivity(newChatroomIntent);
     }
 
-    private boolean validateChatRoomName() {
+    private boolean validateChatroomName() {
         return new ChatroomNameValidator().validate(mChatroomName);
     }
 }
