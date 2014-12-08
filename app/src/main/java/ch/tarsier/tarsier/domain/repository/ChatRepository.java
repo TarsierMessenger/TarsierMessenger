@@ -241,11 +241,11 @@ public class ChatRepository extends AbstractRepository<Chat> {
     // Check if the Chat model is valid
     private void validate(Chat chat) throws InvalidModelException {
         if (chat == null) {
-            throw new InvalidModelException("chat is null.");
+            throw new InvalidModelException("Chat is null.");
         }
 
         if (chat.getId() < 0) {
-            throw new InvalidModelException("chat ID is invalid.");
+            throw new InvalidModelException("Chat ID is invalid.");
         }
     }
 }
