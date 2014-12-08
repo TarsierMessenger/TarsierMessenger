@@ -25,8 +25,8 @@ public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
     private int mLayoutResourceId;
     private List<Peer> mPeerList;
 
-    public ChatroomPeersAdapter(Context context, int layoutResourceId, List<Peer> peerList) {
-        super(context, layoutResourceId, peerList);
+    public ChatroomPeersAdapter(Context context, int layoutResourceId) {
+        super(context, layoutResourceId);
         mContext = context;
         mLayoutResourceId = layoutResourceId;
         mPeerList = new ArrayList<>();

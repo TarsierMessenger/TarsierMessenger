@@ -4,24 +4,13 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import android.app.ActionBar;
-import android.app.ListActivity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.nfc.Tag;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.AdapterView;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
@@ -30,24 +19,42 @@ import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.RequestChatroomPeersListEvent;
 import ch.tarsier.tarsier.ui.adapter.ChatroomPeersAdapter;
+import ch.tarsier.tarsier.ui.view.ChatroomPeersListView;
 
 /**
  * @author romac
  */
-public class ChatroomPeersActivity extends ListActivity {
+public class ChatroomPeersActivity extends Activity {
 
     public final static String EXTRA_CHAT_KEY = "ch.tarsier.tarsier.ui.activity.CHATROOM_PEERS_ACTIVITY";
     public final static String TAG = "ChatroomPeersActivity";
 
     private Chat mChat;
-    private ChatroomPeersAdapter mAdapter;
+
+    private ChatroomPeersListView mChatroomPeersListView;
+    private ChatroomPeersAdapter mChatroomPeersAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_chatroom_peers);
         setContentView(R.layout.activity_chatroom_peers);
 
         mChat = (Chat) getIntent().getExtras().getSerializable(EXTRA_CHAT_KEY);
+
+        mChatroomPeersListView = (ChatroomPeersListView) findViewById(R.id.peers_list);
+        mChatroomPeersAdapter = new ChatroomPeersAdapter(this, R.layout.row_chatroom_peers_list);
+
+        mChatroomPeersListView.setLoadingView(R.layout.loading_layout);
+        mChatroomPeersListView.setChatroomPeersAdapter(mChatroomPeersAdapter);
+
+        mChatroomPeersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Peer peer = mChatroomPeersAdapter.getItem(position);
+                //TODO open new private chat
+            }
+        });
 
         setUpEvent();
         //setUpData();
@@ -68,10 +75,10 @@ public class ChatroomPeersActivity extends ListActivity {
     @Subscribe
     public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
         Log.d(TAG, "Got ReceivedChatroomPeersListEvent");
-        mAdapter.clear();
-        mAdapter.addAll(event.getPeers());
+        mChatroomPeersAdapter.clear();
+        mChatroomPeersAdapter.addAll(event.getPeers());
     }
-
+/*
     private void setUpData() {
         Intent sender = getIntent();
         Bundle extras = sender.getExtras();
@@ -84,9 +91,9 @@ public class ChatroomPeersActivity extends ListActivity {
         //Chat chat = (Chat) extras.getSerializable(EXTRAS_CHAT_KEY);
         //Peer[] peers = (Peer[]) extras.getSerializable(EXTRAS_PEERS_KEY);
 
-        //mAdapter = new ChatroomPeersArrayAdapter(this, chat, peers);
-        setAdapter(mAdapter);
-    }
+        //mChatroomPeersAdapter = new ChatroomPeersArrayAdapter(this, chat, peers);
+//        setAdapter(mChatroomPeersAdapter);
+//    }
 /*
     private void setUpWithTestData() {
         Peer host = new Peer("Amirezza Bahreini", "At Sat', come join me !");
@@ -116,12 +123,12 @@ public class ChatroomPeersActivity extends ListActivity {
                 && extras.containsKey(EXTRAS_PEERS_KEY);*/
         return true;
     }
-
+/*
     private void setAdapter(ChatroomPeersAdapter adapter) {
-        mAdapter = adapter;
+        mChatroomPeersAdapter = adapter;
         setListAdapter(adapter);
     }
-
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -140,57 +147,4 @@ public class ChatroomPeersActivity extends ListActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    /**
-     * @author romac
-     *//*
-    class ChatroomPeersArrayAdapter extends ArrayAdapter<Peer> {
-        private final static int LAYOUT = R.layout.row_chatroom_peer;
-
-        private final LayoutInflater mInflater;
-        private final Chat mChat;
-
-        ChatroomPeersArrayAdapter(Context context, Chat chat) {
-            this(context, chat, new ArrayList<Peer>());
-        }
-
-        ChatroomPeersArrayAdapter(Context context, Chat chat, List<Peer> peers) {
-            super(context, LAYOUT, peers);
-
-            mInflater = getLayoutInflater();
-            mChat = chat;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = mInflater.inflate(LAYOUT, parent, false);
-                convertView.setTag(R.id.name, convertView.findViewById(R.id.name));
-                convertView.setTag(R.id.icon, convertView.findViewById(R.id.icon));
-                convertView.setTag(R.id.online_badge, convertView.findViewById(R.id.online_badge));
-                convertView.setTag(R.id.owner_badge, convertView.findViewById(R.id.owner_badge));
-                convertView.setTag(R.id.status_message_profile_activity,
-                        convertView.findViewById(R.id.status_message_profile_activity));
-            }
-
-            View rowView = convertView;
-
-            TextView nameView = (TextView) convertView.getTag(R.id.name);
-            TextView statusView = (TextView) convertView.getTag(R.id.status_message_profile_activity);
-            ImageView imageView = (ImageView) convertView.getTag(R.id.icon);
-            TextView onlineBadgeView = (TextView) convertView.getTag(R.id.online_badge);
-            TextView ownerBadgeView = (TextView) convertView.getTag(R.id.owner_badge);
-
-            Peer p = getItem(position);
-
-            nameView.setText(p.getUserName());
-            statusView.setText(p.getStatusMessage());
-            imageView.setImageURI(Uri.parse(p.getPicturePath()));
-            imageView.setImageResource(R.drawable.ic_launcher);
-            onlineBadgeView.setVisibility((p.isOnline()) ? View.VISIBLE : View.INVISIBLE);
-            ownerBadgeView.setVisibility((mChat.isHost(p)) ? View.VISIBLE : View.INVISIBLE);
-
-            return rowView;
-        }
-    }*/
 }
