@@ -157,7 +157,9 @@ public class Tarsier extends Application {
             while (!Tarsier.app().getDatabase().isReady()) { }
 
             if (getUserPreferences().isDatabaseEmpty()) {
-                FillDatabaseWithFictionalData.populate();
+                // Pass true to force clear and populate the database,
+                // even if there's already some data.
+                FillDatabaseWithFictionalData.populate(false);
                 getUserPreferences().setIsDatabaseEmpty(false);
             }
 
