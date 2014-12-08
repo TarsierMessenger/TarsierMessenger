@@ -3,4 +3,5 @@
     <string name="send_message_hint">Type new message</string>
     <string name="send_message_image">Send message</string>
     <string name="avatar_peer_description">Avatar of the user.</string>
+    <string name="users_in_chatroom">Users in chatroom</string>
 </resources>

@@ -10,11 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-<<<<<<< HEAD
-=======
 import android.view.View;
 import android.widget.Toast;
->>>>>>> connection works
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -45,12 +42,9 @@ public class NearbyListActivity extends Activity {
 
     private NearbyPeerFragment mNearbyPeer;
     private FragmentManager mFragmentManager;
-<<<<<<< HEAD
     //private NearbyChatListFragment mNearbyChatList;
-
-=======
     private Bus mEventBus;
->>>>>>> connection works
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //final ActionBar actionBar = getActionBar();
@@ -165,8 +159,6 @@ public class NearbyListActivity extends Activity {
         Intent displayProfileIntent = new Intent(this, ProfileActivity.class);
         startActivity(displayProfileIntent);
     }
-<<<<<<< HEAD
-=======
 
     private void displayChatsListActivity() {
         Intent chatsListActivity = new Intent(this, ChatListActivity.class);
@@ -185,7 +177,6 @@ public class NearbyListActivity extends Activity {
         Intent chatIntent = new Intent(this, ChatActivity.class);
         startActivity(chatIntent);
     }
->>>>>>> connection works
 }
 
 //FIXME useless tab stuff to be removed

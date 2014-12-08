@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.ui.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,18 +68,11 @@ public class ChatActivity extends Activity implements EndlessListener {
         mListViewAdapter = new BubbleAdapter(this, new ArrayList<BubbleListViewItem>());
         mListView.setBubbleAdapter(mListViewAdapter);
         mListView.setEndlessListener(this);
-        //TODO: Here it's only a test Chat
-        mChat = new Chat();
-        mChat.setPrivate(false);
-        mChat.setTitle("testChat");
-        mChat.setId(13);
-
 
         getEventBus().register(this);
 
+        mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
 
-//        mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
-//
         if (mChat.getId() > -1) {
             DatabaseLoader dbl = new DatabaseLoader();
             dbl.execute();
@@ -98,7 +92,7 @@ public class ChatActivity extends Activity implements EndlessListener {
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setTitle(mChat.getTitle());
             //TODO: To uncomment
 //            actionBar.setIcon(mChat.getAvatarRessourceId());
@@ -110,6 +104,11 @@ public class ChatActivity extends Activity implements EndlessListener {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.chat, menu);
+
+        if (mChat.isPrivate()) {
+            menu.removeItem(R.id.goto_chatroom_peers_activity);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
