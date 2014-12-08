@@ -246,7 +246,13 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     public List<Peer> getChatroomPeersList() {
         if (mConnection == null) {
+            // FIXME Tests to show something on NearbyListActivity.
             Log.d("Connection", "mConnection is null");
+            List<Peer> peerList = new ArrayList<Peer>();
+            peerList.add(new Peer("ben", "lalala"));
+            peerList.add(new Peer("Swagmachine", "coucou les cop1"));
+
+            return peerList;
         }
 
         return mConnection.getPeersList();

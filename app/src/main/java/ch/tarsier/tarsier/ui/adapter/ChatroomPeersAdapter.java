@@ -65,8 +65,6 @@ public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
             holder.mAvatarSrc = (ImageView) row.findViewById(R.id.icon);
             holder.mName = (TextView) row.findViewById(R.id.name);
             holder.mStatus = (TextView) row.findViewById(R.id.status_message_profile_activity);
-            holder.mOnlineBadgeView = (TextView) row.getTag(R.id.online_badge);
-            holder.mOwnerBadgeView = (TextView) row.getTag(R.id.owner_badge);
 
             row.setTag(holder);
         } else {
@@ -79,9 +77,6 @@ public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
         holder.mAvatarSrc.setImageBitmap(peer.getPicture());
         holder.mName.setText(peer.getUserName());
         holder.mStatus.setText(peer.getStatusMessage());
-        //TODO implement badges
-        //holder.mOnlineBadgeView.setVisibility((peer.isOnline()) ? View.VISIBLE : View.INVISIBLE);
-        //holder.mOwnerBadgeView.setVisibility((mChat.isHost(peer)) ? View.VISIBLE : View.INVISIBLE);
 
         return row;
     }
@@ -100,7 +95,5 @@ public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
         private ImageView mAvatarSrc;
         private TextView mName;
         private TextView mStatus;
-        private TextView mOnlineBadgeView;
-        private TextView mOwnerBadgeView;
     }
 }
