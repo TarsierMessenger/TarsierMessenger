@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
@@ -23,6 +24,7 @@ import ch.tarsier.tarsier.prefs.UserPreferences;
  */
 public class Tarsier extends Application {
 
+    private static final String TARSIER_TAG = "TarsierApp";
     private static Tarsier app;
 
     private UserPreferences mUserPreferences;
@@ -56,6 +58,7 @@ public class Tarsier extends Application {
     }
 
     public void initNetwork() {
+        Log.d(TARSIER_TAG, "Network initialized");
         WifiP2pManager mWifiP2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         WifiP2pManager.Channel mWifiP2pChannel = mWifiP2pManager.initialize(this, getMainLooper(), null);
 
