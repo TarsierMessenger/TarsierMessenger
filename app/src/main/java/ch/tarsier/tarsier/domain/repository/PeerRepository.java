@@ -240,8 +240,6 @@ public class PeerRepository extends AbstractRepository<Peer> {
     }
 
     private boolean exists(Peer peer) throws InvalidModelException, IllegalArgumentException {
-        validate(peer);
-
         String whereClause = Columns.Peer._ID + " = " + peer.getId();
 
         Cursor cursor = getReadableDatabase().query(
