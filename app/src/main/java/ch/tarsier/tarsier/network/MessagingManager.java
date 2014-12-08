@@ -247,6 +247,8 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
     public List<Peer> getChatroomPeersList() {
         if (mConnection == null) {
             Log.d("Connection", "mConnection is null");
+            //return empty List if the connection is null
+            return new ArrayList<>();
         }
 
         return mConnection.getPeersList();
