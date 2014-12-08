@@ -1,78 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
     android:layout_width="fill_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:padding="6dip">
+    android:layout_height="match_parent"
+    android:padding="10dp">
 
-    <ImageView
+    <RelativeLayout
+        android:id="@+id/icon_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp">
+
+        <ImageView
             android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="6dip"
-            android:contentDescription="@string/chatroom_peers_image_desc"
-            android:src="@drawable/ic_launcher" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/chatroom_peers_image_desc" />
 
-    <TextView
-            android:id="@+id/status_message_profile_activity"
-            android:layout_width="fill_parent"
-            android:layout_height="26dip"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@id/icon"
-            android:ellipsize="marquee"
-            android:singleLine="true"
-            android:textSize="14sp"
-            android:textColor="@android:color/secondary_text_light"/>
+    </RelativeLayout>
 
-    <TextView
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/icon_holder"
+        android:layout_centerVertical="true">
+
+        <TextView
             android:id="@+id/name"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/status_message_profile_activity"
-            android:layout_alignParentTop="true"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_toEndOf="@id/icon"
-            android:gravity="center_vertical"
-            android:textSize="16sp"
+            android:textColor="@color/tarsier_font"
+            android:layout_weight="1"
+            android:ellipsize="end"
             android:singleLine="true"
-            android:textStyle="bold" />
+            android:textSize="15sp" />
 
-    <TextView
-            android:id="@+id/owner_badge"
+        <TextView
+            android:id="@+id/status_message_profile_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/owner_badge"
-            android:gravity="center"
-            android:text="@string/chatroom_peers_owner"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:layout_marginEnd="8dp"
-            android:layout_alignTop="@+id/online_badge"
-            android:layout_toStartOf="@+id/online_badge"
-            tools:ignore="RelativeOverlap"/>
+            android:layout_below="@id/name"
+            android:textColor="@color/tarsier_font_secondary"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="15sp"/>
 
-    <TextView
-            android:id="@+id/online_badge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/online_badge"
-            android:gravity="center"
-            android:text="@string/chatroom_peers_online"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            tools:ignore="RelativeOverlap"/>
+    </RelativeLayout>
 
 </RelativeLayout>
