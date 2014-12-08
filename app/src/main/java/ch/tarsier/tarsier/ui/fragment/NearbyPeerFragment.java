@@ -14,10 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-<<<<<<< HEAD
 
 import ch.tarsier.tarsier.R;
-=======
 import android.widget.Toast;
 
 import com.squareup.otto.Bus;
@@ -36,7 +34,6 @@ import ch.tarsier.tarsier.event.MainThreadBus;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
 import ch.tarsier.tarsier.network.MessagingManager;
->>>>>>> connection works
 import ch.tarsier.tarsier.ui.activity.ChatActivity;
 import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
 
@@ -55,12 +52,7 @@ public class NearbyPeerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
         Log.d(TAG, "onCreate Fragment");
-=======
-        Log.d(TAG,"onCreate Fragment");
-
->>>>>>> connection works
     }
 
     @Override
