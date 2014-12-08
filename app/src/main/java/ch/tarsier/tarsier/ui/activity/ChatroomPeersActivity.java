@@ -88,7 +88,7 @@ public class ChatroomPeersActivity extends Activity {
     public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
         Log.d(TAG, "Got ReceivedChatroomPeersListEvent");
         mChatroomPeersAdapter.clear();
-        mChatroomPeersAdapter.addAllPeers(event.getPeers());
+        mChatroomPeersListView.addNewData(event.getPeers());
     }
 
     @Override
