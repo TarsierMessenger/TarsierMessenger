@@ -126,6 +126,11 @@ public class PeerRepository extends AbstractRepository<Peer> {
         peer.setId(rowId);
     }
 
+    public void insertAll(List<Peer> peers) throws InvalidModelException, InsertException {
+        for(Peer peer : peers){
+            insert(peer);
+        }
+    }
     public void update(Peer peer) throws InvalidModelException, UpdateException {
         validate(peer);
 
@@ -150,7 +155,7 @@ public class PeerRepository extends AbstractRepository<Peer> {
     }
 
     public void delete(Peer peer) throws InvalidModelException, DeleteException {
-        validate(peer);
+
 
         if (!exists(peer)) {
             return;

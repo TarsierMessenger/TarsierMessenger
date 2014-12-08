@@ -39,8 +39,6 @@ import ch.tarsier.tarsier.exception.DomainException;
 import ch.tarsier.tarsier.exception.PeerCipherException;
 import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.network.server.ServerConnection;
-import ch.tarsier.tarsier.ui.activity.ChatActivity;
-import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.messages.MessageType;
 
 import static ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPublicMessage;
@@ -245,13 +243,13 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
     }
 
     public List<Peer> getChatroomPeersList() {
-        if (mConnection == null) {
+        if (mConnection != null) {
             Log.d("Connection", "mConnection is null");
-            //return empty List if the connection is null
+            return mConnection.getPeersList();
+        }else{
             return new ArrayList<>();
         }
 
-        return mConnection.getPeersList();
     }
 
     private List<WifiP2pDevice> getNearbyPeersList() {
@@ -313,16 +311,16 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             byte[] publicKey = msg.getSenderPublicKey().toByteArray();
             String contents = msg.getPlainText().toStringUtf8();
             //TODO: uncomment
-//            Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
-            Peer sender = new Peer();
+            Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
+//            Peer sender = new Peer();
             boolean isPrivate = message.what == MessageType.MESSAGE_TYPE_PRIVATE;
 
             mEventBus.post(new ReceivedMessageEvent(contents, sender, isPrivate));
 
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
-//        } catch (DomainException e) {
-//            Log.d(NETWORK_LAYER_TAG, "Could not find peer in database for received message.");
+        } catch (DomainException e) {
+            Log.d(NETWORK_LAYER_TAG, "Could not find peer in database for received message.");
         }
     }
 

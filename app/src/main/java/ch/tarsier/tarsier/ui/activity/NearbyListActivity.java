@@ -42,22 +42,16 @@ public class NearbyListActivity extends Activity {
 
     private NearbyPeerFragment mNearbyPeer;
     private FragmentManager mFragmentManager;
-    //private NearbyChatListFragment mNearbyChatList;
     private Bus mEventBus;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        //final ActionBar actionBar = getActionBar();
+    protected void onCreate(Bundle savedInstanceState) {;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_list);
         mFragmentManager = getFragmentManager();
 
         mNearbyPeer = new NearbyPeerFragment();
         mNearbyPeer.setUp(this);
-//        mNearbyChatList = new NearbyChatListFragment();
 
-
-        //ft.replace(R.id.inside_nearby, mNearbyPeer, "peer");
         FragmentTransaction ft = mFragmentManager.beginTransaction();
         ft.add(R.id.inside_nearby, mNearbyPeer);
         ft.attach(mNearbyPeer);
@@ -175,51 +169,16 @@ public class NearbyListActivity extends Activity {
     public void onConnectedEvent(ConnectedEvent event) {
         Log.d(TAG,"Got ConnectedEvent");
         Intent chatIntent = new Intent(this, ChatActivity.class);
+
+        //TODO: Here it's only a test Chat
+
+        Chat mChat = new Chat();
+        mChat.setPrivate(false);
+        mChat.setTitle("Chat");
+        mChat.setId(13);
+        chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, mChat);
+
+
         startActivity(chatIntent);
     }
 }
-
-//FIXME useless tab stuff to be removed
-//        ft.add(R.id.inside_nearby, mNearbyChatList, "chatList");
-
-
-// Create a tab listener that is called when the user changes tabs.
-//        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-//            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-//                if (tab.getPosition() == 0) {
-//
-//                    //ft.attach(mNearbyChatList);
-//                    View menuNewChat = findViewById(R.id.create_new_chat_from_nearby);
-//                    if (menuNewChat != null) {
-//                        menuNewChat.setVisibility(View.VISIBLE);
-//                    }
-//                    ft.replace(R.id.inside_nearby, mNearbyChatList);
-//                } else if (tab.getPosition() == 1) {
-//                    //ft.attach(mNearbyPeer);
-//                    View menuNewChat = findViewById(R.id.create_new_chat_from_nearby);
-//                    if (menuNewChat != null) {
-//                        menuNewChat.setVisibility(View.GONE);
-//                    }
-//                    ft.replace(R.id.inside_nearby, mNearbyPeer);
-//                }
-//            }
-//            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-//                if (tab.getPosition() == 0) {
-//                    //ft.detach(mNearbyChatList);
-//                } else if (tab.getPosition() == 1) {
-//                    //ft.detach(mNearbyPeer);
-//                }
-//            }
-//
-//            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-//
-//            }
-//        };
-//        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_chatroom_name))
-//              .setTabListener(tabListener));
-//        actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab_peer_name)).setTabListener(tabListener));
-//
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setDisplayShowHomeEnabled(false);
-//        }

@@ -99,7 +99,7 @@ public class ClientConnection implements Runnable, ConnectionInterface {
                                 .parseFrom(serializedProtoBuffer);
                         List<TarsierWireProtos.Peer> peers = peerList.getPeerList();
                         updatePeers(peers);
-                        mHandler.obtainMessage(MessageType.MESSAGE_TYPE_PEER_LIST);
+                        mHandler.obtainMessage(MessageType.MESSAGE_TYPE_PEER_LIST).sendToTarget();
                         Log.d(TAG, "Peer list message handled and peer list is updated.");
                         break;
                     case MessageType.MESSAGE_TYPE_PRIVATE:

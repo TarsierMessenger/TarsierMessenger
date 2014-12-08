@@ -53,6 +53,13 @@ public class ServerConnection implements Runnable, ConnectionInterface {
         t.start();
     }
 
+    private void selfAdd(ConnectionHandler handler) {
+        TarsierWireProtos.Peer.Builder peer = TarsierWireProtos.Peer.newBuilder();
+        peer.setName(mLocalUser.getUserName());
+        peer.setPublicKey(ByteString.copyFrom(mLocalUser.getPublicKey().getBytes()));
+        addPeer(peer.build(),handler);
+    }
+
     @Override
     public void run() {
         while (true) {
@@ -188,6 +195,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
             this.mServerConnection = connection;
             this.mSocket = socket;
             this.mHandler = handler;
+            this.mServerConnection.selfAdd(this);
             Thread t = new Thread(this);
             t.start();
         }
@@ -204,14 +212,14 @@ public class ServerConnection implements Runnable, ConnectionInterface {
 
                 e.printStackTrace();
 
-//            } catch (NullPointerException e) {
-//                if (peer != null) {
-//                    mServerConnection.peerDisconnected(peer);
-//                    Log.d(TAG,"Peer disconnected because NullPointerException");
-//                    mServerConnection.broadcastUpdatedPeerList();
-//                }
-//
-//                e.printStackTrace();
+            } catch (NullPointerException e) {
+                if (peer != null) {
+                    mServerConnection.peerDisconnected(peer);
+                    Log.d(TAG,"Peer disconnected because NullPointerException");
+                    mServerConnection.broadcastUpdatedPeerList();
+                }
+
+                e.printStackTrace();
             }
         }
 
@@ -258,7 +266,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                                 mServerConnection.addPeer(peer, this);
                                 mServerConnection.broadcastUpdatedPeerList();
 
-                                mHandler.obtainMessage(MessageType.MESSAGE_TYPE_PEER_LIST);
+                                mHandler.obtainMessage(MessageType.MESSAGE_TYPE_PEER_LIST).sendToTarget();
                                 break;
 
                             case MessageType.MESSAGE_TYPE_PEER_LIST:

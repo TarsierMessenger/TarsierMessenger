@@ -52,7 +52,6 @@ public class NearbyPeerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate Fragment");
     }
 
     @Override
@@ -78,23 +77,10 @@ public class NearbyPeerFragment extends Fragment {
 
                 getEventBus().post(new ConnectToDeviceEvent((WifiP2pDevice) adapterView
                         .getItemAtPosition(position)));
-//                Intent chatIntent = new Intent(mActivity, ChatActivity.class);
-
-//                Chat chat= new Chat();
-//                chat.setTitle("TestChat");
-//                chat.setPrivate(false);
-//                chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, (Peer) adapterView.getItemAtPosition(position));
-//
-//                Toast.makeText(mActivity,
-//                        "peer id is " + ((Peer) adapterView.getItemAtPosition(position)).getId(),
-//                        Toast.LENGTH_SHORT).show();
-                // TODO decomment when it is ok
-//                startActivity(chatIntent);
             }
         });
         return rowView;
     }
-
 
     //FIXME should maybe removed
     public NearbyPeerAdapter getNearbyPeerAdapter() {

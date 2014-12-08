@@ -69,7 +69,6 @@ public class ChatActivity extends Activity implements EndlessListener {
         mListView.setEndlessListener(this);
 
         getEventBus().register(this);
-
         mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
 
         if (mChat.getId() > -1) {
@@ -153,7 +152,6 @@ public class ChatActivity extends Activity implements EndlessListener {
                 //Add the message to the database
                 Tarsier.app().getMessageRepository().insert(sentMessage);
 
-                //TODO : send it over the network
                 getEventBus().post(new SendMessageEvent(mChat,messageText));
 
                 mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
