@@ -35,8 +35,13 @@ public class MessageRepository extends AbstractRepository<Message> {
     }
 
     public void insert(Message message) throws InvalidModelException, InsertException {
+        // cannot use validate(Message message) because before inserting a Message, it's id is < 0
         if (message == null) {
             throw new InvalidModelException("Message is null.");
+        }
+
+        if (exists(message)) {
+            return;
         }
 
         ContentValues values = getValuesForMessage(message);
@@ -55,12 +60,10 @@ public class MessageRepository extends AbstractRepository<Message> {
     }
 
     public void update(Message message) throws InvalidModelException, UpdateException {
-        if (message == null) {
-            throw new InvalidModelException("Message is null.");
-        }
+        validate(message);
 
-        if (message.getId() < 0) {
-            throw new InvalidModelException("Message ID is invalid.");
+        if (!exists(message)) {
+            return;
         }
 
         ContentValues values = getValuesForMessage(message);
@@ -80,12 +83,10 @@ public class MessageRepository extends AbstractRepository<Message> {
     }
 
     public void delete(Message message) throws InvalidModelException, DeleteException {
-        if (message == null) {
-            throw new InvalidModelException("Message is null.");
-        }
+        validate(message);
 
-        if (message.getId() < 0) {
-            throw new InvalidModelException("Message ID is invalid.");
+        if (!exists(message)) {
+            return;
         }
 
         String whereClause = Columns.Message._ID + " = " + message.getId();
@@ -273,5 +274,32 @@ public class MessageRepository extends AbstractRepository<Message> {
         values.put(Columns.Message.COLUMN_NAME_DATETIME, message.getDateTime());
 
         return values;
+    }
+
+    private boolean exists(Message message) throws InvalidModelException, IllegalArgumentException {
+        validate(message);
+
+        String whereClause = Columns.Message._ID + " = " + message.getId();
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null,
+                whereClause,
+                null, null, null, null,
+                "1"
+        );
+
+        return cursor.moveToFirst();
+    }
+
+    // Check if the Message model is valid
+    private void validate(Message message) throws InvalidModelException {
+        if (message == null) {
+            throw new InvalidModelException("Message is null.");
+        }
+
+        if (message.getId() < 0) {
+            throw new InvalidModelException("Message ID is invalid.");
+        }
     }
 }

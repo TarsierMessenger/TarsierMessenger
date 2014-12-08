@@ -8,7 +8,9 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,33 +20,37 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.RequestChatroomPeersListEvent;
+import ch.tarsier.tarsier.ui.adapter.ChatroomPeersAdapter;
 
 /**
  * @author romac
  */
 public class ChatroomPeersActivity extends ListActivity {
 
-    public static final String EXTRAS_CHAT_KEY = "chat";
-    public final static String EXTRAS_PEERS_KEY = "peers";
+    public final static String EXTRA_CHAT_KEY = "ch.tarsier.tarsier.ui.activity.CHATROOM_PEERS_ACTIVITY";
+    public final static String TAG = "ChatroomPeersActivity";
 
-    private ChatroomPeersArrayAdapter mAdapter;
+    private Chat mChat;
+    private ChatroomPeersAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chatroom_peers);
 
-        if (getActionBar() != null) {
-            getActionBar().setHomeButtonEnabled(true);
-        }
+        mChat = (Chat) getIntent().getExtras().getSerializable(EXTRA_CHAT_KEY);
 
-        setUpData();
         setUpEvent();
+        //setUpData();
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -61,6 +67,7 @@ public class ChatroomPeersActivity extends ListActivity {
 
     @Subscribe
     public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
+        Log.d(TAG, "Got ReceivedChatroomPeersListEvent");
         mAdapter.clear();
         mAdapter.addAll(event.getPeers());
     }
@@ -68,19 +75,19 @@ public class ChatroomPeersActivity extends ListActivity {
     private void setUpData() {
         Intent sender = getIntent();
         Bundle extras = sender.getExtras();
-
+/*
         if (extras == null || !hasExtrasData(extras)) {
             setUpWithTestData();
             return;
         }
+*/
+        //Chat chat = (Chat) extras.getSerializable(EXTRAS_CHAT_KEY);
+        //Peer[] peers = (Peer[]) extras.getSerializable(EXTRAS_PEERS_KEY);
 
-        Chat chat = (Chat) extras.getSerializable(EXTRAS_CHAT_KEY);
-        Peer[] peers = (Peer[]) extras.getSerializable(EXTRAS_PEERS_KEY);
-
-        mAdapter = new ChatroomPeersArrayAdapter(this, chat, peers);
+        //mAdapter = new ChatroomPeersArrayAdapter(this, chat, peers);
         setAdapter(mAdapter);
     }
-
+/*
     private void setUpWithTestData() {
         Peer host = new Peer("Amirezza Bahreini", "At Sat', come join me !");
         host.setId(1);
@@ -103,13 +110,14 @@ public class ChatroomPeersActivity extends ListActivity {
 
         setAdapter(new ChatroomPeersArrayAdapter(this, chat, peers));
     }
-
+*/
     private boolean hasExtrasData(Bundle extras) {
-        return extras.containsKey(EXTRAS_CHAT_KEY)
-                && extras.containsKey(EXTRAS_PEERS_KEY);
+        /*return extras.containsKey(EXTRAS_CHAT_KEY)
+                && extras.containsKey(EXTRAS_PEERS_KEY);*/
+        return true;
     }
 
-    private void setAdapter(ChatroomPeersArrayAdapter adapter) {
+    private void setAdapter(ChatroomPeersAdapter adapter) {
         mAdapter = adapter;
         setListAdapter(adapter);
     }
@@ -128,7 +136,6 @@ public class ChatroomPeersActivity extends ListActivity {
             case android.R.id.home:
                 finish();
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -136,7 +143,7 @@ public class ChatroomPeersActivity extends ListActivity {
 
     /**
      * @author romac
-     */
+     *//*
     class ChatroomPeersArrayAdapter extends ArrayAdapter<Peer> {
         private final static int LAYOUT = R.layout.row_chatroom_peer;
 
@@ -144,10 +151,10 @@ public class ChatroomPeersActivity extends ListActivity {
         private final Chat mChat;
 
         ChatroomPeersArrayAdapter(Context context, Chat chat) {
-            this(context, chat, new Peer[] {});
+            this(context, chat, new ArrayList<Peer>());
         }
 
-        ChatroomPeersArrayAdapter(Context context, Chat chat, Peer[] peers) {
+        ChatroomPeersArrayAdapter(Context context, Chat chat, List<Peer> peers) {
             super(context, LAYOUT, peers);
 
             mInflater = getLayoutInflater();
@@ -185,5 +192,5 @@ public class ChatroomPeersActivity extends ListActivity {
 
             return rowView;
         }
-    }
+    }*/
 }

@@ -2,7 +2,6 @@ package ch.tarsier.tarsier.ui.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -115,12 +114,21 @@ public class ChatActivity extends Activity implements EndlessListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.goto_chatroom_peers_activity:
+                openChatroomPeers();
+                return true;
             case R.id.goto_profile_activity:
                 openProfile();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void openChatroomPeers() {
+        Intent openChatroomPeersIntent = new Intent(this, ChatroomPeersActivity.class);
+        openChatroomPeersIntent.putExtra(ChatroomPeersActivity.EXTRA_CHAT_KEY, mChat);
+        startActivity(openChatroomPeersIntent);
     }
 
     private void openProfile() {

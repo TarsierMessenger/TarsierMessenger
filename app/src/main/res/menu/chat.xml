@@ -3,7 +3,7 @@
     tools:context="ch.tarsier.tarsier.ui.activity.ChatActivity" >
 
     <item android:id="@+id/goto_chatroom_peers_activity"
-        android:title="@string/users_in_chatroom"
+        android:title="@string/participants"
         android:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_group" />
 

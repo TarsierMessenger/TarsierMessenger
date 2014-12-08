@@ -36,8 +36,13 @@ public class ChatRepository extends AbstractRepository<Chat> {
     }
 
     public void insert(Chat chat) throws InvalidModelException, InsertException {
+        // cannot use validate(Chat chat) because before inserting a Chat, it's id is < 0
         if (chat == null) {
             throw new InvalidModelException("Chat is null.");
+        }
+
+        if (exists(chat)) {
+            return;
         }
 
         ContentValues values = getValuesForChat(chat);
@@ -56,12 +61,10 @@ public class ChatRepository extends AbstractRepository<Chat> {
     }
 
     public void update(Chat chat) throws InvalidModelException, UpdateException {
-        if (chat == null) {
-            throw new InvalidModelException("Chat is null.");
-        }
+        validate(chat);
 
-        if (chat.getId() < 0) {
-            throw new InvalidModelException("Chat ID is invalid.");
+        if (!exists(chat)) {
+            return;
         }
 
         ContentValues values = getValuesForChat(chat);
@@ -81,12 +84,10 @@ public class ChatRepository extends AbstractRepository<Chat> {
     }
 
     public void delete(Chat chat) throws InvalidModelException, DeleteException {
-        if (chat == null) {
-            throw new InvalidModelException("Chat is null.");
-        }
+        validate(chat);
 
-        if (chat.getId() < 0) {
-            throw new InvalidModelException("Chat ID is invalid.");
+        if (!exists(chat)) {
+            return;
         }
 
         String whereClause = Columns.Chat._ID + " = " + chat.getId();
@@ -223,5 +224,30 @@ public class ChatRepository extends AbstractRepository<Chat> {
         return values;
     }
 
+    private boolean exists(Chat chat) throws InvalidModelException, IllegalArgumentException {
+        validate(chat);
 
+        String whereClause = Columns.Chat._ID + " = " + chat.getId();
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null,
+                whereClause,
+                null, null, null, null,
+                "1"
+        );
+
+        return cursor.moveToFirst();
+    }
+
+    // Check if the Chat model is valid
+    private void validate(Chat chat) throws InvalidModelException {
+        if (chat == null) {
+            throw new InvalidModelException("chat is null.");
+        }
+
+        if (chat.getId() < 0) {
+            throw new InvalidModelException("chat ID is invalid.");
+        }
+    }
 }
