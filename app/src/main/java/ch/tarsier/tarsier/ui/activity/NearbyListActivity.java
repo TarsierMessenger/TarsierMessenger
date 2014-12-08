@@ -5,15 +5,25 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+<<<<<<< HEAD
+=======
+import android.view.View;
+import android.widget.Toast;
+>>>>>>> connection works
 
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.event.ConnectedEvent;
+import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
 import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
@@ -35,8 +45,12 @@ public class NearbyListActivity extends Activity {
 
     private NearbyPeerFragment mNearbyPeer;
     private FragmentManager mFragmentManager;
+<<<<<<< HEAD
     //private NearbyChatListFragment mNearbyChatList;
 
+=======
+    private Bus mEventBus;
+>>>>>>> connection works
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //final ActionBar actionBar = getActionBar();
@@ -68,7 +82,16 @@ public class NearbyListActivity extends Activity {
             actionBar.setDisplayShowHomeEnabled(false);
         }
     }
+    public void onCreateGroup(View view) {
+        //TODO: test chat created
+        Log.d(TAG, "Create Group clicked");
+        Chat newCHat = new Chat();
+        newCHat.setTitle("NewTestChat");
+        newCHat.setId(13);
+        newCHat.setPrivate(false);
+        getEventBus().post(new CreateGroupEvent(newCHat));
 
+    }
     @Subscribe
     public void receivedNewPeersList(ReceivedNearbyPeersListEvent event) {
         Log.d(TAG, "Got ReceivedNearbyPeersListEvent");
@@ -142,6 +165,27 @@ public class NearbyListActivity extends Activity {
         Intent displayProfileIntent = new Intent(this, ProfileActivity.class);
         startActivity(displayProfileIntent);
     }
+<<<<<<< HEAD
+=======
+
+    private void displayChatsListActivity() {
+        Intent chatsListActivity = new Intent(this, ChatListActivity.class);
+        startActivity(chatsListActivity);
+    }
+    public Bus getEventBus() {
+        if (mEventBus == null) {
+            mEventBus = Tarsier.app().getEventBus();
+        }
+
+        return mEventBus;
+    }
+    @Subscribe
+    public void onConnectedEvent(ConnectedEvent event) {
+        Log.d(TAG,"Got ConnectedEvent");
+        Intent chatIntent = new Intent(this, ChatActivity.class);
+        startActivity(chatIntent);
+    }
+>>>>>>> connection works
 }
 
 //FIXME useless tab stuff to be removed

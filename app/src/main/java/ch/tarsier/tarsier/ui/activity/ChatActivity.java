@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,10 +13,16 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.event.ReceivedMessageEvent;
+import ch.tarsier.tarsier.event.SendMessageEvent;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
@@ -41,11 +48,12 @@ public class ChatActivity extends Activity implements EndlessListener {
     public final static String EXTRA_CHAT_MESSAGE_KEY = "ch.tarsier.tarsier.ui.activity.CHAT";
 
     private static final int NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE = 20;
+    private static final String TAG = "ChatAvtivity";
 
     private Chat mChat;
     private BubbleAdapter mListViewAdapter;
     private EndlessListView mListView;
-
+    private Bus mEventBus;
     private boolean mActivityJustStarted;
 
     @Override
@@ -59,9 +67,18 @@ public class ChatActivity extends Activity implements EndlessListener {
         mListViewAdapter = new BubbleAdapter(this, new ArrayList<BubbleListViewItem>());
         mListView.setBubbleAdapter(mListViewAdapter);
         mListView.setEndlessListener(this);
+        //TODO: Here it's only a test Chat
+        mChat = new Chat();
+        mChat.setPrivate(false);
+        mChat.setTitle("testChat");
+        mChat.setId(13);
 
-        mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
 
+        getEventBus().register(this);
+
+
+//        mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
+//
         if (mChat.getId() > -1) {
             DatabaseLoader dbl = new DatabaseLoader();
             dbl.execute();
@@ -83,7 +100,8 @@ public class ChatActivity extends Activity implements EndlessListener {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setTitle(mChat.getTitle());
-            actionBar.setIcon(mChat.getAvatarRessourceId());
+            //TODO: To uncomment
+//            actionBar.setIcon(mChat.getAvatarRessourceId());
         }
     }
 
@@ -129,6 +147,7 @@ public class ChatActivity extends Activity implements EndlessListener {
                 Tarsier.app().getMessageRepository().insert(sentMessage);
 
                 //TODO : send it over the network
+                getEventBus().post(new SendMessageEvent(mChat,messageText));
 
                 mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
             } catch (InsertException e) {
@@ -146,10 +165,26 @@ public class ChatActivity extends Activity implements EndlessListener {
         }
     }
 
+    public Bus getEventBus() {
+        if (mEventBus == null) {
+            mEventBus = Tarsier.app().getEventBus();
+        }
+
+        return mEventBus;
+    }
+
     @Override
     public void loadData() {
         DatabaseLoader dbl = new DatabaseLoader();
         dbl.execute();
+    }
+
+    @Subscribe
+    public void onReceivedMessageEvent(ReceivedMessageEvent event){
+        Log.d(TAG,"Got ReceivedMessageEvent.");
+        Message sentMessage = new Message(mChat.getId(), event.getMessage(), DateUtil.getNowTimestamp());
+        mListView.addNewMessage(sentMessage);
+        mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
     }
 
     /**
