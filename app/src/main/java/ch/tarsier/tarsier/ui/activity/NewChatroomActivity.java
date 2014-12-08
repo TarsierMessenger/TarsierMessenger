@@ -31,7 +31,6 @@ import ch.tarsier.tarsier.validation.ChatroomNameValidator;
 public class NewChatroomActivity extends Activity {
 
     private EditText mChatroomName;
-
     private Bus mEventBus;
 
     @Override
@@ -59,25 +58,14 @@ public class NewChatroomActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.create_chatroom:
-                try {
-                    createChatroom();
-                } catch (InvalidCursorException e) {
-                    e.printStackTrace();
-                } catch (NoSuchModelException e) {
-                    e.printStackTrace();
-                } catch (InvalidModelException e) {
-                    e.printStackTrace();
-                } catch (InsertException e) {
-                    e.printStackTrace();
-                }
+                createChatroom();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void createChatroom()
-            throws InvalidCursorException, NoSuchModelException, InvalidModelException, InsertException {
+    private void createChatroom() {
 
         if (!validateChatroomName()) {
             Toast.makeText(this, "The chatroom name is invalid.", Toast.LENGTH_SHORT).show();
@@ -92,7 +80,13 @@ public class NewChatroomActivity extends Activity {
         newChatroom.setTitle(mChatroomName.getText().toString());
         newChatroom.setHost(userRepository.getUser());
 
-        chatRepository.insert(newChatroom);
+        try {
+            chatRepository.insert(newChatroom);
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
+        }
 
         mEventBus.post(new CreateGroupEvent(newChatroom));
 

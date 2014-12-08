@@ -5,6 +5,7 @@ import com.squareup.otto.Subscribe;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,13 +17,18 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.RequestChatroomPeersListEvent;
+import ch.tarsier.tarsier.exception.InsertException;
+import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.ui.adapter.ChatroomPeersAdapter;
 import ch.tarsier.tarsier.ui.view.ChatroomPeersListView;
 
 /**
  * @author romac
+ * @author gluthier
  */
 public class ChatroomPeersActivity extends Activity {
 
@@ -30,6 +36,7 @@ public class ChatroomPeersActivity extends Activity {
     public final static String TAG = "ChatroomPeersActivity";
 
     private Chat mChat;
+    private Bus mEventBus;
 
     private ChatroomPeersListView mChatroomPeersListView;
     private ChatroomPeersAdapter mChatroomPeersAdapter;
@@ -37,10 +44,16 @@ public class ChatroomPeersActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_chatroom_peers);
         setContentView(R.layout.activity_chatroom_peers);
 
         mChat = (Chat) getIntent().getExtras().getSerializable(EXTRA_CHAT_KEY);
+
+        if (mChat == null) {
+            Log.d(TAG, "EXTRA_CHAT_KEY intent does not exist.");
+            this.finish();
+        }
+
+        mEventBus = Tarsier.app().getEventBus();
 
         mChatroomPeersListView = (ChatroomPeersListView) findViewById(R.id.peers_list);
         mChatroomPeersAdapter = new ChatroomPeersAdapter(this, R.layout.row_chatroom_peers_list);
@@ -52,12 +65,11 @@ public class ChatroomPeersActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Peer peer = mChatroomPeersAdapter.getItem(position);
-                //TODO open new private chat
+                createPrivateChat(peer);
             }
         });
 
         setUpEvent();
-        //setUpData();
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -76,59 +88,9 @@ public class ChatroomPeersActivity extends Activity {
     public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
         Log.d(TAG, "Got ReceivedChatroomPeersListEvent");
         mChatroomPeersAdapter.clear();
-        mChatroomPeersAdapter.addAll(event.getPeers());
+        mChatroomPeersAdapter.addAllPeers(event.getPeers());
     }
-/*
-    private void setUpData() {
-        Intent sender = getIntent();
-        Bundle extras = sender.getExtras();
-/*
-        if (extras == null || !hasExtrasData(extras)) {
-            setUpWithTestData();
-            return;
-        }
-*/
-        //Chat chat = (Chat) extras.getSerializable(EXTRAS_CHAT_KEY);
-        //Peer[] peers = (Peer[]) extras.getSerializable(EXTRAS_PEERS_KEY);
 
-        //mChatroomPeersAdapter = new ChatroomPeersArrayAdapter(this, chat, peers);
-//        setAdapter(mChatroomPeersAdapter);
-//    }
-/*
-    private void setUpWithTestData() {
-        Peer host = new Peer("Amirezza Bahreini", "At Sat', come join me !");
-        host.setId(1);
-
-        Chat chat = new Chat();
-        chat.setHost(host);
-        chat.setTitle("Tarsier rocks!");
-        chat.setPrivate(false);
-
-        Peer[] peers = new Peer[]{
-            host,
-            new Peer("Frederic Jacobs", "Tarsier will beat ISIS !"),
-            new Peer("Gabriel Luthier", "There's no place like 127.0.0.1"),
-            new Peer("Radu Banabic", "Happy coding !"),
-            new Peer("Romain Ruetschi", "Let me rewrite this in Haskell, please.")
-        };
-
-        peers[0].setOnline(true);
-        peers[3].setOnline(true);
-
-        setAdapter(new ChatroomPeersArrayAdapter(this, chat, peers));
-    }
-*/
-    private boolean hasExtrasData(Bundle extras) {
-        /*return extras.containsKey(EXTRAS_CHAT_KEY)
-                && extras.containsKey(EXTRAS_PEERS_KEY);*/
-        return true;
-    }
-/*
-    private void setAdapter(ChatroomPeersAdapter adapter) {
-        mChatroomPeersAdapter = adapter;
-        setListAdapter(adapter);
-    }
-*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -143,8 +105,39 @@ public class ChatroomPeersActivity extends Activity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.goto_profile_activity:
+                openProfile();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void createPrivateChat(Peer peer) {
+        ChatRepository chatRepository = Tarsier.app().getChatRepository();
+
+        Chat newPrivateChat = new Chat();
+        newPrivateChat.setPrivate(true);
+        newPrivateChat.setHost(peer);
+
+        try {
+            chatRepository.insert(newPrivateChat);
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
+        }
+
+        mEventBus.post(new CreateGroupEvent(newPrivateChat));
+
+        Intent newPrivateChatIntent = new Intent(this, ChatActivity.class);
+        newPrivateChatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, newPrivateChatIntent);
+
+        startActivity(newPrivateChatIntent);
+    }
+
+    private void openProfile() {
+        Intent openProfileIntent = new Intent(this, ProfileActivity.class);
+        startActivity(openProfileIntent);
     }
 }

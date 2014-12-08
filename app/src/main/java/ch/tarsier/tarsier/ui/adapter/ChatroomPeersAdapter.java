@@ -79,8 +79,8 @@ public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
         holder.mAvatarSrc.setImageBitmap(peer.getPicture());
         holder.mName.setText(peer.getUserName());
         holder.mStatus.setText(peer.getStatusMessage());
-        holder.mOnlineBadgeView.setVisibility((peer.isOnline()) ? View.VISIBLE : View.INVISIBLE);
-        //TODO mChat?
+        //TODO implement badges
+        //holder.mOnlineBadgeView.setVisibility((peer.isOnline()) ? View.VISIBLE : View.INVISIBLE);
         //holder.mOwnerBadgeView.setVisibility((mChat.isHost(peer)) ? View.VISIBLE : View.INVISIBLE);
 
         return row;
