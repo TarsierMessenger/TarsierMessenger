@@ -277,8 +277,6 @@ public class MessageRepository extends AbstractRepository<Message> {
     }
 
     private boolean exists(Message message) throws InvalidModelException, IllegalArgumentException {
-        validate(message);
-
         String whereClause = Columns.Message._ID + " = " + message.getId();
 
         Cursor cursor = getReadableDatabase().query(

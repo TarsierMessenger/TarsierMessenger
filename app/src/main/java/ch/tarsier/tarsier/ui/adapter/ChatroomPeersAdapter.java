@@ -2,7 +2,6 @@ package ch.tarsier.tarsier.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
 
 /*
@@ -23,9 +21,6 @@ import ch.tarsier.tarsier.domain.model.Peer;
  */
 
 public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
-
-    private final static int LAYOUT = R.layout.row_chatroom_peer;
-
     private Context mContext;
     private int mLayoutResourceId;
     private List<Peer> mPeerList;
@@ -58,44 +53,35 @@ public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        /*
-        if (convertView == null) {
-            convertView = mInflater.inflate(LAYOUT, parent, false);
-            convertView.setTag(R.id.name, convertView.findViewById(R.id.name));
-            convertView.setTag(R.id.icon, convertView.findViewById(R.id.icon));
-            convertView.setTag(R.id.online_badge, convertView.findViewById(R.id.online_badge));
-            convertView.setTag(R.id.owner_badge, convertView.findViewById(R.id.owner_badge));
-            convertView.setTag(R.id.status_message_profile_activity,
-                    convertView.findViewById(R.id.status_message_profile_activity));
-        }
-
-        View rowView = convertView;
-
-        TextView nameView = (TextView) convertView.getTag(R.id.name);
-        TextView statusView = (TextView) convertView.getTag(R.id.status_message_profile_activity);
-        ImageView imageView = (ImageView) convertView.getTag(R.id.icon);
-        TextView onlineBadgeView = (TextView) convertView.getTag(R.id.online_badge);
-        TextView ownerBadgeView = (TextView) convertView.getTag(R.id.owner_badge);
-
-        Peer p = getItem(position);
-
-        nameView.setText(p.getUserName());
-        statusView.setText(p.getStatusMessage());
-        imageView.setImageURI(Uri.parse(p.getPicturePath()));
-        imageView.setImageResource(R.drawable.ic_launcher);
-        onlineBadgeView.setVisibility((p.isOnline()) ? View.VISIBLE : View.INVISIBLE);
-        ownerBadgeView.setVisibility((mChat.isHost(p)) ? View.VISIBLE : View.INVISIBLE);
-
-        return rowView;
-        */
-
         View row = convertView;
         PeerHolder holder;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            row = inflater.inflate(mLayoutResourceId, parent, false);
+
+            holder = new PeerHolder();
+
+            holder.mAvatarSrc = (ImageView) row.findViewById(R.id.icon);
+            holder.mName = (TextView) row.findViewById(R.id.name);
+            holder.mStatus = (TextView) row.findViewById(R.id.status_message_profile_activity);
+            holder.mOnlineBadgeView = (TextView) row.getTag(R.id.online_badge);
+            holder.mOwnerBadgeView = (TextView) row.getTag(R.id.owner_badge);
+
+            row.setTag(holder);
+        } else {
+            holder = (PeerHolder) row.getTag();
         }
 
+        Peer peer = this.getItem(position);
+
+        //TODO verify we get the right picture
+        holder.mAvatarSrc.setImageBitmap(peer.getPicture());
+        holder.mName.setText(peer.getUserName());
+        holder.mStatus.setText(peer.getStatusMessage());
+        holder.mOnlineBadgeView.setVisibility((peer.isOnline()) ? View.VISIBLE : View.INVISIBLE);
+        //TODO mChat?
+        //holder.mOwnerBadgeView.setVisibility((mChat.isHost(peer)) ? View.VISIBLE : View.INVISIBLE);
 
         return row;
     }
@@ -108,12 +94,13 @@ public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
     }
 
     /**
-     * PeerHolder is theclass containing the peer's information
+     * PeerHolder is the class containing the peer's information
      */
     private class PeerHolder {
         private ImageView mAvatarSrc;
         private TextView mName;
         private TextView mStatus;
-        private TextView mBadge;
+        private TextView mOnlineBadgeView;
+        private TextView mOwnerBadgeView;
     }
 }
