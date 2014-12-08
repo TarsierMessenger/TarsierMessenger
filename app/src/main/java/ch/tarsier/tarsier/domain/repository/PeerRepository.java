@@ -102,8 +102,13 @@ public class PeerRepository extends AbstractRepository<Peer> {
     }
 
     public void insert(Peer peer) throws InvalidModelException, InsertException {
+        // cannot use validate(Peer peer) because before inserting a Peer, it's id is < 0
         if (peer == null) {
             throw new InvalidModelException("Peer is null.");
+        }
+
+        if (exists(peer)) {
+            return;
         }
 
         ContentValues values = getPeerValues(peer);
@@ -122,12 +127,10 @@ public class PeerRepository extends AbstractRepository<Peer> {
     }
 
     public void update(Peer peer) throws InvalidModelException, UpdateException {
-        if (peer == null) {
-            throw new InvalidModelException("Peer is null.");
-        }
+        validate(peer);
 
-        if (peer.getId() < 0) {
-            throw new InvalidModelException("Peer ID is invalid.");
+        if (!exists(peer)) {
+            return;
         }
 
         ContentValues values = getPeerValues(peer);
@@ -147,12 +150,10 @@ public class PeerRepository extends AbstractRepository<Peer> {
     }
 
     public void delete(Peer peer) throws InvalidModelException, DeleteException {
-        if (peer == null) {
-            throw new InvalidModelException("Peer is null.");
-        }
+        validate(peer);
 
-        if (peer.getId() < 0) {
-            throw new InvalidModelException("Peer ID is invalid.");
+        if (!exists(peer)) {
+            return;
         }
 
         String whereClause = Columns.Peer._ID + " = " + peer.getId();
@@ -236,5 +237,30 @@ public class PeerRepository extends AbstractRepository<Peer> {
         values.put(Columns.Peer.COLUMN_NAME_IS_ONLINE, peer.isOnline());
 
         return values;
+    }
+
+    private boolean exists(Peer peer) throws InvalidModelException, IllegalArgumentException {
+        String whereClause = Columns.Peer._ID + " = " + peer.getId();
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null,
+                whereClause,
+                null, null, null, null,
+                "1"
+        );
+
+        return cursor.moveToFirst();
+    }
+
+    // Check if the Peer model is valid
+    private void validate(Peer peer) throws InvalidModelException {
+        if (peer == null) {
+            throw new InvalidModelException("Peer is null.");
+        }
+
+        if (peer.getId() < 0) {
+            throw new InvalidModelException("Peer ID is invalid.");
+        }
     }
 }

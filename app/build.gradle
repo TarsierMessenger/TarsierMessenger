@@ -11,8 +11,8 @@ android {
     buildToolsVersion "21.1.1"
     defaultConfig {
         applicationId "ch.tarsier.tarsier"
-        minSdkVersion 17
-        targetSdkVersion 18
+        minSdkVersion 16
+        targetSdkVersion 16
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
