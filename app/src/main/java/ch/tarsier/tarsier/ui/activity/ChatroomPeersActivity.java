@@ -33,6 +33,7 @@ public class ChatroomPeersActivity extends Activity {
     private Bus mEventBus;
     private ChatroomPeersListView mChatroomPeersListView;
     private ChatroomPeersAdapter mChatroomPeersAdapter;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,30 +55,40 @@ public class ChatroomPeersActivity extends Activity {
                 createPrivateChat(peer);
             }
         });
-        setUpEvent();
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
         }
     }
-    private void setUpEvent() {
-        Bus eventBus = Tarsier.app().getEventBus();
-        eventBus.register(this);
-        eventBus.post(new RequestChatroomPeersListEvent());
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mEventBus.register(this);
+        mEventBus.post(new RequestChatroomPeersListEvent());
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mEventBus.unregister(this);
+    }
+
     @Subscribe
     public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
         Log.d(TAG, "Got ReceivedChatroomPeersListEvent");
         mChatroomPeersAdapter.clear();
         mChatroomPeersListView.addNewData(event.getPeers());
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-// Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.chatroom_peers, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -92,24 +103,26 @@ public class ChatroomPeersActivity extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     private void createPrivateChat(Peer peer) {
         Log.d(TAG,"Create private Chat");
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
         Chat newPrivateChat = new Chat();
         newPrivateChat.setPrivate(true);
         newPrivateChat.setHost(peer);
+
         try {
             Log.d(TAG,"insert chat to databse");
             chatRepository.insert(newPrivateChat);
-        } catch (InvalidModelException e) {
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             e.printStackTrace();
         }
+
         Intent newPrivateChatIntent = new Intent(this, ChatActivity.class);
         newPrivateChatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, newPrivateChatIntent);
         startActivity(newPrivateChatIntent);
     }
+
     private void openProfile() {
         Intent openProfileIntent = new Intent(this, ProfileActivity.class);
         startActivity(openProfileIntent);
