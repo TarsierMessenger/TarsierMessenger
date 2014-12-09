@@ -5,6 +5,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.Serializable;
 
@@ -25,16 +26,17 @@ public class Peer implements ByteArraySerializable, Serializable {
     private PublicKey mPublicKey;
     private String mUserName;
     private String mStatusMessage;
-    private String mPicturePath;
     private boolean mOnline;
+    // not used yet
+    private String mPicturePath;
 
     public Peer() {
         mId = -1;
     }
 
     public Peer(String name) {
+        this();
         mUserName = name;
-        mId = -1;
     }
 
     // TODO: Remove when ChatroomPeersActivity won't need it anymore.
@@ -42,17 +44,16 @@ public class Peer implements ByteArraySerializable, Serializable {
         this();
         mUserName = name;
         mStatusMessage = statusMessage;
-        mId = -1;
     }
 
     public Peer(String name, PublicKey publicKey) {
         this();
         mUserName = name;
         mPublicKey = publicKey;
-        mId = -1;
     }
 
     public Peer(byte[] data) throws InvalidProtocolBufferException {
+        this();
         TarsierWireProtos.Peer peer = TarsierWireProtos.Peer.parseFrom(data);
         mUserName = peer.getName();
         mPublicKey = new PublicKey(peer.getPublicKey().toByteArray());
@@ -99,26 +100,40 @@ public class Peer implements ByteArraySerializable, Serializable {
     }
 
     public Bitmap getPicture() {
-        if (getPicturePath() != null) {
-            return BitmapFactory.decodeFile(getPicturePath());
-        }
+        int mod5 = (int) this.getId() % 5;
 
-        return BitmapFactory.decodeResource(Tarsier.app().getResources(), R.drawable.tarsier_placeholder);
+        switch (mod5) {
+            case 0:
+                return BitmapFactory.decodeResource(Tarsier.app().getResources(),
+                        R.drawable.tarsier_placeholder);
+            case 1:
+                return BitmapFactory.decodeResource(Tarsier.app().getResources(),
+                        R.drawable.tarsier1_placeholder);
+            case 2:
+                return BitmapFactory.decodeResource(Tarsier.app().getResources(),
+                        R.drawable.tarsier2_placeholder);
+            case 3:
+                return BitmapFactory.decodeResource(Tarsier.app().getResources(),
+                        R.drawable.tarsier3_placeholder);
+            case 4:
+                return BitmapFactory.decodeResource(Tarsier.app().getResources(),
+                        R.drawable.tarsier4_placeholder);
+            default:
+                return BitmapFactory.decodeResource(Tarsier.app().getResources(),
+                        R.drawable.tarsier_placeholder);
+        }
     }
 
-    public String getPicturePath() {
-        if (mPicturePath == null) {
-            mPicturePath = Tarsier.app().getUserPreferences().getPicturePath();
-        }
-        return mPicturePath;
+    public boolean isUser() {
+        return false;
     }
 
     public void setPicturePath(String picturePath) {
         mPicturePath = picturePath;
     }
 
-    public boolean isUser() {
-        return false;
+    public String getPicturePath() {
+        return mPicturePath;
     }
 
     public byte[] toByteArray() {

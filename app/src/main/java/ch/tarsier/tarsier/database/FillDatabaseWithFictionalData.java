@@ -34,9 +34,9 @@ public class FillDatabaseWithFictionalData {
         PeerRepository peerRepository = Tarsier.app().getPeerRepository();
         MessageRepository messageRepository = Tarsier.app().getMessageRepository();
 
-        List<Chat> chatList = null;
-        List<Message> messageList = null;
-        List<Peer> peerList = null;
+        List<Chat> chatList;
+        List<Message> messageList;
+        List<Peer> peerList;
 
         try {
             chatList = chatRepository.findAll();
@@ -83,7 +83,7 @@ public class FillDatabaseWithFictionalData {
         Random random = new Random();
 
         //Generate the user
-        User gabriel = new User();
+        Peer gabriel = new Peer();
         gabriel.setUserName("Gabriel Luthier");
         gabriel.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
         gabriel.setStatusMessage("en forme");

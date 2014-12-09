@@ -69,7 +69,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
 
             holder = new ChatHolder();
 
-            holder.mAvatarSrc = (ImageView) row.findViewById(R.id.avatar);
+            holder.mAvatar = (ImageView) row.findViewById(R.id.avatar);
             holder.mTitle = (TextView) row.findViewById(R.id.name);
             holder.mLastMessage = (TextView) row.findViewById(R.id.lastMessage);
             holder.mHumanTime = (TextView) row.findViewById(R.id.humanTime);
@@ -89,16 +89,18 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             e.printStackTrace();
         }
 
-        if (chat != null) {
+        if (chat != null) {/*
             if (chat.getAvatarRessourceId() == -1) {
                 if (chat.isPrivate()) {
                     chat.setAvatarRessourceId(R.drawable.tarsier_placeholder);
                 } else {
                     chat.setAvatarRessourceId(R.drawable.tarsier_group_placeholder);
                 }
-            }
+            }*/
 
-            holder.mAvatarSrc.setImageResource(chat.getAvatarRessourceId());
+            holder.mAvatar.setImageBitmap(chat.getPicture());
+
+            //holder.mAvatar.setImageResource(chat.getAvatarRessourceId());
             holder.mTitle.setText(chat.getTitle());
 
             if (lastMessage != null) {
@@ -121,7 +123,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
      * ChatHolder is the class containing the chat's information
      */
     private class ChatHolder {
-        private ImageView mAvatarSrc;
+        private ImageView mAvatar;
         private TextView mTitle;
         private TextView mLastMessage;
         private TextView mHumanTime;

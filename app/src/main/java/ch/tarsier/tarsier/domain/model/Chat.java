@@ -1,6 +1,12 @@
 package ch.tarsier.tarsier.domain.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.Serializable;
+
+import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.Tarsier;
 
 /**
  * @author McMoudi
@@ -12,11 +18,9 @@ public class Chat implements Serializable {
     private String mTitle;
     private Peer mHost;
     private boolean mPrivate;
-    private int mAvatarRessourceId;
 
     public Chat() {
         mId = -1;
-        mAvatarRessourceId = -1;
     }
 
     public long getId() {
@@ -68,11 +72,12 @@ public class Chat implements Serializable {
 
     }
 
-    public int getAvatarRessourceId() {
-        return mAvatarRessourceId;
-    }
-
-    public void setAvatarRessourceId(int id) {
-        mAvatarRessourceId = id;
+    public Bitmap getPicture() {
+        if (isPrivate()) {
+            return getHost().getPicture();
+        } else {
+            return BitmapFactory.decodeResource(Tarsier.app().getResources(),
+                    R.drawable.tarsier_group_placeholder);
+        }
     }
 }

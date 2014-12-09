@@ -1,5 +1,8 @@
 package ch.tarsier.tarsier.domain.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import ch.tarsier.tarsier.Tarsier;
 
 /**
@@ -13,12 +16,7 @@ public final class User extends Peer {
     }
 
     @Override
-    public String getPicturePath() {
-        if (super.getPicturePath() == null) {
-            setPicturePath(Tarsier.app().getUserPreferences().getPicturePath());
-        }
-
-        return super.getPicturePath();
+    public Bitmap getPicture() {
+        return BitmapFactory.decodeFile(Tarsier.app().getUserPreferences().getPicturePath());
     }
-
 }
