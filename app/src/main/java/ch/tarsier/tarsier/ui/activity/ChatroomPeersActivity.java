@@ -1,6 +1,8 @@
 package ch.tarsier.tarsier.ui.activity;
+
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
@@ -22,6 +25,7 @@ import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.ui.adapter.ChatroomPeersAdapter;
 import ch.tarsier.tarsier.ui.view.ChatroomPeersListView;
+
 /**
  * @author romac
  * @author gluthier
@@ -33,6 +37,7 @@ public class ChatroomPeersActivity extends Activity {
     private Bus mEventBus;
     private ChatroomPeersListView mChatroomPeersListView;
     private ChatroomPeersAdapter mChatroomPeersAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,23 +66,27 @@ public class ChatroomPeersActivity extends Activity {
             actionBar.setDisplayShowHomeEnabled(false);
         }
     }
+
     private void setUpEvent() {
         Bus eventBus = Tarsier.app().getEventBus();
         eventBus.register(this);
         eventBus.post(new RequestChatroomPeersListEvent());
     }
+
     @Subscribe
     public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
         Log.d(TAG, "Got ReceivedChatroomPeersListEvent");
         mChatroomPeersAdapter.clear();
         mChatroomPeersListView.addNewData(event.getPeers());
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-// Inflate the menu; this adds items to the action bar if it is present.
+    // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.chatroom_peers, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -92,24 +101,26 @@ public class ChatroomPeersActivity extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     private void createPrivateChat(Peer peer) {
-        Log.d(TAG,"Create private Chat");
+        Log.d(TAG, "Create private Chat");
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
         Chat newPrivateChat = new Chat();
         newPrivateChat.setPrivate(true);
         newPrivateChat.setHost(peer);
         try {
-            Log.d(TAG,"insert chat to databse");
             chatRepository.insert(newPrivateChat);
+            Log.d(TAG, "the chat has been inserted into the database");
         } catch (InvalidModelException e) {
             e.printStackTrace();
         } catch (InsertException e) {
             e.printStackTrace();
         }
         Intent newPrivateChatIntent = new Intent(this, ChatActivity.class);
-        newPrivateChatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, newPrivateChatIntent);
+        newPrivateChatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, newPrivateChat);
         startActivity(newPrivateChatIntent);
     }
+
     private void openProfile() {
         Intent openProfileIntent = new Intent(this, ProfileActivity.class);
         startActivity(openProfileIntent);

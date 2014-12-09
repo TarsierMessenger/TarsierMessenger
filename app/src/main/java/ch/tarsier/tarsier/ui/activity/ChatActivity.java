@@ -70,6 +70,8 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
 
+        mEventBus = getEventBus();
+
         if (mChat.getId() > -1) {
             DatabaseLoader dbl = new DatabaseLoader();
             dbl.execute();
