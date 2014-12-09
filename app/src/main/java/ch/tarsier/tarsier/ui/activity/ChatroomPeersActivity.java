@@ -33,7 +33,7 @@ public class ChatroomPeersActivity extends Activity {
     private Bus mEventBus;
     private ChatroomPeersListView mChatroomPeersListView;
     private ChatroomPeersAdapter mChatroomPeersAdapter;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

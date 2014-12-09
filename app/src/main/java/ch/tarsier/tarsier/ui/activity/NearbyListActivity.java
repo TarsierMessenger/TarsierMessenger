@@ -92,13 +92,13 @@ public class NearbyListActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        Tarsier.app().getEventBus().register(this);
-        Tarsier.app().getEventBus().post(new RequestNearbyPeersListEvent());
+        getEventBus().register(this);
+        getEventBus().post(new RequestNearbyPeersListEvent());
     }
 
     @Override
     public void onPause() {
-        Tarsier.app().getEventBus().unregister(this);
+        getEventBus().unregister(this);
         super.onPause();
     }
 
@@ -170,9 +170,7 @@ public class NearbyListActivity extends Activity {
 
         try {
             Tarsier.app().getChatRepository().insert(mChat);
-        } catch (InvalidModelException e) {
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             e.printStackTrace();
         }
 
