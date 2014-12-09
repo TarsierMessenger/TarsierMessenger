@@ -246,6 +246,10 @@ public class PeerRepository extends AbstractRepository<Peer> {
     }
 
     private boolean exists(Peer peer) {
+        if (peer.getId() < 0) {
+            return false;
+        }
+
         String whereClause = Columns.Peer._ID + " = " + peer.getId();
 
         Cursor cursor = getReadableDatabase().query(

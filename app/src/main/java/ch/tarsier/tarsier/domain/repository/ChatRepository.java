@@ -224,7 +224,11 @@ public class ChatRepository extends AbstractRepository<Chat> {
         return values;
     }
 
-    private boolean exists(Chat chat) throws InvalidModelException, IllegalArgumentException {
+    private boolean exists(Chat chat) {
+        if (chat.getId() < 0) {
+            return false;
+        }
+
         String whereClause = Columns.Chat._ID + " = " + chat.getId();
 
         Cursor cursor = getReadableDatabase().query(
