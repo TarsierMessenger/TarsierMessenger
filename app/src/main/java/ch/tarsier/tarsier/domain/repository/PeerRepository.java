@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -155,7 +156,7 @@ public class PeerRepository extends AbstractRepository<Peer> {
     }
 
     public void delete(Peer peer) throws InvalidModelException, DeleteException {
-
+        validate(peer);
 
         if (!exists(peer)) {
             return;
@@ -244,7 +245,7 @@ public class PeerRepository extends AbstractRepository<Peer> {
         return values;
     }
 
-    private boolean exists(Peer peer) throws InvalidModelException, IllegalArgumentException {
+    private boolean exists(Peer peer) {
         String whereClause = Columns.Peer._ID + " = " + peer.getId();
 
         Cursor cursor = getReadableDatabase().query(
