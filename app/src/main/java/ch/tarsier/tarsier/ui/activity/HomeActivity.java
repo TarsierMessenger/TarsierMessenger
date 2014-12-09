@@ -5,20 +5,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
-import ch.tarsier.tarsier.exception.InsertException;
-import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.util.BitmapFromPath;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;
@@ -36,14 +29,12 @@ public class HomeActivity extends Activity {
     private EditText mUsername;
     private EditText mStatusMessage;
     private ImageView mProfilePicture;
-    private Bus mEventBus;
     private UserPreferences mUserPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        getEventBus().register(this);
         mUserPreferences = Tarsier.app().getUserPreferences();
 
         mUsername = (EditText) findViewById(R.id.username_home);
@@ -147,24 +138,5 @@ public class HomeActivity extends Activity {
         mUserPreferences.setStatusMessage(mStatusMessage.getText().toString());
     }
 
-    @Subscribe
-    public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
-        Log.d(TAG, "Got ReceivedChatroomPeersListEvent");
-        try {
-            Tarsier.app().getPeerRepository().insertAll(event.getPeers());
-        } catch (InvalidModelException e) {
-            e.printStackTrace();
-        } catch (InsertException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Bus getEventBus() {
-        if (mEventBus == null) {
-            mEventBus = Tarsier.app().getEventBus();
-        }
-
-        return mEventBus;
-    }
 }
 

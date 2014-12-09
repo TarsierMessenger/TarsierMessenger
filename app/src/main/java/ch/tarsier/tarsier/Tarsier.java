@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import ch.tarsier.tarsier.database.Database;
+import ch.tarsier.tarsier.database.EventHandler;
 import ch.tarsier.tarsier.database.FillDatabaseWithFictionalData;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
@@ -29,6 +30,7 @@ public class Tarsier extends Application {
 
     private UserPreferences mUserPreferences;
     private Database mDatabase;
+    private EventHandler mEventHandler;
 
     private PeerRepository mPeerRepository;
     private ChatRepository mChatRepository;
@@ -53,6 +55,8 @@ public class Tarsier extends Application {
 
     private void initDatabase() {
         mDatabase = new Database(getApplicationContext());
+        mEventHandler = new EventHandler();
+        mEventHandler.register();
 
         new FillDatabase().execute();
     }
