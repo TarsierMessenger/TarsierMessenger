@@ -23,9 +23,7 @@ import ch.tarsier.tarsier.domain.repository.UserRepository;
 import ch.tarsier.tarsier.event.ConnectedEvent;
 import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.exception.InsertException;
-import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
-import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.validation.ChatroomNameValidator;
 
 /**
@@ -51,6 +49,18 @@ public class NewChatroomActivity extends Activity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getEventBus().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        getEventBus().unregister(this);
+        super.onPause();
     }
 
     @Override
