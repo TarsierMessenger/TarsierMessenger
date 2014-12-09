@@ -48,7 +48,7 @@ public class ChatActivity extends Activity implements EndlessListener {
     public final static String EXTRA_CHAT_MESSAGE_KEY = "ch.tarsier.tarsier.ui.activity.CHAT";
 
     private static final int NUMBER_OF_MESSAGES_TO_FETCH_AT_ONCE = 20;
-    private static final String TAG = "ChatAvtivity";
+    private static final String TAG = "ChatActivity";
 
     private Chat mChat;
     private BubbleAdapter mListViewAdapter;
@@ -68,7 +68,6 @@ public class ChatActivity extends Activity implements EndlessListener {
         mListView.setBubbleAdapter(mListViewAdapter);
         mListView.setEndlessListener(this);
 
-        getEventBus().register(this);
         mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
 
         if (mChat.getId() > -1) {
@@ -190,6 +189,18 @@ public class ChatActivity extends Activity implements EndlessListener {
         Message sentMessage = new Message(mChat.getId(), event.getMessage(), DateUtil.getNowTimestamp());
         mListView.addNewMessage(sentMessage);
         mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mEventBus.register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mEventBus.unregister(this);
     }
 
     /**
