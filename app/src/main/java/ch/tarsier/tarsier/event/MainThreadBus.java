@@ -39,4 +39,18 @@ public class MainThreadBus extends Bus {
             });
         }
     }
+
+    @Override
+    public void unregister(final Object object) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            super.unregister(object);
+        } else {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    MainThreadBus.super.unregister(object);
+                }
+            });
+        }
+    }
 }
