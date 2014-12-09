@@ -41,9 +41,9 @@ public class NewChatroomActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_chatroom);
 
-        mChatroomName = (EditText) findViewById(R.id.chatroom_name);
-
         getEventBus().register(this);
+
+        mChatroomName = (EditText) findViewById(R.id.chatroom_name);
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -111,13 +111,14 @@ public class NewChatroomActivity extends Activity {
         return new ChatroomNameValidator().validate(mChatroomName);
     }
 
-    public Bus getEventBus() {
+    private Bus getEventBus() {
         if (mEventBus == null) {
             mEventBus = Tarsier.app().getEventBus();
         }
 
         return mEventBus;
     }
+
     @Subscribe
     public void onConnectedEvent(ConnectedEvent event) {
         Log.d(TAG, "Got ConnectedEvent");

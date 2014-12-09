@@ -47,7 +47,7 @@ public class NearbyListActivity extends Activity {
     private Bus mEventBus;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {;
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_list);
 
@@ -155,13 +155,14 @@ public class NearbyListActivity extends Activity {
         Intent chatsListActivity = new Intent(this, ChatListActivity.class);
         startActivity(chatsListActivity);
     }
-    public Bus getEventBus() {
+    private Bus getEventBus() {
         if (mEventBus == null) {
             mEventBus = Tarsier.app().getEventBus();
         }
 
         return mEventBus;
     }
+
     @Subscribe
     public void onConnectedEvent(ConnectedEvent event) {
         Log.d(TAG,"Got ConnectedEvent");

@@ -61,6 +61,8 @@ public class ChatActivity extends Activity implements EndlessListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        getEventBus().register(this);
+
         mListView = (EndlessListView) findViewById(R.id.list);
         mListView.setLoadingView(R.layout.loading_layout);
 
@@ -69,8 +71,6 @@ public class ChatActivity extends Activity implements EndlessListener {
         mListView.setEndlessListener(this);
 
         mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
-
-        mEventBus = getEventBus();
 
         if (mChat.getId() > -1) {
             DatabaseLoader dbl = new DatabaseLoader();
@@ -169,7 +169,7 @@ public class ChatActivity extends Activity implements EndlessListener {
         }
     }
 
-    public Bus getEventBus() {
+    private Bus getEventBus() {
         if (mEventBus == null) {
             mEventBus = Tarsier.app().getEventBus();
         }
@@ -194,13 +194,13 @@ public class ChatActivity extends Activity implements EndlessListener {
     @Override
     protected void onResume() {
         super.onResume();
-        mEventBus.register(this);
+        getEventBus().register(this);
     }
 
     @Override
     protected void onPause() {
+        getEventBus().unregister(this);
         super.onPause();
-        mEventBus.unregister(this);
     }
 
     /**
