@@ -16,6 +16,8 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Message;
+import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
@@ -89,22 +91,24 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             e.printStackTrace();
         }
 
-        if (chat != null) {/*
-            if (chat.getAvatarRessourceId() == -1) {
-                if (chat.isPrivate()) {
-                    chat.setAvatarRessourceId(R.drawable.tarsier_placeholder);
-                } else {
-                    chat.setAvatarRessourceId(R.drawable.tarsier_group_placeholder);
-                }
-            }*/
-
+        if (chat != null) {
             holder.mAvatar.setImageBitmap(chat.getPicture());
-
-            //holder.mAvatar.setImageResource(chat.getAvatarRessourceId());
             holder.mTitle.setText(chat.getTitle());
 
             if (lastMessage != null) {
-                holder.mLastMessage.setText(INTRO_TEXT + lastMessage.getText());
+                if (chat.isPrivate()) {
+                    holder.mLastMessage.setText(INTRO_TEXT + lastMessage.getText());
+                } else {
+                    Peer sender = null;
+                    try {
+                        sender = Tarsier.app().getPeerRepository()
+                                .findByPublicKey(lastMessage.getSenderPublicKey());
+                    } catch (NoSuchModelException e) {
+                        e.printStackTrace();
+                    }
+                    holder.mLastMessage.setText(INTRO_TEXT + sender.getUserName() + ": " + lastMessage.getText());
+                }
+
                 holder.mHumanTime.setText(DateUtil.computeDateSeparator(lastMessage.getDateTime()));
             }
         }

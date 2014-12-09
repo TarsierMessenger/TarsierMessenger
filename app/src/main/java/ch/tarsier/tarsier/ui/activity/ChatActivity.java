@@ -153,7 +153,7 @@ public class ChatActivity extends Activity implements EndlessListener {
                 //Add the message to the database
                 Tarsier.app().getMessageRepository().insert(sentMessage);
 
-                getEventBus().post(new SendMessageEvent(mChat,messageText));
+                getEventBus().post(new SendMessageEvent(mChat, messageText));
 
                 mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
             } catch (InsertException | InvalidModelException e) {

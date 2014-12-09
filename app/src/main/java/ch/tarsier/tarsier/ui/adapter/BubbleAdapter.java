@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -169,6 +170,10 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
                 bubbleLp.addRule(RelativeLayout.RIGHT_OF, viewHolder.picture.getId());
                 break;
             case BUBBLE_RIGHT:
+                //FIXME dirty hack to set the user's avatar
+                viewHolder.picture.setImageBitmap(BitmapFactory.
+                        decodeFile(Tarsier.app().getUserPreferences().getPicturePath()));
+
                 viewHolder.name.setVisibility(View.GONE);
                 //TODO:Uncommenct after correcting the error
                 viewHolder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
