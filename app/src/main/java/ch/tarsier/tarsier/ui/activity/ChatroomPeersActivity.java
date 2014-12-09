@@ -59,7 +59,6 @@ public class ChatroomPeersActivity extends Activity {
                 createPrivateChat(peer);
             }
         });
-        setUpEvent();
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -67,10 +66,17 @@ public class ChatroomPeersActivity extends Activity {
         }
     }
 
-    private void setUpEvent() {
-        Bus eventBus = Tarsier.app().getEventBus();
-        eventBus.register(this);
-        eventBus.post(new RequestChatroomPeersListEvent());
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mEventBus.register(this);
+        mEventBus.post(new RequestChatroomPeersListEvent());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mEventBus.unregister(this);
     }
 
     @Subscribe
@@ -82,7 +88,7 @@ public class ChatroomPeersActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.chatroom_peers, menu);
         return true;
     }
@@ -108,14 +114,13 @@ public class ChatroomPeersActivity extends Activity {
         Chat newPrivateChat = new Chat();
         newPrivateChat.setPrivate(true);
         newPrivateChat.setHost(peer);
+
         try {
             chatRepository.insert(newPrivateChat);
-            Log.d(TAG, "the chat has been inserted into the database");
-        } catch (InvalidModelException e) {
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             e.printStackTrace();
         }
+
         Intent newPrivateChatIntent = new Intent(this, ChatActivity.class);
         newPrivateChatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, newPrivateChat);
         startActivity(newPrivateChatIntent);
