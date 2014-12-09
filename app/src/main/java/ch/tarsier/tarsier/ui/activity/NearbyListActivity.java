@@ -23,6 +23,8 @@ import ch.tarsier.tarsier.event.ConnectedEvent;
 import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
+import ch.tarsier.tarsier.exception.InsertException;
+import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
 import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
 
@@ -47,6 +49,7 @@ public class NearbyListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_list);
+        getEventBus().register(this);
         mFragmentManager = getFragmentManager();
 
         mNearbyPeer = new NearbyPeerFragment();
@@ -70,16 +73,7 @@ public class NearbyListActivity extends Activity {
             actionBar.setDisplayShowHomeEnabled(false);
         }
     }
-    public void onCreateGroup(View view) {
-        //TODO: test chat created
-        Log.d(TAG, "Create Group clicked");
-        Chat newCHat = new Chat();
-        newCHat.setTitle("NewTestChat");
-        newCHat.setId(13);
-        newCHat.setPrivate(false);
-        getEventBus().post(new CreateGroupEvent(newCHat));
 
-    }
     @Subscribe
     public void receivedNewPeersList(ReceivedNearbyPeersListEvent event) {
         Log.d(TAG, "Got ReceivedNearbyPeersListEvent");
@@ -169,13 +163,19 @@ public class NearbyListActivity extends Activity {
     public void onConnectedEvent(ConnectedEvent event) {
         Log.d(TAG,"Got ConnectedEvent");
         Intent chatIntent = new Intent(this, ChatActivity.class);
-
-        //TODO: Here it's only a test Chat
-
         Chat mChat = new Chat();
         mChat.setPrivate(false);
         mChat.setTitle("Chat");
-        mChat.setId(13);
+        mChat.setHost(Tarsier.app().getUserRepository().getUser());
+
+        try {
+            Tarsier.app().getChatRepository().insert(mChat);
+        } catch (InvalidModelException e) {
+            e.printStackTrace();
+        } catch (InsertException e) {
+            e.printStackTrace();
+        }
+
         chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, mChat);
 
 

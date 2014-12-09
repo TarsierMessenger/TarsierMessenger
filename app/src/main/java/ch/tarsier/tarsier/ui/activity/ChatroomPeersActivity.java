@@ -93,18 +93,19 @@ public class ChatroomPeersActivity extends Activity {
         }
     }
     private void createPrivateChat(Peer peer) {
+        Log.d(TAG,"Create private Chat");
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
         Chat newPrivateChat = new Chat();
         newPrivateChat.setPrivate(true);
         newPrivateChat.setHost(peer);
         try {
+            Log.d(TAG,"insert chat to databse");
             chatRepository.insert(newPrivateChat);
         } catch (InvalidModelException e) {
             e.printStackTrace();
         } catch (InsertException e) {
             e.printStackTrace();
         }
-        mEventBus.post(new CreateGroupEvent(newPrivateChat));
         Intent newPrivateChatIntent = new Intent(this, ChatActivity.class);
         newPrivateChatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, newPrivateChatIntent);
         startActivity(newPrivateChatIntent);

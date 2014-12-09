@@ -97,7 +97,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
     //This sends all public messages.
     public void broadcastMessage(byte[] publicKey, byte[] wireMessage) {
         for (Peer peer : getPeersList()) {
-            if (!peer.getPublicKey().equals(new PublicKey(publicKey))) {
+            if (!(new String(peer.getPublicKey().toByteArray()).equals(new String(publicKey)))) {
                 ConnectionHandler connection = mConnectionMap.get(new String(peer.getPublicKey().toByteArray()));
                 connection.write(wireMessage);
             }

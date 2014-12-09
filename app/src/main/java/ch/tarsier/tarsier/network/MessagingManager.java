@@ -244,9 +244,9 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     public List<Peer> getChatroomPeersList() {
         if (mConnection != null) {
-            Log.d("Connection", "mConnection is null");
             return mConnection.getPeersList();
         }else{
+            Log.d("Connection", "mConnection is null");
             return new ArrayList<>();
         }
 
@@ -310,9 +310,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
             byte[] publicKey = msg.getSenderPublicKey().toByteArray();
             String contents = msg.getPlainText().toStringUtf8();
-            //TODO: uncomment
             Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
-//            Peer sender = new Peer();
             boolean isPrivate = message.what == MessageType.MESSAGE_TYPE_PRIVATE;
 
             mEventBus.post(new ReceivedMessageEvent(contents, sender, isPrivate));
