@@ -116,7 +116,7 @@ public class FillDatabaseWithFictionalData {
 
         Peer xavier = new Peer();
         xavier.setUserName("Xavier Willemin");
-        xavier.setPublicKey(new PublicKey(Tarsier.app().getUserPreferences().getKeyPair().getPublicKey()));
+        xavier.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
         xavier.setStatusMessage("salut");
 
         Peer yann = new Peer();
