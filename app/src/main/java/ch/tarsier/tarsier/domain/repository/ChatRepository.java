@@ -3,6 +3,7 @@ package ch.tarsier.tarsier.domain.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
+import android.util.Log;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class ChatRepository extends AbstractRepository<Chat> {
 
     private static final String TABLE_NAME = Columns.Chat.TABLE_NAME;
     private static final String ID_DESCEND = Columns.Chat._ID + " DESC";
+    private static final String TAG = "ChatRepository";
 
     private PeerRepository mPeerRepository;
 
@@ -225,6 +227,8 @@ public class ChatRepository extends AbstractRepository<Chat> {
     }
 
     private boolean exists(Chat chat) {
+        Log.d(TAG, "Check if the chat exists");
+
         if (chat.getId() < 0) {
             return false;
         }
@@ -244,6 +248,8 @@ public class ChatRepository extends AbstractRepository<Chat> {
 
     // Check if the Chat model is valid
     private void validate(Chat chat) throws InvalidModelException {
+        Log.d(TAG, "validate the chat");
+
         if (chat == null) {
             throw new InvalidModelException("Chat is null.");
         }
