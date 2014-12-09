@@ -10,6 +10,8 @@
     <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
     <string name="title_activity_new_chatrooom">New Chatroom</string>
     <string name="title_activity_chat_list">Chats</string>
+    <string name="title_activity_chatroom_peers">Participants</string>
+    <string name="title_activity_chat">Chat</string>
 
     <!-- Devices lists -->
     <string name="finding_service">Finding local peers</string>

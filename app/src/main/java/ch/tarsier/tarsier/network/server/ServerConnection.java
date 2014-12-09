@@ -46,10 +46,18 @@ public class ServerConnection implements Runnable, ConnectionInterface {
     private Handler mHandler;
 
     public ServerConnection(Handler handler) throws IOException {
+        Log.d(TAG, "ServerConnection Created.");
         this.mServer = new ServerSocket(MessageType.SERVER_SOCKET);
         this.mHandler = handler;
         Thread t = new Thread(this);
         t.start();
+    }
+
+    private void selfAdd(ConnectionHandler handler) {
+        TarsierWireProtos.Peer.Builder peer = TarsierWireProtos.Peer.newBuilder();
+        peer.setName(mLocalUser.getUserName());
+        peer.setPublicKey(ByteString.copyFrom(mLocalUser.getPublicKey().getBytes()));
+        addPeer(peer.build(),handler);
     }
 
     @Override
@@ -90,7 +98,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
     public void broadcastMessage(byte[] publicKey, byte[] wireMessage) {
         for (Peer peer : getPeersList()) {
             if (!peer.getPublicKey().equals(new PublicKey(publicKey))) {
-                ConnectionHandler connection = mConnectionMap.get(peer.getPublicKey().toString());
+                ConnectionHandler connection = mConnectionMap.get(new String(peer.getPublicKey().toByteArray()));
                 connection.write(wireMessage);
             }
         }
@@ -110,9 +118,16 @@ public class ServerConnection implements Runnable, ConnectionInterface {
         }
 
         for (Peer peer : getPeersList()) {
-            ConnectionHandler connection = mConnectionMap.get(peer.getPublicKey().toString());
-            connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PEER_LIST,
-                    peerList.build().toByteArray()));
+            ConnectionHandler connection = mConnectionMap.get(new String(peer.getPublicKey().toByteArray()));
+            if(peer == null){
+                Log.d(TAG,"peer is null");
+            }else if(connection == null){
+                Log.d(TAG,"Connection is null");
+            }else {
+
+                connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PEER_LIST,
+                        peerList.build().toByteArray()));
+            }
         }
 
         Log.d(TAG, "Updated peerList is broadcast.");
@@ -180,6 +195,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
             this.mServerConnection = connection;
             this.mSocket = socket;
             this.mHandler = handler;
+            this.mServerConnection.selfAdd(this);
             Thread t = new Thread(this);
             t.start();
         }
@@ -190,6 +206,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
             } catch (IOException e) {
                 if (peer != null) {
                     mServerConnection.peerDisconnected(peer);
+                    Log.d(TAG,"Peer disconnected because IOException");
                     mServerConnection.broadcastUpdatedPeerList();
                 }
 
@@ -198,6 +215,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
             } catch (NullPointerException e) {
                 if (peer != null) {
                     mServerConnection.peerDisconnected(peer);
+                    Log.d(TAG,"Peer disconnected because NullPointerException");
                     mServerConnection.broadcastUpdatedPeerList();
                 }
 
@@ -206,7 +224,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
         }
 
         private void loop() throws IOException {
-            while (true) {
+
                 try {
                     InputStream mInputStream = mSocket.getInputStream();
                     mOutputStream = mSocket.getOutputStream();
@@ -217,6 +235,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                         if (bytes == -1) {
                             if (peer != null) {
                                 mServerConnection.peerDisconnected(peer);
+                                Log.d(TAG,"Peer disconnected because bytes = -1");
                                 mServerConnection.broadcastUpdatedPeerList();
                             }
                             break;
@@ -247,7 +266,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                                 mServerConnection.addPeer(peer, this);
                                 mServerConnection.broadcastUpdatedPeerList();
 
-                                mHandler.obtainMessage(MessageType.MESSAGE_TYPE_PEER_LIST);
+                                mHandler.obtainMessage(MessageType.MESSAGE_TYPE_PEER_LIST).sendToTarget();
                                 break;
 
                             case MessageType.MESSAGE_TYPE_PEER_LIST:
@@ -298,7 +317,6 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                 } catch (InvalidProtocolBufferException e) {
                     Log.e(TAG, "Got unparsable protocol buffer " + e.getLocalizedMessage());
                 }
-            }
         }
 
         protected synchronized void write(byte[] buffer) {

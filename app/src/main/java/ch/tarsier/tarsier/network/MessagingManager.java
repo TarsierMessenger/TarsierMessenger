@@ -39,7 +39,6 @@ import ch.tarsier.tarsier.exception.DomainException;
 import ch.tarsier.tarsier.exception.PeerCipherException;
 import ch.tarsier.tarsier.network.client.ClientConnection;
 import ch.tarsier.tarsier.network.server.ServerConnection;
-import ch.tarsier.tarsier.ui.activity.WiFiDirectDebugActivity;
 import ch.tarsier.tarsier.network.messages.MessageType;
 
 import static ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPublicMessage;
@@ -115,11 +114,12 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         config.deviceAddress = device.deviceAddress;
         config.wps.setup = WpsInfo.PBC;
         config.groupOwnerIntent = 15;
-
+        Log.d(NETWORK_LAYER_TAG, "connectToDevice is called");
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+
             @Override
             public void onSuccess() {
-                Log.d(NETWORK_LAYER_TAG, "Connecting to device");
+                Log.d(NETWORK_LAYER_TAG, "Connected to device");
             }
 
             @Override
@@ -137,8 +137,17 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             }
 
             @Override
-            public void onFailure(int errorCode) {
-                Log.d(NETWORK_LAYER_TAG, "Failed to create a group");
+            public void onFailure(int reasonCode) {
+                if (reasonCode == WifiP2pManager.P2P_UNSUPPORTED) {
+                    Log.d(WIFI_DIRECT_TAG,
+                            "Failed to create a group. P2P isn't supported on this device.");
+                } else if (reasonCode == WifiP2pManager.BUSY) {
+                    Log.d(WIFI_DIRECT_TAG,
+                            "Failed to create a group. The system is too busy to process the request.");
+                } else if (reasonCode == WifiP2pManager.ERROR) {
+                    Log.d(WIFI_DIRECT_TAG,
+                            "Failed to create a group. The operation failed due to an internal error.");
+                }
             }
         });
     }
@@ -147,7 +156,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
-        Log.d(WiFiDirectDebugActivity.TAG, action);
+        Log.d(WIFI_DIRECT_TAG, action);
 
         if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             Log.d(WIFI_DIRECT_TAG, "WIFI_P2P_CONNECTION_CHANGED_ACTION");
@@ -162,19 +171,19 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             if (networkInfo.isConnected()) {
                 // we are connected with the other device, request connection
                 // info to find group owner IP
-                Log.d(WiFiDirectDebugActivity.TAG,
+                Log.d(WIFI_DIRECT_TAG,
                       "Connected to p2p network. Requesting network details");
 
                 mManager.requestConnectionInfo(mChannel, this);
             } else {
-                Log.d(WIFI_DIRECT_TAG, "Did receive a Intent action : " + action);
+                Log.d(WIFI_DIRECT_TAG, "Did receive an Intent action : " + action);
             }
 
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
 
             WifiP2pDevice device = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
 
-            Log.d(WiFiDirectDebugActivity.TAG, "Device status -" + device.status);
+            Log.d(WIFI_DIRECT_TAG, "Device status -" + device.status);
 
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             // Request available peers from the wifi p2p manager. This is an
@@ -234,16 +243,13 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
     }
 
     public List<Peer> getChatroomPeersList() {
-        if (mConnection == null) {
-            // FIXME Tests to show something on NearbyListActivity.
+        if (mConnection != null) {
             Log.d("Connection", "mConnection is null");
-            List<Peer> peerList = new ArrayList<Peer>();
-            peerList.add(new Peer("ben", "lalala"));
-
-            return peerList;
+            return mConnection.getPeersList();
+        }else{
+            return new ArrayList<>();
         }
 
-        return mConnection.getPeersList();
     }
 
     private List<WifiP2pDevice> getNearbyPeersList() {
@@ -303,8 +309,10 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             TarsierPublicMessage msg = TarsierPublicMessage.parseFrom((byte[]) message.obj);
 
             byte[] publicKey = msg.getSenderPublicKey().toByteArray();
-            String contents = msg.getPlainText().toString();
+            String contents = msg.getPlainText().toStringUtf8();
+            //TODO: uncomment
             Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
+//            Peer sender = new Peer();
             boolean isPrivate = message.what == MessageType.MESSAGE_TYPE_PRIVATE;
 
             mEventBus.post(new ReceivedMessageEvent(contents, sender, isPrivate));
@@ -335,11 +343,13 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     @Subscribe
     public void onConnectToDeviceEvent(ConnectToDeviceEvent event) {
+        Log.d(NETWORK_LAYER_TAG, "Got ConnectToDeviceEvent");
         connectToDevice(event.getDevice());
     }
 
     @Subscribe
     public void onCreateGroupEvent(CreateGroupEvent event) {
+        Log.d(NETWORK_LAYER_TAG, "Got CreateGroupEvent");
         createGroup();
     }
 

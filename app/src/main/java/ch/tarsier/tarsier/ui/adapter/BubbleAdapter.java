@@ -170,8 +170,9 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
                 break;
             case BUBBLE_RIGHT:
                 viewHolder.name.setVisibility(View.GONE);
+                //TODO:Uncommenct after correcting the error
                 viewHolder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
-                pictureLp.addRule(RelativeLayout.ALIGN_PARENT_END);
+                pictureLp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 bubbleLp.addRule(RelativeLayout.LEFT_OF, viewHolder.picture.getId());
                 messageLp.gravity = Gravity.END;
                 break;

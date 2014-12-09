@@ -5,7 +5,7 @@
     tools:context=".DiscussionsActivity" >
 
     <item android:id="@+id/create_chat_from_chat_list_activity"
-        android:title="@string/new_private_chat"
+        android:title="@string/new_chat"
         android:showAsAction="ifRoom"
         android:icon="@drawable/new_private_chat" />
 
