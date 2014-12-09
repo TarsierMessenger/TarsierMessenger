@@ -45,11 +45,14 @@ public class NearbyListActivity extends Activity {
     private NearbyPeerFragment mNearbyPeer;
     private FragmentManager mFragmentManager;
     private Bus mEventBus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_list);
+
         getEventBus().register(this);
+
         mFragmentManager = getFragmentManager();
 
         mNearbyPeer = new NearbyPeerFragment();

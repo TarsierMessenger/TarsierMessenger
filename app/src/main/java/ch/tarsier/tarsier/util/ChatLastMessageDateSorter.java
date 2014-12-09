@@ -32,9 +32,7 @@ public class ChatLastMessageDateSorter implements Comparator<Chat> {
         long time = 0;
         try {
             time = messageRepository.getLastMessageOf(chat).getDateTime();
-        } catch (NoSuchModelException e) {
-            e.printStackTrace();
-        } catch (InvalidModelException e) {
+        } catch (NoSuchModelException | InvalidModelException e) {
             e.printStackTrace();
         }
 

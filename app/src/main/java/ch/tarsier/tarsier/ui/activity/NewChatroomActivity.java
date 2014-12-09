@@ -42,6 +42,7 @@ public class NewChatroomActivity extends Activity {
         setContentView(R.layout.activity_new_chatroom);
 
         mChatroomName = (EditText) findViewById(R.id.chatroom_name);
+
         getEventBus().register(this);
 
         ActionBar actionBar = getActionBar();
@@ -97,9 +98,7 @@ public class NewChatroomActivity extends Activity {
 
         try {
             chatRepository.insert(newChatroom);
-        } catch (InvalidModelException e) {
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             e.printStackTrace();
         }
 

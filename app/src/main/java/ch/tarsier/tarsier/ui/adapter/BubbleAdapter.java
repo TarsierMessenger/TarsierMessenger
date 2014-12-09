@@ -49,7 +49,7 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
 
         mContext = context;
         mMessages = messages;
-        mPeers = new HashMap<String, Peer>();
+        mPeers = new HashMap<>();
     }
 
     public long getLastMessageTimestamp() {

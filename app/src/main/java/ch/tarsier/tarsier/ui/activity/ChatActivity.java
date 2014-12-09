@@ -156,9 +156,7 @@ public class ChatActivity extends Activity implements EndlessListener {
                 getEventBus().post(new SendMessageEvent(mChat,messageText));
 
                 mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
-            } catch (InsertException e) {
-                e.printStackTrace();
-            } catch (InvalidModelException e) {
+            } catch (InsertException | InvalidModelException e) {
                 e.printStackTrace();
             }
 

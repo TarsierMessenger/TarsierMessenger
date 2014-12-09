@@ -85,9 +85,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         Message lastMessage = null;
         try {
             lastMessage = messageRepository.getLastMessageOf(chat);
-        } catch (NoSuchModelException e) {
-            e.printStackTrace();
-        } catch (InvalidModelException e) {
+        } catch (NoSuchModelException | InvalidModelException e) {
             e.printStackTrace();
         }
 

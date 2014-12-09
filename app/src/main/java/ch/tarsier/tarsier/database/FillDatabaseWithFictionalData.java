@@ -57,9 +57,7 @@ public class FillDatabaseWithFictionalData {
             for (Peer p : peerList) {
                 peerRepository.delete(p);
             }
-        } catch (InvalidModelException e) {
-            e.printStackTrace();
-        } catch (DeleteException e) {
+        } catch (InvalidModelException | DeleteException e) {
             e.printStackTrace();
         }
     }
@@ -144,10 +142,7 @@ public class FillDatabaseWithFictionalData {
             peerRepository.insert(romain);
             peerRepository.insert(xavier);
             peerRepository.insert(yann);
-        } catch (InsertException e) {
-            Log.d(TAG, "An error occured while creating users: " + e.toString());
-            e.printStackTrace();
-        } catch (InvalidModelException e) {
+        } catch (InsertException | InvalidModelException e) {
             Log.d(TAG, "An error occured while creating users: " + e.toString());
             e.printStackTrace();
         }
@@ -208,10 +203,7 @@ public class FillDatabaseWithFictionalData {
             chatRepository.insert(chat8);
             chatRepository.insert(chat9);
             chatRepository.insert(chat10);
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating chats: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating chats: " + e.toString());
             e.printStackTrace();
         }
@@ -251,10 +243,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat1) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -286,10 +275,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat2) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -340,10 +326,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat3) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -383,10 +366,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat4) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -417,10 +397,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat5) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -466,10 +443,7 @@ public class FillDatabaseWithFictionalData {
                 Log.d(TAG, "Creating messages for chat 6.");
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -504,10 +478,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat7) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -542,10 +513,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat8) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -576,10 +544,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat9) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -642,10 +607,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat10) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
