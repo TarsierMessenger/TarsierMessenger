@@ -11,11 +11,10 @@ import java.util.List;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 
-/*
+/**
  * ChatListView is the class that controls the view of the ChatListActivity
  * @author gluthier
  */
-
 public class ChatListView extends ListView {
 
     private View mFooter;

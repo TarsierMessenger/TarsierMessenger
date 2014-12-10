@@ -184,9 +184,15 @@ public class ChatActivity extends Activity implements EndlessListener {
     }
 
     @Subscribe
-    public void onReceivedMessageEvent(ReceivedMessageEvent event){
-        Log.d(TAG,"Got ReceivedMessageEvent.");
-        Message sentMessage = new Message(mChat.getId(), event.getMessage(), event.getSender().getPublicKey(), DateUtil.getNowTimestamp());
+    public void onReceivedMessageEvent(ReceivedMessageEvent event) {
+        Log.d(TAG, "Got ReceivedMessageEvent.");
+
+        Message sentMessage = new Message(
+                mChat.getId(),
+                event.getMessage(),
+                event.getSender().getPublicKey(),
+                DateUtil.getNowTimestamp());
+
         mListView.addNewMessage(sentMessage);
         mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
     }

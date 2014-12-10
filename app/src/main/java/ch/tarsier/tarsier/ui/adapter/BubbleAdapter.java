@@ -170,12 +170,11 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
                 bubbleLp.addRule(RelativeLayout.RIGHT_OF, viewHolder.picture.getId());
                 break;
             case BUBBLE_RIGHT:
-                //FIXME dirty hack to set the user's avatar
+                //FIXME dirty hack to set the user's avatar: getPicture() should return this if it's the user
                 viewHolder.picture.setImageBitmap(BitmapFactory.
                         decodeFile(Tarsier.app().getUserPreferences().getPicturePath()));
 
                 viewHolder.name.setVisibility(View.GONE);
-                //TODO:Uncommenct after correcting the error
                 viewHolder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
                 pictureLp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 bubbleLp.addRule(RelativeLayout.LEFT_OF, viewHolder.picture.getId());

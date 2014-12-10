@@ -5,13 +5,10 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -20,7 +17,6 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.event.ConnectedEvent;
-import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
 import ch.tarsier.tarsier.exception.InsertException;
@@ -165,7 +161,7 @@ public class NearbyListActivity extends Activity {
 
     @Subscribe
     public void onConnectedEvent(ConnectedEvent event) {
-        Log.d(TAG,"Got ConnectedEvent");
+        Log.d(TAG, "Got ConnectedEvent");
         Intent chatIntent = new Intent(this, ChatActivity.class);
         Chat mChat = new Chat();
         mChat.setPrivate(false);

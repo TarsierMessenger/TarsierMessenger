@@ -15,11 +15,10 @@ import java.util.List;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
 
-/*
+/**
  * @author romac
  * @author gluthier
  */
-
 public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
     private Context mContext;
     private int mLayoutResourceId;

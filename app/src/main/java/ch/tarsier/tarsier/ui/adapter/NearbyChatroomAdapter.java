@@ -96,7 +96,7 @@ public class NearbyChatroomAdapter extends ArrayAdapter<Chat> {
     }
 
     /**
-     * ChatRoomSummaryHolder is the class containing the chatRoom's information
+     * ChatroomSummaryHolder is the class containing the chatRoom's information
      */
     private class NearbyChatroomHolder {
         private TextView mName;

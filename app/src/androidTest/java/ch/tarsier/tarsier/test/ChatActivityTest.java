@@ -1,16 +1,7 @@
 package ch.tarsier.tarsier.test;
 
 import android.test.ActivityInstrumentationTestCase2;
-import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.ui.activity.ChatActivity;
-import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
-import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.clearText;
-import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.closeSoftKeyboard;
-import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.typeText;
-import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isClickable;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.Matchers.not;
 
 /**
  * @author marinnicolini

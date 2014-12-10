@@ -109,6 +109,9 @@ public class NearbyPeerAdapter extends ArrayAdapter<WifiP2pDevice> {
         }
     }
 
+    /**
+     * PeerHolder is the class wrapping the peer's informations
+     */
     private class PeerHolder {
         private TextView mUsername;
         private TextView mStatus;

@@ -1,7 +1,6 @@
 package ch.tarsier.tarsier.domain.model;
 
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 import ch.tarsier.tarsier.ui.view.BubbleListViewItem;

@@ -14,6 +14,8 @@ import ch.tarsier.tarsier.Tarsier;
  */
 public class Chat implements Serializable {
 
+    private static final String DEFAULT_TITLE = "'s chatroom";
+
     private long mId;
     private String mTitle;
     private Peer mHost;
@@ -41,7 +43,6 @@ public class Chat implements Serializable {
             if (mTitle != null) {
                 return mTitle;
             } else {
-                String DEFAULT_TITLE = "'s chatroom";
                 return getHost().getUserName() + DEFAULT_TITLE;
             }
         }

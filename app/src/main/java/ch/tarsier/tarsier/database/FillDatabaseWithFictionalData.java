@@ -11,7 +11,6 @@ import ch.tarsier.tarsier.crypto.EC25519;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.domain.model.User;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
@@ -619,9 +618,9 @@ public class FillDatabaseWithFictionalData {
         MessageRepository messageRepository = Tarsier.app().getMessageRepository();
 
         try {
-            if (chatRepository.findAll().size() > 0 ||
-                messageRepository.findAll().size() > 0 ||
-                peerRepository.findAll().size() > 0) {
+            if (chatRepository.findAll().size() > 0
+                    || messageRepository.findAll().size() > 0
+                    || peerRepository.findAll().size() > 0) {
                 return true;
             }
         } catch (NoSuchModelException e) {

@@ -31,10 +31,10 @@ import ch.tarsier.tarsier.validation.ChatroomNameValidator;
  */
 public class NewChatroomActivity extends Activity {
 
-    private static final String TAG = "NewChatRoomActivity";
+    private static final String TAG = "NewChatroomActivity";
     private EditText mChatroomName;
     private Bus mEventBus;
-    private Chat newChatroom;
+    private Chat mNewChatroom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,27 +84,26 @@ public class NewChatroomActivity extends Activity {
     private void createChatroom() {
 
         if (!validateChatroomName()) {
-            Toast.makeText(this, "The chatroom name is invalid.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
         UserRepository userRepository = Tarsier.app().getUserRepository();
 
-        newChatroom = new Chat();
-        newChatroom.setPrivate(false);
-        newChatroom.setTitle(mChatroomName.getText().toString());
-        newChatroom.setHost(userRepository.getUser());
+        mNewChatroom = new Chat();
+        mNewChatroom.setPrivate(false);
+        mNewChatroom.setTitle(mChatroomName.getText().toString());
+        mNewChatroom.setHost(userRepository.getUser());
 
         try {
-            chatRepository.insert(newChatroom);
+            chatRepository.insert(mNewChatroom);
         } catch (InvalidModelException | InsertException e) {
             e.printStackTrace();
         }
 
-        mEventBus.post(new CreateGroupEvent(newChatroom));
+        Toast.makeText(this, "Chatroom name saved, waiting for connection...", Toast.LENGTH_SHORT).show();
 
-
+        mEventBus.post(new CreateGroupEvent(mNewChatroom));
     }
 
     private boolean validateChatroomName() {
@@ -123,9 +122,8 @@ public class NewChatroomActivity extends Activity {
     public void onConnectedEvent(ConnectedEvent event) {
         Log.d(TAG, "Got ConnectedEvent");
 
-
         Intent newChatroomIntent = new Intent(this, ChatActivity.class);
-        newChatroomIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, newChatroom);
+        newChatroomIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, mNewChatroom);
         startActivity(newChatroomIntent);
     }
 }
