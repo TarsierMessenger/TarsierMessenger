@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ch.tarsier.tarsier" >
-
     <!-- Request permission to use the Wi-Fi hardware . -->
     <uses-permission
         android:name="android.permission.ACCESS_WIFI_STATE"
@@ -49,40 +48,48 @@
             android:name="ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity"
             android:label="@string/title_activity_add_profile_picture"
             android:theme="@style/AppTheme"
-            android:parentActivityName=".ui.activity.HomeActivity">
+            android:parentActivityName=".ui.activity.HomeActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.ProfileActivity"
-            android:label="@string/title_activity_profile" >
+            android:label="@string/title_activity_profile"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.activity.WiFiDirectDebugActivity"
-            android:label="@string/title_activity_wifidirectdebug">
+            android:label="@string/title_activity_wifidirectdebug"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ui.activity.NewChatroomActivity"
             android:label="@string/title_activity_new_chatrooom"
-            android:parentActivityName=".ui.activity.NearbyListActivity">
+            android:parentActivityName=".ui.activity.NearbyListActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.ChatroomPeersActivity"
             android:parentActivityName=".ui.activity.ChatActivity"
-            android:label="@string/title_activity_chatroom_peers" >
+            android:label="@string/title_activity_chatroom_peers"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.ChatListActivity"
             android:label="@string/title_activity_chat_list"
-            android:theme="@style/CustomActionBarTheme" >
+            android:theme="@style/CustomActionBarTheme"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.ChatActivity"
             android:parentActivityName=".ui.activity.ChatListActivity"
-            android:label="@string/title_activity_chat" >
+            android:label="@string/title_activity_chat"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="ch.tarsier.tarsier.ui.activity.NearbyListActivity"
             android:label="@string/title_activity_nearby_list"
-            android:parentActivityName=".ui.activity.ChatListActivity">
+            android:parentActivityName=".ui.activity.ChatListActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
