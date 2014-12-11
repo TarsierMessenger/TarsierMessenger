@@ -183,7 +183,19 @@ public class ChatRepository extends AbstractRepository<Chat> {
         );
 
         if (!cursor.moveToFirst()) {
-            throw new NoSuchModelException("Couldn't find a Chat with PeerId " + peer.getId());
+            cursor.close();
+
+            Chat chat = new Chat();
+            chat.setHost(peer);
+            chat.setPrivate(isPrivate);
+
+            try {
+                insert(chat);
+            } catch (InsertException e) {
+                throw new NoSuchModelException(e);
+            }
+
+            return chat;
         }
 
         try {
