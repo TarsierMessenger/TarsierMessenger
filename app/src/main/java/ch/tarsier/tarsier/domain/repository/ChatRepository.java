@@ -153,6 +153,38 @@ public class ChatRepository extends AbstractRepository<Chat> {
         }
     }
 
+    public Chat getChatWithPeer(Peer peer) throws InvalidModelException, NoSuchModelException {
+        if (peer == null) {
+            throw new InvalidModelException("Peer is null.");
+        }
+
+        if (peer.getId() < 0) {
+            throw new InvalidModelException("Peer ID is invalid.");
+        }
+
+        String whereClause = Columns.Chat.COLUMN_NAME_HOST_ID + " = " + peer.getId();
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null,
+                whereClause,
+                null, null, null, null,
+                "1"
+        );
+
+        if (!cursor.moveToFirst()) {
+            throw new NoSuchModelException("Couldn't find a Chat with PeerId " + peer.getId());
+        }
+
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
+        }
+    }
+
     @Override
     protected Chat buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
