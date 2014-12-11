@@ -19,6 +19,7 @@ import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -324,18 +325,24 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     @Subscribe
     public void onSendMessageEvent(SendMessageEvent event) {
-        if (event.isPublic()) {
-            Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a public message.");
-            broadcastMessage(event.getMessage());
-        } else if (event.isPrivate()) {
-            Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a private message.");
-            try {
-                sendMessage(event.getPeer(), event.getMessage());
-            } catch (PeerCipherException e) {
-                Log.e(NETWORK_LAYER_TAG, "Cannot send message, encountered issue encrypting");
+        if (mConnection != null) {
+            if (event.isPublic()) {
+                Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a public message.");
+                broadcastMessage(event.getMessage());
+            } else if (event.isPrivate()) {
+                Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a private message.");
+                try {
+                    sendMessage(event.getPeer(), event.getMessage());
+                } catch (PeerCipherException e) {
+                    Log.e(NETWORK_LAYER_TAG, "Cannot send message, encountered issue encrypting");
+                }
+            } else {
+                Log.d(NETWORK_LAYER_TAG, "Cannot send message that is neither private nor public.");
             }
         } else {
-            Log.d(NETWORK_LAYER_TAG, "Cannot send message that is neither private nor public.");
+            //mConnection is null. Message cannot be send to other user
+            //should leave the chat
+            Log.d(NETWORK_LAYER_TAG,"mConnection is null. Cannot send message to nobody");
         }
     }
 
