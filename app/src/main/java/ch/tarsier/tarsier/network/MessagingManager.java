@@ -19,7 +19,6 @@ import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,7 +73,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         mChannel = channel;
 
         createPeerListener();
-        initiatePeerDiscovery();
+        resetNetworkStackAndInitiatePeerDiscovery();
 
         mManager.requestPeers(mChannel, peerListListener);
     }
@@ -221,7 +220,36 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         };
     }
 
-    private void initiatePeerDiscovery() {
+    private void resetNetworkStackAndInitiatePeerDiscovery() {
+        Log.d(NETWORK_LAYER_TAG, "Resetting network stack");
+        mManager.cancelConnect(mChannel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                removeGroupAndInitiateDiscover();
+            }
+
+            @Override
+            public void onFailure(int reason) {
+                removeGroupAndInitiateDiscover();
+            }
+        });
+    }
+
+    private void removeGroupAndInitiateDiscover(){
+        mManager.removeGroup(mChannel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                initiatePeerDiscovery();
+            }
+
+            @Override
+            public void onFailure(int reason) {
+                initiatePeerDiscovery();
+            }
+        });
+    }
+
+    private void initiatePeerDiscovery(){
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
@@ -364,6 +392,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
         if (mEventBus != null) {
             Log.d(NETWORK_LAYER_TAG, "Sending ReceivedNearbyPeersListEvent");
+            resetNetworkStackAndInitiatePeerDiscovery();
             mEventBus.post(new ReceivedNearbyPeersListEvent(getNearbyPeersList()));
         }
     }
