@@ -148,18 +148,11 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         if (!messageText.isEmpty()) {
             //Add the message to the ListView
-            try {
-                mListView.addNewMessage(sentMessage);
+            mListView.addNewMessage(sentMessage);
 
-                //Add the message to the database
-                Tarsier.app().getMessageRepository().insert(sentMessage);
+            getEventBus().post(new SendMessageEvent(mChat, sentMessage));
 
-                getEventBus().post(new SendMessageEvent(mChat, messageText));
-
-                mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
-            } catch (InsertException | InvalidModelException e) {
-                e.printStackTrace();
-            }
+            mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
 
             messageView.setText("");
 

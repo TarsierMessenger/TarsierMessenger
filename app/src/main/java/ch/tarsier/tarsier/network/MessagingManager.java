@@ -354,14 +354,15 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     @Subscribe
     public void onSendMessageEvent(SendMessageEvent event) {
+        ch.tarsier.tarsier.domain.model.Message message = event.getMessage();
         if (mConnection != null) {
             if (event.isPublic()) {
                 Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a public message.");
-                broadcastMessage(event.getMessage());
+                broadcastMessage(message.getText());
             } else if (event.isPrivate()) {
                 Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a private message.");
                 try {
-                    sendMessage(event.getPeer(), event.getMessage());
+                    sendMessage(event.getPeer(), message.getText());
                 } catch (PeerCipherException e) {
                     Log.e(NETWORK_LAYER_TAG, "Cannot send message, encountered issue encrypting");
                 }

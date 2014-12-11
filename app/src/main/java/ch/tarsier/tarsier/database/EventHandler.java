@@ -14,6 +14,7 @@ import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.event.DisplayMessageEvent;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
+import ch.tarsier.tarsier.event.SendMessageEvent;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
@@ -68,6 +69,14 @@ public class EventHandler {
             Log.d(TAG, "Could not find chat for given peer.");
         } catch (InsertException e) {
             Log.d(TAG, "Could not find insert received message into chatroom.");
+
+    @Subscribe
+    public void onSendMessageEvent(SendMessageEvent event) {
+        try {
+            mMessageRepository.insert(event.getMessage());
+        } catch (InvalidModelException | InsertException e) {
+            Log.d(TAG, "Could not insert message being sent in the database.");
+            e.printStackTrace();
         }
     }
 
