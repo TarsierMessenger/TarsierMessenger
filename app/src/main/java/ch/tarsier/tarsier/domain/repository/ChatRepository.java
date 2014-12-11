@@ -153,26 +153,6 @@ public class ChatRepository extends AbstractRepository<Chat> {
         }
     }
 
-    public Chat getRandomChat() throws NoSuchModelException {
-        Cursor cursor = getReadableDatabase().query(
-                TABLE_NAME,
-                null, null, null, null, null, null,
-                "1"
-        );
-
-        if (!cursor.moveToFirst()) {
-            throw new NoSuchModelException("Couldn't find a random Chat");
-        }
-
-        try {
-            return buildFromCursor(cursor);
-        } catch (InvalidCursorException e) {
-            throw new NoSuchModelException(e);
-        } finally {
-            cursor.close();
-        }
-    }
-
     @Override
     protected Chat buildFromCursor(Cursor c) throws InvalidCursorException {
         if (c == null) {
