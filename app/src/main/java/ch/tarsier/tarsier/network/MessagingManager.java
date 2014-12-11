@@ -30,6 +30,7 @@ import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ConnectToDeviceEvent;
 import ch.tarsier.tarsier.event.ConnectedEvent;
 import ch.tarsier.tarsier.event.CreateGroupEvent;
+import ch.tarsier.tarsier.event.ErrorConnectionEvent;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
@@ -340,9 +341,8 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
                 Log.d(NETWORK_LAYER_TAG, "Cannot send message that is neither private nor public.");
             }
         } else {
-            //mConnection is null. Message cannot be send to other user
-            //should leave the chat
             Log.d(NETWORK_LAYER_TAG,"mConnection is null. Cannot send message to nobody");
+            mEventBus.post(new ErrorConnectionEvent("Error : There is no connected devices. The message was not send"));
         }
     }
 
