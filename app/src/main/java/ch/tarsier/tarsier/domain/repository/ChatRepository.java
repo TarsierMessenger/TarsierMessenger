@@ -153,7 +153,15 @@ public class ChatRepository extends AbstractRepository<Chat> {
         }
     }
 
-    public Chat getChatWithPeer(Peer peer) throws InvalidModelException, NoSuchModelException {
+    public Chat findPrivateChatForPeer(Peer peer) throws InvalidModelException, NoSuchModelException {
+        return findChatForPeer(peer, true);
+    }
+
+    public Chat findPublicChatForPeer(Peer peer) throws InvalidModelException, NoSuchModelException {
+        return findChatForPeer(peer, false);
+    }
+
+    private Chat findChatForPeer(Peer peer, boolean isPrivate) throws InvalidModelException, NoSuchModelException {
         if (peer == null) {
             throw new InvalidModelException("Peer is null.");
         }
@@ -162,7 +170,9 @@ public class ChatRepository extends AbstractRepository<Chat> {
             throw new InvalidModelException("Peer ID is invalid.");
         }
 
-        String whereClause = Columns.Chat.COLUMN_NAME_HOST_ID + " = " + peer.getId();
+        String whereClause = Columns.Chat.COLUMN_NAME_HOST_ID + " = " + peer.getId()
+                           + " AND "
+                           + Columns.Chat.COLUMN_NAME_IS_PRIVATE + " = " + ((isPrivate) ? "1" : "0");
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,

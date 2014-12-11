@@ -218,7 +218,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
 
         Chat chatFromDb = null;
         try {
-            chatFromDb = mChatRepository.getChatWithPeer(mDummyPeer);
+            chatFromDb = mChatRepository.findPrivateChatForPeer(mDummyPeer);
         } catch (InvalidModelException e) {
             fail("IllegalArgumentException should ne be thrown: " + e.getMessage());
         } catch (NoSuchModelException e) {
