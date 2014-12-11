@@ -67,8 +67,12 @@ public class EventHandler {
 
         } catch (NoSuchModelException | InvalidModelException e) {
             Log.d(TAG, "Could not find chat for given peer.");
+            e.printStackTrace();
         } catch (InsertException e) {
             Log.d(TAG, "Could not find insert received message into chatroom.");
+            e.printStackTrace();
+        }
+    }
 
     @Subscribe
     public void onSendMessageEvent(SendMessageEvent event) {
@@ -87,6 +91,7 @@ public class EventHandler {
         try {
             mPeerRepository.insertAll(event.getPeers());
         } catch (InvalidModelException | InsertException e) {
+            Log.d(TAG, "Could not insert new peers in the database.");
             e.printStackTrace();
         }
     }
