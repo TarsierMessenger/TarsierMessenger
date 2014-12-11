@@ -1,5 +1,8 @@
 package ch.tarsier.tarsier.ui.activity;
 
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,6 +20,7 @@ import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
+import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.R;
@@ -32,10 +36,14 @@ public class ChatListActivity extends Activity implements EndlessListener {
     private ChatListView mChatListView;
     private ChatListAdapter mChatListAdapter;
 
+    private Bus mEventBus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
+
+        mEventBus = Tarsier.app().getEventBus();
 
         mChatListView = (ChatListView) findViewById(R.id.chat_list);
         mChatListAdapter = new ChatListAdapter(this, R.layout.row_chat_list);
@@ -43,7 +51,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
         mChatListView.setLoadingView(R.layout.loading_layout);
         mChatListView.setChatListAdapter(mChatListAdapter);
 
-        this.loadData();
+        loadData();
 
         mChatListView.setChatListAdapter(mChatListAdapter);
 
@@ -60,6 +68,18 @@ public class ChatListActivity extends Activity implements EndlessListener {
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setDisplayShowHomeEnabled(false);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mEventBus.register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        mEventBus.unregister(this);
+        super.onPause();
     }
 
     private void displayChatActivity(Chat chat) {
@@ -104,6 +124,11 @@ public class ChatListActivity extends Activity implements EndlessListener {
         startActivity(openProfileIntent);
     }
 
+    @Subscribe
+    public void onReceivedMessageEvent(ReceivedMessageEvent event) {
+        loadData();
+    }
+
     /**
      * ChatLoader is the class that loads the list of chats
      */
@@ -135,6 +160,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
             super.onPostExecute(chatList);
 
             if (chatList != null) {
+                mChatListAdapter.clear();
                 mChatListView.addNewData(chatList);
             }
         }
