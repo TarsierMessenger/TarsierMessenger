@@ -39,7 +39,11 @@ abstract class AbstractRepository<T> {
         }
 
         while (!c.isAfterLast()) {
-            result.add(buildFromCursor(c));
+            T elem = buildFromCursor(c);
+
+            if (elem != null) {
+                result.add(buildFromCursor(c));
+            }
 
             c.moveToNext();
         }
