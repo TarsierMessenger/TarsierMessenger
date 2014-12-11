@@ -23,6 +23,7 @@ import ch.tarsier.tarsier.event.RequestChatroomPeersListEvent;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
+import ch.tarsier.tarsier.exception.UpdateException;
 import ch.tarsier.tarsier.ui.adapter.ChatroomPeersAdapter;
 import ch.tarsier.tarsier.ui.view.ChatroomPeersListView;
 
@@ -120,12 +121,13 @@ public class ChatroomPeersActivity extends Activity {
 
         try {
             Chat newPrivateChat = chatRepository.findPrivateChatForPeer(peer);
-            chatRepository.insert(newPrivateChat);
+            newPrivateChat.setPrivate(true);
+            chatRepository.update(newPrivateChat);
 
             Intent newPrivateChatIntent = new Intent(this, ChatActivity.class);
             newPrivateChatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, newPrivateChat);
             startActivity(newPrivateChatIntent);
-        } catch (NoSuchModelException | InvalidModelException | InsertException e) {
+        } catch (NoSuchModelException | InvalidModelException | UpdateException e) {
             e.printStackTrace();
         }
     }

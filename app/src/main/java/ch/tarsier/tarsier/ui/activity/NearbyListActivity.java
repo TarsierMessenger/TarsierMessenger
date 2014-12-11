@@ -16,12 +16,10 @@ import com.squareup.otto.Subscribe;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
-import ch.tarsier.tarsier.domain.model.DummyPeer;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.event.ConnectedEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
-import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
@@ -176,6 +174,7 @@ public class NearbyListActivity extends Activity {
             chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, chat);
             startActivity(chatIntent);
         } catch (NoSuchModelException | InvalidModelException e) {
+            Log.d(TAG, "Cannot find public chat.");
             e.printStackTrace();
         }
     }

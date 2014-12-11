@@ -11,7 +11,6 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Chat;
-import ch.tarsier.tarsier.domain.model.DummyPeer;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
@@ -170,11 +169,12 @@ public class ChatRepository extends AbstractRepository<Chat> {
         );
 
         if (!cursor.moveToFirst()) {
+            Log.d(TAG, "Cannot find public chat, creating a new one.");
             cursor.close();
 
             Chat chat = new Chat();
             chat.setPrivate(false);
-            chat.setHost(new DummyPeer());
+            chat.setHost(Tarsier.app().getUserRepository().getUser());
 
             try {
                 insert(chat);
@@ -261,18 +261,15 @@ public class ChatRepository extends AbstractRepository<Chat> {
             boolean isPrivate = c.getInt(c.getColumnIndexOrThrow(
                     Columns.Chat.COLUMN_NAME_IS_PRIVATE)) != 0;
 
-            // if the hostId is invalid, we discard the chat
-            if (hostId < 0) {
-                return null;
-            }
-
-            Peer host = mPeerRepository.findById(hostId);
-
             Chat chat = new Chat();
             chat.setId(id);
             chat.setTitle(title);
-            chat.setHost(host);
-            chat.setPrivate(isPrivate);
+            chat.setPrivate(isPrivate);;
+
+            if (hostId > 0) {
+                Peer host = mPeerRepository.findById(hostId);
+                chat.setHost(host);
+            }
 
             return chat;
 

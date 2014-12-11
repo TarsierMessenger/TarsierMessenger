@@ -147,8 +147,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
         ConnectionHandler connection = mConnectionMap.get(new String(publicKey));
         if (connection != null) {
 
-            Log.d(TAG,
-                    "A private message is sent to " + peerWithPublicKey(publicKey).getUserName());
+            // Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey).getUserName());
             connection.write(message);
         } else {
             Log.e(TAG, "Sadly there is no peer for that public key");

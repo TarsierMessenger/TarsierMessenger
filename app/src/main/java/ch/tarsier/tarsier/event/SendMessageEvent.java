@@ -10,11 +10,9 @@ import ch.tarsier.tarsier.domain.model.Peer;
 public class SendMessageEvent {
 
     private final Chat mChat;
-    private final Peer mPeer;
     private final Message mMessage;
 
     public SendMessageEvent(Chat chat, Message message) {
-        mPeer = null;
         mChat = chat;
         mMessage = message;
     }
@@ -27,15 +25,11 @@ public class SendMessageEvent {
         return mChat;
     }
 
-    public Peer getPeer() {
-        return mPeer;
-    }
-
     public boolean isPublic() {
-        return mChat != null;
+        return !isPrivate();
     }
 
     public boolean isPrivate() {
-        return mPeer != null;
+        return mChat.isPrivate();
     }
 }

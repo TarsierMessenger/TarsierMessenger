@@ -222,6 +222,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     private void resetNetworkStackAndInitiatePeerDiscovery() {
         Log.d(NETWORK_LAYER_TAG, "Resetting network stack");
+        mConnection = null;
         mManager.cancelConnect(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
@@ -362,7 +363,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             } else if (event.isPrivate()) {
                 Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a private message.");
                 try {
-                    sendMessage(event.getPeer(), message.getText());
+                    sendMessage(event.getChat().getHost(), message.getText());
                 } catch (PeerCipherException e) {
                     Log.e(NETWORK_LAYER_TAG, "Cannot send message, encountered issue encrypting");
                 }
