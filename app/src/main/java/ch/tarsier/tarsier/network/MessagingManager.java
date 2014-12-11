@@ -19,6 +19,7 @@ import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ConnectToDeviceEvent;
 import ch.tarsier.tarsier.event.ConnectedEvent;
 import ch.tarsier.tarsier.event.CreateGroupEvent;
+import ch.tarsier.tarsier.event.ErrorConnectionEvent;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
@@ -324,18 +326,23 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     @Subscribe
     public void onSendMessageEvent(SendMessageEvent event) {
-        if (event.isPublic()) {
-            Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a public message.");
-            broadcastMessage(event.getMessage());
-        } else if (event.isPrivate()) {
-            Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a private message.");
-            try {
-                sendMessage(event.getPeer(), event.getMessage());
-            } catch (PeerCipherException e) {
-                Log.e(NETWORK_LAYER_TAG, "Cannot send message, encountered issue encrypting");
+        if (mConnection != null) {
+            if (event.isPublic()) {
+                Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a public message.");
+                broadcastMessage(event.getMessage());
+            } else if (event.isPrivate()) {
+                Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a private message.");
+                try {
+                    sendMessage(event.getPeer(), event.getMessage());
+                } catch (PeerCipherException e) {
+                    Log.e(NETWORK_LAYER_TAG, "Cannot send message, encountered issue encrypting");
+                }
+            } else {
+                Log.d(NETWORK_LAYER_TAG, "Cannot send message that is neither private nor public.");
             }
         } else {
-            Log.d(NETWORK_LAYER_TAG, "Cannot send message that is neither private nor public.");
+            Log.d(NETWORK_LAYER_TAG,"mConnection is null. Cannot send message to nobody");
+            mEventBus.post(new ErrorConnectionEvent("Error : There is no connected devices. The message was not send"));
         }
     }
 

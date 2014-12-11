@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.event.ErrorConnectionEvent;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.event.SendMessageEvent;
 import ch.tarsier.tarsier.exception.InsertException;
@@ -207,6 +208,11 @@ public class ChatActivity extends Activity implements EndlessListener {
     protected void onPause() {
         getEventBus().unregister(this);
         super.onPause();
+    }
+
+    @Subscribe
+    public void onReceiveConnectionError(ErrorConnectionEvent event) {
+        Toast.makeText(this,event.getErrorMessage(),Toast.LENGTH_LONG).show();
     }
 
     /**
