@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -91,13 +92,18 @@ public class ServerConnection implements Runnable, ConnectionInterface {
     @Override
     public void broadcastMessage(byte[] message) {
         byte[] wireMessage = TarsierMessageFactory.wirePublicProto(message);
-        broadcastMessage(mLocalUser.getPublicKey().getBytes(), wireMessage);
+        broadcastMessage(mLocalUser.getPublicKey(), wireMessage);
     }
 
     //This sends all public messages.
-    public void broadcastMessage(byte[] publicKey, byte[] wireMessage) {
+    public void broadcastMessage(PublicKey publicKey, byte[] wireMessage) {
+        Log.d(TAG,"PeerList " + getPeersList());
         for (Peer peer : getPeersList()) {
-            if (!(new String(peer.getPublicKey().toByteArray()).equals(new String(publicKey)))) {
+            Log.d(TAG,"publicKey : " + publicKey);
+            Log.d(TAG,"peer publicKey : " + peer.getPublicKey());
+            Log.d(TAG,"peer publicKey == publicKey : " + (peer.getPublicKey().equals(publicKey)));
+            if (!peer.getPublicKey().equals(publicKey) && !peer.getPublicKey().equals(mLocalUser.getPublicKey())) {
+                Log.d(TAG,"sending message to : " + peer.getUserName());
                 ConnectionHandler connection = mConnectionMap.get(new String(peer.getPublicKey().toByteArray()));
                 connection.write(wireMessage);
             }
@@ -301,7 +307,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                                     .parseFrom(serializedProtoBuffer);
 
                             mServerConnection.broadcastMessage(
-                                    publicMessage.getSenderPublicKey().toByteArray(),
+                                    new PublicKey(publicMessage.getSenderPublicKey().toByteArray()),
                                     typeAndMessage);
 
                             mHandler.obtainMessage(MessageType.messageTypeFromData(buffer),
