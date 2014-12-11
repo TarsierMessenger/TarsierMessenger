@@ -18,7 +18,6 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
-import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.RequestChatroomPeersListEvent;
 import ch.tarsier.tarsier.exception.InsertException;
@@ -42,16 +41,21 @@ public class ChatroomPeersActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatroom_peers);
+
         mChat = (Chat) getIntent().getExtras().getSerializable(EXTRA_CHAT_KEY);
         if (mChat == null) {
             Log.d(TAG, "EXTRA_CHAT_KEY intent does not exist.");
             this.finish();
         }
+
         mEventBus = Tarsier.app().getEventBus();
+
         mChatroomPeersListView = (ChatroomPeersListView) findViewById(R.id.peers_list);
         mChatroomPeersAdapter = new ChatroomPeersAdapter(this, R.layout.row_chatroom_peers_list);
+
         mChatroomPeersListView.setLoadingView(R.layout.loading_layout);
         mChatroomPeersListView.setChatroomPeersAdapter(mChatroomPeersAdapter);
+
         mChatroomPeersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -59,6 +63,7 @@ public class ChatroomPeersActivity extends Activity {
                 createPrivateChat(peer);
             }
         });
+
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -111,6 +116,7 @@ public class ChatroomPeersActivity extends Activity {
     private void createPrivateChat(Peer peer) {
         Log.d(TAG, "Create private Chat");
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
+
         Chat newPrivateChat = new Chat();
         newPrivateChat.setPrivate(true);
         newPrivateChat.setHost(peer);

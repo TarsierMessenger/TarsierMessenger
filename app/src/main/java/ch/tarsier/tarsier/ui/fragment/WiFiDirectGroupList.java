@@ -51,7 +51,9 @@ public class WiFiDirectGroupList extends ListFragment {
         ((TextView) v.findViewById(android.R.id.text2)).setText("Connecting");
     }
 
-
+    /**
+     * WiFiDevicesAdapter is the adapter for WifiP2pDevice
+     */
     public class WiFiDevicesAdapter extends ArrayAdapter<WifiP2pDevice> {
 
         private List<WifiP2pDevice> mItems;

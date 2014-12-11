@@ -11,7 +11,6 @@ import ch.tarsier.tarsier.crypto.EC25519;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
-import ch.tarsier.tarsier.domain.model.User;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
@@ -34,9 +33,9 @@ public class FillDatabaseWithFictionalData {
         PeerRepository peerRepository = Tarsier.app().getPeerRepository();
         MessageRepository messageRepository = Tarsier.app().getMessageRepository();
 
-        List<Chat> chatList = null;
-        List<Message> messageList = null;
-        List<Peer> peerList = null;
+        List<Chat> chatList;
+        List<Message> messageList;
+        List<Peer> peerList;
 
         try {
             chatList = chatRepository.findAll();
@@ -57,9 +56,7 @@ public class FillDatabaseWithFictionalData {
             for (Peer p : peerList) {
                 peerRepository.delete(p);
             }
-        } catch (InvalidModelException e) {
-            e.printStackTrace();
-        } catch (DeleteException e) {
+        } catch (InvalidModelException | DeleteException e) {
             e.printStackTrace();
         }
     }
@@ -85,7 +82,7 @@ public class FillDatabaseWithFictionalData {
         Random random = new Random();
 
         //Generate the user
-        User gabriel = new User();
+        Peer gabriel = new Peer();
         gabriel.setUserName("Gabriel Luthier");
         gabriel.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
         gabriel.setStatusMessage("en forme");
@@ -118,7 +115,7 @@ public class FillDatabaseWithFictionalData {
 
         Peer xavier = new Peer();
         xavier.setUserName("Xavier Willemin");
-        xavier.setPublicKey(new PublicKey(Tarsier.app().getUserPreferences().getKeyPair().getPublicKey()));
+        xavier.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
         xavier.setStatusMessage("salut");
 
         Peer yann = new Peer();
@@ -144,10 +141,7 @@ public class FillDatabaseWithFictionalData {
             peerRepository.insert(romain);
             peerRepository.insert(xavier);
             peerRepository.insert(yann);
-        } catch (InsertException e) {
-            Log.d(TAG, "An error occured while creating users: " + e.toString());
-            e.printStackTrace();
-        } catch (InvalidModelException e) {
+        } catch (InsertException | InvalidModelException e) {
             Log.d(TAG, "An error occured while creating users: " + e.toString());
             e.printStackTrace();
         }
@@ -208,10 +202,7 @@ public class FillDatabaseWithFictionalData {
             chatRepository.insert(chat8);
             chatRepository.insert(chat9);
             chatRepository.insert(chat10);
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating chats: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating chats: " + e.toString());
             e.printStackTrace();
         }
@@ -251,10 +242,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat1) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -286,10 +274,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat2) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -340,10 +325,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat3) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -383,10 +365,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat4) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -417,10 +396,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat5) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -466,10 +442,7 @@ public class FillDatabaseWithFictionalData {
                 Log.d(TAG, "Creating messages for chat 6.");
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -504,10 +477,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat7) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -542,10 +512,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat8) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -576,10 +543,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat9) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -642,10 +606,7 @@ public class FillDatabaseWithFictionalData {
             for (Message m : messagesChat10) {
                 messageRepository.insert(m);
             }
-        } catch (InvalidModelException e) {
-            Log.d(TAG, "An error occurred while creating messages: " + e.toString());
-            e.printStackTrace();
-        } catch (InsertException e) {
+        } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "An error occurred while creating messages: " + e.toString());
             e.printStackTrace();
         }
@@ -657,9 +618,9 @@ public class FillDatabaseWithFictionalData {
         MessageRepository messageRepository = Tarsier.app().getMessageRepository();
 
         try {
-            if (chatRepository.findAll().size() > 0 ||
-                messageRepository.findAll().size() > 0 ||
-                peerRepository.findAll().size() > 0) {
+            if (chatRepository.findAll().size() > 0
+                    || messageRepository.findAll().size() > 0
+                    || peerRepository.findAll().size() > 0) {
                 return true;
             }
         } catch (NoSuchModelException e) {

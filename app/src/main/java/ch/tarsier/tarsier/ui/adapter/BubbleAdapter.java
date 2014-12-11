@@ -2,6 +2,7 @@ package ch.tarsier.tarsier.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
+import ch.tarsier.tarsier.domain.repository.UserRepository;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.view.BubbleListViewItem;
 import ch.tarsier.tarsier.ui.view.DateSeparator;
@@ -32,6 +34,9 @@ import ch.tarsier.tarsier.R;
  * and https://github.com/survivingwithandroid/Surviving-with-android/tree/master/EndlessAdapter
  */
 public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
+
+    private UserRepository mUserRepository;
+
     /**
      * Types of items in the EndlessListView
      */
@@ -49,7 +54,8 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
 
         mContext = context;
         mMessages = messages;
-        mPeers = new HashMap<String, Peer>();
+        mPeers = new HashMap<>();
+        mUserRepository = Tarsier.app().getUserRepository();
     }
 
     public long getLastMessageTimestamp() {
@@ -146,7 +152,9 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
             EndlessListViewType type) throws NoSuchModelException {
         String messageSenderPublicKey = message.getSenderPublicKey().base64Encoded();
         Peer sender;
-        if (mPeers.containsKey(messageSenderPublicKey)) {
+        if (message.isSentByUser()) {
+            sender = mUserRepository.getUser();
+        } else if (mPeers.containsKey(messageSenderPublicKey)) {
             sender = mPeers.get(messageSenderPublicKey);
         } else {
             sender = Tarsier.app().getPeerRepository().findByPublicKey(message.getSenderPublicKey());
@@ -170,7 +178,6 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
                 break;
             case BUBBLE_RIGHT:
                 viewHolder.name.setVisibility(View.GONE);
-                //TODO:Uncommenct after correcting the error
                 viewHolder.bubble.setBackgroundResource(R.drawable.bubble_text_right);
                 pictureLp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 bubbleLp.addRule(RelativeLayout.LEFT_OF, viewHolder.picture.getId());

@@ -57,7 +57,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
         TarsierWireProtos.Peer.Builder peer = TarsierWireProtos.Peer.newBuilder();
         peer.setName(mLocalUser.getUserName());
         peer.setPublicKey(ByteString.copyFrom(mLocalUser.getPublicKey().getBytes()));
-        addPeer(peer.build(),handler);
+        addPeer(peer.build(), handler);
     }
 
     @Override
@@ -119,11 +119,11 @@ public class ServerConnection implements Runnable, ConnectionInterface {
 
         for (Peer peer : getPeersList()) {
             ConnectionHandler connection = mConnectionMap.get(new String(peer.getPublicKey().toByteArray()));
-            if(peer == null){
-                Log.d(TAG,"peer is null");
-            }else if(connection == null){
-                Log.d(TAG,"Connection is null");
-            }else {
+            if (peer == null) {
+                Log.d(TAG, "peer is null");
+            } else if (connection == null) {
+                Log.d(TAG, "Connection is null");
+            } else {
 
                 connection.write(ByteUtils.prependInt(MessageType.MESSAGE_TYPE_PEER_LIST,
                         peerList.build().toByteArray()));
@@ -206,7 +206,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
             } catch (IOException e) {
                 if (peer != null) {
                     mServerConnection.peerDisconnected(peer);
-                    Log.d(TAG,"Peer disconnected because IOException");
+                    Log.d(TAG, "Peer disconnected because IOException");
                     mServerConnection.broadcastUpdatedPeerList();
                 }
 
@@ -215,7 +215,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
             } catch (NullPointerException e) {
                 if (peer != null) {
                     mServerConnection.peerDisconnected(peer);
-                    Log.d(TAG,"Peer disconnected because NullPointerException");
+                    Log.d(TAG, "Peer disconnected because NullPointerException");
                     mServerConnection.broadcastUpdatedPeerList();
                 }
 
@@ -225,98 +225,98 @@ public class ServerConnection implements Runnable, ConnectionInterface {
 
         private void loop() throws IOException {
 
-                try {
-                    InputStream mInputStream = mSocket.getInputStream();
-                    mOutputStream = mSocket.getOutputStream();
-                    byte[] buffer = new byte[CURRENT_MAX_MESSAGE_SIZE];
+            try {
+                InputStream mInputStream = mSocket.getInputStream();
+                mOutputStream = mSocket.getOutputStream();
+                byte[] buffer = new byte[CURRENT_MAX_MESSAGE_SIZE];
 
-                    while (true) {
-                        int bytes = mInputStream.read(buffer);
-                        if (bytes == -1) {
-                            if (peer != null) {
-                                mServerConnection.peerDisconnected(peer);
-                                Log.d(TAG,"Peer disconnected because bytes = -1");
-                                mServerConnection.broadcastUpdatedPeerList();
+                while (true) {
+                    int bytes = mInputStream.read(buffer);
+                    if (bytes == -1) {
+                        if (peer != null) {
+                            mServerConnection.peerDisconnected(peer);
+                            Log.d(TAG, "Peer disconnected because bytes = -1");
+                            mServerConnection.broadcastUpdatedPeerList();
+                        }
+                        break;
+                    }
+
+                    Log.v(TAG, "Read some bytes");
+
+                    if (bytes >= CURRENT_MAX_MESSAGE_SIZE) {
+                        //TODO: Fix message max size
+                        Log.e(TAG, "Tarsier doesn't support those messages yet");
+                        mSocket.close();
+                    }
+
+                    byte[] typeAndMessage = ByteUtils.split(buffer, bytes, 0)[0];
+                    byte[] serializedProtoBuffer =
+                            ByteUtils.split(typeAndMessage, 1, typeAndMessage.length - 1)[1];
+
+                    switch (MessageType.messageTypeFromData(buffer)) {
+
+                        case MessageType.MESSAGE_TYPE_HELLO:
+                            Log.d(TAG, "Received a HELLO message");
+
+                            TarsierWireProtos.HelloMessage helloMessage
+                                    = TarsierWireProtos.HelloMessage.parseFrom(
+                                    serializedProtoBuffer);
+
+                            peer = helloMessage.getPeer();
+                            mServerConnection.addPeer(peer, this);
+                            mServerConnection.broadcastUpdatedPeerList();
+
+                            mHandler.obtainMessage(MessageType.MESSAGE_TYPE_PEER_LIST).sendToTarget();
+                            break;
+
+                        case MessageType.MESSAGE_TYPE_PEER_LIST:
+                            Log.e(TAG, "Server shouldn't be receiving this");
+                            break;
+
+                        case MessageType.MESSAGE_TYPE_PRIVATE:
+                            TarsierWireProtos.TarsierPrivateMessage privateMessage;
+                            privateMessage = TarsierWireProtos.TarsierPrivateMessage
+                                    .parseFrom(serializedProtoBuffer);
+                            if (mServerConnection.isLocalPeer(
+                                    privateMessage.getReceiverPublicKey().toByteArray())) {
+                                mHandler.obtainMessage(
+                                        MessageType.messageTypeFromData(buffer),
+                                        serializedProtoBuffer).sendToTarget();
+                                mHandler.obtainMessage(
+                                        MessageType.messageTypeFromData(buffer),
+                                        serializedProtoBuffer).sendToTarget();
+                            } else {
+                                mServerConnection
+                                        .sendMessage(mServerConnection.peerWithPublicKey(
+                                                        privateMessage
+                                                                .getReceiverPublicKey()
+                                                                .toByteArray()),
+                                                serializedProtoBuffer);
                             }
                             break;
-                        }
 
-                        Log.v(TAG, "Read some bytes");
+                        case MessageType.MESSAGE_TYPE_PUBLIC:
+                            TarsierWireProtos.TarsierPublicMessage publicMessage;
+                            publicMessage = TarsierWireProtos.TarsierPublicMessage
+                                    .parseFrom(serializedProtoBuffer);
 
-                        if (bytes >= CURRENT_MAX_MESSAGE_SIZE) {
-                            //TODO: Fix message max size
-                            Log.e(TAG, "Tarsier doesn't support those messages yet");
-                            mSocket.close();
-                        }
+                            mServerConnection.broadcastMessage(
+                                    publicMessage.getSenderPublicKey().toByteArray(),
+                                    typeAndMessage);
 
-                        byte[] typeAndMessage = ByteUtils.split(buffer, bytes, 0)[0];
-                        byte[] serializedProtoBuffer =
-                                ByteUtils.split(typeAndMessage, 1, typeAndMessage.length - 1)[1];
+                            mHandler.obtainMessage(MessageType.messageTypeFromData(buffer),
+                                    serializedProtoBuffer).sendToTarget();
 
-                        switch (MessageType.messageTypeFromData(buffer)) {
+                            Log.d(TAG, "A public message is received: " + serializedProtoBuffer.toString());
+                            break;
 
-                            case MessageType.MESSAGE_TYPE_HELLO:
-                                Log.d(TAG, "Received a HELLO message");
-
-                                TarsierWireProtos.HelloMessage helloMessage
-                                        = TarsierWireProtos.HelloMessage.parseFrom(
-                                        serializedProtoBuffer);
-
-                                peer = helloMessage.getPeer();
-                                mServerConnection.addPeer(peer, this);
-                                mServerConnection.broadcastUpdatedPeerList();
-
-                                mHandler.obtainMessage(MessageType.MESSAGE_TYPE_PEER_LIST).sendToTarget();
-                                break;
-
-                            case MessageType.MESSAGE_TYPE_PEER_LIST:
-                                Log.e(TAG, "Server shouldn't be receiving this");
-                                break;
-
-                            case MessageType.MESSAGE_TYPE_PRIVATE:
-                                TarsierWireProtos.TarsierPrivateMessage privateMessage;
-                                privateMessage = TarsierWireProtos.TarsierPrivateMessage
-                                        .parseFrom(serializedProtoBuffer);
-                                if (mServerConnection.isLocalPeer(
-                                        privateMessage.getReceiverPublicKey().toByteArray())) {
-                                    mHandler.obtainMessage(
-                                            MessageType.messageTypeFromData(buffer),
-                                            serializedProtoBuffer).sendToTarget();
-                                    mHandler.obtainMessage(
-                                            MessageType.messageTypeFromData(buffer),
-                                            serializedProtoBuffer).sendToTarget();
-                                } else {
-                                    mServerConnection
-                                            .sendMessage(mServerConnection.peerWithPublicKey(
-                                                            privateMessage
-                                                                    .getReceiverPublicKey()
-                                                                    .toByteArray()),
-                                                    serializedProtoBuffer);
-                                }
-                                break;
-
-                            case MessageType.MESSAGE_TYPE_PUBLIC:
-                                TarsierWireProtos.TarsierPublicMessage publicMessage;
-                                publicMessage = TarsierWireProtos.TarsierPublicMessage
-                                        .parseFrom(serializedProtoBuffer);
-
-                                mServerConnection.broadcastMessage(
-                                        publicMessage.getSenderPublicKey().toByteArray(),
-                                        typeAndMessage);
-
-                                mHandler.obtainMessage(MessageType.messageTypeFromData(buffer),
-                                        serializedProtoBuffer).sendToTarget();
-
-                                Log.d(TAG, "A public message is received: " + serializedProtoBuffer.toString());
-                                break;
-
-                            default:
-                                Log.d(TAG, "Unknown message type");
-                        }
+                        default:
+                            Log.d(TAG, "Unknown message type");
                     }
-                } catch (InvalidProtocolBufferException e) {
-                    Log.e(TAG, "Got unparsable protocol buffer " + e.getLocalizedMessage());
                 }
+            } catch (InvalidProtocolBufferException e) {
+                Log.e(TAG, "Got unparsable protocol buffer " + e.getLocalizedMessage());
+            }
         }
 
         protected synchronized void write(byte[] buffer) {

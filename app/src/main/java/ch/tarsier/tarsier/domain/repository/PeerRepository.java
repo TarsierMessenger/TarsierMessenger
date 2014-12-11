@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -128,7 +127,7 @@ public class PeerRepository extends AbstractRepository<Peer> {
     }
 
     public void insertAll(List<Peer> peers) throws InvalidModelException, InsertException {
-        for(Peer peer : peers){
+        for (Peer peer : peers) {
             insert(peer);
         }
     }

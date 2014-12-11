@@ -18,6 +18,10 @@ public class Message implements BubbleListViewItem {
     // mId is set to a value >= 0 when the Message is inserted into the database
     private long mId;
 
+    public Message() {
+        mId = -1;
+    }
+
     /**
      * Create a message sent by a peer
      *
@@ -31,12 +35,12 @@ public class Message implements BubbleListViewItem {
     }
 
     public Message(long chatId, String text, PublicKey senderPublicKey, long dateTime) {
+        this();
         mChatId = chatId;
         mText = text;
         mSenderPublicKey = senderPublicKey;
         mIsSentByUser = false;
         mDateTime = dateTime;
-        mId = -1;
     }
 
     /**
@@ -47,12 +51,12 @@ public class Message implements BubbleListViewItem {
      * @param dateTime the timestamp at which the message has been sent
      */
     public Message(long chatId, String text, long dateTime) {
+        this();
         mChatId = chatId;
         mText = text;
         mSenderPublicKey = new PublicKey(Tarsier.app().getUserPreferences().getKeyPair().getPublicKey());
         mIsSentByUser = true;
         mDateTime = dateTime;
-        mId = -1;
     }
 
     public String getText() {

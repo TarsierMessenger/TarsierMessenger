@@ -16,6 +16,7 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Message;
+import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
@@ -69,7 +70,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
 
             holder = new ChatHolder();
 
-            holder.mAvatarSrc = (ImageView) row.findViewById(R.id.avatar);
+            holder.mAvatar = (ImageView) row.findViewById(R.id.avatar);
             holder.mTitle = (TextView) row.findViewById(R.id.name);
             holder.mLastMessage = (TextView) row.findViewById(R.id.lastMessage);
             holder.mHumanTime = (TextView) row.findViewById(R.id.humanTime);
@@ -85,26 +86,38 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
         Message lastMessage = null;
         try {
             lastMessage = messageRepository.getLastMessageOf(chat);
-        } catch (NoSuchModelException e) {
-            e.printStackTrace();
-        } catch (InvalidModelException e) {
+        } catch (NoSuchModelException | InvalidModelException e) {
             e.printStackTrace();
         }
 
         if (chat != null) {
-            if (chat.getAvatarRessourceId() == -1) {
-                if (chat.isPrivate()) {
-                    chat.setAvatarRessourceId(R.drawable.tarsier_placeholder);
-                } else {
-                    chat.setAvatarRessourceId(R.drawable.tarsier_group_placeholder);
-                }
-            }
-
-            holder.mAvatarSrc.setImageResource(chat.getAvatarRessourceId());
+            holder.mAvatar.setImageBitmap(chat.getPicture());
             holder.mTitle.setText(chat.getTitle());
 
             if (lastMessage != null) {
-                holder.mLastMessage.setText(INTRO_TEXT + lastMessage.getText());
+
+                Peer sender = null;
+
+                if (!chat.isPrivate()) {
+                    if (lastMessage.isSentByUser()) {
+                        sender = Tarsier.app().getUserRepository().getUser();
+                    } else {
+                        try {
+                            sender = Tarsier.app().getPeerRepository()
+                                    .findByPublicKey(lastMessage.getSenderPublicKey());
+                        } catch (NoSuchModelException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                if (sender == null) {
+                    // if chat.isPrivate or if findByPublicKey threw an error
+                    holder.mLastMessage.setText(INTRO_TEXT + lastMessage.getText());
+                } else {
+                    holder.mLastMessage.setText(INTRO_TEXT + sender.getUserName() + ": " + lastMessage.getText());
+                }
+
                 holder.mHumanTime.setText(DateUtil.computeDateSeparator(lastMessage.getDateTime()));
             }
         }
@@ -123,7 +136,7 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
      * ChatHolder is the class containing the chat's information
      */
     private class ChatHolder {
-        private ImageView mAvatarSrc;
+        private ImageView mAvatar;
         private TextView mTitle;
         private TextView mLastMessage;
         private TextView mHumanTime;
