@@ -24,6 +24,7 @@ import ch.tarsier.tarsier.event.ConnectedEvent;
 import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.validation.ChatroomNameValidator;
 
 /**
@@ -88,22 +89,14 @@ public class NewChatroomActivity extends Activity {
         }
 
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
-        UserRepository userRepository = Tarsier.app().getUserRepository();
-
-        mNewChatroom = new Chat();
-        mNewChatroom.setPrivate(false);
-        mNewChatroom.setTitle(mChatroomName.getText().toString());
-        mNewChatroom.setHost(userRepository.getUser());
 
         try {
-            chatRepository.insert(mNewChatroom);
-        } catch (InvalidModelException | InsertException e) {
-            e.printStackTrace();
+            mNewChatroom = chatRepository.findPublicChat();
+            Toast.makeText(this, "Waiting for connection...", Toast.LENGTH_SHORT).show();
+            mEventBus.post(new CreateGroupEvent(mNewChatroom));
+        } catch (NoSuchModelException | InvalidModelException e) {
+            Log.d(TAG, "Couldn't find a public chat.");
         }
-
-        Toast.makeText(this, "Chatroom name saved, waiting for connection...", Toast.LENGTH_SHORT).show();
-
-        mEventBus.post(new CreateGroupEvent(mNewChatroom));
     }
 
     private boolean validateChatroomName() {

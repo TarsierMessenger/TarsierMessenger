@@ -2,4 +2,5 @@
 <resources>
     <string name="txt_hint">Type Message</string>
     <string name="btn_send">Send Message</string>
+    <string name="chatroom_default_title">Lobby</string>
 </resources>
