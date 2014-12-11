@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.event.DisplayMessageEvent;
 import ch.tarsier.tarsier.event.ErrorConnectionEvent;
-import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.event.SendMessageEvent;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
@@ -185,16 +185,10 @@ public class ChatActivity extends Activity implements EndlessListener {
     }
 
     @Subscribe
-    public void onReceivedMessageEvent(ReceivedMessageEvent event) {
-        Log.d(TAG, "Got ReceivedMessageEvent.");
+    public void onDisplayMessageEvent(DisplayMessageEvent event) {
+        Log.d(TAG, "Got DisplayMessageEvent.");
 
-        Message sentMessage = new Message(
-                mChat.getId(),
-                event.getMessage(),
-                event.getSender().getPublicKey(),
-                DateUtil.getNowTimestamp());
-
-        mListView.addNewMessage(sentMessage);
+        mListView.addNewMessage(event.getMessage());
 
         // Scroll down to the just received message if we are not scrolling through old messages
         if (mListView.getLastVisiblePosition() == mListViewAdapter.getCount() -1 &&
