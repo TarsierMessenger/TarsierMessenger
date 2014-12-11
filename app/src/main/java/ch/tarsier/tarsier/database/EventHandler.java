@@ -53,7 +53,13 @@ public class EventHandler {
         Log.d(TAG, "Got ReceivedMessageEvent");
 
         try {
-            Chat chat = mChatRepository.findChatForPeer(event.getSender(), event.isPrivate());
+            Chat chat;
+
+            if (event.isPrivate()) {
+                chat = mChatRepository.findPrivateChatForPeer(event.getSender());
+            } else {
+                chat = mChatRepository.findPublicChat();
+            }
 
             Message message = new Message(
                 chat.getId(),

@@ -24,8 +24,6 @@ import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.event.DisplayMessageEvent;
 import ch.tarsier.tarsier.event.ErrorConnectionEvent;
 import ch.tarsier.tarsier.event.SendMessageEvent;
-import ch.tarsier.tarsier.exception.InsertException;
-import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 import ch.tarsier.tarsier.ui.view.BubbleListViewItem;
@@ -179,6 +177,9 @@ public class ChatActivity extends Activity implements EndlessListener {
 
     @Subscribe
     public void onDisplayMessageEvent(DisplayMessageEvent event) {
+        Log.d(TAG, "Got DisplayMessageEvent.");
+        Log.d(TAG, "Message id: " + event.getMessage().getChatId() + " | Chat id: " + mChat.getId());
+
         if (event.getMessage().getChatId() != mChat.getId()) {
             return;
         }

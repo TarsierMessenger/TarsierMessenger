@@ -11,6 +11,7 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.domain.model.DummyPeer;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.exception.DeleteException;
 import ch.tarsier.tarsier.exception.InsertException;
@@ -157,8 +158,40 @@ public class ChatRepository extends AbstractRepository<Chat> {
         return findChatForPeer(peer, true);
     }
 
-    public Chat findPublicChatForPeer(Peer peer) throws InvalidModelException, NoSuchModelException {
-        return findChatForPeer(peer, false);
+    public Chat findPublicChat() throws InvalidModelException, NoSuchModelException {
+        String whereClause = Columns.Chat.COLUMN_NAME_IS_PRIVATE + " = 0";
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null,
+                whereClause,
+                null, null, null, null,
+                "1"
+        );
+
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+
+            Chat chat = new Chat();
+            chat.setPrivate(false);
+            chat.setHost(new DummyPeer());
+
+            try {
+                insert(chat);
+            } catch (InsertException e) {
+                throw new NoSuchModelException(e);
+            }
+
+            return chat;
+        }
+
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
+        }
     }
 
     public Chat findChatForPeer(Peer peer, boolean isPrivate) throws InvalidModelException, NoSuchModelException {
@@ -243,9 +276,7 @@ public class ChatRepository extends AbstractRepository<Chat> {
 
             return chat;
 
-        } catch (CursorIndexOutOfBoundsException e) {
-            throw new InvalidCursorException(e);
-        } catch (NoSuchModelException e) {
+        } catch (CursorIndexOutOfBoundsException | NoSuchModelException e) {
             throw new InvalidCursorException(e);
         }
     }
