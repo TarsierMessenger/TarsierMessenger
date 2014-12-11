@@ -60,7 +60,7 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
 
     public long getLastMessageTimestamp() {
         if (mMessages.size() > 0) {
-            return mMessages.get(0).getDateTime();
+            return mMessages.get(getCount() - 1).getDateTime();
         } else {
             return DateUtil.getNowTimestamp();
         }
@@ -83,7 +83,7 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).getId();
+        return getItem(getCount() - 1 - position).getId();
     }
 
     @Override

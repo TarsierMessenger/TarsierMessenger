@@ -58,7 +58,7 @@ public class Tarsier extends Application {
         mEventHandler = new EventHandler();
         mEventHandler.register();
 
-        // new FillDatabase().execute();
+        // new FillDatabase().execute();
     }
 
     public void initNetwork() {
