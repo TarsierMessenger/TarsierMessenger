@@ -161,7 +161,7 @@ public class ChatRepository extends AbstractRepository<Chat> {
         return findChatForPeer(peer, false);
     }
 
-    private Chat findChatForPeer(Peer peer, boolean isPrivate) throws InvalidModelException, NoSuchModelException {
+    public Chat findChatForPeer(Peer peer, boolean isPrivate) throws InvalidModelException, NoSuchModelException {
         if (peer == null) {
             throw new InvalidModelException("Peer is null.");
         }
