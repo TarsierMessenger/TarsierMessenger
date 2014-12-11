@@ -95,16 +95,26 @@ public class ChatListAdapter extends ArrayAdapter<Chat> {
             holder.mTitle.setText(chat.getTitle());
 
             if (lastMessage != null) {
-                if (chat.isPrivate()) {
+
+                Peer sender = null;
+
+                if (!chat.isPrivate()) {
+                    if (lastMessage.isSentByUser()) {
+                        sender = Tarsier.app().getUserRepository().getUser();
+                    } else {
+                        try {
+                            sender = Tarsier.app().getPeerRepository()
+                                    .findByPublicKey(lastMessage.getSenderPublicKey());
+                        } catch (NoSuchModelException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                if (sender == null) {
+                    // if chat.isPrivate or if findByPublicKey threw an error
                     holder.mLastMessage.setText(INTRO_TEXT + lastMessage.getText());
                 } else {
-                    Peer sender = null;
-                    try {
-                        sender = Tarsier.app().getPeerRepository()
-                                .findByPublicKey(lastMessage.getSenderPublicKey());
-                    } catch (NoSuchModelException e) {
-                        e.printStackTrace();
-                    }
                     holder.mLastMessage.setText(INTRO_TEXT + sender.getUserName() + ": " + lastMessage.getText());
                 }
 

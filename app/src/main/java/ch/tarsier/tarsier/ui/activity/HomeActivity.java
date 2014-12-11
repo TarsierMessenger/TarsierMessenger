@@ -139,13 +139,6 @@ public class HomeActivity extends Activity {
     private void saveProfileInfos() {
         mUserPreferences.setUsername(mUsername.getText().toString());
         mUserPreferences.setStatusMessage(mStatusMessage.getText().toString());
-
-        User user = Tarsier.app().getUserRepository().getUser();
-        try {
-            Tarsier.app().getPeerRepository().insert(user);
-        } catch (InvalidModelException | InsertException e) {
-            e.printStackTrace();
-        }
     }
 
 }

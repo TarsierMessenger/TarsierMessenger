@@ -154,8 +154,7 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
         Peer sender;
         if (message.isSentByUser()) {
             sender = mUserRepository.getUser();
-        }
-        else if (mPeers.containsKey(messageSenderPublicKey)) {
+        } else if (mPeers.containsKey(messageSenderPublicKey)) {
             sender = mPeers.get(messageSenderPublicKey);
         } else {
             sender = Tarsier.app().getPeerRepository().findByPublicKey(message.getSenderPublicKey());
