@@ -179,6 +179,10 @@ public class ChatActivity extends Activity implements EndlessListener {
 
     @Subscribe
     public void onDisplayMessageEvent(DisplayMessageEvent event) {
+        if (event.getMessage().getChatId() != mChat.getId()) {
+            return;
+        }
+
         Log.d(TAG, "Got DisplayMessageEvent.");
 
         mListView.addNewMessage(event.getMessage());
