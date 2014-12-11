@@ -196,6 +196,12 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         mListView.addNewMessage(sentMessage);
 
+        //Scroll down to the just received message if we are not scrolling through old messages
+        if (mListView.getLastVisiblePosition() == mListViewAdapter.getCount() -1 &&
+                mListView.getChildAt(mListView.getChildCount() - 1).getBottom() <= mListView.getHeight()) {
+            mListView.setSelection(mListViewAdapter.getCount() - 1);
+        }
+
         //Add the message to the database
         try {
             Tarsier.app().getMessageRepository().insert(sentMessage);
