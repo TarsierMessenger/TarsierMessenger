@@ -3,6 +3,7 @@ package ch.tarsier.tarsier.domain.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
+import android.util.Log;
 
 import java.util.List;
 
@@ -126,11 +127,22 @@ public class PeerRepository extends AbstractRepository<Peer> {
         peer.setId(rowId);
     }
 
-    public void insertAll(List<Peer> peers) throws InvalidModelException, InsertException {
-        for (Peer peer : peers) {
+    public void insertIfNotExists(Peer peer) throws InvalidModelException, InsertException {
+        if (peer == null) {
+            throw new InvalidModelException("Peer is null.");
+        }
+
+        try {
+            Peer existingPeer = findByPublicKey(peer.getPublicKey());
+            peer.setId(existingPeer.getId());
+            update(peer);
+        } catch (NoSuchModelException e) {
             insert(peer);
+        } catch (UpdateException e) {
+            e.printStackTrace();
         }
     }
+
     public void update(Peer peer) throws InvalidModelException, UpdateException {
         validate(peer);
 
