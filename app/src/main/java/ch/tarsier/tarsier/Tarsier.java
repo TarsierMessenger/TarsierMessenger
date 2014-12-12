@@ -18,6 +18,7 @@ import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.domain.repository.UserRepository;
 import ch.tarsier.tarsier.event.MainThreadBus;
 import ch.tarsier.tarsier.network.MessagingManager;
+import ch.tarsier.tarsier.notifications.Notifications;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 
 /**
@@ -37,6 +38,8 @@ public class Tarsier extends Application {
     private MessageRepository mMessageRepository;
     private UserRepository mUserRepository;
 
+    private Notifications mNotifications;
+
     private Bus mEventBus;
 
     public static Tarsier app() {
@@ -51,6 +54,12 @@ public class Tarsier extends Application {
 
         initDatabase();
         initNetwork();
+        initNotifications();
+    }
+
+    private void initNotifications() {
+        mNotifications = new Notifications(mEventBus, getApplicationContext());
+        mNotifications.register();
     }
 
     private void initDatabase() {
