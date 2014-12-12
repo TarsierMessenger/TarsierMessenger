@@ -8,6 +8,7 @@ import android.util.Log;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
+import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
@@ -95,7 +96,9 @@ public class EventHandler {
         Log.d(TAG, "Got ReceivedChatroomPeersListEvent");
 
         try {
-            mPeerRepository.insertAll(event.getPeers());
+            for (Peer peer : event.getPeers()) {
+                mPeerRepository.insertIfNotExistsWithPublicKey(peer);
+            }
         } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "Could not insert new peers in the database.");
             e.printStackTrace();
