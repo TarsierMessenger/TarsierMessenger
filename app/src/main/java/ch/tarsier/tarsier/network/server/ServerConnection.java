@@ -22,6 +22,7 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.User;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
+import ch.tarsier.tarsier.exception.PeerCipherException;
 import ch.tarsier.tarsier.util.ByteUtils;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.messages.MessageType;
@@ -149,9 +150,13 @@ public class ServerConnection implements Runnable, ConnectionInterface {
     protected void sendMessage(byte[] publicKey, byte[] message) {
         ConnectionHandler connection = mConnectionMap.get(new String(publicKey));
         if (connection != null) {
-
-            // Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey).getUserName());
-            connection.write(message);
+            byte[] wireMessage = new byte[0];
+            try {
+                wireMessage = TarsierMessageFactory.wirePrivateProto(publicKey, message);
+            } catch (PeerCipherException e) {
+                Log.e(TAG, "Peer tag exception");
+            }
+            connection.write(wireMessage);
         } else {
             Log.e(TAG, "Sadly there is no peer for that public key");
         }
@@ -290,15 +295,9 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                                 mHandler.obtainMessage(
                                         MessageType.messageTypeFromData(buffer),
                                         serializedProtoBuffer).sendToTarget();
-                                mHandler.obtainMessage(
-                                        MessageType.messageTypeFromData(buffer),
-                                        serializedProtoBuffer).sendToTarget();
                             } else {
                                 mServerConnection
-                                        .sendMessage(mServerConnection.peerWithPublicKey(
-                                                        privateMessage
-                                                                .getReceiverPublicKey()
-                                                                .toByteArray()),
+                                        .sendMessage(privateMessage.getReceiverPublicKey().toByteArray(),
                                                 serializedProtoBuffer);
                             }
                             break;
