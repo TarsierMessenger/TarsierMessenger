@@ -70,7 +70,7 @@ public class EventHandler {
             );
 
             mMessageRepository.insert(message);
-            mEventBus.post(new DisplayMessageEvent(message));
+            mEventBus.post(new DisplayMessageEvent(message, event.getSender(), chat));
 
         } catch (NoSuchModelException | InvalidModelException e) {
             Log.d(TAG, "Could not find chat for given peer.");

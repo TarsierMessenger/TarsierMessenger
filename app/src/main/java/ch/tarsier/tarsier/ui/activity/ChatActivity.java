@@ -180,11 +180,18 @@ public class ChatActivity extends Activity implements EndlessListener {
         Log.d(TAG, "Got DisplayMessageEvent.");
         Log.d(TAG, "Message id: " + event.getMessage().getChatId() + " | Chat id: " + mChat.getId());
 
-        if (event.getMessage().getChatId() != mChat.getId()) {
+        Message message = event.getMessage();
+        Chat chat = event.getChat();
+
+        if (message.getChatId() != mChat.getId()) {
+            if (chat.isPrivate()) {
+                String text = event.getSender().getUserName() + " just sent you a private message.";
+                Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+            }
             return;
         }
 
-        mListView.addNewMessage(event.getMessage());
+        mListView.addNewMessage(message);
         mListView.setSelection(mListViewAdapter.getCount() - 1);
     }
 
