@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -16,11 +17,13 @@ import com.squareup.otto.Subscribe;
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.event.ConnectedEvent;
+import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
-import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
 import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
 
@@ -42,10 +45,14 @@ public class NearbyListActivity extends Activity {
     private FragmentManager mFragmentManager;
     private Bus mEventBus;
 
+    private ChatRepository mChatRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_list);
+
+        mChatRepository = Tarsier.app().getChatRepository();
 
         getEventBus().register(this);
 
@@ -79,7 +86,6 @@ public class NearbyListActivity extends Activity {
         NearbyPeerAdapter peerAdapter = mNearbyPeer.getNearbyPeerAdapter();
         if (peerAdapter != null) {
             peerAdapter.setPeerList(event.getPeers());
-        } else {
         }
         FragmentTransaction ft = mFragmentManager.beginTransaction();
         ft.detach(mNearbyPeer);
@@ -138,8 +144,15 @@ public class NearbyListActivity extends Activity {
     }
 
     private void displayNewChatroomActivity() {
-        Intent newChat = new Intent(this, NewChatroomActivity.class);
-        startActivity(newChat);
+        ChatRepository chatRepository = Tarsier.app().getChatRepository();
+        Chat mNewChatroom = null;
+        try {
+            mNewChatroom = chatRepository.findPublicChat();
+            Toast.makeText(this, "Waiting for connection...", Toast.LENGTH_SHORT).show();
+            mEventBus.post(new CreateGroupEvent(mNewChatroom));
+        } catch (InvalidModelException | NoSuchModelException e) {
+            Toast.makeText(this, "Failed to connect to new chat room",  Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void displayProfileActivity() {
@@ -162,21 +175,17 @@ public class NearbyListActivity extends Activity {
     @Subscribe
     public void onConnectedEvent(ConnectedEvent event) {
         Log.d(TAG, "Got ConnectedEvent");
+
         Intent chatIntent = new Intent(this, ChatActivity.class);
-        Chat mChat = new Chat();
-        mChat.setPrivate(false);
-        mChat.setTitle("Chat");
-        mChat.setHost(Tarsier.app().getUserRepository().getUser());
 
         try {
-            Tarsier.app().getChatRepository().insert(mChat);
-        } catch (InvalidModelException | InsertException e) {
+            super.onBackPressed();
+            Chat chat = mChatRepository.findPublicChat();
+            chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, chat);
+            startActivity(chatIntent);
+        } catch (NoSuchModelException | InvalidModelException e) {
+            Log.d(TAG, "Cannot find public chat.");
             e.printStackTrace();
         }
-
-        chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, mChat);
-
-
-        startActivity(chatIntent);
     }
 }

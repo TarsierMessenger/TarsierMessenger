@@ -22,6 +22,8 @@ import ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent;
 import ch.tarsier.tarsier.event.RequestChatroomPeersListEvent;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
+import ch.tarsier.tarsier.exception.NoSuchModelException;
+import ch.tarsier.tarsier.exception.UpdateException;
 import ch.tarsier.tarsier.ui.adapter.ChatroomPeersAdapter;
 import ch.tarsier.tarsier.ui.view.ChatroomPeersListView;
 
@@ -117,19 +119,17 @@ public class ChatroomPeersActivity extends Activity {
         Log.d(TAG, "Create private Chat");
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
 
-        Chat newPrivateChat = new Chat();
-        newPrivateChat.setPrivate(true);
-        newPrivateChat.setHost(peer);
-
         try {
-            chatRepository.insert(newPrivateChat);
-        } catch (InvalidModelException | InsertException e) {
+            Chat newPrivateChat = chatRepository.findPrivateChatForPeer(peer);
+            newPrivateChat.setPrivate(true);
+            chatRepository.update(newPrivateChat);
+
+            Intent newPrivateChatIntent = new Intent(this, ChatActivity.class);
+            newPrivateChatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, newPrivateChat);
+            startActivity(newPrivateChatIntent);
+        } catch (NoSuchModelException | InvalidModelException | UpdateException e) {
             e.printStackTrace();
         }
-
-        Intent newPrivateChatIntent = new Intent(this, ChatActivity.class);
-        newPrivateChatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, newPrivateChat);
-        startActivity(newPrivateChatIntent);
     }
 
     private void openProfile() {

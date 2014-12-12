@@ -153,16 +153,12 @@ public class ChatRepository extends AbstractRepository<Chat> {
         }
     }
 
-    public Chat getChatWithPeer(Peer peer) throws InvalidModelException, NoSuchModelException {
-        if (peer == null) {
-            throw new InvalidModelException("Peer is null.");
-        }
+    public Chat findPrivateChatForPeer(Peer peer) throws InvalidModelException, NoSuchModelException {
+        return findChatForPeer(peer, true);
+    }
 
-        if (peer.getId() < 0) {
-            throw new InvalidModelException("Peer ID is invalid.");
-        }
-
-        String whereClause = Columns.Chat.COLUMN_NAME_HOST_ID + " = " + peer.getId();
+    public Chat findPublicChat() throws InvalidModelException, NoSuchModelException {
+        String whereClause = Columns.Chat.COLUMN_NAME_IS_PRIVATE + " = 0";
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -173,7 +169,66 @@ public class ChatRepository extends AbstractRepository<Chat> {
         );
 
         if (!cursor.moveToFirst()) {
-            throw new NoSuchModelException("Couldn't find a Chat with PeerId " + peer.getId());
+            Log.d(TAG, "Cannot find public chat, creating a new one.");
+            cursor.close();
+
+            Chat chat = new Chat();
+            chat.setPrivate(false);
+            chat.setHost(Tarsier.app().getUserRepository().getUser());
+
+            try {
+                insert(chat);
+            } catch (InsertException e) {
+                throw new NoSuchModelException(e);
+            }
+
+            return chat;
+        }
+
+        try {
+            return buildFromCursor(cursor);
+        } catch (InvalidCursorException e) {
+            throw new NoSuchModelException(e);
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public Chat findChatForPeer(Peer peer, boolean isPrivate) throws InvalidModelException, NoSuchModelException {
+        if (peer == null) {
+            throw new InvalidModelException("Peer is null.");
+        }
+
+        if (peer.getId() < 0) {
+            throw new InvalidModelException("Peer ID is invalid.");
+        }
+
+        String whereClause = Columns.Chat.COLUMN_NAME_HOST_ID + " = " + peer.getId()
+                           + " AND "
+                           + Columns.Chat.COLUMN_NAME_IS_PRIVATE + " = " + ((isPrivate) ? "1" : "0");
+
+        Cursor cursor = getReadableDatabase().query(
+                TABLE_NAME,
+                null,
+                whereClause,
+                null, null, null, null,
+                "1"
+        );
+
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+
+            Chat chat = new Chat();
+            chat.setHost(peer);
+            chat.setPrivate(isPrivate);
+
+            try {
+                insert(chat);
+            } catch (InsertException e) {
+                throw new NoSuchModelException(e);
+            }
+
+            return chat;
         }
 
         try {
@@ -206,24 +261,19 @@ public class ChatRepository extends AbstractRepository<Chat> {
             boolean isPrivate = c.getInt(c.getColumnIndexOrThrow(
                     Columns.Chat.COLUMN_NAME_IS_PRIVATE)) != 0;
 
-            // if the hostId is invalid, we discard the chat
-            if (hostId < 0) {
-                return null;
-            }
-
-            Peer host = mPeerRepository.findById(hostId);
-
             Chat chat = new Chat();
             chat.setId(id);
             chat.setTitle(title);
-            chat.setHost(host);
-            chat.setPrivate(isPrivate);
+            chat.setPrivate(isPrivate);;
+
+            if (hostId > 0) {
+                Peer host = mPeerRepository.findById(hostId);
+                chat.setHost(host);
+            }
 
             return chat;
 
-        } catch (CursorIndexOutOfBoundsException e) {
-            throw new InvalidCursorException(e);
-        } catch (NoSuchModelException e) {
+        } catch (CursorIndexOutOfBoundsException | NoSuchModelException e) {
             throw new InvalidCursorException(e);
         }
     }

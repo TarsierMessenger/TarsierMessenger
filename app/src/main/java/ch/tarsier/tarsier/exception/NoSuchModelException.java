@@ -9,7 +9,7 @@ public class NoSuchModelException extends DomainException {
         super(detailMessage);
     }
 
-    public NoSuchModelException(InvalidCursorException e) {
+    public NoSuchModelException(Exception e) {
         super(e);
     }
 }

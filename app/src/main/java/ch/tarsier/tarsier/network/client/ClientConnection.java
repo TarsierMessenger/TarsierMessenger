@@ -159,8 +159,7 @@ public class ClientConnection implements Runnable, ConnectionInterface {
     private void sendMessage(PublicKey publicKey, byte[] message) throws PeerCipherException {
         byte[] wireMessage = TarsierMessageFactory.wirePrivateProto(publicKey.getBytes(), message);
         write(wireMessage);
-        Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey.getBytes())
-                .getUserName());
+       // Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey.getBytes()).getUserName());
     }
 
     @Override

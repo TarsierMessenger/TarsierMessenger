@@ -39,6 +39,7 @@ import ch.tarsier.tarsier.event.SendMessageEvent;
 import ch.tarsier.tarsier.exception.DomainException;
 import ch.tarsier.tarsier.exception.PeerCipherException;
 import ch.tarsier.tarsier.network.client.ClientConnection;
+import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 import ch.tarsier.tarsier.network.server.ServerConnection;
 import ch.tarsier.tarsier.network.messages.MessageType;
 
@@ -222,6 +223,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     private void resetNetworkStackAndInitiatePeerDiscovery() {
         Log.d(NETWORK_LAYER_TAG, "Resetting network stack");
+        mConnection = null;
         mManager.cancelConnect(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
@@ -336,15 +338,24 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     private void postReceivedMessageEvent(Message message) {
         try {
-            TarsierPublicMessage msg = TarsierPublicMessage.parseFrom((byte[]) message.obj);
-
-            byte[] publicKey = msg.getSenderPublicKey().toByteArray();
-            String contents = msg.getPlainText().toStringUtf8();
-            Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
             boolean isPrivate = message.what == MessageType.MESSAGE_TYPE_PRIVATE;
 
-            mEventBus.post(new ReceivedMessageEvent(contents, sender, isPrivate));
+            if (isPrivate){
+                TarsierWireProtos.TarsierPrivateMessage msg = TarsierWireProtos.TarsierPrivateMessage.parseFrom((byte[]) message.obj);
+                byte[] publicKey = msg.getSenderPublicKey().toByteArray();
+                String contents = msg.getCipherText().toStringUtf8();
+                Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
 
+                mEventBus.post(new ReceivedMessageEvent(contents, sender, true));
+            } else {
+                TarsierPublicMessage msg = TarsierPublicMessage.parseFrom((byte[]) message.obj);
+
+                byte[] publicKey = msg.getSenderPublicKey().toByteArray();
+                String contents = msg.getPlainText().toStringUtf8();
+                Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
+
+                mEventBus.post(new ReceivedMessageEvent(contents, sender, false));
+            }
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         } catch (DomainException e) {
@@ -354,14 +365,16 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     @Subscribe
     public void onSendMessageEvent(SendMessageEvent event) {
+        ch.tarsier.tarsier.domain.model.Message message = event.getMessage();
         if (mConnection != null) {
             if (event.isPublic()) {
                 Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a public message.");
-                broadcastMessage(event.getMessage());
+                broadcastMessage(message.getText());
             } else if (event.isPrivate()) {
                 Log.d(NETWORK_LAYER_TAG, "Got SendMessageEvent for a private message.");
                 try {
-                    sendMessage(event.getPeer(), event.getMessage());
+                    Peer host = event.getChat().getHost();
+                    sendMessage(event.getChat().getHost(), message.getText());
                 } catch (PeerCipherException e) {
                     Log.e(NETWORK_LAYER_TAG, "Cannot send message, encountered issue encrypting");
                 }

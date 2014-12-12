@@ -9,6 +9,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.User;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
+import ch.tarsier.tarsier.exception.PeerCipherException;
 import ch.tarsier.tarsier.util.ByteUtils;
 import ch.tarsier.tarsier.network.ConnectionInterface;
 import ch.tarsier.tarsier.network.messages.MessageType;
@@ -48,7 +50,9 @@ public class ServerConnection implements Runnable, ConnectionInterface {
 
     public ServerConnection(Handler handler) throws IOException {
         Log.d(TAG, "ServerConnection Created.");
-        this.mServer = new ServerSocket(MessageType.SERVER_SOCKET);
+        this.mServer = new ServerSocket();
+        this.mServer.setReuseAddress(true);
+        this.mServer.bind(new InetSocketAddress(MessageType.SERVER_SOCKET));
         this.mHandler = handler;
         Thread t = new Thread(this);
         t.start();
@@ -146,10 +150,13 @@ public class ServerConnection implements Runnable, ConnectionInterface {
     protected void sendMessage(byte[] publicKey, byte[] message) {
         ConnectionHandler connection = mConnectionMap.get(new String(publicKey));
         if (connection != null) {
-
-            Log.d(TAG,
-                    "A private message is sent to " + peerWithPublicKey(publicKey).getUserName());
-            connection.write(message);
+            byte[] wireMessage = new byte[0];
+            try {
+                wireMessage = TarsierMessageFactory.wirePrivateProto(publicKey, message);
+            } catch (PeerCipherException e) {
+                Log.e(TAG, "Peer tag exception");
+            }
+            connection.write(wireMessage);
         } else {
             Log.e(TAG, "Sadly there is no peer for that public key");
         }
@@ -288,15 +295,9 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                                 mHandler.obtainMessage(
                                         MessageType.messageTypeFromData(buffer),
                                         serializedProtoBuffer).sendToTarget();
-                                mHandler.obtainMessage(
-                                        MessageType.messageTypeFromData(buffer),
-                                        serializedProtoBuffer).sendToTarget();
                             } else {
                                 mServerConnection
-                                        .sendMessage(mServerConnection.peerWithPublicKey(
-                                                        privateMessage
-                                                                .getReceiverPublicKey()
-                                                                .toByteArray()),
+                                        .sendMessage(privateMessage.getReceiverPublicKey().toByteArray(),
                                                 serializedProtoBuffer);
                             }
                             break;

@@ -21,11 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.event.DisplayMessageEvent;
 import ch.tarsier.tarsier.event.ErrorConnectionEvent;
-import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 import ch.tarsier.tarsier.event.SendMessageEvent;
-import ch.tarsier.tarsier.exception.InsertException;
-import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 import ch.tarsier.tarsier.ui.view.BubbleListViewItem;
@@ -148,18 +146,11 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         if (!messageText.isEmpty()) {
             //Add the message to the ListView
-            try {
-                mListView.addNewMessage(sentMessage);
+            mListView.addNewMessage(sentMessage);
 
-                //Add the message to the database
-                Tarsier.app().getMessageRepository().insert(sentMessage);
+            getEventBus().post(new SendMessageEvent(mChat, sentMessage));
 
-                getEventBus().post(new SendMessageEvent(mChat, messageText));
-
-                mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
-            } catch (InsertException | InvalidModelException e) {
-                e.printStackTrace();
-            }
+            mListView.smoothScrollToPosition(mListViewAdapter.getCount() - 1);
 
             messageView.setText("");
 
@@ -185,31 +176,16 @@ public class ChatActivity extends Activity implements EndlessListener {
     }
 
     @Subscribe
-    public void onReceivedMessageEvent(ReceivedMessageEvent event) {
-        Log.d(TAG, "Got ReceivedMessageEvent.");
+    public void onDisplayMessageEvent(DisplayMessageEvent event) {
+        Log.d(TAG, "Got DisplayMessageEvent.");
+        Log.d(TAG, "Message id: " + event.getMessage().getChatId() + " | Chat id: " + mChat.getId());
 
-        Message sentMessage = new Message(
-                mChat.getId(),
-                event.getMessage(),
-                event.getSender().getPublicKey(),
-                DateUtil.getNowTimestamp());
-
-        mListView.addNewMessage(sentMessage);
-
-        //Scroll down to the just received message if we are not scrolling through old messages
-        if (mListView.getLastVisiblePosition() == mListViewAdapter.getCount() -1 &&
-                mListView.getChildAt(mListView.getChildCount() - 1).getBottom() <= mListView.getHeight()) {
-            mListView.setSelection(mListViewAdapter.getCount() - 1);
+        if (event.getMessage().getChatId() != mChat.getId()) {
+            return;
         }
 
-        //Add the message to the database
-        try {
-            Tarsier.app().getMessageRepository().insert(sentMessage);
-        } catch (InvalidModelException e) {
-            e.printStackTrace();
-        } catch (InsertException e) {
-            e.printStackTrace();
-        }
+        mListView.addNewMessage(event.getMessage());
+        mListView.setSelection(mListViewAdapter.getCount() - 1);
     }
 
     @Override

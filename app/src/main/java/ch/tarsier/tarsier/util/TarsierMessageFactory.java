@@ -26,7 +26,8 @@ public class TarsierMessageFactory {
         byte[] cipherText = encryptionProduct.getCiphertext();
         byte[] IV         = encryptionProduct.getIV();
 
-        privateMessage.setCipherText(ByteString.copyFrom(cipherText));
+        // privateMessage.setCipherText(ByteString.copyFrom(cipherText));
+        privateMessage.setCipherText(ByteString.copyFrom(message));
         privateMessage.setIV(ByteString.copyFrom(IV));
 
         byte[] messageProto = privateMessage.build().toByteArray();
