@@ -149,7 +149,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
 
     // test methods together
     public void testInsertAndFindIdOfTheChatInserted() {
-        insertDummyChat();
+        insertDummyChat(false);
 
         Chat dummyChatFormDb = null;
         try {
@@ -163,12 +163,12 @@ public class ChatRepositoryTest extends AndroidTestCase {
         assertNotNull(dummyChatFormDb);
 
         assertEquals("Quentin", dummyChatFormDb.getHost().getUserName());
-        assertEquals("Public chat title", dummyChatFormDb.getTitle());
+        assertEquals("Lobby", dummyChatFormDb.getTitle());
         assertEquals(false, dummyChatFormDb.isPrivate());
     }
 
     public void testInsertAndUpdateDummyChat() {
-        insertDummyChat();
+        insertDummyChat(false);
 
         Peer newPeer = new Peer("Jean");
         newPeer.setStatusMessage("trankil");
@@ -182,7 +182,6 @@ public class ChatRepositoryTest extends AndroidTestCase {
             fail("InsertException should not be thrown: " + e.getMessage());
         }
 
-        mDummyChat.setTitle("New title");
         mDummyChat.setHost(newPeer);
 
         try {
@@ -196,7 +195,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
         assertNotSame(-1, mDummyChat.getId());
 
         assertEquals("Jean", mDummyChat.getHost().getUserName());
-        assertEquals("New title", mDummyChat.getTitle());
+        assertEquals("Lobby", mDummyChat.getTitle());
 
         Chat dummyChatFormDb = null;
         try {
@@ -210,15 +209,15 @@ public class ChatRepositoryTest extends AndroidTestCase {
         assertNotNull(dummyChatFormDb);
 
         assertEquals("Jean", dummyChatFormDb.getHost().getUserName());
-        assertEquals("New title", dummyChatFormDb.getTitle());
+        assertEquals("Lobby", dummyChatFormDb.getTitle());
     }
 
     public void testInsertAndGetChatWithPeer() {
-        insertDummyChat();
+        insertDummyChat(true);
 
         Chat chatFromDb = null;
         try {
-            chatFromDb = mChatRepository.findPublicChatForPeer(mDummyPeer);
+            chatFromDb = mChatRepository.findPrivateChatForPeer(mDummyPeer);
         } catch (InvalidModelException e) {
             fail("IllegalArgumentException should ne be thrown: " + e.getMessage());
         } catch (NoSuchModelException e) {
@@ -236,7 +235,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
 
 
     public void testInsertAndDeleteDummyMessage() {
-        insertDummyChat();
+        insertDummyChat(false);
 
         try {
             mChatRepository.delete(mDummyChat);
@@ -250,7 +249,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
     }
 
 
-    private void insertDummyChat() {
+    private void insertDummyChat(boolean isPrivate) {
         // makes sure that mDummyChat is "clean"
         mDummyPeer = new Peer("Quentin");
         mDummyPeer.setStatusMessage("au max");
@@ -266,7 +265,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
         }
 
         mDummyChat = new Chat();
-        mDummyChat.setPrivate(false);
+        mDummyChat.setPrivate(isPrivate);
         mDummyChat.setHost(mDummyPeer);
         mDummyChat.setTitle("Public chat title");
 
