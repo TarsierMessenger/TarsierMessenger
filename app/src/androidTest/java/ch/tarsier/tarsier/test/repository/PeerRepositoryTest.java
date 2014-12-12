@@ -3,6 +3,7 @@ package ch.tarsier.tarsier.test.repository;
 import android.test.AndroidTestCase;
 
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.crypto.EC25519;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
@@ -217,6 +218,22 @@ public class PeerRepositoryTest extends AndroidTestCase {
         assertEquals(-1, mDummyPeer.getId());
     }
 
+    public void testInsertIfNotExistsWithPublicKeyWillNotInsertAnAlreadyExistingPeer() {
+        Peer peer = new Peer("Dude");
+        peer.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
+        peer.setStatusMessage("Daaaaaaaammmmmn");
+
+        try {
+            mPeerRepository.insert(peer);
+            long existingId = peer.getId();
+            peer.setId(-1);
+
+            mPeerRepository.insertIfNotExistsWithPublicKey(peer);
+            assertEquals(existingId, peer.getId());
+        } catch (InsertException | InvalidModelException e) {
+            fail(e.getMessage());
+        }
+    }
 
     private void insertDummyPeer() {
         // makes sure thet mDummyPeer is "clean"

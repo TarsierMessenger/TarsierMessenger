@@ -97,7 +97,7 @@ public class EventHandler {
 
         try {
             for (Peer peer : event.getPeers()) {
-                mPeerRepository.insertIfNotExists(peer);
+                mPeerRepository.insertIfNotExistsWithPublicKey(peer);
             }
         } catch (InvalidModelException | InsertException e) {
             Log.d(TAG, "Could not insert new peers in the database.");

@@ -127,7 +127,7 @@ public class PeerRepository extends AbstractRepository<Peer> {
         peer.setId(rowId);
     }
 
-    public void insertIfNotExists(Peer peer) throws InvalidModelException, InsertException {
+    public void insertIfNotExistsWithPublicKey(Peer peer) throws InvalidModelException, InsertException {
         if (peer == null) {
             throw new InvalidModelException("Peer is null.");
         }
