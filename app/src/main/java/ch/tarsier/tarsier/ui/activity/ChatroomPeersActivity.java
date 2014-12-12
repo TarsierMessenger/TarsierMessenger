@@ -13,6 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
@@ -90,7 +93,17 @@ public class ChatroomPeersActivity extends Activity {
     public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
         Log.d(TAG, "Got ReceivedChatroomPeersListEvent");
         mChatroomPeersAdapter.clear();
-        mChatroomPeersListView.addNewData(event.getPeers());
+        mChatroomPeersListView.addNewData(filterOutOwnUser(event.getPeers()));
+    }
+
+    private List<Peer> filterOutOwnUser(List<Peer> peers) {
+        ArrayList<Peer> filteredPeers = new ArrayList<Peer>();
+        for (Peer peer : peers) {
+            if (!peer.isUser()) {
+                filteredPeers.add(peer);
+            }
+        }
+        return filteredPeers;
     }
 
     @Override

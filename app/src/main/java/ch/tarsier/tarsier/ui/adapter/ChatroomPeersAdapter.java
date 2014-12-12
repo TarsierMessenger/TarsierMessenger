@@ -60,7 +60,6 @@ public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
             row = inflater.inflate(mLayoutResourceId, parent, false);
 
             holder = new PeerHolder();
-
             holder.mAvatarSrc = (ImageView) row.findViewById(R.id.icon);
             holder.mName = (TextView) row.findViewById(R.id.name);
             holder.mStatus = (TextView) row.findViewById(R.id.status_message_profile_activity);
