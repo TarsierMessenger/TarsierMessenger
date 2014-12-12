@@ -97,7 +97,7 @@ public class ChatroomPeersActivity extends Activity {
     }
 
     private List<Peer> filterOutOwnUser(List<Peer> peers) {
-        ArrayList<Peer> filteredPeers = new ArrayList<Peer>();
+        ArrayList<Peer> filteredPeers = new ArrayList<>();
         for (Peer peer : peers) {
             if (!peer.isUser()) {
                 filteredPeers.add(peer);

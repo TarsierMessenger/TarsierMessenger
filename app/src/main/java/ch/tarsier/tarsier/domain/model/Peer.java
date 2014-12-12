@@ -124,7 +124,7 @@ public class Peer implements ByteArraySerializable, Serializable {
     }
 
     public boolean isUser() {
-        return false;
+        return Tarsier.app().getUserRepository().getUser().getPublicKey().equals(getPublicKey());
     }
 
     public void setPicturePath(String picturePath) {
