@@ -101,7 +101,6 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
     public void setLoadingView(int resId) {
         LayoutInflater inflater = (LayoutInflater) super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mHeader = inflater.inflate(resId, null);
-        this.addHeaderView(mHeader);
     }
 
     public void setEndlessListener(EndlessListener endlessListener) {
