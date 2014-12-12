@@ -62,12 +62,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ui.activity.NewChatroomActivity"
-            android:label="@string/title_activity_new_chatrooom"
-            android:parentActivityName=".ui.activity.NearbyListActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name="ch.tarsier.tarsier.ui.activity.ChatroomPeersActivity"
             android:parentActivityName=".ui.activity.ChatActivity"
             android:label="@string/title_activity_chatroom_peers"

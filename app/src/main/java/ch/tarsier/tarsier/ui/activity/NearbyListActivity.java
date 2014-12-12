@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -18,6 +19,7 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.event.ConnectedEvent;
+import ch.tarsier.tarsier.event.CreateGroupEvent;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.event.RequestNearbyPeersListEvent;
 import ch.tarsier.tarsier.exception.InvalidModelException;
@@ -142,8 +144,15 @@ public class NearbyListActivity extends Activity {
     }
 
     private void displayNewChatroomActivity() {
-        Intent newChat = new Intent(this, NewChatroomActivity.class);
-        startActivity(newChat);
+        ChatRepository chatRepository = Tarsier.app().getChatRepository();
+        Chat mNewChatroom = null;
+        try {
+            mNewChatroom = chatRepository.findPublicChat();
+            Toast.makeText(this, "Waiting for connection...", Toast.LENGTH_SHORT).show();
+            mEventBus.post(new CreateGroupEvent(mNewChatroom));
+        } catch (InvalidModelException | NoSuchModelException e) {
+            Toast.makeText(this, "Failed to connect to new chat room",  Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void displayProfileActivity() {
@@ -170,6 +179,7 @@ public class NearbyListActivity extends Activity {
         Intent chatIntent = new Intent(this, ChatActivity.class);
 
         try {
+            super.onBackPressed();
             Chat chat = mChatRepository.findPublicChat();
             chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, chat);
             startActivity(chatIntent);

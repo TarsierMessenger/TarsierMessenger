@@ -9,6 +9,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -48,7 +49,9 @@ public class ServerConnection implements Runnable, ConnectionInterface {
 
     public ServerConnection(Handler handler) throws IOException {
         Log.d(TAG, "ServerConnection Created.");
-        this.mServer = new ServerSocket(MessageType.SERVER_SOCKET);
+        this.mServer = new ServerSocket();
+        this.mServer.setReuseAddress(true);
+        this.mServer.bind(new InetSocketAddress(MessageType.SERVER_SOCKET));
         this.mHandler = handler;
         Thread t = new Thread(this);
         t.start();

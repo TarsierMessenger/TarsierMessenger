@@ -74,6 +74,7 @@ public class ChatListActivity extends Activity implements EndlessListener {
     protected void onResume() {
         super.onResume();
         mEventBus.register(this);
+        loadData();
     }
 
     @Override
