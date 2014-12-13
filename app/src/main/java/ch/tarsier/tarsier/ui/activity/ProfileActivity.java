@@ -102,7 +102,7 @@ public class ProfileActivity extends Activity {
         Bitmap profilePicture = BitmapFactory.decodeFile(filePath);
 
         if (profilePicture == null) {
-            profilePicture = BitmapFactory.decodeResource(getResources(), R.drawable.add_picture_home);
+            profilePicture = BitmapFactory.decodeResource(getResources(), R.drawable.add_picture);
         }
 
         mProfilePicture.setImageBitmap(profilePicture);
