@@ -19,6 +19,8 @@ import ch.tarsier.tarsier.exception.UpdateException;
  */
 public class ChatRepositoryTest extends AndroidTestCase {
 
+    private static final long NINE_THOUSAND = 9000;
+
     private ChatRepository mChatRepository;
     private PeerRepository mPeerRepository;
     private Chat mDummyChat;
@@ -28,7 +30,6 @@ public class ChatRepositoryTest extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        // Tarsier.app().reset();
         mChatRepository = Tarsier.app().getChatRepository();
         mPeerRepository = Tarsier.app().getPeerRepository();
 
@@ -38,9 +39,16 @@ public class ChatRepositoryTest extends AndroidTestCase {
         mDummyChat.setTitle("Public chat title");
     }
 
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        deleteDummyChat();
+    }
+
+
     // test findById(long id) alone
     public void testFindIllegalIds() {
-        long[] illegalIds = {-1, -9000, Long.MIN_VALUE};
+        long[] illegalIds = {-1, -NINE_THOUSAND, Long.MIN_VALUE};
 
         for (long id : illegalIds) {
             try {
@@ -56,7 +64,7 @@ public class ChatRepositoryTest extends AndroidTestCase {
     }
 
     public void testFindLegalIds() {
-        long[] legalIds = {0, 1, 9000, Long.MAX_VALUE};
+        long[] legalIds = {0, 1, NINE_THOUSAND, Long.MAX_VALUE};
 
         for (long id : legalIds) {
             try {
@@ -69,7 +77,6 @@ public class ChatRepositoryTest extends AndroidTestCase {
             }
         }
     }
-
 
     // test insert(Chat chat) alone
     public void testInsertNullChat() {
@@ -93,7 +100,6 @@ public class ChatRepositoryTest extends AndroidTestCase {
             fail("InsertException should not be thrown: " + e.getMessage());
         }
     }
-
 
     // test update(Chat chat) alone
     public void testUpdateNullChat() {
@@ -120,7 +126,6 @@ public class ChatRepositoryTest extends AndroidTestCase {
         }
     }
 
-
     // test delete(Chat chat) alone
     public void testDeleteNullChat() {
         try {
@@ -143,6 +148,15 @@ public class ChatRepositoryTest extends AndroidTestCase {
             assertEquals("Chat ID is invalid.", e.getMessage());
         } catch (DeleteException e) {
             fail("Expecting InvalidModelException to be thrown first: " + e.getMessage());
+        }
+    }
+
+    //test findAll() alone
+    public void testFindAllChats() {
+        try {
+            mChatRepository.findAll();
+        } catch (NoSuchModelException e) {
+            fail("NoSuchModelException should not be thrown: " + e.getMessage());
         }
     }
 
@@ -233,7 +247,6 @@ public class ChatRepositoryTest extends AndroidTestCase {
         assertEquals(chatFromDb.getHost().getStatusMessage(), mDummyChat.getHost().getStatusMessage());
     }
 
-
     public void testInsertAndDeleteDummyMessage() {
         insertDummyChat(false);
 
@@ -248,13 +261,71 @@ public class ChatRepositoryTest extends AndroidTestCase {
         assertEquals(-1, mDummyChat.getId());
     }
 
+    public void testInsertAndFindAllChats() {
+        insertDummyChat(false);
+
+        try {
+            mChatRepository.findAll();
+        } catch (NoSuchModelException e) {
+            fail("NoSuchModelException should not be thrown.");
+        }
+    }
+
+    public void testInsertAndFindPublicChat() {
+        insertDummyChat(false);
+
+        Chat chatFromDb = null;
+        try {
+            chatFromDb = mChatRepository.findPublicChat();
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown: " + e.getMessage());
+        } catch (NoSuchModelException e) {
+            fail("DeleteException should not be thrown: " + e.getMessage());
+        }
+
+        assertEquals(chatFromDb.getTitle(), mDummyChat.getTitle());
+        assertEquals(chatFromDb.isPrivate(), mDummyChat.isPrivate());
+    }
+
+    public void testInsertAndFindChatForPeer() {
+        insertDummyChat(false);
+
+        Chat chatFromDb = null;
+        try {
+            chatFromDb = mChatRepository.findChatForPeer(mDummyPeer, false);
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown: " + e.getMessage());
+        } catch (NoSuchModelException e) {
+            fail("DeleteException should not be thrown: " + e.getMessage());
+        }
+
+        assertEquals(chatFromDb.getTitle(), mDummyChat.getTitle());
+        assertEquals(chatFromDb.isPrivate(), mDummyChat.isPrivate());
+    }
+
+    public void testInsertAndFindPrivateChatForPeer() {
+        insertDummyChat(true);
+
+        Chat chatFromDb = null;
+        try {
+            chatFromDb = mChatRepository.findPrivateChatForPeer(mDummyPeer);
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown: " + e.getMessage());
+        } catch (NoSuchModelException e) {
+            fail("DeleteException should not be thrown: " + e.getMessage());
+        }
+
+        assertEquals(chatFromDb.getId(), mDummyChat.getId());
+        assertEquals(chatFromDb.getTitle(), mDummyChat.getTitle());
+        assertEquals(chatFromDb.isPrivate(), mDummyChat.isPrivate());
+    }
+
 
     private void insertDummyChat(boolean isPrivate) {
         // makes sure that mDummyChat is "clean"
         mDummyPeer = new Peer("Quentin");
         mDummyPeer.setStatusMessage("au max");
         mDummyPeer.setPublicKey(new PublicKey(new byte[]{1, 1}));
-
 
         try {
             mPeerRepository.insert(mDummyPeer);
@@ -263,6 +334,8 @@ public class ChatRepositoryTest extends AndroidTestCase {
         } catch (InsertException e) {
             fail("InsertException should not be thrown: " + e.getMessage());
         }
+
+        assertNotSame(-1, mDummyPeer.getId());
 
         mDummyChat = new Chat();
         mDummyChat.setPrivate(isPrivate);
@@ -278,5 +351,18 @@ public class ChatRepositoryTest extends AndroidTestCase {
         }
 
         assertNotSame(-1, mDummyChat.getId());
+    }
+
+    private void deleteDummyChat() {
+        try {
+            if (mDummyPeer != null) {
+                mPeerRepository.delete(mDummyPeer);
+            }
+            if (mDummyChat != null) {
+                mChatRepository.delete(mDummyChat);
+            }
+        } catch (InvalidModelException | DeleteException e) {
+            e.printStackTrace();
+        }
     }
 }

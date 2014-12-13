@@ -3,7 +3,6 @@ package ch.tarsier.tarsier.test;
 import android.app.Activity;
 
 import ch.tarsier.tarsier.R;
-import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.ui.activity.ChatListActivity;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;

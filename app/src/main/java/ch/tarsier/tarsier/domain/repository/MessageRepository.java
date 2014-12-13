@@ -25,10 +25,7 @@ import ch.tarsier.tarsier.exception.UpdateException;
 public class MessageRepository extends AbstractRepository<Message> {
 
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
-
     private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + " DESC";
-
-    public static final int ALL = Integer.MIN_VALUE;
 
     public MessageRepository(Database database) {
         super(database);
@@ -132,18 +129,6 @@ public class MessageRepository extends AbstractRepository<Message> {
         } finally {
             cursor.close();
         }
-    }
-
-    public List<Message> findByChat(Chat chat)
-            throws IllegalArgumentException, NoSuchModelException {
-
-        return findByChat(chat, ALL);
-    }
-
-    public List<Message> findByChat(Chat chat, int max)
-            throws IllegalArgumentException, NoSuchModelException {
-
-        return findByChatUntil(chat, 0, max);
     }
 
     /**

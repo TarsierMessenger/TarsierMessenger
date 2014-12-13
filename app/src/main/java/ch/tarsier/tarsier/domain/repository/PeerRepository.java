@@ -3,7 +3,6 @@ package ch.tarsier.tarsier.domain.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
-import android.util.Log;
 
 import java.util.List;
 
@@ -61,6 +60,7 @@ public class PeerRepository extends AbstractRepository<Peer> {
 
     public Peer findByPublicKey(byte[] publicKey)
             throws IllegalArgumentException, NoSuchModelException {
+
         if (publicKey == null) {
             throw new IllegalArgumentException("PublicKey is null.");
         }
