@@ -17,4 +17,6 @@ public class ChatListActivityTest extends TarsierTestCase<ChatListActivity> {
         mockRepositories();
         getActivity();
     }
+
+    
 }
