@@ -14,6 +14,7 @@ public class ChatListActivityTest extends TarsierTestCase<ChatListActivity> {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        mockRepositories();
         getActivity();
     }
 }

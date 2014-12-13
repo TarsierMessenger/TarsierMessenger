@@ -105,7 +105,7 @@ public class MessageRepository extends AbstractRepository<Message> {
     }
 
     public Message findById(long id)
-            throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
+            throws IllegalArgumentException, NoSuchModelException {
 
         if (id < 0) {
             throw new IllegalArgumentException("Message ID is invalid.");

@@ -163,6 +163,10 @@ public class Tarsier extends Application {
         return mUserRepository;
     }
 
+    public void setUserRepository(UserRepository userRepository) {
+        mUserRepository = userRepository;
+    }
+
     /**
      * FillDatabase is the class that fill the database with fictional data
      */
