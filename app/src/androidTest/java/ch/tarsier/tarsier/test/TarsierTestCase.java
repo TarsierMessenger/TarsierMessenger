@@ -10,7 +10,6 @@ import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.domain.repository.UserRepository;
-import ch.tarsier.tarsier.exception.InvalidCursorException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 
@@ -44,6 +43,15 @@ public class TarsierTestCase<T> extends ActivityInstrumentationTestCase2 {
         }
     }
 
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        Tarsier.app().setChatRepository(null);
+        Tarsier.app().setMessageRepository(null);
+        Tarsier.app().setPeerRepository(null);
+        Tarsier.app().setUserRepository(null);
+    }
+
     /**
      * Mock the Repositories
      *
@@ -68,14 +76,14 @@ public class TarsierTestCase<T> extends ActivityInstrumentationTestCase2 {
         Peer peer2 = FillDBForTesting.peer2;
         Peer peer3 = FillDBForTesting.peer3;
 
-        Chat chat1 = FillDBForTesting.chat1;
-        Chat chat2 = FillDBForTesting.chat2;
+        Chat chat1 = FillDBForTesting.chat2;
+        Chat chat2 = FillDBForTesting.chat1;
 
-        Message message1Chat1 = FillDBForTesting.message1Chat1;
-        Message message2Chat1 = FillDBForTesting.message2Chat1;
-        Message message1Chat2 = FillDBForTesting.message1Chat2;
-        Message message2Chat2 = FillDBForTesting.message2Chat2;
-        Message message3Chat2 = FillDBForTesting.message3Chat2;
+        Message message1Chat1 = FillDBForTesting.message1Chat2;
+        Message message2Chat1 = FillDBForTesting.message2Chat2;
+        Message message3Chat1 = FillDBForTesting.message3Chat1;
+        Message message1Chat2 = FillDBForTesting.message1Chat1;
+        Message message2Chat2 = FillDBForTesting.message2Chat1;
 
 
         when(chatRepositoryMock.findAll()).thenReturn(FillDBForTesting.allChats);
@@ -94,11 +102,11 @@ public class TarsierTestCase<T> extends ActivityInstrumentationTestCase2 {
         when(messageRepositoryMock.findAll()).thenReturn(FillDBForTesting.allMessages);
         when(messageRepositoryMock.findById(message1Chat1.getId())).thenReturn(message1Chat1);
         when(messageRepositoryMock.findById(message2Chat1.getId())).thenReturn(message2Chat1);
+        when(messageRepositoryMock.findById(message3Chat1.getId())).thenReturn(message3Chat1);
         when(messageRepositoryMock.findById(message1Chat2.getId())).thenReturn(message1Chat2);
         when(messageRepositoryMock.findById(message2Chat2.getId())).thenReturn(message2Chat2);
-        when(messageRepositoryMock.findById(message3Chat2.getId())).thenReturn(message3Chat2);
         when(messageRepositoryMock.getLastMessageOf(chat1)).thenReturn(message2Chat1);
-        when(messageRepositoryMock.getLastMessageOf(chat2)).thenReturn(message3Chat2);
+        when(messageRepositoryMock.getLastMessageOf(chat2)).thenReturn(message3Chat1);
 
         when(peerRepositoryMock.findAll()).thenReturn(FillDBForTesting.allPeers);
         when(peerRepositoryMock.findById(peer1.getId())).thenReturn(peer1);

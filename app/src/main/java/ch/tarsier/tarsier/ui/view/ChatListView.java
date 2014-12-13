@@ -32,6 +32,10 @@ public class ChatListView extends ListView {
         super(context, attributeSet, defStyle);
     }
 
+    public ChatListAdapter getChatListAdapter() {
+        return mChatListAdapter;
+    }
+
     public void setChatListAdapter(ChatListAdapter chatListAdapter) {
         super.setAdapter(chatListAdapter);
         mChatListAdapter = chatListAdapter;

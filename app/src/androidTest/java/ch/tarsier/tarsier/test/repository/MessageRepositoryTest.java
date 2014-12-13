@@ -30,7 +30,7 @@ public class MessageRepositoryTest extends AndroidTestCase {
         Tarsier.app().setUserPreferences(null);
         mMessageRepository = Tarsier.app().getMessageRepository();
         mUserPublicKey = Tarsier.app().getUserPreferences().getKeyPair().getPublicKey();
-        mDummyMessage = new Message(1, "test", mUserPublicKey, 1000);
+        mDummyMessage = new Message(1, "test", mUserPublicKey, 1);
     }
 
 

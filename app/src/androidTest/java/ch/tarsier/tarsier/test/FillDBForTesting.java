@@ -29,15 +29,15 @@ public class FillDBForTesting {
     public static Peer peer2;
     public static Peer peer3;
 
-    public static Chat chat1;
     public static Chat chat2;
-
-    public static Message message1Chat1;
-    public static Message message2Chat1;
+    public static Chat chat1;
 
     public static Message message1Chat2;
     public static Message message2Chat2;
-    public static Message message3Chat2;
+
+    public static Message message1Chat1;
+    public static Message message2Chat1;
+    public static Message message3Chat1;
 
     public static List<Chat> allChats;
     public static List<Message> allMessages;
@@ -90,11 +90,11 @@ public class FillDBForTesting {
         //Generate the chats
         chat1 = new Chat();
         chat1.setHost(peer1);
-        chat1.setPrivate(true);
+        chat1.setPrivate(false);
 
         chat2 = new Chat();
         chat2.setHost(peer2);
-        chat2.setPrivate(false);
+        chat2.setPrivate(true);
 
         long chat1Id = chat1.getId();
         long chat2Id = chat2.getId();
@@ -107,18 +107,18 @@ public class FillDBForTesting {
         //Generate the messages for the first chat
         message1Chat1 = new Message(chat1Id, "Chat 1: Message 1", peer1Id, FIRST_DECEMBER_2014_MID_DAY);
         message2Chat1 = new Message(chat1Id, "Chat 1: Message 2", peer2Id, FIRST_DECEMBER_2014_MID_DAY + ONE_MINUTE);
+        message3Chat1 = new Message(chat1Id, "Chat 1: Message 2", peer3Id, FIRST_DECEMBER_2014_MID_DAY + TWO_MINUTES);
 
         //Generate the messages for the second chat
         message1Chat2 = new Message(chat2Id, "Chat 2: Message 1", peer1Id, FIRST_DECEMBER_2014_MID_DAY);
         message2Chat2 = new Message(chat2Id, "Chat 2: Message 2", peer2Id, FIRST_DECEMBER_2014_MID_DAY + ONE_MINUTE);
-        message3Chat2 = new Message(chat2Id, "Chat 2: Message 2", peer3Id, FIRST_DECEMBER_2014_MID_DAY + TWO_MINUTES);
 
         allMessages = new ArrayList<>();
         allMessages.add(message1Chat1);
         allMessages.add(message2Chat1);
+        allMessages.add(message3Chat1);
         allMessages.add(message1Chat2);
         allMessages.add(message2Chat2);
-        allMessages.add(message3Chat2);
 
         initiated = true;
     }
@@ -144,15 +144,15 @@ public class FillDBForTesting {
             peerRepositoryMock.insert(peer2);
             peerRepositoryMock.insert(peer3);
 
-            chatRepositoryMock.insert(chat1);
             chatRepositoryMock.insert(chat2);
-
-            messageRepositoryMock.insert(message1Chat1);
-            messageRepositoryMock.insert(message2Chat1);
+            chatRepositoryMock.insert(chat1);
 
             messageRepositoryMock.insert(message1Chat2);
             messageRepositoryMock.insert(message2Chat2);
-            messageRepositoryMock.insert(message3Chat2);
+
+            messageRepositoryMock.insert(message1Chat1);
+            messageRepositoryMock.insert(message2Chat1);
+            messageRepositoryMock.insert(message3Chat1);
         } catch (InvalidModelException | InsertException e) {
             e.printStackTrace();
         }
