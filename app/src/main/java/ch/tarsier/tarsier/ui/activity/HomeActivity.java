@@ -12,9 +12,6 @@ import android.widget.ImageView;
 
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.domain.model.User;
-import ch.tarsier.tarsier.exception.InsertException;
-import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 import ch.tarsier.tarsier.util.BitmapFromPath;
 import ch.tarsier.tarsier.validation.StatusMessageValidator;

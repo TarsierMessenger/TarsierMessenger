@@ -69,8 +69,7 @@ public class TarsierTestCase<T> extends ActivityInstrumentationTestCase2 {
 
         FillDBForTesting.populate(chatRepositoryMock,
                 messageRepositoryMock,
-                peerRepositoryMock,
-                userRepositoryMock);
+                peerRepositoryMock);
 
         Peer peer1 = FillDBForTesting.peer1;
         Peer peer2 = FillDBForTesting.peer2;

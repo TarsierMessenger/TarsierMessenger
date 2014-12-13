@@ -132,8 +132,7 @@ public class FillDBForTesting {
      */
     public static void populate(ChatRepository chatRepositoryMock,
                                 MessageRepository messageRepositoryMock,
-                                PeerRepository peerRepositoryMock,
-                                UserRepository userRepositoryMock) {
+                                PeerRepository peerRepositoryMock) {
 
         if (!initiated) {
             initiate();

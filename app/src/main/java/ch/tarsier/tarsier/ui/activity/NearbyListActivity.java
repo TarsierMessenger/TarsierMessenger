@@ -151,7 +151,7 @@ public class NearbyListActivity extends Activity {
             Toast.makeText(this, "Waiting for connection...", Toast.LENGTH_SHORT).show();
             mEventBus.post(new CreateGroupEvent(mNewChatroom));
         } catch (InvalidModelException | NoSuchModelException e) {
-            Toast.makeText(this, "Failed to connect to new chat room",  Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to connect to new chatroom",  Toast.LENGTH_SHORT).show();
         }
     }
 

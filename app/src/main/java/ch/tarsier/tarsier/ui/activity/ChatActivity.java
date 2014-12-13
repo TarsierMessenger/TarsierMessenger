@@ -209,7 +209,7 @@ public class ChatActivity extends Activity implements EndlessListener {
 
     @Subscribe
     public void onReceiveConnectionError(ErrorConnectionEvent event) {
-        Toast.makeText(this,event.getErrorMessage(),Toast.LENGTH_LONG).show();
+        Toast.makeText(this, event.getErrorMessage(), Toast.LENGTH_LONG).show();
     }
 
     /**
