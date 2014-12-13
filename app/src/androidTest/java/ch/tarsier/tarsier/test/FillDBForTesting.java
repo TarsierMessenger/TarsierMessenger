@@ -1,5 +1,6 @@
 package ch.tarsier.tarsier.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.crypto.EC25519;
@@ -56,7 +57,7 @@ public class FillDBForTesting {
         //Generate the user
         user = new User();
         user.setUserName("user");
-        peer1.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
+        user.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
         user.setStatusMessage("status user");
 
 
@@ -80,6 +81,7 @@ public class FillDBForTesting {
         byte[] peer2Id = peer2.getPublicKey().getBytes();
         byte[] peer3Id = peer3.getPublicKey().getBytes();
 
+        allPeers = new ArrayList<>();
         allPeers.add(peer1);
         allPeers.add(peer2);
         allPeers.add(peer3);
@@ -97,6 +99,7 @@ public class FillDBForTesting {
         long chat1Id = chat1.getId();
         long chat2Id = chat2.getId();
 
+        allChats = new ArrayList<>();
         allChats.add(chat1);
         allChats.add(chat2);
 
@@ -110,6 +113,7 @@ public class FillDBForTesting {
         message2Chat2 = new Message(chat2Id, "Chat 2: Message 2", peer2Id, FIRST_DECEMBER_2014_MID_DAY + ONE_MINUTE);
         message3Chat2 = new Message(chat2Id, "Chat 2: Message 2", peer3Id, FIRST_DECEMBER_2014_MID_DAY + TWO_MINUTES);
 
+        allMessages = new ArrayList<>();
         allMessages.add(message1Chat1);
         allMessages.add(message2Chat1);
         allMessages.add(message1Chat2);
