@@ -1,13 +1,11 @@
 package ch.tarsier.tarsier.test;
 
-import android.test.ActivityInstrumentationTestCase2;
-
 import ch.tarsier.tarsier.ui.activity.ChatListActivity;
 
 /**
  * @author gluthier
  */
-public class ChatListActivityTest extends ActivityInstrumentationTestCase2<ChatListActivity> {
+public class ChatListActivityTest extends TarsierTestCase<ChatListActivity> {
 
     public ChatListActivityTest() {
         super(ChatListActivity.class);
