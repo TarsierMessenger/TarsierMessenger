@@ -12,6 +12,8 @@ import ch.tarsier.tarsier.ui.view.ChatListView;
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isClickable;
+import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isDisplayed;
+import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isFocusable;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
 
 /**
@@ -20,6 +22,7 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 public class ChatListActivityTest extends TarsierTestCase<ChatListActivity> {
 
     private Activity mActivity;
+    private ChatListAdapter mChatListAdapter;
 
     public ChatListActivityTest() {
         super(ChatListActivity.class);
@@ -30,21 +33,47 @@ public class ChatListActivityTest extends TarsierTestCase<ChatListActivity> {
         super.setUp();
         super.mockRepositories();
         mActivity = getActivity();
+        mChatListAdapter = getAdapter();
     }
 
-    public void testChatListIsClickable() {
+
+    public void testChatListProperties() {
         onView(withId(R.id.chat_list))
                 .check(matches(isClickable()));
+        onView(withId(R.id.chat_list))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.chat_list))
+                .check(matches(isFocusable()));
     }
 
-    public void testGoodInformationsArePrinted() {
+    public void testAdapterNotEmpty() {
+        assertFalse(mChatListAdapter.isEmpty());
+    }
+
+    public void testGetCountAdapter() {
+        assertEquals(FillDBForTesting.allChats.size(), mChatListAdapter.getCount());
+    }
+
+    public void testGetItemAdapter() {
+        assertEquals(FillDBForTesting.chat1, mChatListAdapter.getItem(0));
+        assertEquals(FillDBForTesting.chat2, mChatListAdapter.getItem(1));
+    }
+
+    public void testGetItemIdAdapter() {
+        assertEquals(FillDBForTesting.chat1.getId(), mChatListAdapter.getItemId(0));
+        assertEquals(FillDBForTesting.chat2.getId(), mChatListAdapter.getItemId(1));
+    }
+
+    public void testChatInformationsArePrinted() {
+        assertChatInformationsAreTheSame(FillDBForTesting.chat1, mChatListAdapter.getItem(0));
+        assertChatInformationsAreTheSame(FillDBForTesting.chat2, mChatListAdapter.getItem(1));
+    }
+
+
+    private ChatListAdapter getAdapter() {
         ChatListView chatListView = (ChatListView) mActivity.findViewById(R.id.chat_list);
-        ChatListAdapter chatListAdapter = chatListView.getChatListAdapter();
-
-        assertChatInformationsAreTheSame(FillDBForTesting.chat1, chatListAdapter.getItem(0));
-        assertChatInformationsAreTheSame(FillDBForTesting.chat2, chatListAdapter.getItem(1));
+        return chatListView.getChatListAdapter();
     }
-
 
     private void assertChatInformationsAreTheSame(Chat expected, Chat actual) {
         assertSame(expected.getId(), actual.getId());
