@@ -6,6 +6,8 @@ import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 import ch.tarsier.tarsier.ui.view.BubbleListViewItem;
 
 /**
+ * Message is the class that models a message.
+ *
  * @author McMoudi
  * @author gluthier
  */

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * CompositeValidator is the class that represents a composite validator.
+ *
  * @author romac
  * @param <T> The type of the elements to validate.
  */

@@ -5,6 +5,8 @@ import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
+ * DisplayMessageEvent is the event representing a message being displayed.
+ *
  * @author romac
  * @author amirezzaw
  */

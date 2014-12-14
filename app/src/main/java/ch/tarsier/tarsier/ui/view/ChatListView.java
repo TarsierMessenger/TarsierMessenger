@@ -12,7 +12,9 @@ import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 
 /**
- * ChatListView is the class that controls the view of the ChatListActivity
+ * ChatListView is the class that controls the view of the ChatListActivity.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.ChatListActivity
  * @author gluthier
  */
 public class ChatListView extends ListView {
@@ -30,6 +32,10 @@ public class ChatListView extends ListView {
 
     public ChatListView(Context context, AttributeSet attributeSet, int defStyle) {
         super(context, attributeSet, defStyle);
+    }
+
+    public ChatListAdapter getChatListAdapter() {
+        return mChatListAdapter;
     }
 
     public void setChatListAdapter(ChatListAdapter chatListAdapter) {

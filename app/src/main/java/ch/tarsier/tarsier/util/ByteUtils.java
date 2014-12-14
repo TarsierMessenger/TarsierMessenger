@@ -1,6 +1,8 @@
 package ch.tarsier.tarsier.util;
 
 /**
+ * ByteUtils is the class that provides bytes utilities.
+ *
  * @author FredericJacobs
  */
 public class ByteUtils {
@@ -29,5 +31,4 @@ public class ByteUtils {
         prepended[0] = (byte) a;
         return combine(prepended, b);
     }
-
 }

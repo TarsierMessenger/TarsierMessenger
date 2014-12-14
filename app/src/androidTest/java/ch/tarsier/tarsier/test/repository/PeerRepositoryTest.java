@@ -14,9 +14,14 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
+ * PeerRepositoryTest tests the PeerRepository.
+ *
+ * @see ch.tarsier.tarsier.domain.repository.PeerRepository
  * @author gluthier
  */
 public class PeerRepositoryTest extends AndroidTestCase {
+
+    private static final long NINE_THOUSAND = 9000;
 
     private PeerRepository mPeerRepository;
     private Peer mDummyPeer;
@@ -25,7 +30,6 @@ public class PeerRepositoryTest extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        // Tarsier.app().reset();
         mPeerRepository = Tarsier.app().getPeerRepository();
 
         mDummyPeer = new Peer("Alfred");
@@ -33,10 +37,16 @@ public class PeerRepositoryTest extends AndroidTestCase {
         mDummyPeer.setPublicKey(new PublicKey(new byte[]{0, 1}));
     }
 
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        deleteDummyPeer();
+    }
+
 
     // test findById(long id) alone
     public void testFindIllegalIds() {
-        long[] illegalIds = {-1, -9001, Long.MIN_VALUE};
+        long[] illegalIds = {-1, -NINE_THOUSAND, Long.MIN_VALUE};
 
         for (long id : illegalIds) {
             try {
@@ -52,7 +62,7 @@ public class PeerRepositoryTest extends AndroidTestCase {
     }
 
     public void testFindLegalIds() {
-        long[] legalIds = {0, 1, 9001, Long.MAX_VALUE};
+        long[] legalIds = {0, 1, NINE_THOUSAND, Long.MAX_VALUE};
 
         for (long id : legalIds) {
             try {
@@ -65,7 +75,6 @@ public class PeerRepositoryTest extends AndroidTestCase {
             }
         }
     }
-
 
     // test insert(Peer peer) alone
     public void testInsertNullPeer() {
@@ -89,7 +98,6 @@ public class PeerRepositoryTest extends AndroidTestCase {
             fail("InsertException should not be thrown: " + e.getMessage());
         }
     }
-
 
     // test update(Peer peer) alone
     public void testUpdateNullPeer() {
@@ -116,7 +124,6 @@ public class PeerRepositoryTest extends AndroidTestCase {
         }
     }
 
-
     // test delete(Peer peer) alone
     public void testDeleteNullPeer() {
         try {
@@ -139,6 +146,49 @@ public class PeerRepositoryTest extends AndroidTestCase {
             assertEquals("Peer ID is invalid.", e.getMessage());
         } catch (DeleteException e) {
             fail("Expecting InvalidModelException to be thrown first: " + e.getMessage());
+        }
+    }
+
+    // test findByPublicKey(byte[] publicKey) alone
+    public void testFindByNullPublicKey() {
+        byte[] nullKey = null;
+        try {
+            mPeerRepository.findByPublicKey(nullKey);
+        } catch (IllegalArgumentException e) {
+            // good
+            assertEquals("PublicKey is null.", e.getMessage());
+        } catch (NoSuchModelException e) {
+            fail("Expecting IllegalArgumentException to be thrown first: " + e.getMessage());
+        }
+    }
+
+    public void testFindByNonExistingPublicKey() {
+        byte[] nonExistingKey = new byte[] {0, 1, 2, 1, 0};
+        try {
+            mPeerRepository.findByPublicKey(nonExistingKey);
+        } catch (NoSuchModelException e) {
+            // good
+        }
+    }
+
+    // test insertIfNotExistsWithPublicKey(Peer peer) alone
+    public void testInsertIfNotExistsWithPublicKeyWithNullPeer() {
+        try {
+            mPeerRepository.insertIfNotExistsWithPublicKey(null);
+        } catch (InvalidModelException e) {
+            // good
+            assertEquals("Peer is null.", e.getMessage());
+        } catch (InsertException e) {
+            fail("Expecting InvalidModelException to be thrown first: " + e.getMessage());
+        }
+    }
+
+    // test findAll() alone
+    public void testFindAllWithNoMessages() {
+        try {
+            mPeerRepository.findAll();
+        } catch (NoSuchModelException e) {
+            fail("NoSuchModelException should not be thrown: " + e.getMessage());
         }
     }
 
@@ -235,6 +285,19 @@ public class PeerRepositoryTest extends AndroidTestCase {
         }
     }
 
+    public void testInsertAndInsertIfNotExistsWithPublicKey() {
+        insertDummyPeer();
+
+        try {
+            mPeerRepository.insertIfNotExistsWithPublicKey(mDummyPeer);
+        } catch (InvalidModelException e) {
+            fail("InvalidModelException should not be thrown: " + e.getMessage());
+        } catch (InsertException e) {
+            fail("InsertException should not be thrown: " + e.getMessage());
+        }
+    }
+
+
     private void insertDummyPeer() {
         // makes sure thet mDummyPeer is "clean"
         mDummyPeer = new Peer("Alfred");
@@ -250,5 +313,15 @@ public class PeerRepositoryTest extends AndroidTestCase {
         }
 
         assertNotSame(-1, mDummyPeer.getId());
+    }
+
+    private void deleteDummyPeer() {
+        try {
+            if (mDummyPeer != null) {
+                mPeerRepository.delete(mDummyPeer);
+            }
+        } catch (InvalidModelException | DeleteException e) {
+            e.printStackTrace();
+        }
     }
 }

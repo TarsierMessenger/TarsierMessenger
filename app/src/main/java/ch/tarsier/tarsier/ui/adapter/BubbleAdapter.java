@@ -2,7 +2,6 @@ package ch.tarsier.tarsier.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +25,13 @@ import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.R;
 
 /**
- * @author xawill
- *
  * Custom class to display the bubbles in the ChatActivity ListView
  *
  * Inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
  * and https://github.com/survivingwithandroid/Surviving-with-android/tree/master/EndlessAdapter
+ *
+ * @see ch.tarsier.tarsier.ui.activity.ChatActivity
+ * @author xawill
  */
 public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
 
@@ -149,7 +149,7 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
     }
 
     private BubbleViewHolder inflateMessageRow(BubbleViewHolder viewHolder, Message message,
-            EndlessListViewType type) throws NoSuchModelException {
+                                               EndlessListViewType type) throws NoSuchModelException {
         String messageSenderPublicKey = message.getSenderPublicKey().base64Encoded();
         Peer sender;
         if (message.isSentByUser()) {

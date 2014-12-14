@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="chatroom_peers_image_desc">Peer\'s profile picture</string>
-    <string name="chatroom_peers_online">Online</string>
-    <string name="chatroom_peers_owner">Owner</string>
 </resources>

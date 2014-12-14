@@ -3,8 +3,10 @@ package ch.tarsier.tarsier.event;
 import ch.tarsier.tarsier.domain.model.Chat;
 
 /**
+ * CreateGroupEvent is the event representing the creation of a group.
+ *
  * @author romac
- * @author amirezza
+ * @author amirrezaw
  */
 public class CreateGroupEvent {
 

@@ -7,13 +7,12 @@ import android.content.Context;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.widget.Toast;
 
-import ch.tarsier.tarsier.Tarsier;
-import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 
 /**
+ * Notifications is the class that contains the notifications' properties.
+ *
  * @author romac
  */
 public class Notifications {
@@ -50,5 +49,4 @@ public class Notifications {
             e.printStackTrace();
         }
     }
-
 }

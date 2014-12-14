@@ -19,16 +19,16 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
+ * MessageRepository is the class that interact with the database
+ * for the queries concerning the Message model.
+ *
  * @author gluthier
  * @author McMoudi
  */
 public class MessageRepository extends AbstractRepository<Message> {
 
     private static final String TABLE_NAME = Columns.Message.TABLE_NAME;
-
     private static final String DATETIME_DESCEND = Columns.Message.COLUMN_NAME_DATETIME + " DESC";
-
-    public static final int ALL = Integer.MIN_VALUE;
 
     public MessageRepository(Database database) {
         super(database);
@@ -105,7 +105,7 @@ public class MessageRepository extends AbstractRepository<Message> {
     }
 
     public Message findById(long id)
-            throws IllegalArgumentException, NoSuchModelException, InvalidCursorException {
+            throws IllegalArgumentException, NoSuchModelException {
 
         if (id < 0) {
             throw new IllegalArgumentException("Message ID is invalid.");
@@ -134,18 +134,6 @@ public class MessageRepository extends AbstractRepository<Message> {
         }
     }
 
-    public List<Message> findByChat(Chat chat)
-            throws IllegalArgumentException, NoSuchModelException {
-
-        return findByChat(chat, ALL);
-    }
-
-    public List<Message> findByChat(Chat chat, int max)
-            throws IllegalArgumentException, NoSuchModelException {
-
-        return findByChatUntil(chat, 0, max);
-    }
-
     /**
      * @param chat   the chat from which the messages shall be retrieved
      * @param until  retrieve messages older than this timestamp
@@ -160,7 +148,7 @@ public class MessageRepository extends AbstractRepository<Message> {
         }
 
         String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId()
-                 + " AND " + Columns.Message.COLUMN_NAME_DATETIME + " < " + until;
+                + " AND " + Columns.Message.COLUMN_NAME_DATETIME + " < " + until;
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -249,7 +237,7 @@ public class MessageRepository extends AbstractRepository<Message> {
                     Columns.Message.COLUMN_NAME_SENT_BY_USER)) != 0;
             long dateTime = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_DATETIME));
 
-            Message message = null;
+            Message message;
             if (isSentByUser) {
                 message = new Message(chatId, text, dateTime);
             } else {

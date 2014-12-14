@@ -3,7 +3,6 @@ package ch.tarsier.tarsier.domain.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
-import android.util.Log;
 
 import java.util.List;
 
@@ -20,6 +19,9 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
+ * PeerRepository is the class that interact with the database
+ * for the queries concerning the Peer model.
+ *
  * @author xawill
  */
 public class PeerRepository extends AbstractRepository<Peer> {
@@ -61,6 +63,7 @@ public class PeerRepository extends AbstractRepository<Peer> {
 
     public Peer findByPublicKey(byte[] publicKey)
             throws IllegalArgumentException, NoSuchModelException {
+
         if (publicKey == null) {
             throw new IllegalArgumentException("PublicKey is null.");
         }
@@ -88,9 +91,13 @@ public class PeerRepository extends AbstractRepository<Peer> {
         if (!cursor.moveToFirst()) {
             throw new NoSuchModelException(
                     "Cannot find a peer with public key "
-                    + publicKey.base64Encoded()
-                    + "\n user publicKey : "
-                    + new PublicKey(Tarsier.app().getUserPreferences().getKeyPair().getPublicKey()).base64Encoded());
+                            + publicKey.base64Encoded()
+                            + "\n user publicKey : "
+                            + new PublicKey(Tarsier.app()
+                            .getUserPreferences()
+                            .getKeyPair()
+                            .getPublicKey())
+                            .base64Encoded());
         }
 
         try {

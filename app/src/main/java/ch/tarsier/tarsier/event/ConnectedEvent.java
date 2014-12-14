@@ -1,6 +1,8 @@
 package ch.tarsier.tarsier.event;
 
 /**
+ * ConnectedEvent is the event representing the connection.
+ *
  * @author romac
  */
 public class ConnectedEvent {

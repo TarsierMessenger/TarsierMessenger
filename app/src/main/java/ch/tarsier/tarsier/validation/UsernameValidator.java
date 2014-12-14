@@ -6,6 +6,8 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 
 /**
+ * UsernameValidator is the class that validates the username.
+ *
  * @author romac
  */
 public class UsernameValidator extends CompositeValidator<EditText> {
@@ -15,11 +17,11 @@ public class UsernameValidator extends CompositeValidator<EditText> {
 
     public UsernameValidator() {
         addValidator(
-            new EditTextLengthValidator(
-                MIN_USERNAME_LENGTH,
-                MAX_USERNAME_LENGTH,
-                Tarsier.app().getResources().getString(R.string.error_username_length)
-            )
+                new EditTextLengthValidator(
+                        MIN_USERNAME_LENGTH,
+                        MAX_USERNAME_LENGTH,
+                        Tarsier.app().getResources().getString(R.string.error_username_length)
+                )
         );
         addValidator(new EditTextNoWhitespaceValidator(
                 Tarsier.app().getResources().getString(R.string.error_username_whitespace)

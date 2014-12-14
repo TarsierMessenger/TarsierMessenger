@@ -1,6 +1,8 @@
 package ch.tarsier.tarsier.network.messages;
 
 /**
+ * MessageType is the class that contains the message's connectivity informatios.
+ *
  * @author FredericJacobs
  */
 public class MessageType {
@@ -14,7 +16,6 @@ public class MessageType {
     final public static int MESSAGE_TYPE_PRIVATE = 2;
 
     final public static int MESSAGE_TYPE_PUBLIC = 3;
-
 
     final public static int MESSAGE_TYPE_DISCONNECT = 10;
 

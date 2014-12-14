@@ -13,7 +13,6 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -30,17 +29,19 @@ import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 import ch.tarsier.tarsier.util.TarsierMessageFactory;
 
 /**
+ * ServerConnection is the class that implement the server side of the network.
+ *
  * @author FredericJacobs
- * @author amirezza
+ * @author amirrezaw
  */
 public class ServerConnection implements Runnable, ConnectionInterface {
 
     private static final String TAG = "TarsierServerConnection";
 
     private LinkedHashMap<String, ConnectionHandler> mConnectionMap
-            = new LinkedHashMap<String, ConnectionHandler>();
+            = new LinkedHashMap<>();
 
-    private LinkedHashMap<String, Peer> mPeersMap = new LinkedHashMap<String, Peer>();
+    private LinkedHashMap<String, Peer> mPeersMap = new LinkedHashMap<>();
 
     private User mLocalUser = Tarsier.app().getUserRepository().getUser();
 
@@ -101,13 +102,13 @@ public class ServerConnection implements Runnable, ConnectionInterface {
 
     //This sends all public messages.
     public void broadcastMessage(PublicKey publicKey, byte[] wireMessage) {
-        Log.d(TAG,"PeerList " + getPeersList());
+        Log.d(TAG, "PeerList " + getPeersList());
         for (Peer peer : getPeersList()) {
-            Log.d(TAG,"publicKey : " + publicKey);
-            Log.d(TAG,"peer publicKey : " + peer.getPublicKey());
-            Log.d(TAG,"peer publicKey == publicKey : " + (peer.getPublicKey().equals(publicKey)));
+            Log.d(TAG, "publicKey : " + publicKey);
+            Log.d(TAG, "peer publicKey : " + peer.getPublicKey());
+            Log.d(TAG, "peer publicKey == publicKey : " + (peer.getPublicKey().equals(publicKey)));
             if (!peer.getPublicKey().equals(publicKey) && !peer.getPublicKey().equals(mLocalUser.getPublicKey())) {
-                Log.d(TAG,"sending message to : " + peer.getUserName());
+                Log.d(TAG, "sending message to : " + peer.getUserName());
                 ConnectionHandler connection = mConnectionMap.get(new String(peer.getPublicKey().toByteArray()));
                 connection.write(wireMessage);
             }
@@ -172,7 +173,7 @@ public class ServerConnection implements Runnable, ConnectionInterface {
 
     public List<Peer> getPeersList() {
         Set<String> peerKeySet = mPeersMap.keySet();
-        ArrayList<Peer> membersList = new ArrayList<Peer>();
+        ArrayList<Peer> membersList = new ArrayList<>();
         for (String key : peerKeySet) {
 
             Peer peer = mPeersMap.get(key);

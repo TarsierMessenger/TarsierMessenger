@@ -19,6 +19,9 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 
 /**
+ * NearbyPeerAdapter is the adapter for the NearbyListActivity.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.NearbyListActivity
  * @author benpac
  */
 public class NearbyPeerAdapter extends ArrayAdapter<WifiP2pDevice> {
@@ -83,10 +86,10 @@ public class NearbyPeerAdapter extends ArrayAdapter<WifiP2pDevice> {
         peerHolder.mUsername.setText(peerToShow.deviceName);
         peerHolder.mStatus.setText(getDeviceStatus(peerToShow.status));
         peerHolder.mProfilePicture.setImageBitmap(
-            BitmapFactory.decodeResource(
-                    Tarsier.app().getResources(),
-                    R.drawable.tarsier_placeholder
-            )
+                BitmapFactory.decodeResource(
+                        Tarsier.app().getResources(),
+                        R.drawable.tarsier_placeholder
+                )
         );
 
         return row;

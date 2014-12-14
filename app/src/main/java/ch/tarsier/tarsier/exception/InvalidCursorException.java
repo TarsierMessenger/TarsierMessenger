@@ -1,6 +1,8 @@
 package ch.tarsier.tarsier.exception;
 
 /**
+ * InvalidCursorException is the exception for the cursor operations.
+ *
  * @author gluthier
  */
 public class InvalidCursorException extends DomainException {

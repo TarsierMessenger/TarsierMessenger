@@ -20,6 +20,8 @@ import ch.tarsier.tarsier.event.ConnectToDeviceEvent;
 import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
 
 /**
+ * NearbyPeerFragment is the fragment for the NearbyListActivity.
+ *
  * @author benpac
  * @author marinnicolini
  */
@@ -41,7 +43,6 @@ public class NearbyPeerFragment extends Fragment {
         super.onAttach(activity);
         mActivity = activity;
         Log.d(TAG, "onAttach Fragment");
-
     }
 
     @Override
@@ -69,8 +70,8 @@ public class NearbyPeerFragment extends Fragment {
         return mNearbyPeerAdapter;
     }
 
-    public void setUp(Activity activty) {
-        mActivity = activty;
+    public void setUpFragment(Activity activity) {
+        mActivity = activity;
         mNearbyPeerAdapter = new NearbyPeerAdapter(mActivity, R.layout.row_nearby_peer_list);
     }
 

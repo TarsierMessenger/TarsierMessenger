@@ -9,6 +9,10 @@ import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 
 /**
+ * ChatLastMessageDateSorter is the class that provides a comparator
+ * of two chats by their date of their last message.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.ChatListActivity
  * @author gluthier
  */
 public class ChatLastMessageDateSorter implements Comparator<Chat> {

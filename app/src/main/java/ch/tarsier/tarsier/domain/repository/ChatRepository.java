@@ -20,6 +20,9 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
+ * ChatRepository is the class that interact with the database
+ * for the queries concerning the Chat model.
+ *
  * @author romac
  * @author McMoudi
  */
@@ -153,10 +156,6 @@ public class ChatRepository extends AbstractRepository<Chat> {
         }
     }
 
-    public Chat findPrivateChatForPeer(Peer peer) throws InvalidModelException, NoSuchModelException {
-        return findChatForPeer(peer, true);
-    }
-
     public Chat findPublicChat() throws InvalidModelException, NoSuchModelException {
         String whereClause = Columns.Chat.COLUMN_NAME_IS_PRIVATE + " = 0";
 
@@ -194,6 +193,10 @@ public class ChatRepository extends AbstractRepository<Chat> {
         }
     }
 
+    public Chat findPrivateChatForPeer(Peer peer) throws InvalidModelException, NoSuchModelException {
+        return findChatForPeer(peer, true);
+    }
+
     public Chat findChatForPeer(Peer peer, boolean isPrivate) throws InvalidModelException, NoSuchModelException {
         if (peer == null) {
             throw new InvalidModelException("Peer is null.");
@@ -204,8 +207,8 @@ public class ChatRepository extends AbstractRepository<Chat> {
         }
 
         String whereClause = Columns.Chat.COLUMN_NAME_HOST_ID + " = " + peer.getId()
-                           + " AND "
-                           + Columns.Chat.COLUMN_NAME_IS_PRIVATE + " = " + ((isPrivate) ? "1" : "0");
+                + " AND "
+                + Columns.Chat.COLUMN_NAME_IS_PRIVATE + " = " + (isPrivate ? "1" : "0");
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -264,7 +267,7 @@ public class ChatRepository extends AbstractRepository<Chat> {
             Chat chat = new Chat();
             chat.setId(id);
             chat.setTitle(title);
-            chat.setPrivate(isPrivate);;
+            chat.setPrivate(isPrivate);
 
             if (hostId > 0) {
                 Peer host = mPeerRepository.findById(hostId);

@@ -21,7 +21,7 @@ public class KeyPair {
 
     public KeyPair(String publicKey, String privateKey) {
         this(Base64.decode(publicKey, Base64.NO_WRAP),
-             Base64.decode(privateKey, Base64.NO_WRAP));
+                Base64.decode(privateKey, Base64.NO_WRAP));
     }
 
     public byte[] getPublicKey() {

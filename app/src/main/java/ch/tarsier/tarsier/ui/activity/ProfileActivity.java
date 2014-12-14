@@ -19,6 +19,8 @@ import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
 /**
+ * ProfileActivity is the activity that contains the user's informations.
+ *
  * @author romac
  */
 public class ProfileActivity extends Activity {
@@ -102,7 +104,7 @@ public class ProfileActivity extends Activity {
         Bitmap profilePicture = BitmapFactory.decodeFile(filePath);
 
         if (profilePicture == null) {
-            profilePicture = BitmapFactory.decodeResource(getResources(), R.drawable.add_picture_home);
+            profilePicture = BitmapFactory.decodeResource(getResources(), R.drawable.add_picture);
         }
 
         mProfilePicture.setImageBitmap(profilePicture);

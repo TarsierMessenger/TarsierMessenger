@@ -3,6 +3,8 @@ package ch.tarsier.tarsier.validation;
 import android.widget.EditText;
 
 /**
+ * EditTextValidator is the class that validates an EditText.
+ *
  * @author romac
  */
 public abstract class EditTextValidator extends AbstractValidator<EditText> {

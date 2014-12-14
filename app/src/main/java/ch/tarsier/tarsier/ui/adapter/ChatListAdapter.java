@@ -23,6 +23,9 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
 
 /**
+ * ChatListAdapter is the adapter for the ChatListActivity.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.ChatListActivity
  * @author gluthier
  */
 public class ChatListAdapter extends ArrayAdapter<Chat> {

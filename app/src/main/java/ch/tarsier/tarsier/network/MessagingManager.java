@@ -46,6 +46,8 @@ import ch.tarsier.tarsier.network.messages.MessageType;
 import static ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPublicMessage;
 
 /**
+ * MessagingManager is the class that manage all the messaging.
+ *
  * @author FredericJacobs
  */
 public class MessagingManager extends BroadcastReceiver implements ConnectionInfoListener,
@@ -54,6 +56,8 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
     private static final String NETWORK_LAYER_TAG = "TarsierMessagingManager";
 
     private static final String WIFI_DIRECT_TAG = "WiFiDirect";
+
+    private static final int CONFIG_GROUP_OWNER_INTENT = 15;
 
     private WifiP2pManager mManager;
 
@@ -103,8 +107,8 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
                 Log.d(WIFI_DIRECT_TAG, "Connected as peer");
 
                 mConnection = new ClientConnection(
-                    getConnectionHandler(),
-                    p2pInfo.groupOwnerAddress);
+                        getConnectionHandler(),
+                        p2pInfo.groupOwnerAddress);
 
                 mEventBus.post(new ConnectedEvent(false));
             }
@@ -115,7 +119,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = device.deviceAddress;
         config.wps.setup = WpsInfo.PBC;
-        config.groupOwnerIntent = 15;
+        config.groupOwnerIntent = CONFIG_GROUP_OWNER_INTENT;
         Log.d(NETWORK_LAYER_TAG, "connectToDevice is called");
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
 
@@ -174,7 +178,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
                 // we are connected with the other device, request connection
                 // info to find group owner IP
                 Log.d(WIFI_DIRECT_TAG,
-                      "Connected to p2p network. Requesting network details");
+                        "Connected to p2p network. Requesting network details");
 
                 mManager.requestConnectionInfo(mChannel, this);
             } else {
@@ -237,7 +241,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         });
     }
 
-    private void removeGroupAndInitiateDiscover(){
+    private void removeGroupAndInitiateDiscover() {
         mManager.removeGroup(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
@@ -251,7 +255,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         });
     }
 
-    private void initiatePeerDiscovery(){
+    private void initiatePeerDiscovery() {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
@@ -340,8 +344,9 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         try {
             boolean isPrivate = message.what == MessageType.MESSAGE_TYPE_PRIVATE;
 
-            if (isPrivate){
-                TarsierWireProtos.TarsierPrivateMessage msg = TarsierWireProtos.TarsierPrivateMessage.parseFrom((byte[]) message.obj);
+            if (isPrivate) {
+                TarsierWireProtos.TarsierPrivateMessage msg =
+                        TarsierWireProtos.TarsierPrivateMessage.parseFrom((byte[]) message.obj);
                 byte[] publicKey = msg.getSenderPublicKey().toByteArray();
                 String contents = msg.getCipherText().toStringUtf8();
                 Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
@@ -382,8 +387,9 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
                 Log.d(NETWORK_LAYER_TAG, "Cannot send message that is neither private nor public.");
             }
         } else {
-            Log.d(NETWORK_LAYER_TAG,"mConnection is null. Cannot send message to nobody");
-            mEventBus.post(new ErrorConnectionEvent("Error : There is no connected devices. The message was not send"));
+            Log.d(NETWORK_LAYER_TAG, "mConnection is null. Cannot send message to nobody");
+            mEventBus.post(new ErrorConnectionEvent(
+                    "Error : There is no connected devices. The message was not send"));
         }
     }
 

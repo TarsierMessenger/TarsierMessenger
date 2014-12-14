@@ -16,6 +16,9 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
+ * ChatroomPeersAdapter is the adapter for the ChatroomPeersActivity.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.ChatroomPeersActivity
  * @author romac
  * @author gluthier
  */

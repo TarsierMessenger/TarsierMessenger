@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import ch.tarsier.tarsier.Tarsier;
 
 /**
+ * AbstractPreferences is the abstract class that represent the preferences.
+ *
  * @author romac
  *
  * TODO: Have `getString()` take an Enum rather than an int.
@@ -46,5 +48,4 @@ public abstract class AbstractPreferences {
         editor.putBoolean(mApp.getString(key), value);
         editor.apply();
     }
-
 }

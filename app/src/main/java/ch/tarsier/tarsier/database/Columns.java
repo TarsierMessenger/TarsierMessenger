@@ -3,6 +3,8 @@ package ch.tarsier.tarsier.database;
 import android.provider.BaseColumns;
 
 /**
+ * Columns is the class that define the columns' names in the tables of the database.
+ *
  * @author McMoudi
  * @author romac
  */

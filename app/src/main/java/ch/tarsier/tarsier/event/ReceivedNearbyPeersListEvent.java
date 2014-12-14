@@ -5,6 +5,8 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import java.util.List;
 
 /**
+ * ReceivedNearbyPeersListEvent is the event representing the reception of the list of nearby peers.
+ *
  * @author romac
  */
 public class ReceivedNearbyPeersListEvent {
@@ -18,5 +20,4 @@ public class ReceivedNearbyPeersListEvent {
     public List<WifiP2pDevice> getPeers() {
         return mPeers;
     }
-
 }

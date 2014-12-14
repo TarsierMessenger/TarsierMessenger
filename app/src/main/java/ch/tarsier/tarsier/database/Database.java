@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
+ * Database is the class containing the SQLite database.
+ *
  * @author McMoudi
  * @author romac
  */

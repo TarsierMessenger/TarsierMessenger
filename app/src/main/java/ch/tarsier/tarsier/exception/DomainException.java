@@ -1,6 +1,8 @@
 package ch.tarsier.tarsier.exception;
 
 /**
+ * DomainException is the exception for the queries in the database.
+ *
  * @author romac
  */
 public class DomainException extends Exception {

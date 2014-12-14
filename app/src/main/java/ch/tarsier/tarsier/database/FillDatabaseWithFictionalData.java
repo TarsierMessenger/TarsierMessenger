@@ -22,6 +22,9 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
 
 /**
+ * FillDatabaseWithFictionalData is the class that fill the database
+ * with fictional data for testing purposes.
+ *
  * @author gluthier
  */
 public class FillDatabaseWithFictionalData {

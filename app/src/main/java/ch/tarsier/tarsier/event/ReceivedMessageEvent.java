@@ -3,6 +3,8 @@ package ch.tarsier.tarsier.event;
 import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
+ * ReceivedMessageEvent is the event representing the reception of a message.
+ *
  * @author romac
  */
 public class ReceivedMessageEvent {

@@ -13,9 +13,8 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.exception.PeerCipherException;
 
 /**
- * Created by fred on 28/11/14.
+ * @author FredericJacobs on 28/11/14.
  */
-
 public class PeerCipher {
     private static final String TAG = "PeerCipher";
     private byte[] mPrecomputedSharedSecret;

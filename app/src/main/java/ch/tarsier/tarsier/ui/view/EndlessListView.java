@@ -13,6 +13,9 @@ import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
 
 /**
+ * EndlessListView is the class that controls the view of the ChatActivity.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.ChatActivity
  * @author marinnicolini and xawill (extreme programming)
  */
 public class EndlessListView extends ListView implements AbsListView.OnScrollListener {

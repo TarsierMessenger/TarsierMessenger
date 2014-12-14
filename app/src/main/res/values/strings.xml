@@ -8,7 +8,6 @@
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_nearby_list">Users around you</string>
     <string name="title_activity_wifidirectdebug">Wi-Fi Direct Debug</string>
-    <string name="title_activity_new_chatrooom">New Chatroom</string>
     <string name="title_activity_chat_list">Chats</string>
     <string name="title_activity_chatroom_peers">Participants</string>
     <string name="title_activity_chat">Chat</string>
