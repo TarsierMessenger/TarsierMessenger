@@ -10,11 +10,16 @@ import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPrivateMessage;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPublicMessage;
 
+/**
+ * TarsierMessageFactory is the class that provides utilities for the Proto.
+ *
+ * @author FredericJacobs
+ */
 public class TarsierMessageFactory {
 
     public static byte[] wirePrivateProto(byte[] peerPublicKey, byte[] message)
-                                                        throws PeerCipherException
-    {
+            throws PeerCipherException {
+
         byte[] myPublicKey = getPublicKey();
         TarsierPrivateMessage.Builder privateMessage = TarsierPrivateMessage.newBuilder();
 

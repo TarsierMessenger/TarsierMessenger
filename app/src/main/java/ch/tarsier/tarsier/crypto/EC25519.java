@@ -7,6 +7,8 @@ import java.security.SecureRandom;
 /**
  * The EC25519 class is a wrapper on C libraries to enable
  * elliptic curve key agreement and signing.
+ *
+ * @author FredericJacobs
  */
 
 public class EC25519 {
@@ -92,7 +94,7 @@ public class EC25519 {
     }
 
     public static boolean verifyEd25519Signature(byte[] publicKey, byte[] message, byte[] signature)
-        throws InvalidParameterException {
+            throws InvalidParameterException {
 
         if (publicKey.length != ECC_KEY_LENGTH) {
             throw new InvalidParameterException();

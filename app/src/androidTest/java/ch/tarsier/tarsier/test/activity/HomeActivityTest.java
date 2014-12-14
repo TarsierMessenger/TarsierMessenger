@@ -1,9 +1,13 @@
-package ch.tarsier.tarsier.test;
+package ch.tarsier.tarsier.test.activity;
 
+import ch.tarsier.tarsier.test.TarsierTestCase;
 import ch.tarsier.tarsier.ui.activity.HomeActivity;
 
 /**
- * @author Benjamin Paccaud
+ * HomeActivityTest test the HomeActivity class.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.HomeActivity
+ * @author benpac
  */
 public class HomeActivityTest extends TarsierTestCase<HomeActivity> {
 

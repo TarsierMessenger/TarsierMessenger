@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.Looper;
 
 /**
+ * MainThreadBus is the class the control the flow of all events.
+ *
  * @author romac
  * @link http://stackoverflow.com/a/22063892/63301
  */

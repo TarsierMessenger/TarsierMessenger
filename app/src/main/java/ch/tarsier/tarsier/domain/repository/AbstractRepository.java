@@ -10,6 +10,8 @@ import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
 
 /**
+ * AbstractRepository is the abstract class that represents a Repository
+ *
  * @author romac
  * @param <T> The model that this repository manipulates.
  */

@@ -34,12 +34,13 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Message;
 
 /**
- * @author marinnicolini and xawill (extreme programming)
  *
  * This activity is responsible to display the messages of the current chat.
  * This chat can either be a private one, or a chatroom (multiple peers).
  *
  * Bubble's layout is inspired from https://github.com/AdilSoomro/Android-Speech-Bubble
+ *
+ * @author marinnicolini and xawill (extreme programming)
  */
 //TODO control the layout with virtual keyboard
 public class ChatActivity extends Activity implements EndlessListener {

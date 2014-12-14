@@ -6,6 +6,8 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 
 /**
+ * StatusMessageValidator is the class that validates the status message.
+ *
  * @author romac
  */
 public class StatusMessageValidator extends CompositeValidator<EditText> {
@@ -15,15 +17,15 @@ public class StatusMessageValidator extends CompositeValidator<EditText> {
 
     public StatusMessageValidator() {
         addValidator(
-            new EditTextLengthValidator(
-                MIN_STATUS_LENGTH,
-                MAX_STATUS_LENGTH,
-                Tarsier.app().getResources().getString(R.string.error_status_message_length)
-            )
+                new EditTextLengthValidator(
+                        MIN_STATUS_LENGTH,
+                        MAX_STATUS_LENGTH,
+                        Tarsier.app().getResources().getString(R.string.error_status_message_length)
+                )
         );
         addValidator(new EditTextNoWhitespaceValidator(
                         Tarsier.app().getResources().getString(R.string.error_status_message_whitespace)
-                     )
+                )
         );
     }
 

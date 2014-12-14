@@ -17,8 +17,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
+ * TarsierTestCase provides a custom TestCase for the app.
+ *
  * @author benjamin on 18/11/14.
  * @author gluthier
+ * @param <T> The type of the elements to test
  */
 public class TarsierTestCase<T> extends ActivityInstrumentationTestCase2 {
 

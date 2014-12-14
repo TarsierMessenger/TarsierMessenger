@@ -9,6 +9,8 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 
 /**
+ * Chat is the class that models a chat.
+ *
  * @author McMoudi
  * @author romac
  */

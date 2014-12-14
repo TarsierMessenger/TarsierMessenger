@@ -6,6 +6,9 @@ import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 
 /**
+ * UserRepository is the class that interact with the database
+ * for the queries concerning the User model.
+ *
  * @author romac
  */
 public class UserRepository {

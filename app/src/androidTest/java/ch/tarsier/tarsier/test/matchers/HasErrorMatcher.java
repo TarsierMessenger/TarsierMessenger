@@ -12,6 +12,8 @@ import ch.tarsier.tarsier.Tarsier;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * HasErrorMatcher provides tests utilities.
+ *
  * @author romac
  */
 public class HasErrorMatcher extends TypeSafeMatcher<View> {
@@ -32,7 +34,7 @@ public class HasErrorMatcher extends TypeSafeMatcher<View> {
         EditText editText = (EditText) view;
 
         return editText.getError() != null
-            && editText.getError().toString().equals(mError);
+                && editText.getError().toString().equals(mError);
     }
 
     public static Matcher<View> hasError(final String error) {

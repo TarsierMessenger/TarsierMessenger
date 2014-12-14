@@ -8,7 +8,8 @@ import ch.tarsier.tarsier.exception.PeerCipherException;
 /**
  * Abstracts the network connection (typically implemented by ClientConnection and ServerConnection).
  * This connection interface is to be used in the messaging manager.
- * @author amirezza
+ *
+ * @author amirrezaw
  */
 public interface ConnectionInterface {
     List<Peer> getPeersList();

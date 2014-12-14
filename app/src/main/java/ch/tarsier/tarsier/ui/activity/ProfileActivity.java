@@ -19,6 +19,8 @@ import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
 /**
+ * ProfileActivity is the activity that contains the user's informations.
+ *
  * @author romac
  */
 public class ProfileActivity extends Activity {

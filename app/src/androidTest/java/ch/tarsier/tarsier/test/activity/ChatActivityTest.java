@@ -1,9 +1,12 @@
-package ch.tarsier.tarsier.test;
+package ch.tarsier.tarsier.test.activity;
 
 import android.test.ActivityInstrumentationTestCase2;
 import ch.tarsier.tarsier.ui.activity.ChatActivity;
 
 /**
+ * ChatActivityTest tests the ChatActivity class.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.ChatActivity
  * @author marinnicolini
  */
 public class ChatActivityTest extends ActivityInstrumentationTestCase2<ChatActivity> {

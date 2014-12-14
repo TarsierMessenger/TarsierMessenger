@@ -12,6 +12,9 @@ import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.ui.adapter.ChatroomPeersAdapter;
 
 /**
+ * ChatroomPeersListView is the class that controls the view of the ChatroomPeersActivity.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.ChatroomPeersActivity
  * @author gluthier
  */
 public class ChatroomPeersListView extends ListView {

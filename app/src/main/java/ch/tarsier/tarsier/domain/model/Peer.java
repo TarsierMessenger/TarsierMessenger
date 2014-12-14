@@ -15,11 +15,17 @@ import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 
 /**
+ * Peer is the class that models a peer.
+ *
  * @author xawill
  * @author romac
  * @author FredericJacobs
  */
 public class Peer implements ByteArraySerializable, Serializable {
+
+    private static final int CASE_THREE = 3;
+    private static final int CASE_FOUR = 4;
+    private static final int NUMBER_OF_PLACEHOLDERS = 5;
 
     private long mId;
     private PublicKey mPublicKey;
@@ -99,7 +105,7 @@ public class Peer implements ByteArraySerializable, Serializable {
     }
 
     public Bitmap getPicture() {
-        int mod5 = (int) this.getId() % 5;
+        int mod5 = (int) this.getId() % NUMBER_OF_PLACEHOLDERS;
 
         switch (mod5) {
             case 0:
@@ -111,10 +117,10 @@ public class Peer implements ByteArraySerializable, Serializable {
             case 2:
                 return BitmapFactory.decodeResource(Tarsier.app().getResources(),
                         R.drawable.tarsier2_placeholder);
-            case 3:
+            case CASE_THREE:
                 return BitmapFactory.decodeResource(Tarsier.app().getResources(),
                         R.drawable.tarsier3_placeholder);
-            case 4:
+            case CASE_FOUR:
                 return BitmapFactory.decodeResource(Tarsier.app().getResources(),
                         R.drawable.tarsier4_placeholder);
             default:

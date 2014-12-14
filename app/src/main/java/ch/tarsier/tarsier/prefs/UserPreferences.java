@@ -9,6 +9,8 @@ import ch.tarsier.tarsier.crypto.EC25519;
 import ch.tarsier.tarsier.crypto.KeyPair;
 
 /**
+ * UserPreferences is the class that contains the user's preferences.
+ *
  * @author romac
  *
  * TODO: Add method to set the profile picture
@@ -79,7 +81,7 @@ public class UserPreferences extends AbstractPreferences {
 
     public String getPicturePath() {
         return Environment.getExternalStorageDirectory()
-               + "/" + PROFILE_PICTURE_NAME;
+                + "/" + PROFILE_PICTURE_NAME;
     }
 
     public Uri getPictureUri() {

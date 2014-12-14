@@ -17,17 +17,22 @@ import java.util.List;
 import ch.tarsier.tarsier.R;
 
 /**
+ * WiFiDirectGroupList is the fragment for the WiFiDirectDebugActivity.
+ *
  * @author amirezza
  */
 public class WiFiDirectGroupList extends ListFragment {
 
+    /**
+     * DeviceClickListener is the interface that implement a click listener for the device
+     */
     public interface DeviceClickListener {
         void connectP2p(WifiP2pDevice device);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.devices_list, container, false);
     }
 
@@ -59,7 +64,7 @@ public class WiFiDirectGroupList extends ListFragment {
         private List<WifiP2pDevice> mItems;
 
         public WiFiDevicesAdapter(Context context, int resource,
-                int textViewResourceId, List<WifiP2pDevice> items) {
+                                  int textViewResourceId, List<WifiP2pDevice> items) {
             super(context, resource, textViewResourceId, items);
             this.mItems = items;
         }

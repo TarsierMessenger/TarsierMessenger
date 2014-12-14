@@ -14,6 +14,9 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
+ * PeerRepositoryTest tests the PeerRepository.
+ *
+ * @see ch.tarsier.tarsier.domain.repository.PeerRepository
  * @author gluthier
  */
 public class PeerRepositoryTest extends AndroidTestCase {

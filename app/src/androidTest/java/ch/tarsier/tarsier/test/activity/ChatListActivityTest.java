@@ -1,9 +1,13 @@
-package ch.tarsier.tarsier.test;
+package ch.tarsier.tarsier.test.activity;
 
 import android.app.Activity;
 
+import junit.framework.Assert;
+
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.test.FillDBForTesting;
+import ch.tarsier.tarsier.test.TarsierTestCase;
 import ch.tarsier.tarsier.ui.activity.ChatListActivity;
 import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
 import ch.tarsier.tarsier.ui.view.ChatListView;
@@ -16,6 +20,9 @@ import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMat
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
 
 /**
+ * ChatListActivityTest tests the ChatListActivity class.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.ChatListActivity
  * @author gluthier
  */
 public class ChatListActivityTest extends TarsierTestCase<ChatListActivity> {
@@ -50,7 +57,7 @@ public class ChatListActivityTest extends TarsierTestCase<ChatListActivity> {
     }
 
     public void testGetCountAdapter() {
-        assertEquals(FillDBForTesting.allChats.size(), mChatListAdapter.getCount());
+        Assert.assertEquals(FillDBForTesting.allChats.size(), mChatListAdapter.getCount());
     }
 
     public void testGetItemAdapter() {

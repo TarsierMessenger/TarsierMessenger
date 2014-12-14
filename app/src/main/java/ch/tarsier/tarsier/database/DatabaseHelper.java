@@ -13,6 +13,8 @@ import android.util.Log;
 import ch.tarsier.tarsier.Tarsier;
 
 /**
+ * DatabaseHelper is the class that create the tables in the database
+ *
  * @author McMoudi
  */
 public class DatabaseHelper extends SQLiteOpenHelper {

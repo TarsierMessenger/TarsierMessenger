@@ -12,12 +12,11 @@ import ch.tarsier.tarsier.domain.model.value.PublicKey;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
-import ch.tarsier.tarsier.domain.repository.UserRepository;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 
 /**
- * The FillDBForTesting class is used to fill the mocked database for testing purposes
+ * The FillDBForTesting class is used to fill the mocked database for testing purposes.
  *
  * @author gluthier
  */

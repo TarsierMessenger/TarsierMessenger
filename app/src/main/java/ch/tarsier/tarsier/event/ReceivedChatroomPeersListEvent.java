@@ -5,6 +5,9 @@ import java.util.List;
 import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
+ * ReceivedChatroomPeersListEvent is the event representing
+ * the reception of the list of peers in a chatroom.
+ *
  * @author romac
  */
 public class ReceivedChatroomPeersListEvent {

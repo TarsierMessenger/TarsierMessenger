@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
+ * DateUtil is the class that provides date/time utilities.
+ *
  * @author xawill and marinnicolini
  */
 public class DateUtil {

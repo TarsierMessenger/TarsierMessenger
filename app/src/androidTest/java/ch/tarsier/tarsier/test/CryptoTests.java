@@ -8,6 +8,8 @@ import ch.tarsier.tarsier.crypto.EC25519;
 import ch.tarsier.tarsier.crypto.KeyPair;
 
 /**
+ * CryptoTests tests the crypto.
+ *
  * @author FredericJacobs
  */
 public class CryptoTests extends AndroidTestCase {
@@ -21,13 +23,13 @@ public class CryptoTests extends AndroidTestCase {
             KeyPair lauraKeyPair = EC25519.generateKeyPair();
 
             byte[] edSecret    = EC25519.calculateCurve25519KeyAgreement(
-                edKeyPair.getPrivateKey(),
-                lauraKeyPair.getPublicKey()
+                    edKeyPair.getPrivateKey(),
+                    lauraKeyPair.getPublicKey()
             );
 
             byte[] lauraSecret = EC25519.calculateCurve25519KeyAgreement(
-                lauraKeyPair.getPrivateKey(),
-                edKeyPair.getPublicKey()
+                    lauraKeyPair.getPrivateKey(),
+                    edKeyPair.getPublicKey()
             );
 
             assertTrue(edSecret.length == AGREEMENT_SECRET_LENGTH);

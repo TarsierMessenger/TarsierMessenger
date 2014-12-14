@@ -46,6 +46,8 @@ import ch.tarsier.tarsier.network.messages.MessageType;
 import static ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPublicMessage;
 
 /**
+ * MessagingManager is the class that manage all the messaging.
+ *
  * @author FredericJacobs
  */
 public class MessagingManager extends BroadcastReceiver implements ConnectionInfoListener,
@@ -54,6 +56,8 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
     private static final String NETWORK_LAYER_TAG = "TarsierMessagingManager";
 
     private static final String WIFI_DIRECT_TAG = "WiFiDirect";
+
+    private static final int CONFIG_GROUP_OWNER_INTENT = 15;
 
     private WifiP2pManager mManager;
 
@@ -115,7 +119,7 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = device.deviceAddress;
         config.wps.setup = WpsInfo.PBC;
-        config.groupOwnerIntent = 15;
+        config.groupOwnerIntent = CONFIG_GROUP_OWNER_INTENT;
         Log.d(NETWORK_LAYER_TAG, "connectToDevice is called");
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
 

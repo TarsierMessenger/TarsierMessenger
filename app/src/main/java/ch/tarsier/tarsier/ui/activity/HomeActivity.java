@@ -21,6 +21,7 @@ import ch.tarsier.tarsier.validation.UsernameValidator;
 /**
  * This is the Home screen of Tarsier. It allows to enter a Username
  * and initiate a session
+ *
  * @author Benjamin Paccaud.
  */
 public class HomeActivity extends Activity {
@@ -42,7 +43,7 @@ public class HomeActivity extends Activity {
         mProfilePicture = (ImageView) findViewById(R.id.picture);
 
         if (!mUserPreferences.getUsername().equals("")
-            && !mUserPreferences.getStatusMessage().equals("")) {
+                && !mUserPreferences.getStatusMessage().equals("")) {
 
             this.finish();
             Intent chatListIntent = new Intent(this, ChatListActivity.class);

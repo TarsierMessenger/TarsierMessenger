@@ -1,6 +1,8 @@
 package ch.tarsier.tarsier.util;
 
 /**
+ * ByteUtils is the class that provides bytes utilities.
+ *
  * @author FredericJacobs
  */
 public class ByteUtils {

@@ -17,12 +17,16 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
+ * MessageRepositoryTest tests the MessageRepository.
+ *
+ * @see ch.tarsier.tarsier.domain.repository.MessageRepository
  * @author gluthier
  */
 public class MessageRepositoryTest extends AndroidTestCase {
 
     private static final long FIRST_DECEMBER_2014_MID_DAY = 1417392000;
     private static final long NINE_THOUSAND = 9000;
+    private static final long RANDOM_ID = 10;
 
     private MessageRepository mMessageRepository;
     private ChatRepository mChatRepository;
@@ -200,9 +204,9 @@ public class MessageRepositoryTest extends AndroidTestCase {
     public void testInsertAndUpdateDummyMessage() {
         insertDummyMessage();
 
-        mDummyMessage.setChatId(10);
+        mDummyMessage.setChatId(RANDOM_ID);
         mDummyMessage.setText("this is new");
-        mDummyMessage.setDateTime(2000);
+        mDummyMessage.setDateTime(NINE_THOUSAND);
 
         try {
             mMessageRepository.update(mDummyMessage);
@@ -214,9 +218,9 @@ public class MessageRepositoryTest extends AndroidTestCase {
 
         assertNotSame(-1, mDummyMessage.getId());
 
-        assertEquals(10, mDummyMessage.getChatId());
+        assertEquals(RANDOM_ID, mDummyMessage.getChatId());
         assertEquals("this is new", mDummyMessage.getText());
-        assertEquals(2000, mDummyMessage.getDateTime());
+        assertEquals(NINE_THOUSAND, mDummyMessage.getDateTime());
 
         Message dummyMessageFromDb = null;
         try {

@@ -3,8 +3,10 @@ package ch.tarsier.tarsier.event;
 import android.net.wifi.p2p.WifiP2pDevice;
 
 /**
+ * ConnectToDeviceEvent is the event representing the connection to a device.
+ *
  * @author romac
- * @author amirezza
+ * @author amirrezaw
  */
 public class ConnectToDeviceEvent {
 

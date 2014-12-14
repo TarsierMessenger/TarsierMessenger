@@ -1,6 +1,8 @@
 package ch.tarsier.tarsier.validation;
 
 /**
+ * AbstractValidator is the abstract class that represents a validator.
+ *
  * @author romac
  * @param <T> The type of the elements to validate.
  */

@@ -22,6 +22,8 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
 
 /**
+ * EventHandler is the class that handles the events for the database
+ *
  * @author romac
  */
 public class EventHandler {
@@ -63,10 +65,10 @@ public class EventHandler {
             }
 
             Message message = new Message(
-                chat.getId(),
-                event.getMessage(),
-                event.getSender().getPublicKey(),
-                DateUtil.getNowTimestamp()
+                    chat.getId(),
+                    event.getMessage(),
+                    event.getSender().getPublicKey(),
+                    DateUtil.getNowTimestamp()
             );
 
             mMessageRepository.insert(message);

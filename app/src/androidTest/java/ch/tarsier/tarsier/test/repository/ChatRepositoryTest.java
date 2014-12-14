@@ -15,6 +15,9 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
+ * ChatRepositoryTest tests the ChatRepository.
+ *
+ * @see ch.tarsier.tarsier.domain.repository.ChatRepository
  * @author gluthier
  */
 public class ChatRepositoryTest extends AndroidTestCase {

@@ -11,6 +11,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
+ * UserRepositoryTest tests the UserRepository.
+ *
+ * @see ch.tarsier.tarsier.domain.repository.UserRepository
  * @author gluthier
  */
 public class UserRepositoryTest extends TarsierTestCase<UserRepository> {

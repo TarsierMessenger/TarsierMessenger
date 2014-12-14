@@ -27,6 +27,12 @@ import ch.tarsier.tarsier.network.messages.MessageType;
 import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 import ch.tarsier.tarsier.util.TarsierMessageFactory;
 
+/**
+ * ClientConnection is the class that implement the client side of the network.
+ *
+ * @author FredericJacobs
+ * @author amirrezaw
+ */
 public class ClientConnection implements Runnable, ConnectionInterface {
 
     private static final String TAG = "TarsierClientConnection";
@@ -159,7 +165,7 @@ public class ClientConnection implements Runnable, ConnectionInterface {
     private void sendMessage(PublicKey publicKey, byte[] message) throws PeerCipherException {
         byte[] wireMessage = TarsierMessageFactory.wirePrivateProto(publicKey.getBytes(), message);
         write(wireMessage);
-       // Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey.getBytes()).getUserName());
+        // Log.d(TAG, "A private message is sent to " + peerWithPublicKey(publicKey.getBytes()).getUserName());
     }
 
     @Override

@@ -1,7 +1,9 @@
 package ch.tarsier.tarsier.exception;
 
 /**
- * @author Benjamin Paccaud
+ * AddProfilePictureException is the exception for the addition of the profile picture.
+ *
+ * @author benpac
  */
 public class AddProfilePictureException extends Exception {
     public AddProfilePictureException() {

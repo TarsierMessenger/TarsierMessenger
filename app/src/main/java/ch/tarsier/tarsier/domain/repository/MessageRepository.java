@@ -19,6 +19,9 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
+ * MessageRepository is the class that interact with the database
+ * for the queries concerning the Message model.
+ *
  * @author gluthier
  * @author McMoudi
  */
@@ -145,7 +148,7 @@ public class MessageRepository extends AbstractRepository<Message> {
         }
 
         String whereClause = Columns.Message.COLUMN_NAME_CHAT_ID + " = " + chat.getId()
-                 + " AND " + Columns.Message.COLUMN_NAME_DATETIME + " < " + until;
+                + " AND " + Columns.Message.COLUMN_NAME_DATETIME + " < " + until;
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,
@@ -234,7 +237,7 @@ public class MessageRepository extends AbstractRepository<Message> {
                     Columns.Message.COLUMN_NAME_SENT_BY_USER)) != 0;
             long dateTime = c.getLong(c.getColumnIndexOrThrow(Columns.Message.COLUMN_NAME_DATETIME));
 
-            Message message = null;
+            Message message;
             if (isSentByUser) {
                 message = new Message(chatId, text, dateTime);
             } else {

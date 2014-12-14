@@ -29,6 +29,9 @@ import ch.tarsier.tarsier.ui.view.EndlessListener;
 import ch.tarsier.tarsier.util.ChatLastMessageDateSorter;
 
 /**
+ * ChatListActivity is the activity that contains the list of all chats
+ * that the user is currently having.
+ *
  * @author gluthier
  */
 public class ChatListActivity extends Activity implements EndlessListener {

@@ -1,11 +1,14 @@
-package ch.tarsier.tarsier.test;
+package ch.tarsier.tarsier.test.activity;
 
 import android.test.ActivityInstrumentationTestCase2;
 
 import ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity;
 
 /**
- * @author Benjamin Paccaud
+ * AddProfilePictureActivityTest tests the AddProfilePictureActivity class
+ *
+ * @see ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity
+ * @author benpac
  */
 public class AddProfilePictureActivityTest extends ActivityInstrumentationTestCase2<AddProfilePictureActivity> {
 

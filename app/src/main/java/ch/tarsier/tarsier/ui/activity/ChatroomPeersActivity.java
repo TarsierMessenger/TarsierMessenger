@@ -30,6 +30,8 @@ import ch.tarsier.tarsier.ui.adapter.ChatroomPeersAdapter;
 import ch.tarsier.tarsier.ui.view.ChatroomPeersListView;
 
 /**
+ * ChatroomPeersActivity is the activity that contains the list of all peers in a chatroom.
+ *
  * @author romac
  * @author gluthier
  */

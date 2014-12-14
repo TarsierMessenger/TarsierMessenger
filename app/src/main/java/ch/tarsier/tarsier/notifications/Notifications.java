@@ -11,6 +11,8 @@ import android.net.Uri;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 
 /**
+ * Notifications is the class that contains the notifications' properties.
+ *
  * @author romac
  */
 public class Notifications {
@@ -47,5 +49,4 @@ public class Notifications {
             e.printStackTrace();
         }
     }
-
 }

@@ -21,6 +21,8 @@ import ch.tarsier.tarsier.ui.fragment.WiFiDirectGroupList;
 // can run in the background too.
 
 /**
+ * WiFiDirectDebugActivity is the activity that is used to debug WiFiDirect.
+ *
  * @author FredericJacobs
  * @author amirezza
  */
@@ -29,6 +31,8 @@ public class WiFiDirectDebugActivity
         implements WiFiDirectGroupList.DeviceClickListener {
 
     public static final String TAG = "WiFiDirectDebugActivity";
+
+    private static final int CONFIG_GROUP_OWNER_INTENT = 15;
 
     private boolean isServer = false;
 
@@ -71,7 +75,7 @@ public class WiFiDirectDebugActivity
         if (isServer) {
             config.groupOwnerIntent = 0;
         } else {
-            config.groupOwnerIntent = 15;
+            config.groupOwnerIntent = CONFIG_GROUP_OWNER_INTENT;
         }
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
             @Override

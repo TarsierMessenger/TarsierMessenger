@@ -28,12 +28,11 @@ import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
 import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
 
 /**
- * @author benpac
- * @author marinnicolini
- *
  * This Activity shows a list of either nearby peers to connect with or a list of
  * chatrooms active nearby.
  *
+ * @author benpac
+ * @author marinnicolini
  */
 public class NearbyListActivity extends Activity {
 
@@ -59,7 +58,7 @@ public class NearbyListActivity extends Activity {
         mFragmentManager = getFragmentManager();
 
         mNearbyPeer = new NearbyPeerFragment();
-        mNearbyPeer.setUp(this);
+        mNearbyPeer.setUpFragment(this);
 
         FragmentTransaction ft = mFragmentManager.beginTransaction();
         ft.add(R.id.inside_nearby, mNearbyPeer);

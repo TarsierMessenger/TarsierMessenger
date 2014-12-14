@@ -6,5 +6,4 @@ package ch.tarsier.tarsier.data;
 public interface ByteArraySerializable {
 
     byte[] toByteArray();
-
 }

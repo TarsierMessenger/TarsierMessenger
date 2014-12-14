@@ -120,7 +120,7 @@ public class AddProfilePictureActivity extends Activity {
 
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 
-             // File tmp = null;
+            // File tmp = null;
             File file = new File(Tarsier.app().getUserPreferences().getPicturePath());
 
             boolean fileExists = false;
@@ -230,7 +230,7 @@ public class AddProfilePictureActivity extends Activity {
         int size = (imageHeight < imageWidth) ? imageHeight : imageWidth;
 
         Bitmap output = Bitmap.createBitmap(size, size,
-                                            Bitmap.Config.ARGB_8888);
+                Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
         final int color = 0xff424242;

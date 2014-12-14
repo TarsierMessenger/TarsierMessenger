@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.test;
+package ch.tarsier.tarsier.test.activity;
 
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.test.ActivityInstrumentationTestCase2;
@@ -13,6 +13,9 @@ import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.ui.activity.NearbyListActivity;
 
 /**
+ * NearbyListActivityTest tests the NearbyListActivity class.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.NearbyListActivity
  * @author benpac
  */
 public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<NearbyListActivity> {
@@ -33,7 +36,7 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
     }
 
     public void testEventSend() {
-        List<WifiP2pDevice> peerList = new ArrayList<WifiP2pDevice>();
+        List<WifiP2pDevice> peerList = new ArrayList<>();
 
         WifiP2pDevice ben  = new WifiP2pDevice();
         ben.deviceName = "ben";
@@ -55,7 +58,7 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
         peerList.add(ben);
         postAndWait(peerList);
 
-        List<WifiP2pDevice> peerList2 = new ArrayList<WifiP2pDevice>();
+        List<WifiP2pDevice> peerList2 = new ArrayList<>();
         peerList2.add(ben);
         peerList2.add(romac);
         peerList2.add(ben);

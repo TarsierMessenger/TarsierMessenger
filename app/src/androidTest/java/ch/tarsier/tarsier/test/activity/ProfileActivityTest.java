@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.test;
+package ch.tarsier.tarsier.test.activity;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -15,6 +15,9 @@ import static com.google.android.apps.common.testing.ui.espresso.action.ViewActi
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
 
 /**
+ * ProfileActivityTest test the ProfileActivity class.
+ *
+ * @see ch.tarsier.tarsier.ui.activity.ProfileActivity
  * @author romac
  */
 public class ProfileActivityTest extends
@@ -32,13 +35,13 @@ public class ProfileActivityTest extends
 
     public void testUsernameRejectedIfTooShort() {
         onView(withId(R.id.username))
-            .perform(click(), clearText(), closeSoftKeyboard());
+                .perform(click(), clearText(), closeSoftKeyboard());
 
         onView(withId(R.id.action_save_profile))
-            .perform(click());
+                .perform(click());
 
         onView(withId(R.id.username))
-            .check(matches(hasError(R.string.error_username_length)));
+                .check(matches(hasError(R.string.error_username_length)));
     }
 
     public void testUsernameRejectedIfTooLong() {
@@ -71,7 +74,7 @@ public class ProfileActivityTest extends
 
     public void testStatusMessageRejectedIfTooLong() {
         String text = "This status message is longer than 50 characters. "
-                    + "It really is longer than 50, hence the need for multiple lines.";
+                + "It really is longer than 50, hence the need for multiple lines.";
 
         onView(withId(R.id.username))
                 .perform(click(), typeText("romac"), closeSoftKeyboard());

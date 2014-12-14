@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import ch.tarsier.tarsier.Tarsier;
 
 /**
+ * User is the class that models the user.
+ *
  * @author romac
  */
 public final class User extends Peer {

@@ -20,6 +20,9 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.exception.UpdateException;
 
 /**
+ * ChatRepository is the class that interact with the database
+ * for the queries concerning the Chat model.
+ *
  * @author romac
  * @author McMoudi
  */
@@ -204,8 +207,8 @@ public class ChatRepository extends AbstractRepository<Chat> {
         }
 
         String whereClause = Columns.Chat.COLUMN_NAME_HOST_ID + " = " + peer.getId()
-                           + " AND "
-                           + Columns.Chat.COLUMN_NAME_IS_PRIVATE + " = " + (isPrivate ? "1" : "0");
+                + " AND "
+                + Columns.Chat.COLUMN_NAME_IS_PRIVATE + " = " + (isPrivate ? "1" : "0");
 
         Cursor cursor = getReadableDatabase().query(
                 TABLE_NAME,

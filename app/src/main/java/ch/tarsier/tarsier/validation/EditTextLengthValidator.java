@@ -3,6 +3,8 @@ package ch.tarsier.tarsier.validation;
 import android.widget.EditText;
 
 /**
+ * EditTextLengthValidator is the class that validates an EditText for authorized length.
+ *
  * @author romac
  */
 public class EditTextLengthValidator extends EditTextValidator {
