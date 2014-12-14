@@ -19,8 +19,9 @@ import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 
 /**
- * NearbyPeerAdapter is the adapter for the NearbyListActivity.
- *
+ * This is the ListViewAdapter to display the NearbyPeers around the user's device.
+ * The mRowLayoutId must contain an ImageView nearbyPeerPicture, a TextView nearbyPeerStatus and a
+ * TextView nearbyPeerName
  * @see ch.tarsier.tarsier.ui.activity.NearbyListActivity
  * @author benpac
  */
@@ -33,7 +34,7 @@ public class NearbyPeerAdapter extends ArrayAdapter<WifiP2pDevice> {
 
     public NearbyPeerAdapter(Context context, int resource) {
         super(context, resource);
-        mPeerList = new ArrayList<WifiP2pDevice>();
+        mPeerList = new ArrayList<>();
         mContext = context;
         mRowLayoutId = resource;
         Log.d(TAG, "Nearby Peer Adapter created");
@@ -61,9 +62,7 @@ public class NearbyPeerAdapter extends ArrayAdapter<WifiP2pDevice> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        PeerHolder peerHolder = null;
-
-        //Log.d("PeerAdapter", "mContext is : " + ((Activity) mContext).getLocalClassName());
+        PeerHolder peerHolder;
 
         if (row == null) {
             //create row
@@ -95,6 +94,12 @@ public class NearbyPeerAdapter extends ArrayAdapter<WifiP2pDevice> {
         return row;
     }
 
+    /**
+     * Transform the WifiP2pDevice status code into a meaningful String
+     *
+     * @param statusCode the status code of the WifiP2pDevice
+     * @return A string explaining the status
+     */
     private String getDeviceStatus(int statusCode) {
         switch (statusCode) {
             case WifiP2pDevice.CONNECTED:

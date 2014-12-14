@@ -92,6 +92,10 @@ public class NearbyListActivity extends Activity {
         return mEventBus;
     }
 
+    public NearbyPeerFragment getNearbyPeerFragment() {
+        return mNearbyPeerFragment;
+    }
+
     /**
      * Method activated when the list of nearby peers is received.
      *

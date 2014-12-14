@@ -41,6 +41,12 @@ public class NearbyPeerFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        getEventBus().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;

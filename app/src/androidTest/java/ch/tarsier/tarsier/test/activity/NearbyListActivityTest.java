@@ -1,5 +1,6 @@
 package ch.tarsier.tarsier.test.activity;
 
+import android.app.Activity;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -24,6 +25,8 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
 
     private  Bus mEventBus;
 
+    private NearbyListActivity mActivity;
+
     public NearbyListActivityTest() {
         super(NearbyListActivity.class);
     }
@@ -32,7 +35,7 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
     public void setUp() throws Exception {
         super.setUp();
         mEventBus = Tarsier.app().getEventBus();
-        getActivity();
+        mActivity = getActivity();
     }
 
     public void testEventSend() {
@@ -41,30 +44,37 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
         WifiP2pDevice ben  = new WifiP2pDevice();
         ben.deviceName = "ben";
         ben.status = WifiP2pDevice.AVAILABLE;
-        peerList.add(ben);
 
         WifiP2pDevice romac = new WifiP2pDevice();
         romac.deviceName = "romac";
-        romac.status = WifiP2pDevice.FAILED;
+        romac.status = WifiP2pDevice.INVITED;
+
+        peerList.add(ben);
         peerList.add(romac);
-
         postAndWait(peerList);
-        peerList.add(ben);
-
-        postAndWait(peerList);
-        peerList.add(ben);
-
+        assertEquals(mActivity.getNearbyPeerFragment().getNearbyPeerAdapter().getCount(),
+                     peerList.size());
 
         peerList.add(ben);
         postAndWait(peerList);
+        assertEquals(mActivity.getNearbyPeerFragment().getNearbyPeerAdapter().getCount(),
+                peerList.size());
+
+        peerList.add(ben);
+        peerList.add(ben);
+        postAndWait(peerList);
+        assertEquals(mActivity.getNearbyPeerFragment().getNearbyPeerAdapter().getCount(),
+                peerList.size());
 
         List<WifiP2pDevice> peerList2 = new ArrayList<>();
         peerList2.add(ben);
         peerList2.add(romac);
         peerList2.add(ben);
         peerList2.add(romac);
-
         postAndWait(peerList2);
+        assertEquals(mActivity.getNearbyPeerFragment().getNearbyPeerAdapter().getCount(),
+                peerList2.size());
+
     }
 
     private void postAndWait(List<WifiP2pDevice> peers) {
