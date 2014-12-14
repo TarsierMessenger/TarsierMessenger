@@ -1,4 +1,4 @@
-package ch.tarsier.tarsier.test;
+package ch.tarsier.tarsier.test.util;
 
 import android.test.AndroidTestCase;
 
@@ -10,7 +10,7 @@ import java.util.Locale;
 import ch.tarsier.tarsier.util.DateUtil;
 
 /**
- * DateUtilTest tests the DateUtil.
+ * DateUtilTest tests the DateUtil class.
  *
  * @see ch.tarsier.tarsier.util.DateUtil
  * @author marinnicolini on 16.11.2014.

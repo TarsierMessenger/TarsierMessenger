@@ -14,11 +14,20 @@ import ch.tarsier.tarsier.R;
 public class BitmapFromPath {
 
     public static Bitmap getBitmapFromPath(Context context, String filePath) {
+        if (context == null) {
+            throw new IllegalArgumentException("Context is null.");
+        }
+
+        if (filePath == null || filePath.equals("")) {
+            throw new IllegalArgumentException("filepath is null or empty.");
+        }
+
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
 
         if (bitmap == null) {
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.add_picture);
         }
+
         return bitmap;
     }
 

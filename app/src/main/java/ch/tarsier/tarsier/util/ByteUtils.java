@@ -31,5 +31,4 @@ public class ByteUtils {
         prepended[0] = (byte) a;
         return combine(prepended, b);
     }
-
 }
