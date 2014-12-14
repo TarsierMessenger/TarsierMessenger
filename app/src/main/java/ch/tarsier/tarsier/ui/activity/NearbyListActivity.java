@@ -28,11 +28,12 @@ import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
 import ch.tarsier.tarsier.ui.fragment.NearbyPeerFragment;
 
 /**
- * This Activity shows a list of either nearby peers to connect with or a list of
- * chatrooms active nearby.
+ * This Activity shows a list of nearby peers to connect with. It is also from here that the user
+ * create a new chatroom
  *
  * @author benpac
  * @author marinnicolini
+ *
  */
 public class NearbyListActivity extends Activity {
 
@@ -40,7 +41,7 @@ public class NearbyListActivity extends Activity {
 
     private final static String TAG = "NearbyList";
 
-    private NearbyPeerFragment mNearbyPeer;
+    private NearbyPeerFragment mNearbyPeerFragment;
     private FragmentManager mFragmentManager;
     private Bus mEventBus;
 
@@ -55,14 +56,14 @@ public class NearbyListActivity extends Activity {
 
         getEventBus().register(this);
 
+
+        mNearbyPeerFragment = new NearbyPeerFragment();
+        mNearbyPeerFragment.setUpFragment(this);
+
         mFragmentManager = getFragmentManager();
-
-        mNearbyPeer = new NearbyPeerFragment();
-        mNearbyPeer.setUpFragment(this);
-
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        ft.add(R.id.inside_nearby, mNearbyPeer);
-        ft.attach(mNearbyPeer);
+        ft.add(R.id.inside_nearby, mNearbyPeerFragment);
+        ft.attach(mNearbyPeerFragment);
         ft.commit();
 
         ActionBar actionBar = getActionBar();
@@ -79,23 +80,64 @@ public class NearbyListActivity extends Activity {
         }
     }
 
+    /**
+     * Method to get the Bus object to send Events
+     * @return the singleton Bus.
+     */
+    private Bus getEventBus() {
+        if (mEventBus == null) {
+            mEventBus = Tarsier.app().getEventBus();
+        }
+
+        return mEventBus;
+    }
+
+    /**
+     * Method activated when the list of nearby peers is received.
+     *
+     * Takes the list in the ReceivedNearbyPeersListEvent and update the NearbyPeerAdapter in the
+     * fragment and force the update of the fragment.
+     * @param event contains the new list of nearby peers (WifiP2pDevice)
+     */
     @Subscribe
     public void receivedNewPeersList(ReceivedNearbyPeersListEvent event) {
         Log.d(TAG, "Got ReceivedNearbyPeersListEvent");
-        NearbyPeerAdapter peerAdapter = mNearbyPeer.getNearbyPeerAdapter();
+        NearbyPeerAdapter peerAdapter = mNearbyPeerFragment.getNearbyPeerAdapter();
         if (peerAdapter != null) {
             peerAdapter.setPeerList(event.getPeers());
         }
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        ft.detach(mNearbyPeer);
-        ft.attach(mNearbyPeer);
+        ft.detach(mNearbyPeerFragment);
+        ft.attach(mNearbyPeerFragment);
         ft.commit();
+    }
 
+
+    /**
+     * Method called when the connection is established. Goes to the public chat room.
+     * @param event does not contain any useful information.
+     */
+    @Subscribe
+    public void onConnectedEvent(ConnectedEvent event) {
+        Log.d(TAG, "Got ConnectedEvent");
+
+        Intent chatIntent = new Intent(this, ChatActivity.class);
+
+        try {
+            super.onBackPressed();
+            Chat chat = mChatRepository.findPublicChat();
+            chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, chat);
+            startActivity(chatIntent);
+        } catch (NoSuchModelException | InvalidModelException e) {
+            Log.d(TAG, "Cannot find public chat.");
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        //Register to the Bus and ask the network for the list of nearby peers
         getEventBus().register(this);
         getEventBus().post(new RequestNearbyPeersListEvent());
     }
@@ -142,9 +184,12 @@ public class NearbyListActivity extends Activity {
         }
     }
 
+    /**
+     * This launch the creation of a new Chatroom and initiate the connection as server.
+     */
     private void displayNewChatroomActivity() {
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
-        Chat mNewChatroom = null;
+        Chat mNewChatroom;
         try {
             mNewChatroom = chatRepository.findPublicChat();
             Toast.makeText(this, "Waiting for connection...", Toast.LENGTH_SHORT).show();
@@ -154,37 +199,19 @@ public class NearbyListActivity extends Activity {
         }
     }
 
+    /**
+     * Launch the profile activity.
+     */
     private void displayProfileActivity() {
         Intent displayProfileIntent = new Intent(this, ProfileActivity.class);
         startActivity(displayProfileIntent);
     }
 
+    /**
+     * return to the Chatlist activity. Unused.
+     */
     private void displayChatsListActivity() {
         Intent chatsListActivity = new Intent(this, ChatListActivity.class);
         startActivity(chatsListActivity);
-    }
-    private Bus getEventBus() {
-        if (mEventBus == null) {
-            mEventBus = Tarsier.app().getEventBus();
-        }
-
-        return mEventBus;
-    }
-
-    @Subscribe
-    public void onConnectedEvent(ConnectedEvent event) {
-        Log.d(TAG, "Got ConnectedEvent");
-
-        Intent chatIntent = new Intent(this, ChatActivity.class);
-
-        try {
-            super.onBackPressed();
-            Chat chat = mChatRepository.findPublicChat();
-            chatIntent.putExtra(ChatActivity.EXTRA_CHAT_MESSAGE_KEY, chat);
-            startActivity(chatIntent);
-        } catch (NoSuchModelException | InvalidModelException e) {
-            Log.d(TAG, "Cannot find public chat.");
-            e.printStackTrace();
-        }
     }
 }
