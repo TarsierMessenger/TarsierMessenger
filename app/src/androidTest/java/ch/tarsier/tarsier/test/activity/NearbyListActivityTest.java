@@ -1,18 +1,9 @@
 package ch.tarsier.tarsier.test.activity;
 
-import android.app.Activity;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 
-import com.google.android.apps.common.testing.ui.espresso.matcher.BoundedMatcher;
 import com.squareup.otto.Bus;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +13,14 @@ import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.event.ReceivedNearbyPeersListEvent;
 import ch.tarsier.tarsier.ui.activity.NearbyListActivity;
 
-import static com.google.android.apps.common.testing.testrunner.util.Checks.checkNotNull;
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onData;
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.click;
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
-import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withChild;
+import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isClickable;
+import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withContentDescription;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.anything;
 
 /**
  * NearbyListActivityTest tests the NearbyListActivity class.
@@ -93,15 +84,25 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
                 peerList2.size());
     }
 
+    /**
+     * Test that we are able to click on the devices
+     */
     public void testClickOnDevice() {
         WifiP2pDevice ben = createBen();
         List<WifiP2pDevice> peerList = new ArrayList<>();
         peerList.add(ben);
         postAndWait(peerList);
-        //click on first item of the list
-        //onView(withId(R.id.inside_nearby))
-        //onData(withDeviceName("ben")).perform(click());
-        //onView(withId(R.id)).check(matches(withDevice(withDeviceName("ben"))));
+        onView(withId(R.id.inside_nearby)).perform(click());
+        onData(anything()).inAdapterView(withContentDescription(
+                mActivity.getResources().getString(R.string.description_list_nearby_peer)))
+                .atPosition(0).perform(click());
+    }
+
+    /**
+     * test that we can click the create chat room button
+     */
+    public void testClickOnCreateChatroom() {
+        onView(withId(R.id.create_new_chat_from_nearby)).check(matches(isClickable()));
     }
 
     /**
@@ -121,6 +122,7 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
         WifiP2pDevice ben  = new WifiP2pDevice();
         ben.deviceName = "ben";
         ben.status = WifiP2pDevice.AVAILABLE;
+        ben.deviceAddress = "his.home";
         return ben;
     }
     private WifiP2pDevice createRomac() {
@@ -129,52 +131,4 @@ public class NearbyListActivityTest extends ActivityInstrumentationTestCase2<Nea
         romac.status = WifiP2pDevice.INVITED;
     return romac;
     }
-
-    public static Matcher<Object> withDeviceName(final String expectedName) {
-        checkNotNull(expectedName);
-        return withDeviceName(equalTo(expectedName));
-    }
-
-    public static Matcher<Object> withDeviceName(final Matcher<String>  DeviceNameMatcher){
-        checkNotNull(DeviceNameMatcher);
-        return new BoundedMatcher<Object, WifiP2pDevice>(WifiP2pDevice.class) {
-            @Override
-            public boolean matchesSafely(WifiP2pDevice device) {
-                return device.deviceName.equals(DeviceNameMatcher);
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with item content: ");
-                DeviceNameMatcher.describeTo(description);
-            }
-        };
-    }
-
-    private static Matcher<View> withDevice(final Matcher<Object> dataMatcher) {
-        return new TypeSafeMatcher<View>() {
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with class name: ");
-                dataMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                if (!(view instanceof AdapterView)) {
-                    return false;
-                }
-                @SuppressWarnings("rawtypes")
-                Adapter adapter = ((AdapterView) view).getAdapter();
-                for (int i = 0; i < adapter.getCount(); i++) {
-                    if (dataMatcher.matches(adapter.getItem(i))) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        };
-    }
-
 }

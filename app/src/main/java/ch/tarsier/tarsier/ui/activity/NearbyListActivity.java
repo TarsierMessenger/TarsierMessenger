@@ -75,7 +75,6 @@ public class NearbyListActivity extends Activity {
             } else {
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
-
             actionBar.setDisplayShowHomeEnabled(false);
         }
     }

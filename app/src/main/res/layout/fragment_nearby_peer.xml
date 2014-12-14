@@ -5,6 +5,7 @@
     <ListView
     android:id="@+id/nearby_peer_list"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent"
+    android:contentDescription="@string/description_list_nearby_peer"/>
 
 </LinearLayout>

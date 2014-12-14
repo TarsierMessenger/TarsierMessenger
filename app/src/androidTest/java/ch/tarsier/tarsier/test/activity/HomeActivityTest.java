@@ -46,6 +46,7 @@ public class HomeActivityTest extends TarsierTestCase<HomeActivity> {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        //store original UserPreference to restore them at the end of test
         mUserPrefStore = Tarsier.app().getUserPreferences();
         mUserPrefMock = mock(UserPreferences.class);
         when(mUserPrefMock.getStatusMessage()).thenReturn(EMPTY_STRING);
@@ -55,12 +56,9 @@ public class HomeActivityTest extends TarsierTestCase<HomeActivity> {
         getActivity();
     }
 
-    /**
-     * put back the original UserPreference when the test is done
-     * @throws Exception
-     */
     @Override
     protected void tearDown() throws Exception {
+        //put back the original user preferences to avoid error when running tests
         Tarsier.app().setUserPreferences(mUserPrefStore);
         super.tearDown();
     }
