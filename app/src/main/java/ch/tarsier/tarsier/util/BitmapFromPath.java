@@ -18,10 +18,6 @@ public class BitmapFromPath {
             throw new IllegalArgumentException("Context is null.");
         }
 
-        if (filePath == null || filePath.equals("")) {
-            throw new IllegalArgumentException("filepath is null or empty.");
-        }
-
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
 
         if (bitmap == null) {

@@ -39,24 +39,6 @@ public class BitmapFromPathTest extends TarsierTestCase<HomeActivity> {
         }
     }
 
-    public void testGetBitmapFromNullPath() {
-        try {
-            BitmapFromPath.getBitmapFromPath(mActivity.getBaseContext(), null);
-            fail("IllegalArgumentException should be thrown.");
-        } catch (IllegalArgumentException e) {
-            assertEquals("filepath is null or empty.", e.getMessage());
-        }
-    }
-
-    public void testGetBitmapFromEmptyPath() {
-        try {
-            BitmapFromPath.getBitmapFromPath(mActivity.getBaseContext(), "");
-            fail("IllegalArgumentException should be thrown.");
-        } catch (IllegalArgumentException e) {
-            assertEquals("filepath is null or empty.", e.getMessage());
-        }
-    }
-
     public void testGetBitmapFromPathWithGoodArguments() {
         try {
             BitmapFromPath.getBitmapFromPath(mActivity.getBaseContext(), FILEPATH);
