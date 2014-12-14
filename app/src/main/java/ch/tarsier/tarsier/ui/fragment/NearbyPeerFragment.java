@@ -20,10 +20,12 @@ import ch.tarsier.tarsier.event.ConnectToDeviceEvent;
 import ch.tarsier.tarsier.ui.adapter.NearbyPeerAdapter;
 
 /**
- * NearbyPeerFragment is the fragment for the NearbyListActivity.
+ * This fragment present a list of WifiP2pDevices nearby the user's device.
+ * It shows the basic information on each devices
  *
  * @author benpac
  * @author marinnicolini
+ *
  */
 public class NearbyPeerFragment extends Fragment {
 
@@ -39,15 +41,19 @@ public class NearbyPeerFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        getEventBus().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
-        Log.d(TAG, "onAttach Fragment");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView Fragment");
         Log.d(TAG, "onCreateView Fragment size list peers : " + mNearbyPeerAdapter.getCount());
 
         View rowView = inflater.inflate(R.layout.fragment_nearby_peer, container, false);
@@ -57,7 +63,6 @@ public class NearbyPeerFragment extends Fragment {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
                 getEventBus().post(new ConnectToDeviceEvent((WifiP2pDevice) adapterView
                         .getItemAtPosition(position)));
             }
@@ -65,23 +70,31 @@ public class NearbyPeerFragment extends Fragment {
         return rowView;
     }
 
-    //FIXME should maybe removed
     public NearbyPeerAdapter getNearbyPeerAdapter() {
         return mNearbyPeerAdapter;
     }
 
+
+    /**
+     * Set up the activity reference and create the Adapter. We need the reference to the
+     * activity in the Adapter.
+     * @param activity The activity the fragment is displayed on.
+     */
     public void setUpFragment(Activity activity) {
         mActivity = activity;
         mNearbyPeerAdapter = new NearbyPeerAdapter(mActivity, R.layout.row_nearby_peer_list);
     }
 
-
+    /**
+     * Get the singleton Bus to post/receive events. if it is the first call, it register the fragment to
+     * post events
+     * @return the bus event.
+     */
     public Bus getEventBus() {
         if (mEventBus == null) {
             mEventBus = Tarsier.app().getEventBus();
             mEventBus.register(this);
         }
-
         return mEventBus;
     }
 

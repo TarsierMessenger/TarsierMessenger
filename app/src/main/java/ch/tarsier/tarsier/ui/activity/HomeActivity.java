@@ -69,7 +69,6 @@ public class HomeActivity extends Activity {
         this.validateStatusMessage();
 
         if (validateFields()) {
-            // FIXME: should create key the first time the user connects
             saveProfileInfos();
             //remove this activity from the stack.
             this.finish();
