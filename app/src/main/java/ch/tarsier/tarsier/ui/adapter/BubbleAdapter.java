@@ -45,7 +45,7 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
     }
     private static final int TYPE_MAX_COUNT = EndlessListViewType.values().length;
 
-    private long numberOfDateSeparators;
+    private int numberOfDateSeparators;
 
     private Context mContext;
     private List<BubbleListViewItem> mMessages;
@@ -73,13 +73,13 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
         numberOfDateSeparators = numberOfDateSeparators + addedSeparators;
     }
 
-    public long getNumberOfDateSeparators() {
-        return numberOfDateSeparators;
-    }
-
     @Override
     public int getCount() {
         return mMessages.size();
+    }
+
+    public int getCountWithoutSeparators() {
+        return mMessages.size() - numberOfDateSeparators;
     }
 
     /**
@@ -148,8 +148,6 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
                     dateSeparatorViewHolder = (DateSeparatorViewHolder) convertView.getTag();
                 }
 
-                //TODO /!\ Attention, vérifier que le computeDateSeparator
-                //TODO est bien modifié tous les jours pour chaque date separator
                 inflateDateSeparator(dateSeparatorViewHolder, (DateSeparator) listViewItem);
                 break;
             default:

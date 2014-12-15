@@ -77,7 +77,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
 
     private List<BubbleListViewItem> addDateSeparators(List<Message> data) {
         int newSeparators = 0;
-        ArrayList<BubbleListViewItem> newListItems = new ArrayList<BubbleListViewItem>();
+        ArrayList<BubbleListViewItem> newListItems = new ArrayList<>();
 
         Iterator<Message> i = data.iterator();
         Message nextMessage = i.next(); //We already checked if data is empty
