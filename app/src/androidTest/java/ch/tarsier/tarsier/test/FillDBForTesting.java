@@ -1,7 +1,9 @@
 package ch.tarsier.tarsier.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import ch.tarsier.tarsier.crypto.EC25519;
 import ch.tarsier.tarsier.domain.model.Chat;
@@ -14,6 +16,7 @@ import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
+import ch.tarsier.tarsier.util.DateUtil;
 
 /**
  * The FillDBForTesting class is used to fill the mocked database for testing purposes.
@@ -24,27 +27,21 @@ public class FillDBForTesting {
 
     public static User user;
 
-    public static Peer peer1;
-    public static Peer peer2;
-    public static Peer peer3;
+    private static final int NUMBER_OF_PEERS = 3;
+    public static Peer[] peers;
 
     public static Chat chat2;
     public static Chat chat1;
 
-    public static Message message1Chat2;
-    public static Message message2Chat2;
-
-    public static Message message1Chat1;
-    public static Message message2Chat1;
-    public static Message message3Chat1;
+    private static final int NUMBER_OF_MESSAGES = 75;
+    public static Message[] messagesChat1;
+    public static Message[] messagesChat2;
 
     public static List<Chat> allChats;
     public static List<Message> allMessages;
     public static List<Peer> allPeers;
 
     private static final long FIRST_DECEMBER_2014_MID_DAY = 1417392000;
-    private static final long ONE_MINUTE = 60;
-    private static final long TWO_MINUTES = 120;
 
     private static boolean initiated = false;
 
@@ -60,39 +57,27 @@ public class FillDBForTesting {
         user.setStatusMessage("status user");
 
 
-        //Generate the peers
-        peer1 = new Peer();
-        peer1.setUserName("peer1");
-        peer1.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
-        peer1.setStatusMessage("status1");
-
-        peer2 = new Peer();
-        peer2.setUserName("peer2");
-        peer2.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
-        peer2.setStatusMessage("status2");
-
-        peer3 = new Peer();
-        peer3.setUserName("peer3");
-        peer3.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
-        peer3.setStatusMessage("status3");
-
-        byte[] peer1Id = peer1.getPublicKey().getBytes();
-        byte[] peer2Id = peer2.getPublicKey().getBytes();
-        byte[] peer3Id = peer3.getPublicKey().getBytes();
+        peers = new Peer[NUMBER_OF_PEERS];
+        for (int i=0; i<NUMBER_OF_PEERS; i++) {
+            //Generate the peers
+            Peer peer = new Peer();
+            peer.setUserName("peer "+i);
+            peer.setPublicKey(new PublicKey(EC25519.generateKeyPair().getPublicKey()));
+            peer.setStatusMessage("status"+i);
+            peers[i] = peer;
+        }
 
         allPeers = new ArrayList<>();
-        allPeers.add(peer1);
-        allPeers.add(peer2);
-        allPeers.add(peer3);
+        allPeers.addAll(Arrays.asList(peers));
 
 
         //Generate the chats
         chat1 = new Chat();
-        chat1.setHost(peer1);
+        chat1.setHost(peers[0]);
         chat1.setPrivate(false);
 
         chat2 = new Chat();
-        chat2.setHost(peer2);
+        chat2.setHost(peers[1]);
         chat2.setPrivate(true);
 
         long chat1Id = chat1.getId();
@@ -102,22 +87,29 @@ public class FillDBForTesting {
         allChats.add(chat1);
         allChats.add(chat2);
 
+        Random r = new Random();
+        int randomPeerIndex;
+        long nowTimeStamp = DateUtil.getNowTimestamp();
+        int constantWidthInterval = (int) (nowTimeStamp - FIRST_DECEMBER_2014_MID_DAY) / NUMBER_OF_MESSAGES;
+        long messageTimeStamp = FIRST_DECEMBER_2014_MID_DAY;
+        messagesChat1 = new Message[NUMBER_OF_MESSAGES];
+        messagesChat2 = new Message[NUMBER_OF_MESSAGES];
+        for (int i=0; i<NUMBER_OF_MESSAGES; i++) {
+            //Generate the messages for the first chat
+            randomPeerIndex = r.nextInt(NUMBER_OF_PEERS);
+            messagesChat1[i] = new Message(chat1Id, "Chat 1: Message "+i,
+                    peers[randomPeerIndex].getPublicKey().getBytes(), messageTimeStamp);
+            //Generate the messages for the second chat
+            randomPeerIndex = r.nextInt(NUMBER_OF_PEERS);
+            messagesChat2[i] = new Message(chat2Id, "Chat 2: Message "+i,
+                    peers[randomPeerIndex].getPublicKey().getBytes(), messageTimeStamp);
 
-        //Generate the messages for the first chat
-        message1Chat1 = new Message(chat1Id, "Chat 1: Message 1", peer1Id, FIRST_DECEMBER_2014_MID_DAY);
-        message2Chat1 = new Message(chat1Id, "Chat 1: Message 2", peer2Id, FIRST_DECEMBER_2014_MID_DAY + ONE_MINUTE);
-        message3Chat1 = new Message(chat1Id, "Chat 1: Message 2", peer3Id, FIRST_DECEMBER_2014_MID_DAY + TWO_MINUTES);
-
-        //Generate the messages for the second chat
-        message1Chat2 = new Message(chat2Id, "Chat 2: Message 1", peer1Id, FIRST_DECEMBER_2014_MID_DAY);
-        message2Chat2 = new Message(chat2Id, "Chat 2: Message 2", peer2Id, FIRST_DECEMBER_2014_MID_DAY + ONE_MINUTE);
+            messageTimeStamp = messageTimeStamp + constantWidthInterval;
+        }
 
         allMessages = new ArrayList<>();
-        allMessages.add(message1Chat1);
-        allMessages.add(message2Chat1);
-        allMessages.add(message3Chat1);
-        allMessages.add(message1Chat2);
-        allMessages.add(message2Chat2);
+        allMessages.addAll(Arrays.asList(messagesChat1));
+        allMessages.addAll(Arrays.asList(messagesChat2));
 
         initiated = true;
     }
@@ -138,19 +130,17 @@ public class FillDBForTesting {
         }
 
         try {
-            peerRepositoryMock.insert(peer1);
-            peerRepositoryMock.insert(peer2);
-            peerRepositoryMock.insert(peer3);
+            for (int i=0; i<NUMBER_OF_PEERS; i++) {
+                peerRepositoryMock.insert(peers[i]);
+            }
 
             chatRepositoryMock.insert(chat2);
             chatRepositoryMock.insert(chat1);
 
-            messageRepositoryMock.insert(message1Chat2);
-            messageRepositoryMock.insert(message2Chat2);
-
-            messageRepositoryMock.insert(message1Chat1);
-            messageRepositoryMock.insert(message2Chat1);
-            messageRepositoryMock.insert(message3Chat1);
+            for (int i=0; i<NUMBER_OF_MESSAGES; i++) {
+                messageRepositoryMock.insert(messagesChat1[i]);
+                messageRepositoryMock.insert(messagesChat2[i]);
+            }
         } catch (InvalidModelException | InsertException e) {
             e.printStackTrace();
         }

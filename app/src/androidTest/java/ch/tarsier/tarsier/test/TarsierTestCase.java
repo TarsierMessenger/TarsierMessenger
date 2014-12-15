@@ -74,52 +74,42 @@ public class TarsierTestCase<T> extends ActivityInstrumentationTestCase2 {
                 messageRepositoryMock,
                 peerRepositoryMock);
 
-        Peer peer1 = FillDBForTesting.peer1;
-        Peer peer2 = FillDBForTesting.peer2;
-        Peer peer3 = FillDBForTesting.peer3;
+        Peer[] peers = FillDBForTesting.peers;
 
         Chat chat1 = FillDBForTesting.chat2;
         Chat chat2 = FillDBForTesting.chat1;
 
-        Message message1Chat1 = FillDBForTesting.message1Chat2;
-        Message message2Chat1 = FillDBForTesting.message2Chat2;
-        Message message3Chat1 = FillDBForTesting.message3Chat1;
-        Message message1Chat2 = FillDBForTesting.message1Chat1;
-        Message message2Chat2 = FillDBForTesting.message2Chat1;
+        Message[] messagesChat1 = FillDBForTesting.messagesChat1;
+        Message[] messagesChat2 = FillDBForTesting.messagesChat2;
 
 
         when(chatRepositoryMock.findAll()).thenReturn(FillDBForTesting.allChats);
         when(chatRepositoryMock.findById(chat1.getId())).thenReturn(chat1);
         when(chatRepositoryMock.findById(chat2.getId())).thenReturn(chat2);
-        when(chatRepositoryMock.findPrivateChatForPeer(peer1)).thenReturn(chat1);
-        when(chatRepositoryMock.findPrivateChatForPeer(peer2)).thenThrow(NoSuchModelException.class);
-        when(chatRepositoryMock.findPrivateChatForPeer(peer3)).thenThrow(NoSuchModelException.class);
-        when(chatRepositoryMock.findChatForPeer(peer1, true)).thenReturn(chat1);
-        when(chatRepositoryMock.findChatForPeer(peer1, false)).thenThrow(NoSuchModelException.class);
-        when(chatRepositoryMock.findChatForPeer(peer2, true)).thenThrow(NoSuchModelException.class);
-        when(chatRepositoryMock.findChatForPeer(peer2, false)).thenReturn(chat2);
-        when(chatRepositoryMock.findChatForPeer(peer3, true)).thenThrow(NoSuchModelException.class);
-        when(chatRepositoryMock.findChatForPeer(peer3, false)).thenThrow(NoSuchModelException.class);
+        when(chatRepositoryMock.findPrivateChatForPeer(peers[0])).thenReturn(chat1);
+        when(chatRepositoryMock.findPrivateChatForPeer(peers[1])).thenThrow(NoSuchModelException.class);
+        when(chatRepositoryMock.findPrivateChatForPeer(peers[2])).thenThrow(NoSuchModelException.class);
+        when(chatRepositoryMock.findChatForPeer(peers[0], true)).thenReturn(chat1);
+        when(chatRepositoryMock.findChatForPeer(peers[0], false)).thenThrow(NoSuchModelException.class);
+        when(chatRepositoryMock.findChatForPeer(peers[1], true)).thenThrow(NoSuchModelException.class);
+        when(chatRepositoryMock.findChatForPeer(peers[1], false)).thenReturn(chat2);
+        when(chatRepositoryMock.findChatForPeer(peers[2], true)).thenThrow(NoSuchModelException.class);
+        when(chatRepositoryMock.findChatForPeer(peers[2], false)).thenThrow(NoSuchModelException.class);
 
         when(messageRepositoryMock.findAll()).thenReturn(FillDBForTesting.allMessages);
-        when(messageRepositoryMock.findById(message1Chat1.getId())).thenReturn(message1Chat1);
-        when(messageRepositoryMock.findById(message2Chat1.getId())).thenReturn(message2Chat1);
-        when(messageRepositoryMock.findById(message3Chat1.getId())).thenReturn(message3Chat1);
-        when(messageRepositoryMock.findById(message1Chat2.getId())).thenReturn(message1Chat2);
-        when(messageRepositoryMock.findById(message2Chat2.getId())).thenReturn(message2Chat2);
-        when(messageRepositoryMock.getLastMessageOf(chat1)).thenReturn(message2Chat1);
-        when(messageRepositoryMock.getLastMessageOf(chat2)).thenReturn(message3Chat1);
+        for (int i=0; i<messagesChat1.length; i++) {
+            when(messageRepositoryMock.findById(messagesChat1[i].getId())).thenReturn(messagesChat1[i]);
+            when(messageRepositoryMock.findById(messagesChat2[i].getId())).thenReturn(messagesChat2[i]);
+        }
+        when(messageRepositoryMock.getLastMessageOf(chat1)).thenReturn(messagesChat1[messagesChat1.length-1]);
+        when(messageRepositoryMock.getLastMessageOf(chat2)).thenReturn(messagesChat2[messagesChat1.length-1]);
 
         when(peerRepositoryMock.findAll()).thenReturn(FillDBForTesting.allPeers);
-        when(peerRepositoryMock.findById(peer1.getId())).thenReturn(peer1);
-        when(peerRepositoryMock.findById(peer2.getId())).thenReturn(peer2);
-        when(peerRepositoryMock.findById(peer3.getId())).thenReturn(peer3);
-        when(peerRepositoryMock.findByPublicKey(peer1.getPublicKey().getBytes())).thenReturn(peer1);
-        when(peerRepositoryMock.findByPublicKey(peer2.getPublicKey().getBytes())).thenReturn(peer2);
-        when(peerRepositoryMock.findByPublicKey(peer3.getPublicKey().getBytes())).thenReturn(peer3);
-        when(peerRepositoryMock.findByPublicKey(peer1.getPublicKey())).thenReturn(peer1);
-        when(peerRepositoryMock.findByPublicKey(peer2.getPublicKey())).thenReturn(peer2);
-        when(peerRepositoryMock.findByPublicKey(peer3.getPublicKey())).thenReturn(peer3);
+        for (Peer peer : peers) {
+            when(peerRepositoryMock.findById(peer.getId())).thenReturn(peer);
+            when(peerRepositoryMock.findByPublicKey(peer.getPublicKey().getBytes())).thenReturn(peer);
+            when(peerRepositoryMock.findByPublicKey(peer.getPublicKey())).thenReturn(peer);
+        }
 
         when(userRepositoryMock.getUser()).thenReturn(FillDBForTesting.user);
 

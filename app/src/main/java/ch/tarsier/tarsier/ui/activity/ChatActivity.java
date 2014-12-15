@@ -63,7 +63,7 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         getEventBus().register(this);
 
-        mListView = (EndlessListView) findViewById(R.id.list);
+        mListView = (EndlessListView) findViewById(R.id.list_view);
         mListView.setLoadingView(R.layout.loading_layout);
 
         mListViewAdapter = new BubbleAdapter(this, new ArrayList<BubbleListViewItem>());

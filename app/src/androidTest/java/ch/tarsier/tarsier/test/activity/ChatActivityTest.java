@@ -1,15 +1,31 @@
 package ch.tarsier.tarsier.test.activity;
 
 import android.test.ActivityInstrumentationTestCase2;
+import ch.tarsier.tarsier.R;
+import ch.tarsier.tarsier.test.TarsierTestCase;
 import ch.tarsier.tarsier.ui.activity.ChatActivity;
+import ch.tarsier.tarsier.ui.activity.ChatListActivity;
+import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
+import ch.tarsier.tarsier.ui.adapter.ChatListAdapter;
+import ch.tarsier.tarsier.ui.view.ChatListView;
+import ch.tarsier.tarsier.ui.view.EndlessListView;
+
+import static com.google.android.apps.common.testing.ui.espresso.Espresso.onView;
+import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.clearText;
+import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.closeSoftKeyboard;
+import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.typeText;
+import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
+import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isClickable;
+import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.not;
 
 /**
- * ChatActivityTest tests the ChatActivity class.
- *
- * @see ch.tarsier.tarsier.ui.activity.ChatActivity
- * @author marinnicolini
+ * @author xawill
  */
-public class ChatActivityTest extends ActivityInstrumentationTestCase2<ChatActivity> {
+public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
+
+    private ChatActivity mActivity;
+    private BubbleAdapter mAdapter;
 
     public ChatActivityTest() {
         super(ChatActivity.class);
@@ -18,40 +34,37 @@ public class ChatActivityTest extends ActivityInstrumentationTestCase2<ChatActiv
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        // Espresso will not launch our activity for us, we must launch it via getActivity().
-        getActivity();
+        super.mockRepositories();
+        mActivity = (ChatActivity) getActivity();
+        EndlessListView listView = (EndlessListView) mActivity.findViewById(R.id.list_view);
+        mAdapter = (BubbleAdapter) listView.getAdapter();
     }
 
-    /* test the sendImageButton if is clickable when something is to be sent or not
-    public void testSendMessageButtonClickable() {
-        String messageSent = "This is a new message to be sent.";
-        onView(withId(R.id.sendImageButton)).check(matches(not(isClickable())));
-        onView(withId(R.id.message_to_send)).perform(typeText(messageSent));
-        onView(withId(R.id.sendImageButton)).check(matches(isClickable()));
-        onView(withId(R.id.message_to_send)).perform(clearText(), closeSoftKeyboard());
-        onView(withId(R.id.sendImageButton)).check(matches(not(isClickable())));
-    }*/
-
-    /*
-    test if the scrolling fetch the last messages
-
-    public void testScrollToFetchMessages() {
+    public void testMessagesFetchedInOrder() {
 
     }
-    */
 
-    /*
-    test if the view go to the last message after scrolling and then send a message
-
-    public void testScrollToCurrentSendMessageButton() {
+    public void testDateSeparatorsAreCorrectlyInserted() {
 
     }
-     */
 
-    /*
-    test if the dateSeparator is actually visible when we scroll
-    public void testDateSeparatorOnScroll() {
+    public void testOnlyFetchMessagesWhenNecessary() {
 
     }
-     */
+
+    public void testNewMessageSentIsDisplayed() {
+
+    }
+
+    public void testNewMessageSentStoredInDatabase() {
+
+    }
+
+    public void testNewMessageSentIsSentOverNetwork() {
+
+    }
+
+    public void testDisplayNewMessagesFromNetwork() {
+
+    }
 }
