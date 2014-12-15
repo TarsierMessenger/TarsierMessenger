@@ -45,6 +45,8 @@ public class Tarsier extends Application {
 
     private Bus mEventBus;
 
+    private MessagingManager mMessagingManager;
+
     public static Tarsier app() {
         return app;
     }
@@ -84,7 +86,7 @@ public class Tarsier extends Application {
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-        MessagingManager mMessagingManager = new MessagingManager(mWifiP2pManager, mWifiP2pChannel);
+        mMessagingManager = new MessagingManager(mWifiP2pManager, mWifiP2pChannel);
         mMessagingManager.setEventBus(getEventBus());
 
         registerReceiver(mMessagingManager, intentFilter);
@@ -100,6 +102,14 @@ public class Tarsier extends Application {
 
     public void setUserPreferences(UserPreferences userPreferences) {
         mUserPreferences = userPreferences;
+    }
+
+    public MessagingManager getMessagingManager() {
+        return mMessagingManager;
+    }
+
+    public void setMessagingManager(MessagingManager messagingManager) {
+        mMessagingManager = messagingManager;
     }
 
     public Database getDatabase() {

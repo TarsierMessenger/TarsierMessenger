@@ -55,6 +55,7 @@ public class ChatroomPeersActivity extends Activity {
 
         mChatroomPeersListView.setLoadingView(R.layout.loading_layout);
         mChatroomPeersListView.setChatroomPeersAdapter(mChatroomPeersAdapter);
+        mChatroomPeersListView.setAdapter(mChatroomPeersAdapter);
 
         mChatroomPeersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -35,16 +35,6 @@ public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
     }
 
     @Override
-    public int getCount() {
-        return mPeerList.size();
-    }
-
-    @Override
-    public Peer getItem(int position) {
-        return mPeerList.get(position);
-    }
-
-    @Override
     public long getItemId(int position) {
         if (mPeerList.get(position) != null) {
             return mPeerList.get(position).getId();
@@ -72,21 +62,23 @@ public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
             holder = (PeerHolder) row.getTag();
         }
 
-        Peer peer = this.getItem(position);
+        Peer peer = getItem(position);
 
         //TODO verify we get the right picture
         holder.mAvatarSrc.setImageBitmap(peer.getPicture());
         holder.mName.setText(peer.getUserName());
         holder.mStatus.setText(peer.getStatusMessage());
 
+        row.setContentDescription("Peer " + peer.getId());
+
         return row;
     }
 
     public void addAllPeers(List<Peer> peerList) {
-        this.clear();
-        this.addAll(peerList);
+        clear();
+        addAll(peerList);
         mPeerList = peerList;
-        this.setNotifyOnChange(true);
+        setNotifyOnChange(true);
     }
 
     /**

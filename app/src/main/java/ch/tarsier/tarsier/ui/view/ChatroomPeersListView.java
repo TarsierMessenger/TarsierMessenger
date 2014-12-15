@@ -39,14 +39,18 @@ public class ChatroomPeersListView extends ListView {
         mChatroomPeersAdapter = chatroomPeersAdapter;
     }
 
+    public ChatroomPeersAdapter getChatroomPeersAdapter() {
+        return mChatroomPeersAdapter;
+    }
+
     public void setLoadingView(int resId) {
         LayoutInflater inflater = (LayoutInflater) super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mFooter = inflater.inflate(resId, null);
-        this.addFooterView(mFooter);
+        addFooterView(mFooter);
     }
 
     public void addNewData(List<Peer> data) {
-        this.removeFooterView(mFooter);
+        removeFooterView(mFooter);
 
         if (data != null) {
             mChatroomPeersAdapter.addAllPeers(data);

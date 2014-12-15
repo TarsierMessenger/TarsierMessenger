@@ -75,6 +75,8 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     private Bus mEventBus;
 
+    private boolean mDisabled = false;
+
     public MessagingManager(WifiP2pManager wifiManager, WifiP2pManager.Channel channel) {
         mManager = wifiManager;
         mChannel = channel;
@@ -372,6 +374,10 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     @Subscribe
     public void onSendMessageEvent(SendMessageEvent event) {
+        if (mDisabled) {
+            return;
+        }
+
         ch.tarsier.tarsier.domain.model.Message message = event.getMessage();
         if (mConnection != null) {
             if (event.isPublic()) {
@@ -397,18 +403,30 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     @Subscribe
     public void onConnectToDeviceEvent(ConnectToDeviceEvent event) {
+        if (mDisabled) {
+            return;
+        }
+
         Log.d(NETWORK_LAYER_TAG, "Got ConnectToDeviceEvent");
         connectToDevice(event.getDevice());
     }
 
     @Subscribe
     public void onCreateGroupEvent(CreateGroupEvent event) {
+        if (mDisabled) {
+            return;
+        }
+
         Log.d(NETWORK_LAYER_TAG, "Got CreateGroupEvent");
         createGroup();
     }
 
     @Subscribe
     public void onRequestNearbyPeersListEvent(RequestNearbyPeersListEvent event) {
+        if (mDisabled) {
+            return;
+        }
+
         Log.d(NETWORK_LAYER_TAG, "Got RequestNearbyPeersListEvent");
 
         if (mEventBus != null) {
@@ -420,6 +438,10 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     @Subscribe
     public void onRequestChatroomPeersListEvent(RequestChatroomPeersListEvent event) {
+        if (mDisabled) {
+            return;
+        }
+
         Log.d(NETWORK_LAYER_TAG, "Got RequestChatroomPeersListEvent");
 
         if (mEventBus != null) {
@@ -430,5 +452,13 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
 
     public Handler getConnectionHandler() {
         return mHandler;
+    }
+
+    public void setDisabled(boolean disabled) {
+        mDisabled = disabled;
+    }
+
+    public boolean isDisabled() {
+        return mDisabled;
     }
 }
