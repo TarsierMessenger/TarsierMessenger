@@ -11,8 +11,8 @@ android {
     buildToolsVersion "21.1.1"
     defaultConfig {
         applicationId "ch.tarsier.tarsier"
-        minSdkVersion 16
-        targetSdkVersion 16
+        minSdkVersion 17
+        targetSdkVersion 17
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
@@ -53,7 +53,12 @@ android {
                'IconDipSize',
                'IconDuplicatesConfig',
                'UselessParent',
-               'IconColors'
+               'IconColors',
+               'TrulyRandom',
+               'SimpleDateFormat',
+               'IconMissingDensityFolder',
+               'Overdraw',
+               'MergeRootFrame'
     }
 }
 
