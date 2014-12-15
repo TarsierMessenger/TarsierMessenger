@@ -61,18 +61,22 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
     }
 
     public void addNewMessage(Message message) {
+        int newSeparators = 0;
         long messageTimeStamp = message.getDateTime();
         if (message.getDateTime() - mBubbleAdapter.getLastMessageTimestamp() > MILLISECONDS_IN_DAY
                 || mBubbleAdapter.isEmpty()) {
             DateSeparator dateSeparator = new DateSeparator(messageTimeStamp);
             mBubbleAdapter.insert(dateSeparator, 0);
+            newSeparators++;
         }
 
         mBubbleAdapter.insert(message, 0);
         mBubbleAdapter.notifyDataSetChanged();
+        mBubbleAdapter.updateDateSeparatorsCount(newSeparators);
     }
 
     private List<BubbleListViewItem> addDateSeparators(List<Message> data) {
+        int newSeparators = 0;
         ArrayList<BubbleListViewItem> newListItems = new ArrayList<BubbleListViewItem>();
 
         Iterator<Message> i = data.iterator();
@@ -88,6 +92,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
             if (currentMessageTimeStamp - nextMessageTimeStamp > MILLISECONDS_IN_DAY) {
                 DateSeparator dateSeparator = new DateSeparator(currentMessageTimeStamp);
                 newListItems.add(dateSeparator);
+                newSeparators++;
             }
         }
         newListItems.add(nextMessage);
@@ -96,7 +101,10 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
                 || mBubbleAdapter.isEmpty() || mAllMessagesLoaded) {
             DateSeparator dateSeparator = new DateSeparator(nextMessage.getDateTime());
             newListItems.add(dateSeparator);
+            newSeparators++;
         }
+
+        mBubbleAdapter.updateDateSeparatorsCount(newSeparators);
 
         return newListItems;
     }
@@ -128,7 +136,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (scrollState == SCROLL_STATE_IDLE && getFirstVisiblePosition() == 0 && !isLoading
+        if (scrollState == SCROLL_STATE_IDLE && getFirstVisiblePosition() == 1 && !isLoading
                 && !mAllMessagesLoaded && mEndlessListener != null) {
             addHeaderView(mHeader);
             isLoading = true;

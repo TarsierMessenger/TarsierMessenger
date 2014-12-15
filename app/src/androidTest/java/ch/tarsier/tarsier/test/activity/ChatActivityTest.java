@@ -1,14 +1,15 @@
 package ch.tarsier.tarsier.test.activity;
 
 import android.content.Intent;
+import android.util.Log;
 
 import junit.framework.Assert;
 
-import org.mockito.Mockito;
-
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.database.Columns;
 import ch.tarsier.tarsier.domain.model.Chat;
+import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
@@ -17,13 +18,17 @@ import ch.tarsier.tarsier.test.FillDBForTesting;
 import ch.tarsier.tarsier.test.TarsierTestCase;
 import ch.tarsier.tarsier.ui.activity.ChatActivity;
 import ch.tarsier.tarsier.ui.adapter.BubbleAdapter;
+import ch.tarsier.tarsier.ui.view.BubbleListViewItem;
 import ch.tarsier.tarsier.ui.view.EndlessListView;
 import ch.tarsier.tarsier.util.DateUtil;
 
 import static com.google.android.apps.common.testing.ui.espresso.Espresso.onData;
 import static com.google.android.apps.common.testing.ui.espresso.action.ViewActions.scrollTo;
+import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
+import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
@@ -37,6 +42,10 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
     private EndlessListView mListView;
     private Chat mChat;
 
+    private ChatRepository mChatRepository;
+    private MessageRepository mMessageRepository;
+    private PeerRepository mPeerRepository;
+
     public ChatActivityTest() {
         super(ChatActivity.class);
     }
@@ -45,11 +54,11 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
     protected void setUp() throws Exception {
         super.setUp();
 
-        ChatRepository chatRepository = Tarsier.app().getChatRepository();
-        MessageRepository messageRepository = Tarsier.app().getMessageRepository();
-        PeerRepository peerRepository = Tarsier.app().getPeerRepository();
+        mChatRepository = Tarsier.app().getChatRepository();
+        mMessageRepository = Tarsier.app().getMessageRepository();
+        mPeerRepository = Tarsier.app().getPeerRepository();
 
-        FillDBForTesting.populate(chatRepository, messageRepository, peerRepository);
+        FillDBForTesting.populate(mChatRepository, mMessageRepository, mPeerRepository);
 
         mChat = FillDBForTesting.chat1;
 
@@ -64,7 +73,7 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
 
     public void testAdapterNotEmpty() {
         try {
-            if(messageRepositoryMock.findByChatUntil(mChat, DateUtil.getNowTimestamp(), 1).isEmpty()) {
+            if(mMessageRepository.findByChatUntil(mChat, DateUtil.getNowTimestamp(), 1).isEmpty()) {
                 assertTrue(mAdapter.isEmpty());
             } else {
                 assertFalse(mAdapter.isEmpty());
@@ -76,15 +85,16 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
 
     public void testAdapterCount() {
         while (!mListView.allMessagesLoaded()) {
-            onData(is(instanceOf(ChatActivity.class)))
-                    .inAdapterView(withId(R.id.list_view))
-                    .atPosition(mAdapter.getCount())
-                    .perform(scrollTo());
+            onData(instanceOf(Message.class))
+                    .inAdapterView(allOf(withId(R.id.list_view), isDisplayed()))
+                    .atPosition(0)
+                    .check(matches(isDisplayed()));
         }
-        Assert.assertEquals(FillDBForTesting.messagesChat1.length, mAdapter.getCount());
+        assertEquals(FillDBForTesting.messagesChat1.length,
+                    mAdapter.getCount() - mAdapter.getNumberOfDateSeparators());
     }
 
-    public void testMessagesFetchedInOrder() {
+    /*public void testMessagesFetchedInOrder() {
 
     }
 
@@ -110,5 +120,5 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
 
     public void testDisplayNewMessagesFromNetwork() {
 
-    }
+    }*/
 }

@@ -45,6 +45,8 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
     }
     private static final int TYPE_MAX_COUNT = EndlessListViewType.values().length;
 
+    private long numberOfDateSeparators;
+
     private Context mContext;
     private List<BubbleListViewItem> mMessages;
     private HashMap<String, Peer> mPeers;
@@ -56,6 +58,7 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
         mMessages = messages;
         mPeers = new HashMap<>();
         mUserRepository = Tarsier.app().getUserRepository();
+        numberOfDateSeparators = 0;
     }
 
     public long getLastMessageTimestamp() {
@@ -64,6 +67,14 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
         } else {
             return DateUtil.getNowTimestamp();
         }
+    }
+
+    public void updateDateSeparatorsCount(int addedSeparators) {
+        numberOfDateSeparators = numberOfDateSeparators + addedSeparators;
+    }
+
+    public long getNumberOfDateSeparators() {
+        return numberOfDateSeparators;
     }
 
     @Override
@@ -215,6 +226,7 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
 
             if (oldestItem.getEndlessListViewType() == EndlessListViewType.DATE_SEPARATOR) {
                 remove(oldestItem);
+                numberOfDateSeparators--;
             }
 
             return true;

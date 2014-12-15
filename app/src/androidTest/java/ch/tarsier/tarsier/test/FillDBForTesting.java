@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-
 import ch.tarsier.tarsier.crypto.EC25519;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
@@ -19,8 +18,6 @@ import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.util.DateUtil;
-
-import static org.mockito.Mockito.doCallRealMethod;
 
 /**
  * The FillDBForTesting class is used to fill the mocked database for testing purposes.

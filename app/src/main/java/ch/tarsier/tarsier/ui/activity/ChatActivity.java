@@ -88,8 +88,6 @@ public class ChatActivity extends Activity implements EndlessListener {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setTitle(mChat.getTitle());
-            //TODO: To uncomment
-//            actionBar.setIcon(mChat.getAvatarRessourceId());
         }
     }
 
