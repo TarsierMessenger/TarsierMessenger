@@ -4,6 +4,8 @@ import java.security.InvalidParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
+import ch.tarsier.tarsier.Tarsier;
+
 /**
  * The EC25519 class is a wrapper on C libraries to enable
  * elliptic curve key agreement and signing.
@@ -77,25 +79,28 @@ public class EC25519 {
         return calculateAgreement(ourPrivate, theirPublic);
     }
 
+
+    public static byte[] calculateEd25519Signature(byte[] message) {
+        byte[] privateKey = Tarsier.app().getUserPreferences().getKeyPair().getPrivateKey();
+        return calculateAgreement(message, privateKey);
+    }
+
     /**
      * Signs the data with Curve25519 keys. Keys are transposed from a Montgomery to an Edwards space
      * to enable us to produce a ed25519 signature output.
      * @param privateKey Curve25519 key
      * @param message    Message to be signed
      * @return Signed message
-     * @throws InvalidParameterException
      */
-    public static byte[] calculateEd25519Signature(byte[] privateKey, byte[] message) throws InvalidParameterException {
-        if (privateKey.length != ECC_KEY_LENGTH) {
-            throw new InvalidParameterException();
-        }
+
+    public static byte[] calculateEd25519Signature(byte[] message, byte[] privateKey) {
         byte[] randomBytes = getRandom(ECC_SIGNATURE_RANDOM_BYTES_NUM);
+
         return calculateSignature(randomBytes, privateKey, message);
     }
 
     public static boolean verifyEd25519Signature(byte[] publicKey, byte[] message, byte[] signature)
             throws InvalidParameterException {
-
         if (publicKey.length != ECC_KEY_LENGTH) {
             throw new InvalidParameterException();
         }

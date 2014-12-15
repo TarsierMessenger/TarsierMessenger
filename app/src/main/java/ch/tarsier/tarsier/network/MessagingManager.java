@@ -21,10 +21,13 @@ import android.os.Message;
 import android.util.Log;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.tarsier.tarsier.Tarsier;
+import ch.tarsier.tarsier.crypto.EC25519;
+import ch.tarsier.tarsier.crypto.PeerCipher;
 import ch.tarsier.tarsier.domain.model.Peer;
 import ch.tarsier.tarsier.event.ConnectToDeviceEvent;
 import ch.tarsier.tarsier.event.ConnectedEvent;
@@ -350,14 +353,29 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
                 TarsierWireProtos.TarsierPrivateMessage msg =
                         TarsierWireProtos.TarsierPrivateMessage.parseFrom((byte[]) message.obj);
                 byte[] publicKey = msg.getSenderPublicKey().toByteArray();
-                String contents = msg.getCipherText().toStringUtf8();
-                Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
 
-                mEventBus.post(new ReceivedMessageEvent(contents, sender, true));
+                byte[] cipherText  = msg.getCipherText().toByteArray();
+                byte[] IV          = msg.getIV().toByteArray();
+                PeerCipher cipher  = new PeerCipher(publicKey);
+                String messageBody = new String(cipher.decrypt(cipherText, IV), "UTF-8");
+                byte[] signature   = msg.getSignature().toByteArray();
+
+                if(EC25519.verifyEd25519Signature(publicKey, cipherText, signature)){
+                    throw new PeerCipherException();
+                }
+
+                Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
+                mEventBus.post(new ReceivedMessageEvent(messageBody, sender, true));
             } else {
                 TarsierPublicMessage msg = TarsierPublicMessage.parseFrom((byte[]) message.obj);
-
+                byte[] plaintext = msg.getPlainText().toByteArray();
                 byte[] publicKey = msg.getSenderPublicKey().toByteArray();
+                byte[] signature = msg.getSignature().toByteArray();
+
+                if (!EC25519.verifyEd25519Signature(publicKey, plaintext, signature)){
+                    throw new PeerCipherException();
+                }
+
                 String contents = msg.getPlainText().toStringUtf8();
                 Peer sender = Tarsier.app().getPeerRepository().findByPublicKey(publicKey);
 
@@ -367,6 +385,10 @@ public class MessagingManager extends BroadcastReceiver implements ConnectionInf
             e.printStackTrace();
         } catch (DomainException e) {
             Log.d(NETWORK_LAYER_TAG, "Could not find peer in database for received message.");
+        } catch (PeerCipherException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 
