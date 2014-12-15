@@ -72,7 +72,7 @@ public class ChatActivity extends Activity implements EndlessListener {
 
         mChat = (Chat) getIntent().getSerializableExtra(EXTRA_CHAT_MESSAGE_KEY);
 
-        if (mChat.getId() > -1) {
+        if (mChat != null && mChat.getId() > -1) {
             DatabaseLoader dbl = new DatabaseLoader();
             dbl.execute();
 
@@ -82,11 +82,6 @@ public class ChatActivity extends Activity implements EndlessListener {
             Intent goBackToChatList = new Intent(this, ChatListActivity.class);
             startActivity(goBackToChatList);
         }
-
-        //TODO detect [Enter] key while writing a message to send it
-
-        /** Todo if we have time... Possibility to retrieve one message not yet sent but already typed
-         */
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {

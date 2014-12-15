@@ -52,6 +52,12 @@ public class DateUtil {
         return calendar.getTimeInMillis();
     }
 
+    public static long getFirstDecemberTimestamp() {
+        //Set calendar to 1st december
+        calendar.set(2014, Calendar.DECEMBER, 1, 0, 0, 0);
+        return calendar.getTimeInMillis();
+    }
+
     public static String computeHour(long timestamp) {
         Date sentHour = new Date(timestamp);
 

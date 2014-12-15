@@ -2,6 +2,8 @@ package ch.tarsier.tarsier.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import org.mockito.stubbing.OngoingStubbing;
+
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
 import ch.tarsier.tarsier.domain.model.Message;
@@ -10,9 +12,11 @@ import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.domain.repository.UserRepository;
+import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -76,8 +80,8 @@ public class TarsierTestCase<T> extends ActivityInstrumentationTestCase2 {
 
         Peer[] peers = FillDBForTesting.peers;
 
-        Chat chat1 = FillDBForTesting.chat2;
-        Chat chat2 = FillDBForTesting.chat1;
+        Chat chat1 = FillDBForTesting.chat1;
+        Chat chat2 = FillDBForTesting.chat2;
 
         Message[] messagesChat1 = FillDBForTesting.messagesChat1;
         Message[] messagesChat2 = FillDBForTesting.messagesChat2;

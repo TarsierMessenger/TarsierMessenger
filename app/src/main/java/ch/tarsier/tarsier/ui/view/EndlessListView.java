@@ -115,8 +115,12 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
         this.mBubbleAdapter = bubbleAdapter;
     }
 
+    public boolean allMessagesLoaded() {
+        return mAllMessagesLoaded ;
+    }
+
     public void setAllMessagesLoaded(boolean allMessagesLoaded) {
-        this.mAllMessagesLoaded = allMessagesLoaded;
+        mAllMessagesLoaded = allMessagesLoaded;
     }
 
     @Override

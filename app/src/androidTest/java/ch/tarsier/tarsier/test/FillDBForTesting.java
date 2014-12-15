@@ -1,5 +1,7 @@
 package ch.tarsier.tarsier.test;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,12 +20,16 @@ import ch.tarsier.tarsier.exception.InsertException;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.util.DateUtil;
 
+import static org.mockito.Mockito.doCallRealMethod;
+
 /**
  * The FillDBForTesting class is used to fill the mocked database for testing purposes.
  *
  * @author gluthier
  */
 public class FillDBForTesting {
+
+    private static final String TAG = "FillDBForTesting";
 
     public static User user;
 
@@ -41,14 +47,18 @@ public class FillDBForTesting {
     public static List<Message> allMessages;
     public static List<Peer> allPeers;
 
-    private static final long FIRST_DECEMBER_2014_MID_DAY = 1417392000;
-
-    private static boolean initiated = false;
+    private static final long FIRST_DECEMBER_2014_MIDNIGHT = DateUtil.getFirstDecemberTimestamp();
 
     /**
-     * Create the Models
+     * Insert the Models into the Repositories
+     *
+     * @param chatRepository The ChatRepository
+     * @param messageRepository The MessageRepository
+     * @param peerRepository The PeerRepository
      */
-    public static void initiate() {
+    public static void populate(ChatRepository chatRepository,
+                                MessageRepository messageRepository,
+                                PeerRepository peerRepository) {
 
         //Generate the user
         user = new User();
@@ -70,6 +80,13 @@ public class FillDBForTesting {
         allPeers = new ArrayList<>();
         allPeers.addAll(Arrays.asList(peers));
 
+        for (int i=0; i<NUMBER_OF_PEERS; i++) {
+            try {
+                peerRepository.insert(peers[i]);
+            } catch (InvalidModelException | InsertException e) {
+                e.printStackTrace();
+            }
+        }
 
         //Generate the chats
         chat1 = new Chat();
@@ -80,28 +97,36 @@ public class FillDBForTesting {
         chat2.setHost(peers[1]);
         chat2.setPrivate(true);
 
-        long chat1Id = chat1.getId();
-        long chat2Id = chat2.getId();
-
         allChats = new ArrayList<>();
         allChats.add(chat1);
         allChats.add(chat2);
 
+        try {
+            chatRepository.insert(chat1);
+            Log.d(TAG, "Insert chat1 with id " + chat1.getId());
+            chatRepository.insert(chat2);
+            Log.d(TAG, "Insert chat2 with id " + chat2.getId());
+        } catch (InvalidModelException | InsertException e) {
+            e.printStackTrace();
+        }
+
+
+        //Generate the messages for both chats
         Random r = new Random();
         int randomPeerIndex;
         long nowTimeStamp = DateUtil.getNowTimestamp();
-        int constantWidthInterval = (int) (nowTimeStamp - FIRST_DECEMBER_2014_MID_DAY) / NUMBER_OF_MESSAGES;
-        long messageTimeStamp = FIRST_DECEMBER_2014_MID_DAY;
+        int constantWidthInterval = (int) (nowTimeStamp - FIRST_DECEMBER_2014_MIDNIGHT) / NUMBER_OF_MESSAGES;
+        long messageTimeStamp = FIRST_DECEMBER_2014_MIDNIGHT;
         messagesChat1 = new Message[NUMBER_OF_MESSAGES];
         messagesChat2 = new Message[NUMBER_OF_MESSAGES];
         for (int i=0; i<NUMBER_OF_MESSAGES; i++) {
             //Generate the messages for the first chat
             randomPeerIndex = r.nextInt(NUMBER_OF_PEERS);
-            messagesChat1[i] = new Message(chat1Id, "Chat 1: Message "+i,
+            messagesChat1[i] = new Message(chat1.getId(), "Chat 1: Message "+i,
                     peers[randomPeerIndex].getPublicKey().getBytes(), messageTimeStamp);
             //Generate the messages for the second chat
             randomPeerIndex = r.nextInt(NUMBER_OF_PEERS);
-            messagesChat2[i] = new Message(chat2Id, "Chat 2: Message "+i,
+            messagesChat2[i] = new Message(chat2.getId(), "Chat 2: Message "+i,
                     peers[randomPeerIndex].getPublicKey().getBytes(), messageTimeStamp);
 
             messageTimeStamp = messageTimeStamp + constantWidthInterval;
@@ -111,35 +136,10 @@ public class FillDBForTesting {
         allMessages.addAll(Arrays.asList(messagesChat1));
         allMessages.addAll(Arrays.asList(messagesChat2));
 
-        initiated = true;
-    }
-
-    /**
-     * Insert the Models into the Repositories
-     *
-     * @param chatRepositoryMock The mocked ChatRepository
-     * @param messageRepositoryMock The mocked MessageRepository
-     * @param peerRepositoryMock The mocked PeerRepository
-     */
-    public static void populate(ChatRepository chatRepositoryMock,
-                                MessageRepository messageRepositoryMock,
-                                PeerRepository peerRepositoryMock) {
-
-        if (!initiated) {
-            initiate();
-        }
-
         try {
-            for (int i=0; i<NUMBER_OF_PEERS; i++) {
-                peerRepositoryMock.insert(peers[i]);
-            }
-
-            chatRepositoryMock.insert(chat2);
-            chatRepositoryMock.insert(chat1);
-
             for (int i=0; i<NUMBER_OF_MESSAGES; i++) {
-                messageRepositoryMock.insert(messagesChat1[i]);
-                messageRepositoryMock.insert(messagesChat2[i]);
+                messageRepository.insert(messagesChat1[i]);
+                messageRepository.insert(messagesChat2[i]);
             }
         } catch (InvalidModelException | InsertException e) {
             e.printStackTrace();
