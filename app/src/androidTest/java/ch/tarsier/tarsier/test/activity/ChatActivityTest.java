@@ -84,21 +84,26 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
     }
 
     public void testAdapterCount() {
-        while (!mListView.allMessagesLoaded()) {
-            onData(instanceOf(Message.class))
-                    .inAdapterView(allOf(withId(R.id.list_view), isDisplayed()))
-                    .atPosition(0)
-                    .check(matches(isDisplayed()));
-        }
+        scrollToTopToFetchAllMessages();
         assertEquals(FillDBForTesting.messagesChat1.length,
                     mAdapter.getCount() - mAdapter.getNumberOfDateSeparators());
     }
 
-    /*public void testMessagesFetchedInOrder() {
+    public void testMessagesFetchedInOrder() {
+        scrollToTopToFetchAllMessages();
 
+        BubbleListViewItem listViewItem = null;
+        long currentTimestamp = DateUtil.getNowTimestamp();
+        long nextTimestamp;
+        for(int i=mAdapter.getCount()-1; i>=0; i--) {
+            listViewItem = mAdapter.getItem(i);
+            nextTimestamp = listViewItem.getDateTime();
+            assertTrue(currentTimestamp >= nextTimestamp);
+            currentTimestamp = nextTimestamp;
+        }
     }
 
-    public void testDateSeparatorsAreCorrectlyInserted() {
+    /*public void testDateSeparatorsAreCorrectlyInserted() {
 
     }
 
@@ -121,4 +126,13 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
     public void testDisplayNewMessagesFromNetwork() {
 
     }*/
+
+    private void scrollToTopToFetchAllMessages() {
+        while (!mListView.allMessagesLoaded()) {
+            onData(instanceOf(Message.class))
+                    .inAdapterView(allOf(withId(R.id.list_view), isDisplayed()))
+                    .atPosition(0)
+                    .check(matches(isDisplayed()));
+        }
+    }
 }
