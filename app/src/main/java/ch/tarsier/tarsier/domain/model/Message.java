@@ -29,13 +29,21 @@ public class Message implements BubbleListViewItem {
      *
      * @param chatId the id of the chat in which the message has been sent
      * @param text the body of the message
-     * @param senderPublicKey the id of the peer which sent the message
+     * @param senderPublicKey the public of the peer which sent the message
      * @param dateTime the timestamp at which the message has been sent
      */
     public Message(long chatId, String text, byte[] senderPublicKey, long dateTime) {
         this(chatId, text, new PublicKey(senderPublicKey), dateTime);
     }
 
+    /**
+     * Create a message sent by a peer
+     *
+     * @param chatId the id of the chat in which the message has been sent
+     * @param text the body of the message
+     * @param senderPublicKey the public key of the peer which sent the message
+     * @param dateTime the timestamp at which the message has been sent
+     */
     public Message(long chatId, String text, PublicKey senderPublicKey, long dateTime) {
         this();
         mChatId = chatId;
@@ -97,6 +105,12 @@ public class Message implements BubbleListViewItem {
         mDateTime = newTime;
     }
 
+    /**
+     * Compute the position of the message in the messages list, depending on whether
+     * it was sent by the user or another peer.
+     *
+     * @return Right if sent by user, left otherwise.
+     */
     @Override
     public BubbleAdapter.EndlessListViewType getEndlessListViewType() {
         return mIsSentByUser ? BubbleAdapter.EndlessListViewType.BUBBLE_RIGHT

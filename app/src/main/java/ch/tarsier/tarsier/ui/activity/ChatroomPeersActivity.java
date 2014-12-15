@@ -30,16 +30,16 @@ import ch.tarsier.tarsier.ui.adapter.ChatroomPeersAdapter;
 import ch.tarsier.tarsier.ui.view.ChatroomPeersListView;
 
 /**
- * ChatroomPeersActivity is the activity that contains the list of all peers in a chatroom.
+ * Displays the list of all peers in a chatroom.
  *
  * @author romac
  * @author gluthier
  */
 public class ChatroomPeersActivity extends Activity {
-    public final static String EXTRA_CHAT_KEY = "ch.tarsier.tarsier.ui.activity.CHATROOM_PEERS_ACTIVITY";
     public final static String TAG = "ChatroomPeersActivity";
-    private Chat mChat;
+
     private Bus mEventBus;
+
     private ChatroomPeersListView mChatroomPeersListView;
     private ChatroomPeersAdapter mChatroomPeersAdapter;
 
@@ -47,12 +47,6 @@ public class ChatroomPeersActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatroom_peers);
-
-        mChat = (Chat) getIntent().getExtras().getSerializable(EXTRA_CHAT_KEY);
-        if (mChat == null) {
-            Log.d(TAG, "EXTRA_CHAT_KEY intent does not exist.");
-            this.finish();
-        }
 
         mEventBus = Tarsier.app().getEventBus();
 
@@ -90,6 +84,12 @@ public class ChatroomPeersActivity extends Activity {
         mEventBus.unregister(this);
     }
 
+    /**
+     * Listens for {@link ch.tarsier.tarsier.event.ReceivedChatroomPeersListEvent} and update
+     * the list of peers accordingly.
+     *
+     * @param event The event representing the new list of peers in the chatroom.
+     */
     @Subscribe
     public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
         Log.d(TAG, "Got ReceivedChatroomPeersListEvent");
@@ -97,6 +97,12 @@ public class ChatroomPeersActivity extends Activity {
         mChatroomPeersListView.addNewData(filterOutOwnUser(event.getPeers()));
     }
 
+    /**
+     * Filter out our own user from the list of peers.
+     *
+     * @param peers The list of peers to filter.
+     * @return A shallow copy of the list, without our own user.
+     */
     private List<Peer> filterOutOwnUser(List<Peer> peers) {
         ArrayList<Peer> filteredPeers = new ArrayList<>();
         for (Peer peer : peers) {
@@ -107,28 +113,14 @@ public class ChatroomPeersActivity extends Activity {
         return filteredPeers;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.chatroom_peers, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.goto_profile_activity:
-                openProfile();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
+    /**
+     * Find (or create if necessary) the {@link ch.tarsier.tarsier.domain.model.Chat} corresponding to the given Peer,
+     * and launch {@link ch.tarsier.tarsier.ui.activity.ChatActivity}.
+     *
+     * @param peer The peer to instantiate a chatroom for.
+     *
+     * @see ch.tarsier.tarsier.domain.repository.ChatRepository#findPrivateChatForPeer(ch.tarsier.tarsier.domain.model.Peer)
+     */
     private void createPrivateChat(Peer peer) {
         Log.d(TAG, "Create private Chat");
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
@@ -146,8 +138,22 @@ public class ChatroomPeersActivity extends Activity {
         }
     }
 
-    private void openProfile() {
-        Intent openProfileIntent = new Intent(this, ProfileActivity.class);
-        startActivity(openProfileIntent);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.chatroom_peers, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

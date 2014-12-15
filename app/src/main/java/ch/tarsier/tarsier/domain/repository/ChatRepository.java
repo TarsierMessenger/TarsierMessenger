@@ -311,7 +311,9 @@ public class ChatRepository extends AbstractRepository<Chat> {
         return cursor.moveToFirst();
     }
 
-    // Check if the Chat model is valid
+    /**
+     * Check if the given chat is valid.
+     */
     private void validate(Chat chat) throws InvalidModelException {
         Log.d(TAG, "validate the chat");
 

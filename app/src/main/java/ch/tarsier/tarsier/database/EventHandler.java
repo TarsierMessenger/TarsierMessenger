@@ -22,7 +22,7 @@ import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.util.DateUtil;
 
 /**
- * EventHandler is the class that handles the events for the database
+ * EventHandler is the class that handles the events for the database.
  *
  * @author romac
  */
@@ -36,6 +36,10 @@ public class EventHandler {
 
     private final Bus mEventBus;
 
+    /**
+     * Constructs a new instance of the EventHandler class,
+     * fetching its dependencies from the Tarsier.app() singleton.
+     */
     public EventHandler() {
         mEventBus = Tarsier.app().getEventBus();
         mPeerRepository = Tarsier.app().getPeerRepository();
@@ -43,14 +47,27 @@ public class EventHandler {
         mMessageRepository = Tarsier.app().getMessageRepository();
     }
 
+    /**
+     * Register this instance with the event bus.
+     */
     public void register() {
         mEventBus.register(this);
     }
 
+    /**
+     * Unregister this instance from the event bus.
+     */
     public void unregister() {
         mEventBus.unregister(this);
     }
 
+    /**
+     * When the user receives a message (either private or public), add the message to
+     * the database, along with the appropriate chatroom (that will be created if it doesn't
+     * exist yet).
+     *
+     * @param event The event representing a received message.
+     */
     @Subscribe
     public void onReceivedMessageEvent(ReceivedMessageEvent event) {
         Log.d(TAG, "Got ReceivedMessageEvent");
@@ -83,6 +100,11 @@ public class EventHandler {
         }
     }
 
+    /**
+     * When the user sends a message, insert it into the database.
+     *
+     * @param event The event representing the sent message.
+     */
     @Subscribe
     public void onSendMessageEvent(SendMessageEvent event) {
         try {
@@ -93,6 +115,12 @@ public class EventHandler {
         }
     }
 
+    /**
+     * When the list of peers in the public chatroom is received,
+     * insert the peers we haven't ever seen into the database.
+     *
+     * @param event The event representing the new peers list.
+     */
     @Subscribe
     public void onReceivedChatroomPeersListEvent(ReceivedChatroomPeersListEvent event) {
         Log.d(TAG, "Got ReceivedChatroomPeersListEvent");

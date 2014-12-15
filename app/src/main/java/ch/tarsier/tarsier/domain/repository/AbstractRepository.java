@@ -10,7 +10,10 @@ import ch.tarsier.tarsier.database.Database;
 import ch.tarsier.tarsier.exception.InvalidCursorException;
 
 /**
- * AbstractRepository is the abstract class that represents a Repository
+ * A repository takes care of fetching, inserting, updating and deleting
+ * data from the database, for a specific model.
+ *
+ * Methods for retrieving data are usually prefixed with `find`.
  *
  * @author romac
  * @param <T> The model that this repository manipulates.

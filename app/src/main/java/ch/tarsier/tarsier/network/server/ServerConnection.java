@@ -29,7 +29,8 @@ import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 import ch.tarsier.tarsier.util.TarsierMessageFactory;
 
 /**
- * ServerConnection is the class that implement the server side of the network.
+ * Represents the connection as the server, which maintain connections with
+ * the clients and takes care of routing new messages and peers list to them.
  *
  * @author FredericJacobs
  * @author amirrezaw

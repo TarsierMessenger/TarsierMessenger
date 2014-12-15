@@ -44,19 +44,18 @@ public class Peer implements ByteArraySerializable, Serializable {
         mUserName = name;
     }
 
-    // TODO: Remove when ChatroomPeersActivity won't need it anymore.
-    public Peer(String name, String statusMessage) {
-        this();
-        mUserName = name;
-        mStatusMessage = statusMessage;
-    }
-
     public Peer(String name, PublicKey publicKey) {
         this();
         mUserName = name;
         mPublicKey = publicKey;
     }
 
+    /**
+     * Create a new peer by unpacking its data from a ProtocolBuffer byte array.
+     *
+     * @param data The ProtocolBuffer byte array.
+     * @throws InvalidProtocolBufferException
+     */
     public Peer(byte[] data) throws InvalidProtocolBufferException {
         this();
         TarsierWireProtos.Peer peer = TarsierWireProtos.Peer.parseFrom(data);
@@ -104,6 +103,12 @@ public class Peer implements ByteArraySerializable, Serializable {
         return mOnline;
     }
 
+    /**
+     * As the network protocol cannot transfer profile pictures,
+     * we need this dirty hack to show different profile pictures for up to 5 peers.
+     *
+     * @return A bitmap representation of a profile picture.
+     */
     public Bitmap getPicture() {
         int mod5 = (int) this.getId() % NUMBER_OF_PLACEHOLDERS;
 
@@ -129,6 +134,12 @@ public class Peer implements ByteArraySerializable, Serializable {
         }
     }
 
+    /**
+     * Check whether this peer is the actual user of the app, by comparing its public
+     * key with the public key stored in the UserPreferences.
+     *
+     * @return true if they match, false otherwise
+     */
     public boolean isUser() {
         return Tarsier.app().getUserRepository().getUser().getPublicKey().equals(getPublicKey());
     }

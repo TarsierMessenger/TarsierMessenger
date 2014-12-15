@@ -46,9 +46,11 @@ import ch.tarsier.tarsier.network.messages.MessageType;
 import static ch.tarsier.tarsier.network.messages.TarsierWireProtos.TarsierPublicMessage;
 
 /**
- * MessagingManager is the class that manage all the messaging.
+ * MessagingManager is the class that manage all the messaging, abstracting over the
+ * type of connection we have (thanks to {@link ConnectionInterface}).
  *
  * @author FredericJacobs
+ * @author amirezzaw
  */
 public class MessagingManager extends BroadcastReceiver implements ConnectionInfoListener,
         Handler.Callback{

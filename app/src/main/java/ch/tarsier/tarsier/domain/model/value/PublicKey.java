@@ -8,6 +8,11 @@ import java.util.Arrays;
 import ch.tarsier.tarsier.data.ByteArraySerializable;
 
 /**
+ * Represents a public key, and provides a few convenience methods to:
+ * - serialize it to a byte array
+ * - check for equality with another public key
+ * - encode it as base64
+ *
  * @author romac
  */
 public class PublicKey implements Serializable, ByteArraySerializable {

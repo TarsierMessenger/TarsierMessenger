@@ -127,7 +127,6 @@ public class ChatActivity extends Activity implements EndlessListener {
 
     private void openChatroomPeers() {
         Intent openChatroomPeersIntent = new Intent(this, ChatroomPeersActivity.class);
-        openChatroomPeersIntent.putExtra(ChatroomPeersActivity.EXTRA_CHAT_KEY, mChat);
         startActivity(openChatroomPeersIntent);
     }
 

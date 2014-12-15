@@ -1,7 +1,7 @@
 package ch.tarsier.tarsier.event;
 
 /**
- * ConnectedEvent is the event representing the connection.
+ * This event is posted by the network stack whenever we connect to / create a chatroom.
  *
  * @author romac
  */

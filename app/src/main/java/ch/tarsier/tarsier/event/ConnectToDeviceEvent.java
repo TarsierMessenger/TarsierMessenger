@@ -3,7 +3,8 @@ package ch.tarsier.tarsier.event;
 import android.net.wifi.p2p.WifiP2pDevice;
 
 /**
- * ConnectToDeviceEvent is the event representing the connection to a device.
+ * This event is posted when we connect to another device,
+ * before connecting to the actual chatroom.
  *
  * @author romac
  * @author amirrezaw

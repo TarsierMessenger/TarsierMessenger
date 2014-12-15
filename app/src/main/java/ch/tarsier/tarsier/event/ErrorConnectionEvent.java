@@ -3,7 +3,7 @@ package ch.tarsier.tarsier.event;
 /**
  * This Event is launch when the connection is not initialized.
  * This can happen is there is no Wifi on the device or if there is no
- * devices connected to this one
+ * devices connected to this one.
  *
  * @author benpac
  */

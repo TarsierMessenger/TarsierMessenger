@@ -11,7 +11,7 @@ import android.net.Uri;
 import ch.tarsier.tarsier.event.ReceivedMessageEvent;
 
 /**
- * Notifications is the class that contains the notifications' properties.
+ * Handles notifications, eg. plays a sound when we get a new message.
  *
  * @author romac
  */

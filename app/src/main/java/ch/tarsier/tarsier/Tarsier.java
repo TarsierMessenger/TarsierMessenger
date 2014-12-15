@@ -22,7 +22,8 @@ import ch.tarsier.tarsier.notifications.Notifications;
 import ch.tarsier.tarsier.prefs.UserPreferences;
 
 /**
- * Tarsier is the singleton of the app that contains the objects common across all classes.
+ * Provides a singleton that contains the objects common across all classes,
+ * and for the whole duration of the app.
  *
  * @author romac
  */

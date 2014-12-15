@@ -28,7 +28,7 @@ import ch.tarsier.tarsier.network.messages.TarsierWireProtos;
 import ch.tarsier.tarsier.util.TarsierMessageFactory;
 
 /**
- * ClientConnection is the class that implement the client side of the network.
+ * Represents the connection as a client to another peer who acts as the server.
  *
  * @author FredericJacobs
  * @author amirrezaw

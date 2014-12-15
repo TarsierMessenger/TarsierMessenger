@@ -5,7 +5,8 @@ import ch.tarsier.tarsier.domain.model.Message;
 import ch.tarsier.tarsier.domain.model.Peer;
 
 /**
- * DisplayMessageEvent is the event representing a message being displayed.
+ * This event represents a new message to display, and should be handled by any activity
+ * that display messages on the screen.
  *
  * @author romac
  * @author amirezzaw

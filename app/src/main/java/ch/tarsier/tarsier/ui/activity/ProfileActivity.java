@@ -19,7 +19,7 @@ import ch.tarsier.tarsier.validation.StatusMessageValidator;
 import ch.tarsier.tarsier.validation.UsernameValidator;
 
 /**
- * ProfileActivity is the activity that contains the user's informations.
+ * Displays and allow editing the user's username, status message and profile picture.
  *
  * @author romac
  */
@@ -68,6 +68,7 @@ public class ProfileActivity extends Activity {
 
     /**
      * Called when a user click on the "Add Picture" image button.
+     * Launches {@link ch.tarsier.tarsier.ui.activity.AddProfilePictureActivity}.
      *
      * @param view The "Add Picture" image button view
      */
@@ -76,6 +77,11 @@ public class ProfileActivity extends Activity {
         startActivity(pictureIntent);
     }
 
+    /**
+     * Save profile informations to the user preferences if those are valid.
+     *
+     * @param item unused
+     */
     public void onClickSave(MenuItem item) {
         if (validateFields()) {
             saveProfileInfos();
@@ -84,6 +90,9 @@ public class ProfileActivity extends Activity {
         }
     }
 
+    /**
+     * Refresh the displayed information when the activity is resumed.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -91,6 +100,9 @@ public class ProfileActivity extends Activity {
         refreshFields();
     }
 
+    /**
+     * Refresh the displayed information.
+     */
     private void refreshFields() {
         String username = mUserPreferences.getUsername();
         mUsername.setText(username);
@@ -110,6 +122,9 @@ public class ProfileActivity extends Activity {
         mProfilePicture.setImageBitmap(profilePicture);
     }
 
+    /**
+     * Save the username and status message into the user preferences.
+     */
     private void saveProfileInfos() {
         mUserPreferences.setUsername(mUsername.getText().toString());
         mUserPreferences.setStatusMessage(mStatusMessage.getText().toString());

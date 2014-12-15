@@ -7,9 +7,9 @@ import android.graphics.BitmapFactory;
 import ch.tarsier.tarsier.R;
 
 /**
- * BitmapFromPath is the class that provides a methods to get a Bitmap from a path given.
+ * BitmapFromPath is the class that provides a methods to get a Bitmap from a given path.
  *
- * @author benpac on 26/11/14.
+ * @author benpac
  */
 public class BitmapFromPath {
 

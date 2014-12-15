@@ -7,6 +7,8 @@ import android.os.Looper;
 
 /**
  * MainThreadBus is the class the control the flow of all events.
+ * We make sure that all events are posted on the main thread, as not doing so
+ * could lead to concurrency issues.
  *
  * @author romac
  * @link http://stackoverflow.com/a/22063892/63301

@@ -12,9 +12,6 @@ import ch.tarsier.tarsier.crypto.KeyPair;
  * UserPreferences is the class that contains the user's preferences.
  *
  * @author romac
- *
- * TODO: Add method to set the profile picture
- *       rather than doing it in AddProfilePictureActivity.
  */
 public class UserPreferences extends AbstractPreferences {
 
