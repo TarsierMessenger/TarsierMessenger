@@ -57,11 +57,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ui.activity.WiFiDirectDebugActivity"
-            android:label="@string/title_activity_wifidirectdebug"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name="ch.tarsier.tarsier.ui.activity.ChatroomPeersActivity"
             android:parentActivityName=".ui.activity.ChatActivity"
             android:label="@string/title_activity_chatroom_peers"
