@@ -2,6 +2,8 @@ package ch.tarsier.tarsier.test.activity;
 
 import android.content.Intent;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+
 import ch.tarsier.tarsier.R;
 import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.domain.model.Chat;
@@ -10,6 +12,7 @@ import ch.tarsier.tarsier.domain.repository.ChatRepository;
 import ch.tarsier.tarsier.domain.repository.MessageRepository;
 import ch.tarsier.tarsier.domain.repository.PeerRepository;
 import ch.tarsier.tarsier.event.DisplayMessageEvent;
+import ch.tarsier.tarsier.event.SendMessageEvent;
 import ch.tarsier.tarsier.exception.InvalidModelException;
 import ch.tarsier.tarsier.exception.NoSuchModelException;
 import ch.tarsier.tarsier.test.FillDBForTesting;
@@ -42,6 +45,7 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
     private MessageRepository mMessageRepository;
 
     private Bus mEventBus;
+    private boolean mEventTriggered;
 
     private static final String MESSAGE_TO_SEND = "This is a new message to send in the Chat " +
             "Activity. This should appear at the end of the screen, be stored in the database and " +
@@ -59,6 +63,8 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
         super.setUp();
 
         mEventBus = Tarsier.app().getEventBus();
+        mEventBus.register(this);
+        mEventTriggered = false;
 
         ChatRepository chatRepository = Tarsier.app().getChatRepository();
         mMessageRepository = Tarsier.app().getMessageRepository();
@@ -111,7 +117,10 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
 
     public void testNewMessageSentIsDisplayed() {
         int itemCountBeforeSending = mAdapter.getCountWithoutSeparators();
-        sendNewMessage();
+
+        onView(withId(R.id.message_to_send)).perform(typeText(MESSAGE_TO_SEND), closeSoftKeyboard());
+        onView(withId(R.id.sendImageButton)).perform(click());
+
         int itemCountAfterSending = mAdapter.getCountWithoutSeparators();
 
         assertEquals(itemCountBeforeSending+1, itemCountAfterSending);
@@ -126,7 +135,8 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
     }
 
     public void testNewMessageSentStoredInDatabase() {
-        sendNewMessage();
+        onView(withId(R.id.message_to_send)).perform(typeText(MESSAGE_TO_SEND), closeSoftKeyboard());
+        onView(withId(R.id.sendImageButton)).perform(click());
 
         try {
             Message messageFromDatabase = mMessageRepository.getLastMessageOf(mChat);
@@ -138,7 +148,24 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
     }
 
     public void testNewMessageIsSentOverNetwork() {
+        onView(withId(R.id.message_to_send)).perform(typeText(MESSAGE_NETWORK), closeSoftKeyboard());
+        onView(withId(R.id.sendImageButton)).perform(click());
 
+        BubbleListViewItem listItem = mAdapter.getItem(mAdapter.getCount()-1);
+        if(listItem.getEndlessListViewType() != BubbleAdapter.EndlessListViewType.DATE_SEPARATOR
+                && mEventTriggered) {
+            Message receivedMessage = (Message) listItem;
+            assertEquals(MESSAGE_NETWORK, receivedMessage.getText());
+        } else {
+            fail();
+        }
+
+        mEventTriggered = false;
+    }
+
+    @Subscribe
+    public void onSendMessageEvent(SendMessageEvent event){
+        mEventTriggered = true;
     }
 
     public void testMessagesFetchedFromNetwork() {
@@ -172,10 +199,5 @@ public class ChatActivityTest extends TarsierTestCase<ChatActivity> {
                     .atPosition(0)
                     .check(matches(isDisplayed()));
         }
-    }
-
-    private void sendNewMessage() {
-        onView(withId(R.id.message_to_send)).perform(typeText(MESSAGE_TO_SEND), closeSoftKeyboard());
-        onView(withId(R.id.sendImageButton)).perform(click());
     }
 }

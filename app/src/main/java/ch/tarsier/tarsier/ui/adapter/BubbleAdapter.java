@@ -61,6 +61,10 @@ public class BubbleAdapter extends ArrayAdapter<BubbleListViewItem> {
         numberOfDateSeparators = 0;
     }
 
+    public void removeAllMessages() {
+        mMessages.clear();
+    }
+
     public long getLastMessageTimestamp() {
         if (mMessages.size() > 0) {
             return mMessages.get(getCount() - 1).getDateTime();

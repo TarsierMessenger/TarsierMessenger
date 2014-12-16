@@ -1,5 +1,4 @@
 package ch.tarsier.tarsier.ui.activity;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -12,11 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
 import java.util.ArrayList;
 import java.util.List;
 import ch.tarsier.tarsier.Tarsier;
