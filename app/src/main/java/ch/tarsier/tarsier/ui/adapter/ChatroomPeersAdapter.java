@@ -64,7 +64,6 @@ public class ChatroomPeersAdapter extends ArrayAdapter<Peer> {
 
         Peer peer = getItem(position);
 
-        //TODO verify we get the right picture
         holder.mAvatarSrc.setImageBitmap(peer.getPicture());
         holder.mName.setText(peer.getUserName());
         holder.mStatus.setText(peer.getStatusMessage());

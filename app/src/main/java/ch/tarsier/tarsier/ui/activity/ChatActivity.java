@@ -38,7 +38,6 @@ import ch.tarsier.tarsier.domain.model.Message;
  *
  * @author marinnicolini and xawill (extreme programming)
  */
-//TODO control the layout with virtual keyboard
 public class ChatActivity extends Activity implements EndlessListener {
 
     public final static String EXTRA_CHAT_MESSAGE_KEY = "ch.tarsier.tarsier.ui.activity.CHAT";

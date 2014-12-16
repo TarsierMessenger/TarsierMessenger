@@ -259,7 +259,6 @@ public class ServerConnection implements Runnable, ConnectionInterface {
                     Log.v(TAG, "Read some bytes");
 
                     if (bytes >= CURRENT_MAX_MESSAGE_SIZE) {
-                        //TODO: Fix message max size
                         Log.e(TAG, "Tarsier doesn't support those messages yet");
                         mSocket.close();
                     }

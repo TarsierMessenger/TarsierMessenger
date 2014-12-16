@@ -291,7 +291,7 @@ public class AddProfilePictureActivity extends Activity {
     }
 
     /**
-     * Save the bitmap on the temporary file. TODO this should be changed to a better location /better way to do it
+     * Save the bitmap on the temporary file.
      * @param bitmap the bitmap to be saved.
      * @throws AddProfilePictureException
      */

@@ -117,7 +117,7 @@ public class NearbyListActivity extends Activity {
 
 
     /**
-     * Method called when the connection is established. Goes to the public chat room.
+     * Method called when the connection is established. Goes to the public chatroom.
      * @param event does not contain any useful information.
      */
     @Subscribe
