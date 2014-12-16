@@ -14,6 +14,7 @@ import java.util.Locale;
 public class DateUtil {
     private static Calendar calendar = Calendar.getInstance();
     private static final int NEGATIVE_FIVE = -5;
+    private static final int YEAR_2014 = 2014;
 
     public static String computeDateSeparator(long timestamp) {
         //Set calendar to Now
@@ -54,7 +55,7 @@ public class DateUtil {
 
     public static long getFirstDecemberTimestamp() {
         //Set calendar to 1st december
-        calendar.set(2014, Calendar.DECEMBER, 1, 0, 0, 0);
+        calendar.set(YEAR_2014, Calendar.DECEMBER, 1, 0, 0, 0);
         return calendar.getTimeInMillis();
     }
 

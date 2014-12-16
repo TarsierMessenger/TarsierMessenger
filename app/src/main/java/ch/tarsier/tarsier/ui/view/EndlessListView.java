@@ -124,7 +124,7 @@ public class EndlessListView extends ListView implements AbsListView.OnScrollLis
     }
 
     public boolean allMessagesLoaded() {
-        return mAllMessagesLoaded ;
+        return mAllMessagesLoaded;
     }
 
     public void setAllMessagesLoaded(boolean allMessagesLoaded) {
