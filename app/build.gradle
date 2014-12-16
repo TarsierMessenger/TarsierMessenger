@@ -62,12 +62,32 @@ android {
     }
 }
 
+check.finalizedBy('jacocoTestReport')
 
-// connectedCheck {
-//   jacoco {
-//     excludes ['**/com/google/**', '**/TarsierWireProtos.java', '**/FillDatabaseWithFictionalData.java']
-// }
-// }
+task jacocoTestReport(type: JacocoReport, dependsOn: "createDebugCoverageReport") {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+    classDirectories = fileTree(
+            dir: './build/intermediates/classes/debug',
+            excludes: ['**/R*.class',
+                       '**/*$InjectAdapter.class',
+                       '**/*$ModuleAdapter.class',
+                       '**/*$ViewInjector*.class',
+                       '**/FillDatabaseWithFictionalData.class',
+                       '**/google/protobuf/**/*.class',
+                       '**/TarsierWireProtos.class',
+                       '**/BuildConfig.class',
+                       '**/network/messages/**/*.class',
+                       '**/*Test*.class'
+            ])
+    sourceDirectories = files(['src/main/java/'])
+    executionData = files("./build/outputs/code-coverage/connected/coverage.ec")
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
