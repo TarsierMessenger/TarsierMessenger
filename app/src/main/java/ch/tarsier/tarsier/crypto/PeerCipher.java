@@ -1,5 +1,6 @@
 package ch.tarsier.tarsier.crypto;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -7,6 +8,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import ch.tarsier.tarsier.Tarsier;
@@ -37,16 +39,18 @@ public class PeerCipher {
         }
     }
 
-    public byte[] decrypt(byte[] ciphertext) throws PeerCipherException {
+    public byte[] decrypt(byte[] ciphertext, byte[] IV) throws PeerCipherException {
 
         try {
+            IvParameterSpec iv = new IvParameterSpec(IV);
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             SecretKeySpec k = new SecretKeySpec(mPrecomputedSharedSecret, "AES");
-            cipher.init(Cipher.DECRYPT_MODE, k);
+            cipher.init(Cipher.DECRYPT_MODE, k, iv);
 
             return cipher.doFinal(ciphertext);
         } catch (NoSuchPaddingException | RuntimeException | InvalidKeyException | IllegalBlockSizeException
-                | BadPaddingException | NoSuchAlgorithmException e) {
+                | BadPaddingException | NoSuchAlgorithmException |
+        InvalidAlgorithmParameterException e) {
             throw new PeerCipherException();
         }
     }

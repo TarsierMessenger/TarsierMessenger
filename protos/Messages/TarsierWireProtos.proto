@@ -16,9 +16,11 @@ message TarsierPrivateMessage {
    required bytes  receiverPublicKey = 2;
    required bytes  senderPublicKey   = 3;
    required bytes  IV                = 4;
+   required bytes  signature         = 5;
 }
 
 message TarsierPublicMessage {
 	required bytes plainText         = 1;
 	required bytes senderPublicKey   = 2;
+  required bytes signature         = 3;
 }

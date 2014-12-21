@@ -4,6 +4,7 @@ import android.test.AndroidTestCase;
 
 import java.util.Arrays;
 
+import ch.tarsier.tarsier.Tarsier;
 import ch.tarsier.tarsier.crypto.EC25519;
 import ch.tarsier.tarsier.crypto.KeyPair;
 
@@ -44,7 +45,7 @@ public class CryptoTests extends AndroidTestCase {
         String     body      = "I'm a NSA whistleblower";
         byte[]     bodyBytes = body.getBytes();
 
-        byte[] sig = EC25519.calculateEd25519Signature(edKeyPair.getPrivateKey(), bodyBytes);
+        byte[] sig = EC25519.calculateEd25519Signature(bodyBytes, edKeyPair.getPrivateKey());
 
         assertTrue(EC25519.verifyEd25519Signature(edKeyPair.getPublicKey(), bodyBytes, sig));
     }
@@ -54,7 +55,7 @@ public class CryptoTests extends AndroidTestCase {
         String     body         = "I'm a NSA whistleblower";
         String     bodyTampered = "I'm a Russian agent";
 
-        byte[] sig = EC25519.calculateEd25519Signature(edKeyPair.getPrivateKey(), body.getBytes());
+        byte[] sig = EC25519.calculateEd25519Signature(body.getBytes(), edKeyPair.getPrivateKey());
         assertFalse(EC25519.verifyEd25519Signature(edKeyPair.getPublicKey(), bodyTampered.getBytes(), sig));
     }
 }
